@@ -12,6 +12,7 @@ import {
   GENUI_LOGICAL_HEIGHT,
   GENUI_LOGICAL_WIDTH,
   fitGenUiViewport,
+  isResponsiveD01Scene,
 } from '@/lib/interactive/logical-viewport';
 import { intersectClientBoxes } from '@/lib/edit/visible-client-rect';
 import { useCanvasStore } from '@/lib/store/canvas';
@@ -254,7 +255,14 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
 
   const rect = entry.rect;
   const clip = entry.clip ?? rect;
-  const viewport = rect ? fitGenUiViewport(rect) : null;
+  // Nobel and the explicitly authored D01 forms are responsive documents with their own
+  // scrolling, rather than fixed 16:9 canvases. Preserve legacy course sizing.
+  const responsiveDocument = sceneId.startsWith('nobel01-') || isResponsiveD01Scene(sceneId);
+  const viewport = rect
+    ? responsiveDocument
+      ? { box: rect, scale: 1 }
+      : fitGenUiViewport(rect)
+    : null;
   const visibleViewport = viewport && clip ? intersectClientBoxes(viewport.box, clip) : null;
   // Require a real measured box before showing — a null or zero-size rect means
   // the slot hasn't laid out yet; showing then would flash a 0x0 iframe pinned
@@ -285,8 +293,8 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
     position: 'absolute',
     left: viewport && visibleViewport ? viewport.box.left - visibleViewport.left : 0,
     top: viewport && visibleViewport ? viewport.box.top - visibleViewport.top : 0,
-    width: GENUI_LOGICAL_WIDTH,
-    height: GENUI_LOGICAL_HEIGHT,
+    width: responsiveDocument ? (rect?.width ?? 0) : GENUI_LOGICAL_WIDTH,
+    height: responsiveDocument ? (rect?.height ?? 0) : GENUI_LOGICAL_HEIGHT,
     border: 0,
     transform: `scale(${viewport?.scale ?? 0})`,
     transformOrigin: 'top left',

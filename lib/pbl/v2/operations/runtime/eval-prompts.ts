@@ -30,6 +30,7 @@ import { listEvaluationsForMicrotask } from './evaluation';
 import { summarizeLatestSubmissionForMicrotask } from './submission';
 import type { PBLMicrotask, PBLMilestone, PBLProjectV2, PBLScenarioConfig } from '../../types';
 import { trimmedPBLText } from '../../readers';
+import { isUngradedMilestone, isUngradedReflection } from './assessment-policy';
 
 export interface EvalPromptPair {
   system: string;
@@ -38,6 +39,11 @@ export interface EvalPromptPair {
 
 function resolveLanguage(project: PBLProjectV2): string {
   return project.languageDirective || project.language || 'en-US';
+}
+
+function ungradedAssessmentBoundary(project: PBLProjectV2): string {
+  if (!project.milestones.some((ms) => ms.microtasks.some(isUngradedReflection))) return '';
+  return '\n\nAuthored assessment boundary: tasks marked ungraded-reflection are initial learner ideas, not achievement tests. Their uncertainty, errors or prior ratings must not earn or lose points, stars or mastery credit. Mention them only as context for later evidence-backed growth. Assess ordinary tasks against their own authored criteria; do not waive prototype, revision or showcase evidence.';
 }
 
 function laterMicrotasksInMilestone(milestone: PBLMilestone, task: PBLMicrotask): PBLMicrotask[] {
@@ -146,11 +152,21 @@ export function buildMilestoneEvalPrompt(
   opts: { recentChatSummary?: string } = {},
 ): EvalPromptPair {
   const language = resolveLanguage(project);
-  const system = loadPBLV2Prompt('evaluator-milestone', { language });
+  const system =
+    loadPBLV2Prompt('evaluator-milestone', { language }) + ungradedAssessmentBoundary(project);
 
   const taskBlocks: string[] = [];
   for (const task of milestone.microtasks) {
     const bits: string[] = [`### ${task.title}`];
+    if (isUngradedReflection(task)) {
+      // Mixed stages still assess their ordinary tasks, but baseline guesses
+      // (and any stale evaluations from older clients) are not grade evidence.
+      taskBlocks.push(
+        bits.join('\n') +
+          '\nUngraded initial reflection: context only; do not rate correctness, mastery, errors or stars.',
+      );
+      continue;
+    }
     if (task.description) bits.push(task.description);
 
     // Per-microtask telemetry from the cached snapshot first (set on
@@ -263,9 +279,12 @@ export function formatProjectEngagementRollup(project: PBLProjectV2): string {
       const s = t.engagement ?? microtaskEngagement(project, t.id);
       msDuration += s.durationSeconds ?? 0;
       msTurns += s.learnerTurnCount ?? 0;
+      if (t.status === 'completed') msCompleted++;
+      // Keep participation facts; exclude baseline uncertainty from assessed
+      // errors, mastery and closing-check quality, including old cached data.
+      if (isUngradedReflection(t)) continue;
       msErrors += s.errorCount ?? 0;
       msRepeatErrors += s.repeatErrorCount ?? 0;
-      if (t.status === 'completed') msCompleted++;
       for (const c of s.conceptsUnlocked ?? []) {
         msConcepts.add(c);
         allConcepts.add(c);
@@ -340,7 +359,9 @@ function lastMicrotaskInMilestone(milestone: PBLMilestone): PBLMicrotask | undef
  *  they are completion-report evidence so the report can acknowledge
  *  whole-stage synthesis when it happened. */
 export function formatProjectSynthesisChecks(project: PBLProjectV2): string {
-  const coreMilestones = project.milestones.filter((ms) => !!ms.synthesisCheck);
+  const coreMilestones = project.milestones.filter(
+    (ms) => !!ms.synthesisCheck && !isUngradedMilestone(ms),
+  );
   if (coreMilestones.length === 0) return '(no integrative checks configured)';
 
   const lines: string[] = [];
@@ -541,7 +562,8 @@ export function buildFinalEvalPrompt(
     return { system, user: sections.join('\n\n') };
   }
 
-  const system = loadPBLV2Prompt('evaluator-final', { language });
+  const system =
+    loadPBLV2Prompt('evaluator-final', { language }) + ungradedAssessmentBoundary(project);
 
   // Milestone narrative recap — pull prose + key signals so the
   // closing arc can echo them. Use the milestone evaluation's prose,
@@ -549,6 +571,12 @@ export function buildFinalEvalPrompt(
   // moments we want the final card to reflect back.
   const msSummaries: string[] = [];
   for (const ms of project.milestones) {
+    if (isUngradedMilestone(ms)) {
+      msSummaries.push(
+        `- ${ms.title}: ungraded initial reflection; participation only, not mastery or grade evidence.`,
+      );
+      continue;
+    }
     const evs = project.evaluations.filter(
       (e) => e.kind === 'milestone' && e.milestoneId === ms.id,
     );

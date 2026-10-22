@@ -1,0 +1,19 @@
+{
+  "extends": "./D01-01-generation-quality.json",
+  "courseId": "D01-03",
+  "reviewedAt": "2026-09-28",
+  "designReview": {
+    "path": "../courses/D01-ai-3d-design-studio/07-design-review.md",
+    "verdict": "SHIP",
+    "scorePercent": 97.5,
+    "evidence": "The independent 2026-09-28 review rates D01-03 at 78/80; its course-by-course Q16 entry and §17 generation boundary are included in the shared review report."
+  },
+  "criteria": [
+    { "id": "Q08", "status": "pass", "evidence": "03-pocket-hideout.md §4 defines route prediction and single-obstacle revision as distinct state-changing workflows; §17 keeps them local." },
+    { "id": "Q09", "status": "pass", "evidence": "Section 4 targets line-without-width and blocked-route misconceptions with same-route retry and actual-view evidence." },
+    { "id": "Q10", "status": "pass", "evidence": "Sections 3 and 7 change visitor destination/route conditions and require a learner-directed revision." },
+    { "id": "Q11", "status": "pass", "evidence": "Sections 3-4 distinguish a drawn path from actual clearance for the chosen character and label untested paths honestly." },
+    { "id": "Q12", "status": "pass", "evidence": "Section 4 responds to the narrowest observed blockage and prompts one layout change before retry." },
+    { "id": "Q13", "status": "pass", "evidence": "Sections 7 and 10 preserve the editable base, top-down route evidence, entry view and observed peer walk-through." }
+  ]
+}

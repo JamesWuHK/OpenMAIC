@@ -23,6 +23,7 @@ import { useExportPPTX } from '@/lib/export/use-export-pptx';
 import { useExportClassroom } from '@/lib/export/use-export-classroom';
 import { isScriptExportReady, useExportScript } from '@/lib/export/use-export-script';
 import { isVideoExportEnabled } from '@/lib/config/feature-flags';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { useVideoRenderStore } from '@/lib/store/video-render';
 import { CircularProgress } from '@/components/ui/circular-progress';
 import { VideoExportDialog } from './video-export-dialog';
@@ -79,6 +80,7 @@ export function HeaderControls({
   variant = 'default',
 }: HeaderControlsProps) {
   const { t } = useI18n();
+  const learnerDeployment = isLearnerDeployment();
   const { theme, setTheme } = useTheme();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [videoDialogOpen, setVideoDialogOpen] = useState(false);
@@ -201,14 +203,14 @@ export function HeaderControls({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Settings */}
-          <button
+          {/* Provider configuration belongs to author deployments. */}
+          {!learnerDeployment && <button
             onClick={() => setSettingsOpen(true)}
             className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
             aria-label={t('settings.title')}
           >
             <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-          </button>
+          </button>}
         </div>
       )}
 
@@ -394,7 +396,7 @@ export function HeaderControls({
         </DropdownMenu>
       )}
 
-      {showGlobalControls && <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />}
+      {showGlobalControls && !learnerDeployment && <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />}
       {showCourseActions && videoExportEnabled && (
         <VideoExportDialog open={videoDialogOpen} onOpenChange={setVideoDialogOpen} />
       )}

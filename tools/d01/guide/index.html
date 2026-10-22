@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-HK">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>桌面小怪獸 · 創作工房</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.mjs"></script></head>
+<body>
+ <header class="site-header"><div class="wordmark"><span class="mark" aria-hidden="true">w.</span><span data-copy="brand"></span></div><div class="header-controls"><span class="local-tag" data-copy="local"></span><label><span class="sr-only" data-copy="language"></span><select id="language"><option value="zh-HK">繁體中文</option><option value="zh-CN">简体中文</option><option value="en">English</option></select></label></div></header>
+ <main>
+  <section class="intro"><p class="eyebrow" data-copy="series"></p><h1 data-copy="title"></h1><p class="intro-line" data-copy="subtitle"></p><p class="meta" data-copy="meta"></p></section>
+  <div class="studio-layout">
+   <nav class="route" aria-label="創作路線"><p class="eyebrow" data-copy="tasks"></p><div id="steps"></div><div class="route-foot"><span class="route-dot" aria-hidden="true"></span><span>01 / 06</span></div></nav>
+   <section class="workspace" aria-labelledby="task-title">
+    <div class="task-heading"><span id="step-number" class="step-number"></span><div><p id="task-time" class="eyebrow"></p><h2 id="task-title" tabindex="-1"></h2></div></div>
+    <p id="mobile-task-lead" class="mobile-task-lead"></p>
+    <div id="prediction"></div>
+    <div class="workbench">
+     <section class="model-panel" aria-label="3D"><div class="viewer"><div class="model-top"><span data-copy="modelTag"></span><span class="axis" aria-hidden="true">X · Y · Z</span></div><div class="canvas-wrap"><canvas id="creature" role="img"></canvas><img id="fallback-image" src="/assets/v02-three-quarter.png" alt="" hidden><span class="model-floor" aria-hidden="true"></span></div><p id="fallback-message" class="warning" hidden></p><div class="view-bar" id="views" role="group"></div><p class="model-caption" data-copy="modelNote"></p></div><div id="lab-controls"></div></section>
+     <section class="task-panel" id="task-panel" aria-label="任務"></section>
+    </div>
+    <section id="gallery" hidden></section>
+    <footer class="task-footer"><button id="previous" class="text-button"></button><button id="next" class="primary"></button></footer>
+   </section>
+  </div>
+  <aside class="storage-bar"><span id="save-status" role="status"></span><button id="export" class="text-button" data-copy="record"></button></aside>
+  <p class="boundary-note" data-copy="audio"></p>
+  <noscript>此本機互動試作需要 JavaScript。請閱讀課程資料中的學生短任務卡。 / This local interactive prototype needs JavaScript.</noscript>
+ </main>
+</body></html>

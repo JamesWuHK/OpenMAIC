@@ -4,12 +4,13 @@ import {
   buildRevisionGuidanceMessage,
   imageRequiresCaption,
   isSubmitLockedDuringStream,
+  latestSubmissionNeedsEvaluation,
   taskEvaluationCanAdvance,
 } from '@/components/scene-renderers/pbl/v2/submission';
 import { findModelById } from '@/lib/ai/model-aliases';
 import { PROVIDERS } from '@/lib/ai/providers';
 import { isToleratedReactionStreamError } from '@/components/scene-renderers/pbl/v2/use-instructor-stream';
-import type { PBLEvaluation } from '@/lib/pbl/v2/types';
+import type { PBLEvaluation, PBLSubmission } from '@/lib/pbl/v2/types';
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 
 function taskEval(score: number | undefined, improvements: string[] = []): PBLEvaluation {
@@ -45,6 +46,31 @@ describe('PBL v2 — post-submission flow', () => {
     );
     // Missing flag (undefined) behaves as not-streaming.
     expect(isSubmitLockedDuringStream({ evaluating: false })).toBe(false);
+  });
+
+  it('offers review retry only when the latest saved work has no evaluation', () => {
+    const work: PBLSubmission = {
+      id: 'sub-1',
+      microtaskId: 'mt-1',
+      kind: 'text',
+      content: 'Student-authored design choice',
+      createdAt: '2026-05-29T00:10:00.000Z',
+    };
+    const olderEvaluation = taskEval(80);
+    const currentEvaluation = { ...olderEvaluation, createdAt: '2026-05-29T00:11:00.000Z' };
+
+    expect(latestSubmissionNeedsEvaluation([], [], 'mt-1')).toBe(false);
+    expect(latestSubmissionNeedsEvaluation([work], [], 'mt-1')).toBe(true);
+    expect(latestSubmissionNeedsEvaluation([work], [olderEvaluation], 'mt-1')).toBe(true);
+    expect(latestSubmissionNeedsEvaluation([work], [currentEvaluation], 'mt-1')).toBe(false);
+    expect(latestSubmissionNeedsEvaluation([work], [], 'other-task')).toBe(false);
+    expect(
+      latestSubmissionNeedsEvaluation(
+        [work],
+        [{ ...currentEvaluation, kind: 'milestone' }],
+        'mt-1',
+      ),
+    ).toBe(true);
   });
 
   it('requires a caption only for an image on a non-vision model', () => {
@@ -116,5 +142,17 @@ describe('PBL v2 — post-submission flow', () => {
     expect(message?.content).toContain('先别急着往下走');
     expect(message?.content).toContain('参照上面的任务点评');
     expect(message?.content).not.toContain('不合格');
+  });
+
+  it('uses Traditional Chinese for Hong Kong task revision guidance', () => {
+    const message = buildRevisionGuidanceMessage({
+      evaluation: taskEval(45),
+      instructorId: 'role-i',
+      microtaskId: 'mt-1',
+      language: 'zh-HK',
+    });
+    expect(message?.content).toContain('任務評議');
+    expect(message?.content).toContain('重新提交');
+    expect(message?.content).not.toContain('任务点评');
   });
 });

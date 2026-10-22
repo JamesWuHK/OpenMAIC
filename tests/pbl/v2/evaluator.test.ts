@@ -110,6 +110,71 @@ function mkProject(): PBLProjectV2 {
   };
 }
 
+describe('ungraded baseline evaluator boundary', () => {
+  it('does not assign milestone stars after an entirely ungraded baseline', async () => {
+    const project = mkProject();
+    project.milestones[0].microtasks[0].assessmentMode = 'ungraded-reflection';
+    const model = new MockLanguageModelV3({
+      doStream: async () => {
+        throw new Error('must not call the model');
+      },
+    });
+    const events = await collectEvents(
+      runMilestoneEvaluation({
+        project,
+        milestoneId: 'ms1',
+        languageModel: model,
+      }),
+    );
+    expect(events).toEqual([{ type: 'done' }]);
+    expect(project.evaluations).toEqual([]);
+  });
+
+  it('still evaluates ordinary work in a mixed milestone', async () => {
+    const project = mkProject();
+    project.milestones[0].microtasks[0].assessmentMode = 'ungraded-reflection';
+    project.milestones[0].microtasks.push({
+      ...project.milestones[0].microtasks[0],
+      id: 'prototype',
+      title: 'Prototype',
+      order: 1,
+      assessmentMode: undefined,
+    });
+    const events = await collectEvents(
+      runMilestoneEvaluation({
+        project,
+        milestoneId: 'ms1',
+        languageModel: scriptedModel('Prototype evidence feedback.'),
+      }),
+    );
+    expect(evaluationPatch(events)).toMatchObject({
+      kind: 'evaluation',
+      evaluation: { kind: 'milestone' },
+    });
+    expect(project.evaluations).toHaveLength(1);
+  });
+
+  it('does not call the model or record a score for an initial reflection', async () => {
+    const project = mkProject();
+    project.milestones[0].microtasks[0].assessmentMode = 'ungraded-reflection';
+    const model = new MockLanguageModelV3({
+      doStream: async () => {
+        throw new Error('must not call the model');
+      },
+    });
+    const events = await collectEvents(
+      runTaskEvaluation({
+        project,
+        milestoneId: 'ms1',
+        microtaskId: 't1',
+        languageModel: model,
+      }),
+    );
+    expect(events).toEqual([{ type: 'done' }]);
+    expect(project.evaluations).toEqual([]);
+  });
+});
+
 describe('Evaluator agent — public API surface', () => {
   it('exports three async-generator entry points', () => {
     expect(typeof runTaskEvaluation).toBe('function');

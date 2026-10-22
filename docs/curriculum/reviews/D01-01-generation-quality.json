@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "courseId": "D01-01",
+  "phase": "generation",
+  "reviewedAt": "2026-09-28",
+  "reviewers": [
+    { "role": "course-owner", "name": "Wanli AI course requirements" },
+    { "role": "technical-qa", "name": "Codex deterministic component QA" }
+  ],
+  "decision": "approved",
+  "verdict": "SHIP",
+  "score": 97,
+  "designReview": {
+    "path": "../courses/D01-ai-3d-design-studio/07-design-review.md",
+    "verdict": "SHIP",
+    "scorePercent": 97.5,
+    "evidence": "2026-09-28 independent review explicitly re-scored D01-01 through D01-06 at 78/80=97.5; Q01-Q06 and Q08-Q21 pass except Q07 partial; Q17 is outside the generation rubric. The course-by-course Q16 table and each lesson's §17 define current scope."
+  },
+  "criteria": [
+    { "id": "Q01", "status": "pass", "evidence": "The selected D01 source §§1-3 name its S-01 design commission, learner cohort, prerequisites, objective and output." },
+    { "id": "Q02", "status": "pass", "evidence": "The selected D01 source §§3, 4 and 7 map student choices to observable task-specific output and revision evidence." },
+    { "id": "Q03", "status": "pass", "evidence": "The selected D01 source §3 specifies nine PBL stages and six functions; §17 retains pbl-studio and the same map." },
+    { "id": "Q04", "status": "pass", "evidence": "The selected D01 source §10 defines portfolioInput, portfolioOutput, nextUse and conceptRevisit." },
+    { "id": "Q05", "status": "pass", "evidence": "The selected D01 source §§1-2 and 11 label S-01 fiction, M examples, R facts and claims not tested." },
+    { "id": "Q06", "status": "pass", "evidence": "The selected D01 source §11 maps Blender/OpenAI primary sources to bounded claims and explicitly limits inference." },
+    { "id": "Q07", "status": "partial", "evidence": "The independent review records grade-level readability and 30-minute/17-minute classroom timing as unpiloted planning assumptions; the selected D01 source §12 forbids runtime claims." },
+    { "id": "Q08", "status": "pass", "evidence": "The selected D01 source §4 defines two student-directed state-changing interactions; §17 assigns deterministic I1/I2 locally." },
+    { "id": "Q09", "status": "pass", "evidence": "The selected D01 source §4 gives misconception-specific hints, retry conditions and observable evidence for both interactions." },
+    { "id": "Q10", "status": "pass", "evidence": "The selected D01 source §3 includes a changed-context transfer challenge and §7 requires a reasoned design decision." },
+    { "id": "Q11", "status": "pass", "evidence": "The selected D01 source §§3-4 diagnose a task-specific misconception and distinguish visual inspection from false technical validation." },
+    { "id": "Q12", "status": "pass", "evidence": "The selected D01 source §4 feedback responds to learner evidence and gives a targeted follow-up before retry." },
+    { "id": "Q13", "status": "pass", "evidence": "The selected D01 source §§7 and 10 preserve versioned output, task-specific observation and learner revision rationale." },
+    { "id": "Q14", "status": "pass", "evidence": "The selected D01 source §§8 and 12 separate coach, Blender operator, student designer and actual peer roles." },
+    { "id": "Q15", "status": "pass", "evidence": "The selected D01 source §§4, 6 and 12 keep design choice and acceptance with the learner; AI executes only the instructed Blender work." },
+    { "id": "Q16", "status": "pass", "evidence": "The selected D01 source language sections contain separate HK Traditional, Simplified and English reading plus authored Cantonese, Mandarin and English speech; no cross-fallback." },
+    { "id": "Q18", "status": "pass", "evidence": "The selected D01 source §14 defines keyboard/mobile task requirements; browser QA separately verifies deterministic workbenches at 390x844 and desktop keyboard." },
+    { "id": "Q19", "status": "pass", "evidence": "The selected D01 source §§10 and 17 fail closed on school tool approval, age terms, data flow, sandbox, supervision and rollback; hosted candidate contains no student records." },
+    { "id": "Q20", "status": "pass", "evidence": "The selected D01 source §§10-11 require original authored text/assets and use technical sources only as bounded research, not copied media." },
+    { "id": "Q21", "status": "pass", "evidence": "The selected D01 source §8 differentiates its project mechanics; §17 maps hosted/local features narrowly and turns off web, image, video and hosted TTS." },
+    { "id": "Q22", "status": "pass", "evidence": "scripts/lib/d01-local-components.mjs, tests/scripts/d01-local-components.test.mjs (4/4), scripts/qa-d01-component-templates.mjs (six mobile cases plus desktop keyboard; zero errors/external requests), and reviews/D01-component-qa-2026-09-28.md provide reproducible implementation, unit and browser evidence." }
+  ],
+  "openIssues": [
+    "This review authorizes only one hosted generation candidate for D01-01. Its link may be accessible to anyone who has it; this does not authorize sharing, learner-site import or publication.",
+    "Audio synthesis/listening, OpenMAIC candidate rendering, student trials, school service terms/data-flow/sandbox evidence and classroom timing remain unverified.",
+    "All Blender execution claims must remain tied to actual school-approved operator evidence; the local workbench only stores learner input and handoff drafts."
+  ]
+}

@@ -58,6 +58,7 @@ import type {
 import type { PBLSSEEvent } from '../api/sse';
 import { addEvaluation } from '../operations/runtime/evaluation';
 import { latestSubmissionForMicrotask } from '../operations/runtime/submission';
+import { isUngradedMilestone, isUngradedReflection } from '../operations/runtime/assessment-policy';
 import {
   buildFinalEvalPrompt,
   buildMilestoneEvalPrompt,
@@ -343,7 +344,7 @@ export async function* runTaskEvaluation(
   const { milestone, microtask } = lookup;
   // Baseline reflections collect an initial idea, including uncertainty.
   // They must not acquire a score via an instructor-triggered eval chain.
-  if (microtask.assessmentMode === 'ungraded-reflection') {
+  if (isUngradedReflection(microtask)) {
     yield { type: 'done' };
     return;
   }
@@ -387,6 +388,12 @@ export async function* runMilestoneEvaluation(
       code: 'NOT_FOUND',
       message: 'Milestone not found for milestone evaluation',
     };
+    yield { type: 'done' };
+    return;
+  }
+  // The task-level guard alone is insufficient: completion also chains a
+  // milestone evaluator that can assign stars to an ungraded baseline.
+  if (isUngradedMilestone(milestone)) {
     yield { type: 'done' };
     return;
   }

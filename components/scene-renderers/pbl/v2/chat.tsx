@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { AvatarDisplay } from '@/components/ui/avatar-display';
 import { SpeechButton } from '@/components/audio/speech-button';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { pblFailureMessage } from '@/lib/pbl/v2/learner-error';
 
 import type {
   PBLChatMessage,
@@ -486,14 +488,20 @@ export function PBLV2Chat({
     };
     sync();
     let lastWidth = el.clientWidth;
-    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
-      if (el.clientWidth === lastWidth) return;
-      lastWidth = el.clientWidth;
-      sync();
-    }) : null;
+    const observer =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            if (el.clientWidth === lastWidth) return;
+            lastWidth = el.clientWidth;
+            sync();
+          })
+        : null;
     observer?.observe(el);
     window.addEventListener('resize', sync);
-    return () => { observer?.disconnect(); window.removeEventListener('resize', sync); };
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', sync);
+    };
   }, [input]);
 
   // Auto-scroll to bottom on new tokens / new messages.
@@ -664,7 +672,9 @@ export function PBLV2Chat({
 
         {error && (
           <div className="flex items-start justify-between gap-2 rounded-xl border border-destructive/40 bg-destructive/15 px-3 py-2 text-xs text-red-200">
-            <span>{error}</span>
+            <span>
+              {isLearnerDeployment() ? pblFailureMessage('coach', project.language) : error}
+            </span>
             <button
               onClick={clearError}
               className="shrink-0 underline underline-offset-2 hover:opacity-80"

@@ -83,6 +83,17 @@ function mkProject(opts: { language?: string; milestones?: PBLMilestone[] } = {}
 }
 
 describe('buildTaskEvalPrompt', () => {
+  it('includes the authored criteria and separates plans from execution evidence', () => {
+    const task = mkMicrotask('t1', 'Prototype', {
+      completionCriteria: 'Submit the editable v01 model and state what has not been tested.',
+    });
+    const milestone = mkMilestone('m1', 'Prototype', [task]);
+    const { user } = buildTaskEvalPrompt(mkProject({ milestones: [milestone] }), milestone, task);
+    expect(user).toContain('## Current task completion criteria');
+    expect(user).toContain(task.completionCriteria);
+    expect(user).toContain('A written claim that Blender ran is not proof');
+    expect(user).toContain('do not require later-stage execution evidence');
+  });
   it('emits {system, user} with language interpolated into system block', () => {
     const t = mkMicrotask('t1', '初始化 HashMap');
     const ms = mkMilestone('ms1', 'Setup', [t]);
@@ -224,6 +235,32 @@ describe('buildTaskEvalPrompt', () => {
 });
 
 describe('buildMilestoneEvalPrompt', () => {
+  it('does not use baseline errors or stale task evaluations to judge a mixed stage', () => {
+    const baseline = mkMicrotask('baseline', 'Initial idea', {
+      assessmentMode: 'ungraded-reflection',
+      engagement: { durationSeconds: 12, learnerTurnCount: 1, errorCount: 99 },
+    });
+    const work = mkMicrotask('work', 'Prototype', {
+      engagement: { durationSeconds: 60, learnerTurnCount: 2, errorCount: 1 },
+    });
+    const ms = mkMilestone('m', 'Mixed stage', [baseline, work]);
+    const project = mkProject({ milestones: [ms] });
+    addEvaluation(project, {
+      kind: 'task',
+      microtaskId: 'baseline',
+      milestoneId: 'm',
+      feedback: 'stale baseline grade',
+      strengths: ['stale baseline mastery'],
+      improvements: [],
+      score: 100,
+    });
+    const { user } = buildMilestoneEvalPrompt(project, ms);
+    expect(user).toContain('Ungraded initial reflection: context only');
+    expect(user).not.toContain('stale baseline mastery');
+    expect(user).not.toContain('errors seen: 99');
+    expect(user).toContain('errors seen: 1');
+    expect(user).toContain('Prototype');
+  });
   it('includes per-microtask telemetry from cached engagement when present', () => {
     const cached: PBLEngagementSummary = {
       durationSeconds: 240,
@@ -417,6 +454,53 @@ describe('formatProjectSynthesisChecks', () => {
 });
 
 describe('buildFinalEvalPrompt', () => {
+  it('keeps baseline participation without importing old ratings or mastery claims', () => {
+    const baseline = mkMicrotask('baseline', 'Initial idea', {
+      assessmentMode: 'ungraded-reflection',
+      engagement: {
+        durationSeconds: 60,
+        learnerTurnCount: 2,
+        errorCount: 99,
+        repeatErrorCount: 88,
+        conceptsUnlocked: ['stale-baseline-mastery'],
+        closingQuality: 'weak',
+      },
+    });
+    const work = mkMicrotask('work', 'Prototype', {
+      engagement: {
+        durationSeconds: 120,
+        learnerTurnCount: 3,
+        errorCount: 1,
+        repeatErrorCount: 0,
+        conceptsUnlocked: ['prototype-concept'],
+        closingQuality: 'strong',
+      },
+    });
+    const ms = mkMilestone('baseline-ms', 'Baseline', [baseline]);
+    const project = mkProject({
+      milestones: [ms, mkMilestone('work-ms', 'Prototype stage', [work])],
+    });
+    addEvaluation(project, {
+      kind: 'milestone',
+      milestoneId: 'baseline-ms',
+      feedback: 'stale-baseline-feedback',
+      strengths: ['stale-baseline-strength'],
+      improvements: [],
+      stars: 5,
+    });
+    const { user, system } = buildFinalEvalPrompt(project);
+    expect(user).toContain('ungraded initial reflection; participation only');
+    expect(system).toContain('must not earn or lose points, stars or mastery credit');
+    expect(system).toContain('do not waive prototype, revision or showcase evidence');
+    expect(user).not.toContain('stale-baseline');
+    expect(user).not.toContain('5★');
+    expect(user).toContain('Wall time: ~3 min');
+    expect(user).toContain('Learner turns: 5');
+    expect(user).toContain('Errors hit: 1');
+    expect(user).toContain('weak=0, ok=0, strong=1');
+    expect(user).toContain('prototype-concept');
+    expect(project.evaluations).toHaveLength(1); // Historical learner data is not deleted.
+  });
   it('emits {system, user} with per-milestone recap + analytics rollup', () => {
     const t = mkMicrotask('t1', 't');
     const ms = mkMilestone('ms1', 'M1', [t]);

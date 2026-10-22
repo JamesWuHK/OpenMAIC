@@ -37,6 +37,7 @@ import {
   Image as ImageIcon,
   Lightbulb,
   Paperclip,
+  RotateCcw,
   Upload,
   X,
 } from 'lucide-react';
@@ -65,6 +66,7 @@ import { applyInstructorEvent } from './apply-instructor-event';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
 import { toPBLModelRequestHeaders } from '@/lib/chat/client-model-policy';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { pblFailureMessage } from '@/lib/pbl/v2/learner-error';
 import { useSettingsStore } from '@/lib/store/settings';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/kernel/progress';
 import {
@@ -235,6 +237,26 @@ function latestTaskEvaluation(
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
 }
 
+/** A transport failure must not strand a saved submission after a reload.
+ * Only retry the latest work when no evaluation has been recorded for it;
+ * a low-scoring evaluation instead calls for a new student revision. */
+export function latestSubmissionNeedsEvaluation(
+  submissions: readonly PBLSubmission[],
+  evaluations: readonly PBLEvaluation[],
+  microtaskId: string,
+): boolean {
+  const latestSubmission = submissions
+    .filter((submission) => submission.microtaskId === microtaskId)
+    .slice()
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+  if (!latestSubmission) return false;
+  const latestEvaluation = evaluations
+    .filter((evaluation) => evaluation.kind === 'task' && evaluation.microtaskId === microtaskId)
+    .slice()
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+  return !latestEvaluation || latestEvaluation.createdAt < latestSubmission.createdAt;
+}
+
 /** An image is graded multimodally only on a vision-capable model. On a
  *  non-vision model the evaluator never sees the picture (it falls back to a
  *  text-only prompt with a placeholder), so a pure-image submission would get
@@ -260,7 +282,8 @@ export function buildRevisionGuidanceMessage(args: {
   revisionAttempt?: number;
 }): PBLChatMessage | null {
   if (!args.instructorId) return null;
-  const zh = args.language === 'zh-CN' || args.language === 'zh-TW' || args.language === 'zh-HK';
+  const simplified = args.language === 'zh-CN';
+  const traditional = args.language === 'zh-TW' || args.language === 'zh-HK';
   const attempt = Math.max(1, args.revisionAttempt ?? 1);
   const zhOpening =
     attempt <= 1
@@ -274,17 +297,29 @@ export function buildRevisionGuidanceMessage(args: {
       : attempt === 2
         ? 'This still needs one more revision pass.'
         : 'Please keep revising this before we move on.';
-  const content = zh
+  const traditionalOpening =
+    attempt <= 1
+      ? '這版先別急著往下走。'
+      : attempt === 2
+        ? '這次還需要再補一輪。'
+        : '還需要繼續修改。';
+  const content = simplified
     ? [
         zhOpening,
         '',
         '先参照上面的任务点评，把最影响下一步的一两处改稳。改好后在右侧重新提交，我再帮你看。',
       ].join('\n')
-    : [
-        enOpening,
-        '',
-        "Use the task review above to tighten the one or two points that most affect the next step. Submit the revision on the right, and I'll review it again.",
-      ].join('\n');
+    : traditional
+      ? [
+          traditionalOpening,
+          '',
+          '先參照上面的任務評議，把最影響下一步的一兩處改善。修改後在右側重新提交，我再幫你看看。',
+        ].join('\n')
+      : [
+          enOpening,
+          '',
+          "Use the task review above to tighten the one or two points that most affect the next step. Submit the revision on the right, and I'll review it again.",
+        ].join('\n');
   return {
     id: 'msg_' + Date.now().toString(16) + Math.random().toString(16).slice(2, 6),
     agentId: args.instructorId,
@@ -316,6 +351,9 @@ export function PBLV2SubmissionPanel({
     () => (current ? listSubmissionsForMicrotask(project, current.task.id) : []),
     [project, current],
   );
+  const canRetryEvaluation = current
+    ? latestSubmissionNeedsEvaluation(project.submissions, project.evaluations, current.task.id)
+    : false;
 
   // ACT MODEL: under a roleplay act the right panel shows the WHOLE act, not a
   // single beat — title = act title, brief = the beats' learnerBriefs merged
@@ -694,7 +732,7 @@ export function PBLV2SubmissionPanel({
                 }
               }}
               disabled={submitLocked}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-[0_0_28px_rgba(155,124,255,0.26)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-[55px] w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-[0_0_28px_rgba(155,124,255,0.26)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0"
             >
               <Upload className="w-3.5 h-3.5" />
               {t('pbl.v2.submission.submitOutput')}
@@ -704,7 +742,7 @@ export function PBLV2SubmissionPanel({
                 type="button"
                 onClick={importD01Evidence}
                 disabled={submitLocked}
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/25 bg-cyan-950/35 px-3 py-2 text-xs font-medium text-cyan-100 transition-colors hover:bg-cyan-900/45 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-2 flex min-h-[55px] w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/25 bg-cyan-950/35 px-3 py-2 text-xs font-medium text-cyan-100 transition-colors hover:bg-cyan-900/45 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0"
               >
                 {project.language === 'en'
                   ? 'Import saved activity record'
@@ -734,12 +772,38 @@ export function PBLV2SubmissionPanel({
                 {t('pbl.v2.submission.submittedCount', { count: existing.length })}
               </div>
             )}
+            {canRetryEvaluation && current?.task.assessmentMode !== 'ungraded-reflection' && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (!submitLocked && current) {
+                    void runImmediateTaskEval(
+                      project,
+                      current.milestone.id,
+                      current.task.id,
+                      current.task.title,
+                    );
+                  }
+                }}
+                disabled={submitLocked}
+                className="mt-2 flex min-h-[55px] w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/25 bg-cyan-950/35 px-3 py-2 text-xs font-medium text-cyan-100 transition-colors hover:bg-cyan-900/45 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                {project.language === 'en'
+                  ? 'Retry reviewing saved work'
+                  : project.language === 'zh-CN'
+                    ? '重新评测已保存的作品'
+                    : '重新評測已保存的作品'}
+              </button>
+            )}
             {evalError && (
               <div
                 role="alert"
                 className="mt-2 rounded-md border border-destructive/30 bg-destructive/10 px-2.5 py-2 text-[11px] leading-snug text-destructive"
               >
-                {t('pbl.v2.submission.evalFailed', { error: evalError })}
+                {isLearnerDeployment()
+                  ? pblFailureMessage('evaluation', project.language)
+                  : t('pbl.v2.submission.evalFailed', { error: evalError })}
               </div>
             )}
           </div>
@@ -829,7 +893,7 @@ function SubmissionHistory({
                 title={
                   viewable ? t('pbl.v2.submission.viewSubmission') : t('pbl.v2.submission.download')
                 }
-                className="w-full rounded-lg border border-cyan-100/[0.12] bg-slate-700/[0.32] px-2.5 py-1.5 text-left text-[11px] leading-snug text-foreground/80 transition-colors hover:bg-slate-700/[0.46] focus:outline-none focus:ring-1 focus:ring-primary/40"
+                className="min-h-[55px] w-full rounded-lg border border-cyan-100/[0.12] bg-slate-700/[0.32] px-2.5 py-1.5 text-left text-[11px] leading-snug text-foreground/80 transition-colors hover:bg-slate-700/[0.46] focus:outline-none focus:ring-1 focus:ring-primary/40 sm:min-h-0"
               >
                 <div className="flex items-center gap-1.5">
                   {isImageSub ? (
@@ -903,7 +967,7 @@ function SubmissionViewer({
           <button
             type="button"
             onClick={() => onDownload(submission)}
-            className="text-muted-foreground hover:text-foreground p-1"
+            className="flex min-h-[55px] min-w-[55px] items-center justify-center p-1 text-muted-foreground hover:text-foreground sm:min-h-0 sm:min-w-0"
             aria-label={t('pbl.v2.submission.download')}
             title={t('pbl.v2.submission.download')}
           >
@@ -912,7 +976,7 @@ function SubmissionViewer({
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 -m-1"
+            className="-m-1 flex min-h-[55px] min-w-[55px] items-center justify-center p-1 text-muted-foreground hover:text-foreground sm:min-h-0 sm:min-w-0"
             aria-label={t('pbl.v2.hero.close')}
           >
             <X className="w-4 h-4" />
@@ -1247,7 +1311,7 @@ function SubmissionModal({
           <button
             type="button"
             onClick={handleClose}
-            className="text-muted-foreground hover:text-foreground p-1 -m-1"
+            className="-m-1 flex min-h-[55px] min-w-[55px] items-center justify-center p-1 text-muted-foreground hover:text-foreground sm:min-h-0 sm:min-w-0"
             aria-label={t('pbl.v2.hero.close')}
           >
             <X className="w-4 h-4" />
@@ -1265,7 +1329,7 @@ function SubmissionModal({
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`px-4 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                className={`min-h-[55px] rounded-full px-4 py-1.5 text-xs font-medium transition-colors sm:min-h-0 ${
                   mode === m
                     ? 'bg-primary/90 shadow-sm text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground'
@@ -1426,7 +1490,7 @@ function SubmissionModal({
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-lg border border-cyan-100/[0.12] bg-slate-700/[0.24] px-3 py-1.5 text-xs transition-colors hover:bg-slate-700/[0.34]"
+            className="min-h-[55px] rounded-lg border border-cyan-100/[0.12] bg-slate-700/[0.24] px-3 py-1.5 text-xs transition-colors hover:bg-slate-700/[0.34] sm:min-h-0"
           >
             {t('pbl.v2.submission.canceling')}
           </button>
@@ -1441,7 +1505,7 @@ function SubmissionModal({
               (!text.trim() && !hasImage) ||
               captionRequired
             }
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex min-h-[55px] items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             {busy ? t('pbl.v2.submission.submitting') : t('pbl.v2.submission.submitOutput')}

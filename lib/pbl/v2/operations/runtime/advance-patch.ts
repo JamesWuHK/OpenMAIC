@@ -10,6 +10,7 @@
 
 import type { PBLAdvanceProjectPatch } from '../../api/sse';
 import { capEngagementEvents } from '../kernel/engagement';
+import { isUngradedMilestone, isUngradedReflection } from './assessment-policy';
 import type { PBLProjectV2, PBLRuntimeEvent } from '../../types';
 import {
   appendRuntimeEvent,
@@ -60,11 +61,12 @@ export function buildAdvanceProjectPatch(
     milestone,
     engagementEvents,
     runtimeEvents: runtimeEvents?.length ? runtimeEvents : undefined,
-    shouldEvaluateTask: args.shouldEvaluateTask,
+    shouldEvaluateTask: args.shouldEvaluateTask && !isUngradedReflection(completedMicrotask),
     // SCENARIO ONLY: role-play projects show NO per-stage milestone reflection
     // card (roleplay beats already skip it; the wrapup auto-complete must not
     // pop one either). The skill report lives entirely on the completion page.
-    shouldEvaluateMilestone: args.milestoneCompleted && !project.scenario,
+    shouldEvaluateMilestone:
+      args.milestoneCompleted && !project.scenario && !isUngradedMilestone(milestone),
     shouldEvaluateFinal: args.projectCompleted,
   };
 }

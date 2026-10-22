@@ -1,0 +1,19 @@
+{
+  "extends": "./D01-01-generation-quality.json",
+  "courseId": "D01-02",
+  "reviewedAt": "2026-09-28",
+  "designReview": {
+    "path": "../courses/D01-ai-3d-design-studio/07-design-review.md",
+    "verdict": "SHIP",
+    "scorePercent": 97.5,
+    "evidence": "The independent 2026-09-28 review rates D01-02 at 78/80; its course-by-course Q16 entry and §17 generation boundary are included in the shared review report."
+  },
+  "criteria": [
+    { "id": "Q08", "status": "pass", "evidence": "02-monster-organizer.md §4 defines two state-changing AI-directed fit/retrieval workflows; §17 retains I1/I2 in local deterministic scope." },
+    { "id": "Q09", "status": "pass", "evidence": "Section 4 identifies blocked interior capacity and removal-path failure, then specifies targeted feedback and same-condition retry." },
+    { "id": "Q10", "status": "pass", "evidence": "Sections 3 and 7 transfer the fit/retrieval test to changed prop placement and require a learner-chosen tradeoff." },
+    { "id": "Q11", "status": "pass", "evidence": "Sections 3-4 diagnose external dimensions being mistaken for usable capacity and require actual insertion/removal evidence." },
+    { "id": "Q12", "status": "pass", "evidence": "Section 4 feedback points to the observed collision or blocked opening and gives a single-variable retry." },
+    { "id": "Q13", "status": "pass", "evidence": "Sections 7 and 10 require the editable organizer, props, insertion/removal views and a documented design tradeoff." }
+  ]
+}

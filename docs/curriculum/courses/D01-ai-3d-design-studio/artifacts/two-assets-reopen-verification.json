@@ -1,0 +1,43 @@
+{
+  "blender_version": "4.5.14 LTS",
+  "results": [
+    {
+      "label": "monster",
+      "file": "D01_L01_teacher_monster.blend",
+      "roundtrip_file": "QA_only_monster_edit_roundtrip.blend",
+      "editable_mesh_count": 9,
+      "mesh_names": [
+        "Base",
+        "Body",
+        "EarL",
+        "EarR",
+        "EyeL",
+        "EyeR",
+        "PupilL",
+        "PupilR",
+        "StudioFloor"
+      ],
+      "no_linked_libraries": true,
+      "no_unpacked_external_images": true,
+      "edit_reopen_pass": true
+    },
+    {
+      "label": "tower",
+      "file": "D01_L06_teacher_tower.blend",
+      "roundtrip_file": "QA_only_tower_edit_roundtrip.blend",
+      "editable_mesh_count": 7,
+      "mesh_names": [
+        "01_wide_foundation",
+        "02_coral_bridge",
+        "03_gold_middle",
+        "04_deep_blue_cap",
+        "05_cream_top",
+        "display_plinth",
+        "removable_top_accent"
+      ],
+      "no_linked_libraries": true,
+      "no_unpacked_external_images": true,
+      "edit_reopen_pass": true
+    }
+  ]
+}

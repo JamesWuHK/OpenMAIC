@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "kind": "documentation-design-contract",
+  "version": "0.5.0",
+  "updatedAt": "2026-10-21",
+  "status": "six-real-local-OpenMAIC-previews-ready; PBL-evidence-bridge-unverified; D01-06-assets-unverified; DeepSeek-official-key-not-located; full-quality-acceptance-pending",
+  "approval": "historical-design-SHIP-reopened-after-pbl-spine-quality-escape",
+  "currentQualityDecision": {
+    "date": "2026-10-21",
+    "result": "BLOCK-import-and-publication-independent-teaching-audit",
+    "finding": "Independent lesson audit found no verified bridge from support interactions into the same PBL project's milestone submissions; scene-04 handoff is also absent. Runtime code inspection further confirms sandbox localStorage is replaced by iframe-lifetime memory, not durable page-refresh storage. D01-06 candidate does not bundle two verified reopenable exhibition artworks. D01-01 through D01-05 are FIX; D01-06 is BLOCK.",
+    "localRemediation": "The six local candidates have a PBL v2 workspace with nine ordered milestones, two slides maximum and no standalone quiz scenes. This is structural progress only; separate saved interactions and reminder text do not prove a continuous student-owned artifact or project evidence flow.",
+    "remainingGate": "Implement and browser-verify interaction-result handoff into the active PBL project; bind real learner evidence to prototype, critique, revision and showcase with same-artifact v01-to-v02 continuity; bundle and reopen-verify two D01-06 artworks or redesign the independent-class task; then complete per-lesson OpenMAIC runtime and school-tool acceptance.",
+    "reviewReport": "../reviews/D01-independent-pedagogy-audit-2026-10-21.md"
+  },
+  "latestIndependentTeachingReview": {
+    "date": "2026-10-21",
+    "result": "BLOCK-import-and-publication",
+    "scope": "Read-only pedagogical review of six source lesson plans, current design contract, and 20261012-r02 candidate JSON/HTML; no browser, school-tool trial, classroom timing, full audio listening, or student pilot.",
+    "lessonDecisions": {
+      "D01-01": "FIX",
+      "D01-02": "FIX",
+      "D01-03": "FIX",
+      "D01-04": "FIX",
+      "D01-05": "FIX",
+      "D01-06": "BLOCK"
+    },
+    "commonFinding": "There is no verified bridge from support interactions to the same PBL project submissions. The sandbox storage shim is iframe-lifetime memory, not durable page-refresh storage. Reminder text alone does not establish project evidence or v01-to-v02 continuity.",
+    "report": "../reviews/D01-independent-pedagogy-audit-2026-10-21.md"
+  },
+  "independentReview": {
+    "date": "2026-09-28",
+    "result": "SHIP-design-only-generation-prep",
+    "score": "78/80=97.5/100; Q07 partial; Q01-Q06 and Q08-Q16 and Q18-Q21 pass; Q17 not applicable to design",
+    "scope": "independent read-only re-score of all six lessons for design phase only",
+    "revisionAfterReview": "Q16 stale status reconciled; current Q16 scripts independently passed; six-lesson design rubric rescored; deterministic components and per-lesson generation gates completed",
+    "recheckResult": "design SHIP; G2 generation SHIP for six one-use teacher-review candidates; all six manifests passed preflight; actual hosted submissions are not yet sent",
+    "reviewReport": "07-design-review.md",
+    "schoolToolAndTimingEvidence": "not-tested"
+  },
+  "latestIndependentTimingReview": {
+    "date": "2026-09-28",
+    "scope": "read-only review of the v0.4 market-duration redesign",
+    "result": "BLOCK-generation-and-publication",
+    "findings": [
+      "30-minute total learning path was not distinguished from OpenMAIC player runtime",
+      "uniform 17-minute AI-Blender workflow window was unbenchmarked across materially different lessons",
+      "core deliverables and optional extensions needed clearer separation"
+    ],
+    "documentationResponse": "v0.4.1 separates total-path target from unmeasured player runtime and defines core scope versus extension",
+    "documentationRecheck": "PASS-limited-document-consistency-only; player runtime and classroom timing remain unmeasured"
+  },
+  "scope": "Local instructional design only; students direct AI in natural language, AI operates Blender; not an OpenMAIC generation manifest or publication approval.",
+  "overarchingProject": "為課外觀眾設計一場可探索的桌面奇想展",
+  "audience": "中一至中二試教假設；小五至小六有簡化支架",
+  "classroomTotalTargetMinutes": 30,
+  "openMaicPlayerRuntimeMinutes": null,
+  "timingStatus": "unvalidated-planning-target; school-tool-pilot-required",
+  "durationBasis": "2026-09-28 review of current learner-site series pages; D01 targets the middle of currently marketed secondary creative-course durations, pending student timing trials.",
+  "durationLabelPolicy": "Do not claim 30 minutes as OpenMAIC player runtime. It is a whole learning-path target including supervised school-based AI-Blender activity. Measure player time after generation and total elapsed time in school pilots before any public duration claim.",
+  "schoolPeriodsPerLesson": 1,
+  "schoolPeriodMinutes": 40,
+  "maxDirectInstructionMinutes": 8,
+  "maxJustInTimeHintSeconds": 90,
+  "stages": [
+    "driving-question",
+    "readiness-check",
+    "project-brief",
+    "investigation",
+    "prototype",
+    "critique",
+    "revision",
+    "showcase",
+    "reflection-transfer"
+  ],
+  "stageMinutes": [
+    2,
+    1,
+    2,
+    3,
+    8,
+    3,
+    6,
+    3,
+    2
+  ],
+  "evidenceStates": {
+    "documents": "authored",
+    "blenderAssets": "partial-D01-01-local-verified; no-two-artwork-D01-06-course-bundle-or-reopen-proof",
+    "studentGuide": "D01-01-local-browser-tested-candidate",
+    "classroomTiming": "not-tested",
+    "teachingOutcomes": "not-tested",
+    "formalDesignReview": "historical-SHIP-reopened; current-final-product-acceptance-BLOCK",
+    "audio": "54-current-MP3s-fully-ffmpeg-decoded; 54-of-54-real-OpenMAIC-player-scenes-playing-and-currentTime-over-0.2-at-playbackRate-1; human-full-listening-and-mobile-audio-pending; Mandarin-and-English-tracks-not-synthesized",
+    "hostedGeneration": "Hosted originals remain immutable and unmodified; raw hosted text is not student-facing. Six current local candidates were reassembled with a PBL workspace at scene 1, nine ordered project milestones, 2/9 slides, 6/9 stateful support interactions and no standalone quizzes; audio/ZIP/static QA and OpenMAIC player runtime remain separate acceptance gates.",
+    "pblSpine": "20261012-r02-six-real-local-player-candidates; nine-milestones-and-ungraded-readiness-authored; learner-model-header-policy-and-submission-policy-regressions-passed; support-interaction-results-not-bridged-to-PBL-submissions; sandbox-storage-is-iframe-memory-not-durable; user-selected-DeepSeek-official-key-not-yet-located; full-state-resume-critique-revision-showcase-QA-pending",
+    "generationQaReport": "../reviews/D01-post-generation-qa-2026-09-29.md",
+    "websitePublication": "not-published"
+  },
+  "lessons": [
+    {
+      "id": "D01-01",
+      "file": "01-desk-creature.md",
+      "languageScripts": "complete-candidate",
+      "title": "桌面小怪獸",
+      "product": "editable-character",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "三視圖",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "角色用途",
+        "辨識特徵"
+      ],
+      "signature": "multi-view-recognition",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-not-imported",
+        "jobId": "dRctH0E-cv",
+        "classroomId": "ieDmKjpXBs",
+        "scenesGenerated": 9
+      },
+      "localGuideEvidence": {
+        "status": "hosted-draft-rejected-local-assembly-static-audit-passed-browser-classroom-runtime-unverified",
+        "report": "11-l01-guide-preview.md",
+        "entry": "../../../../tools/d01/guide/index.html",
+        "localServer": "../../../../tools/d01/serve_l01_guide.mjs",
+        "readingLanguages": ["zh-HK", "zh-CN", "en"],
+        "audio": "not-created",
+        "liveAI": "not-connected",
+        "studentBlenderFiles": "not-read-or-verified",
+        "hostedDraftFindings": "missing-interactive-and-PBL; mixed-locale-and-Korean-typo; unsupported-Blender-operator-claim",
+        "hostedWriteBack": "HTTP 201 but uncached GET remained the original draft; not retried and not confirmed",
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-01-local-assembled.json",
+        "localStaticAudit": "../../../../scripts/audit-d01-local.mjs passed; not imported or published",
+        "studentTrial": "not-tested"
+      },
+      "localAssetEvidence": {
+        "status": "local-reopen-and-script-edit-pass",
+        "build": "../../../../output/d01-l01-blender/20260923-r01/build-evidence.json",
+        "reopen": "../../../../output/d01-l01-blender/20260923-r01/reopen-verification.json",
+        "studentTrial": "not-tested",
+        "freeFormAstraPrompt": "not-tested"
+      }
+    },
+    {
+      "id": "D01-02",
+      "file": "02-monster-organizer.md",
+      "languageScripts": "complete-candidate",
+      "title": "怪獸收納站",
+      "product": "functional-organizer-concept",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "放入",
+        "取出",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "造型",
+        "文具擺法",
+        "裝飾位置"
+      ],
+      "signature": "insert-remove-path",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-locally-assembled-static-audit-passed-not-imported",
+        "jobId": "c3cELVu36f",
+        "classroomId": "7gyEJ4XKzL",
+        "scenesGenerated": 9,
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-02-local-assembled.json"
+      }
+    },
+    {
+      "id": "D01-03",
+      "file": "03-pocket-hideout.md",
+      "languageScripts": "complete-candidate",
+      "title": "口袋秘密基地",
+      "product": "miniature-spatial-scene",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "俯視",
+        "入口",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "基地主題",
+        "空間分區",
+        "驚喜位置"
+      ],
+      "signature": "avatar-route-and-first-look",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-locally-assembled-static-audit-passed-not-imported",
+        "jobId": "GNXTd4ToNF",
+        "classroomId": "44NNsAL1XN",
+        "scenesGenerated": 9,
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-03-local-assembled.json"
+      }
+    },
+    {
+      "id": "D01-04",
+      "file": "04-five-second-story.md",
+      "languageScripts": "complete-candidate",
+      "title": "五秒小劇場",
+      "product": "playable-animation",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "120 幀",
+        "5 秒",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "故事意圖",
+        "結局",
+        "停頓"
+      ],
+      "signature": "timing-and-camera",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-locally-assembled-static-audit-passed-not-imported",
+        "jobId": "ToCo1WPpcO",
+        "classroomId": "rnGt2q-sUI",
+        "scenesGenerated": 9,
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-04-local-assembled.json"
+      }
+    },
+    {
+      "id": "D01-05",
+      "file": "05-shadow-riddle.md",
+      "languageScripts": "complete-candidate",
+      "title": "影子猜謎機",
+      "product": "shadow-art-installation",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "謎面",
+        "揭曉",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "謎底",
+        "形體安排",
+        "線索難度"
+      ],
+      "signature": "shadow-composition-and-light-size",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-locally-assembled-static-audit-passed-not-imported",
+        "jobId": "Y9SHIDt350",
+        "classroomId": "-TeDjquwIf",
+        "scenesGenerated": 9,
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-05-local-assembled.json"
+      }
+    },
+    {
+      "id": "D01-06",
+      "file": "06-mini-exhibition.md",
+      "languageScripts": "complete-candidate",
+      "title": "迷你奇想展",
+      "product": "curated-exhibition-scene",
+      "firstRoughDraftTargetMinute": 16,
+      "plannedExternalToolWorkflowMinutes": 17,
+      "toolWorkflowTimingStatus": "unbenchmarked-planning-window; measure this lesson individually",
+      "outputs": [
+        ".blend",
+        "三張導覽圖",
+        "v01",
+        "v02"
+      ],
+      "choiceDimensions": [
+        "展覽主題",
+        "選品取捨",
+        "觀眾次序"
+      ],
+      "signature": "first-look-and-exhibition-sequence",
+      "hostedGeneration": {
+        "status": "succeeded-candidate-locally-assembled-static-audit-passed-not-imported",
+        "jobId": "DDSmuRuA6L",
+        "classroomId": "Vb-qsqAsv_",
+        "scenesGenerated": 9,
+        "localAssembly": "../../../../output/d01-openmaic-candidates/D01-06-local-assembled.json"
+      }
+    }
+  ]
+}

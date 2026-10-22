@@ -3,9 +3,18 @@ import {
   GENUI_LOGICAL_HEIGHT,
   GENUI_LOGICAL_WIDTH,
   fitGenUiViewport,
+  isResponsiveD01Scene,
 } from '@/lib/interactive/logical-viewport';
 
 describe('fixed GenUI logical viewport', () => {
+  it('opts in only the six authored D01 forms, not slides or arbitrary generated scenes', () => {
+    for (const suffix of ['04', '05', '06', '07', '08-showcase', '09']) {
+      expect(isResponsiveD01Scene(`d01-scene-${suffix}`)).toBe(true);
+    }
+    for (const id of ['d01-scene-01', 'd01-scene-02', 'd01-scene-08', 'd01-scene-040', 'other-d01-scene-04']) {
+      expect(isResponsiveD01Scene(id)).toBe(false);
+    }
+  });
   it('fills a matching 16:9 slot without changing the iframe viewport', () => {
     expect(fitGenUiViewport({ left: 20, top: 30, width: 1280, height: 720 })).toEqual({
       scale: 1,

@@ -79,6 +79,36 @@ function runtimeMessage(id: string): PBLRuntimeEvent {
 }
 
 describe('PBL v2 advance checkpoint — scenario milestone-eval suppression', () => {
+  it('does not chain task or milestone grading for an ungraded-only stage', () => {
+    const p = makeProject();
+    for (const task of p.milestones[0].microtasks) task.assessmentMode = 'ungraded-reflection';
+    const patch = buildAdvanceProjectPatch(p, {
+      microtaskId: 'mt-1',
+      milestoneCompleted: true,
+      projectCompleted: false,
+      shouldEvaluateTask: true,
+    });
+    expect(patch.shouldEvaluateTask).toBe(false);
+    expect(patch.shouldEvaluateMilestone).toBe(false);
+    expect(patch.shouldEvaluateFinal).toBe(false);
+    expect(patch.completedMicrotask?.id).toBe('mt-1');
+    expect(patch.milestone).toBe(p.milestones[0]);
+  });
+
+  it('retains ordinary-work assessment when only one task is an ungraded reflection', () => {
+    const p = makeProject();
+    p.milestones[0].microtasks[0].assessmentMode = 'ungraded-reflection';
+    const patch = buildAdvanceProjectPatch(p, {
+      microtaskId: 'mt-2',
+      milestoneCompleted: true,
+      projectCompleted: true,
+      shouldEvaluateTask: true,
+    });
+    expect(patch.shouldEvaluateTask).toBe(true);
+    expect(patch.shouldEvaluateMilestone).toBe(true);
+    expect(patch.shouldEvaluateFinal).toBe(true);
+  });
+
   it('keeps shouldEvaluateMilestone for ordinary projects', () => {
     const p = makeProject();
     const patch = buildAdvanceProjectPatch(p, {

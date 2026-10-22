@@ -4,6 +4,11 @@ import type { ClientBox } from '@/lib/edit/visible-client-rect';
 export const GENUI_LOGICAL_WIDTH = 1280;
 export const GENUI_LOGICAL_HEIGHT = 720;
 
+/** Authored D01 forms reflow at device width; generated canvases stay fixed. */
+export function isResponsiveD01Scene(sceneId: string): boolean {
+  return /^d01-scene-(04|05|06|07|08-showcase|09)$/.test(sceneId);
+}
+
 export interface FittedGenUiViewport {
   readonly box: ClientBox;
   readonly scale: number;

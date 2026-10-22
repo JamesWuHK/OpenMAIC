@@ -1,0 +1,19 @@
+{
+  "extends": "./D01-01-generation-quality.json",
+  "courseId": "D01-06",
+  "reviewedAt": "2026-09-28",
+  "designReview": {
+    "path": "../courses/D01-ai-3d-design-studio/07-design-review.md",
+    "verdict": "SHIP",
+    "scorePercent": 97.5,
+    "evidence": "The independent 2026-09-28 review rates D01-06 at 78/80; its course-by-course Q16 entry and §17 generation boundary are included in the shared review report."
+  },
+  "criteria": [
+    { "id": "Q08", "status": "pass", "evidence": "06-mini-exhibition.md §4 includes two stateful curation and blind-entry-view revision interactions; §17 keeps both local." },
+    { "id": "Q09", "status": "pass", "evidence": "Section 4 diagnoses a blocked focal exhibit and requires actual anonymous visitor evidence followed by one-layout-change retry." },
+    { "id": "Q10", "status": "pass", "evidence": "Sections 3 and 7 change visitor/entry conditions and keep a two-exhibit core distinct from the optional third exhibit." },
+    { "id": "Q11", "status": "pass", "evidence": "Sections 3-4 require a real unbriefed visitor view and do not infer general preference from one reaction." },
+    { "id": "Q12", "status": "pass", "evidence": "Section 4 feedback cites what the actual visitor saw first and prompts a single layout revision before a second view." },
+    { "id": "Q13", "status": "pass", "evidence": "Sections 7 and 10 retain an editable new exhibition, entry/focus/panorama views and actual visitor feedback." }
+  ]
+}
