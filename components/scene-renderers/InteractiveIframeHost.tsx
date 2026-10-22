@@ -19,6 +19,7 @@ import { useElementRefsStore } from '@/lib/store/element-refs';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { portfolioReply } from '@/lib/learner/c02-portfolio-bridge.mjs';
 import { d01PortfolioReply } from '@/lib/learner/d01-portfolio-bridge.mjs';
+import { nobelPortfolioReply } from '@/lib/learner/nobel-portfolio-bridge.mjs';
 import {
   ELEMENT_REF_SELECTOR_MAX,
   ELEMENT_SNAPSHOT_MAX,
@@ -184,7 +185,8 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
         sceneId, window.location.pathname, {
           getItem: storage.getItem,
           setItem: storage.setItem,
-        }) ?? d01PortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage);
+        }) ?? d01PortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage)
+        ?? nobelPortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage);
       if (reply) frameWindow?.postMessage(reply, '*');
     };
     window.addEventListener('message', receive);
