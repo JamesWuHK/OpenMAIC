@@ -341,6 +341,12 @@ export async function* runTaskEvaluation(
     return;
   }
   const { milestone, microtask } = lookup;
+  // Baseline reflections collect an initial idea, including uncertainty.
+  // They must not acquire a score via an instructor-triggered eval chain.
+  if (microtask.assessmentMode === 'ungraded-reflection') {
+    yield { type: 'done' };
+    return;
+  }
   const { system, user } = buildTaskEvalPrompt(project, milestone, microtask, {
     recentChatSummary,
   });

@@ -12,6 +12,7 @@ import { ServerProvidersInit } from '@/components/server-providers-init';
 import { StorageHealthNotice } from '@/components/storage-health-notice';
 import { AccessCodeGuard } from '@/components/access-code-guard';
 import { ProSwapWatcher } from '@/components/workbench/ProSwapWatcher';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 // The UI font is loaded from @fontsource's stylesheet rather than next/font,
 // because only the stylesheet carries the per-subset `unicode-range`
@@ -28,11 +29,18 @@ import { ProSwapWatcher } from '@/components/workbench/ProSwapWatcher';
 // next/font's generated class.
 import '@fontsource-variable/inter';
 
-export const metadata: Metadata = {
-  title: 'OpenMAIC',
-  description:
-    'The open-source AI interactive classroom. Upload a PDF to instantly generate an immersive, multi-agent learning experience.',
-};
+const learnerDeployment = isLearnerDeployment();
+
+export const metadata: Metadata = learnerDeployment
+  ? {
+      title: '万里 AI 课堂',
+      description: '從香港真實世界出發，面向學生與終身學習者的主題式 AI 互動課堂。',
+    }
+  : {
+      title: 'OpenMAIC',
+      description:
+        'The open-source AI interactive classroom. Upload a PDF to instantly generate an immersive, multi-agent learning experience.',
+    };
 
 export default function RootLayout({
   children,
@@ -40,13 +48,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={learnerDeployment ? 'zh-HK' : 'en'} suppressHydrationWarning>
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <I18nProvider>
+          <I18nProvider preferredLocale={learnerDeployment ? 'zh-TW' : undefined}>
             <ServerProvidersInit />
             <ProSwapWatcher />
             <AccessCodeGuard>{children}</AccessCodeGuard>

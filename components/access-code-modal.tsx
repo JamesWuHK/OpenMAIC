@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { ArrowRight, ShieldCheck, LoaderCircle } from 'lucide-react';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 interface AccessCodeModalProps {
   open: boolean;
@@ -12,6 +13,7 @@ interface AccessCodeModalProps {
 
 export function AccessCodeModal({ open, onSuccess }: AccessCodeModalProps) {
   const { t } = useI18n();
+  const productName = isLearnerDeployment() ? '万里 AI 課堂' : 'OpenMAIC';
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -118,7 +120,7 @@ export function AccessCodeModal({ open, onSuccess }: AccessCodeModalProps) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.25, duration: 0.4 }}
               >
-                OpenMAIC
+                {productName}
               </motion.p>
 
               {/* Form */}

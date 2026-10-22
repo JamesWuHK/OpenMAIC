@@ -23,6 +23,7 @@ export async function hydrateClassroomFallbackScenes(
 export interface ClassroomFallbackChatState {
   chats: ChatSession[];
   chatSnapshot: ChatStorageSnapshot;
+  persist?: boolean;
 }
 
 export async function hydrateClassroomFallbackChats(
@@ -53,6 +54,7 @@ export interface ApplyHydratedClassroomFallbackScenesArgs {
   hydrateScenes?: (stageId: string, scenes: readonly Scene[]) => Promise<Scene[]>;
   hydrateChats?: (stageId: string) => Promise<ClassroomFallbackChatState>;
   applyStageAndScenes: (stage: Stage, scenes: Scene[], options: ClassroomFallbackChatState) => void;
+  storageUnavailable?: boolean;
 }
 
 export async function applyHydratedClassroomFallbackScenes({
@@ -66,7 +68,18 @@ export async function applyHydratedClassroomFallbackScenes({
     chatSnapshot: { sessions: [], restoreMarker: null },
   }),
   applyStageAndScenes,
+  storageUnavailable = false,
 }: ApplyHydratedClassroomFallbackScenesArgs): Promise<boolean> {
+  if (storageUnavailable) {
+    if (!isCurrent() || !isCurrentStageSceneLoadToken(loadToken)) return false;
+    applyStageAndScenes(stage, scenes.map(migrateScene), {
+      chats: [],
+      chatSnapshot: { sessions: [], restoreMarker: null },
+      persist: false,
+    });
+    return true;
+  }
+
   const [hydrated, chatState] = await Promise.all([
     hydrateScenes(stage.id, scenes),
     hydrateChats(stage.id),

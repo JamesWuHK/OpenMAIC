@@ -63,6 +63,8 @@ import { trimmedPBLText } from '@/lib/pbl/v2/readers';
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 import { applyInstructorEvent } from './apply-instructor-event';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import { toPBLModelRequestHeaders } from '@/lib/chat/client-model-policy';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { useSettingsStore } from '@/lib/store/settings';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/kernel/progress';
 import {
@@ -71,6 +73,7 @@ import {
   mintRuntimeEventId,
 } from '@/lib/pbl/v2/operations/kernel/runtime-events';
 import { trackSubmissionScore } from '@/lib/pbl/v2/operations/runtime/dynamic-signals';
+import { stageUngradedReflection } from '@/lib/pbl/v2/operations/runtime/ungraded-reflection';
 import {
   appendTaskCompletionReadyMessage,
   recordPendingTaskCompletionEvidence,
@@ -79,6 +82,7 @@ import {
   taskEvaluationCanComplete,
 } from '@/lib/pbl/v2/operations/kernel/task-completion';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { readD01SubmissionDraft } from '@/lib/learner/d01-portfolio-bridge.mjs';
 import i18n from '@/lib/i18n/config';
 import {
   assertNotStreamError,
@@ -256,7 +260,7 @@ export function buildRevisionGuidanceMessage(args: {
   revisionAttempt?: number;
 }): PBLChatMessage | null {
   if (!args.instructorId) return null;
-  const zh = args.language === 'zh-CN' || args.language === 'zh-TW';
+  const zh = args.language === 'zh-CN' || args.language === 'zh-TW' || args.language === 'zh-HK';
   const attempt = Math.max(1, args.revisionAttempt ?? 1);
   const zhOpening =
     attempt <= 1
@@ -356,6 +360,8 @@ export function PBLV2SubmissionPanel({
   }, [project.milestones]);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [importedText, setImportedText] = useState<string | undefined>(undefined);
+  const [importMessage, setImportMessage] = useState<string | null>(null);
   const [evaluating, setEvaluating] = useState(false);
   const [viewer, setViewer] = useState<PBLSubmission | null>(null);
   // Lock submitting while any stream is feeding the chat (instructor reply /
@@ -365,6 +371,30 @@ export function PBLV2SubmissionPanel({
   // no body / SSE error), so the learner isn't left with a silent "已提交"
   // and no evaluation, guidance or progress.
   const [evalError, setEvalError] = useState<string | null>(null);
+
+  const d01Project = project.milestones.some((milestone) => milestone.id.startsWith('d01-'));
+  const importD01Evidence = () => {
+    if (!current || typeof window === 'undefined') return;
+    const draft = readD01SubmissionDraft(
+      window.location.pathname,
+      current.milestone.id,
+      project.language,
+      { getItem: (key: string) => window.localStorage.getItem(key) },
+    );
+    if (!draft) {
+      setImportMessage(
+        project.language === 'en'
+          ? 'No saved activity record for this PBL step yet.'
+          : project.language === 'zh-CN'
+            ? '这个 PBL 步骤还没有已保存的互动记录。'
+            : '這個 PBL 步驟尚無已保存的互動記錄。',
+      );
+      return;
+    }
+    setImportMessage(null);
+    setImportedText(draft);
+    setModalOpen(true);
+  };
 
   // Download the original uploaded file. Non-text uploads (PDF) keep the
   // original at `fileUrl` (object storage) — download straight from there.
@@ -411,6 +441,12 @@ export function PBLV2SubmissionPanel({
     microtaskId: string,
     microtaskTitle: string,
   ) => {
+    const ungraded = structuredClone(snapshot);
+    if (stageUngradedReflection(ungraded, milestoneId, microtaskId)) {
+      setEvalError(null);
+      onProjectChange(ungraded);
+      return;
+    }
     setEvaluating(true);
     onInstructorStreamingChange?.(true);
     setEvalError(null);
@@ -450,13 +486,7 @@ export function PBLV2SubmissionPanel({
           streamStatus,
           draft,
         });
-        const headers: Record<string, string> = {
-          'Content-Type': 'application/json',
-          'x-model': modelConfig.modelString || '',
-          'x-api-key': modelConfig.apiKey || '',
-        };
-        if (modelConfig.baseUrl) headers['x-base-url'] = modelConfig.baseUrl;
-        if (modelConfig.providerType) headers['x-provider-type'] = modelConfig.providerType;
+        const headers = toPBLModelRequestHeaders(modelConfig, isLearnerDeployment());
         try {
           const stored = localStorage.getItem('locale');
           if (stored) headers['x-user-locale'] = stored;
@@ -658,7 +688,10 @@ export function PBLV2SubmissionPanel({
             <button
               type="button"
               onClick={() => {
-                if (!submitLocked) setModalOpen(true);
+                if (!submitLocked) {
+                  setImportedText(undefined);
+                  setModalOpen(true);
+                }
               }}
               disabled={submitLocked}
               className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-[0_0_28px_rgba(155,124,255,0.26)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
@@ -666,6 +699,25 @@ export function PBLV2SubmissionPanel({
               <Upload className="w-3.5 h-3.5" />
               {t('pbl.v2.submission.submitOutput')}
             </button>
+            {d01Project && (
+              <button
+                type="button"
+                onClick={importD01Evidence}
+                disabled={submitLocked}
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-200/25 bg-cyan-950/35 px-3 py-2 text-xs font-medium text-cyan-100 transition-colors hover:bg-cyan-900/45 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {project.language === 'en'
+                  ? 'Import saved activity record'
+                  : project.language === 'zh-CN'
+                    ? '导入已保存的互动记录'
+                    : '匯入已保存的互動記錄'}
+              </button>
+            )}
+            {importMessage && (
+              <p role="status" className="mt-2 text-center text-[10px] text-amber-200/90">
+                {importMessage}
+              </p>
+            )}
             {evaluating ? (
               <div className="mt-2 text-[10px] text-muted-foreground text-center">
                 {t('pbl.v2.submission.evaluating')}
@@ -714,6 +766,7 @@ export function PBLV2SubmissionPanel({
           milestoneId={current.milestone.id}
           microtaskTitle={current.task.title}
           existing={existing}
+          initialText={importedText}
           submitLocked={submitLocked}
           onClose={() => setModalOpen(false)}
           onSubmit={(args) => {
@@ -896,6 +949,7 @@ interface SubmissionModalProps {
   milestoneId: string;
   microtaskTitle: string;
   existing: PBLSubmission[];
+  initialText?: string;
   /** True when a chat stream started while the modal is open — block submit so
    *  it can't interleave with the instructor's in-flight response. */
   submitLocked?: boolean;
@@ -917,6 +971,7 @@ function SubmissionModal({
   milestoneId,
   microtaskTitle,
   existing,
+  initialText,
   submitLocked,
   onClose,
   onSubmit,
@@ -929,7 +984,7 @@ function SubmissionModal({
     return !!model?.capabilities?.vision;
   });
   const [mode, setMode] = useState<'paste' | 'file'>('paste');
-  const [text, setText] = useState('');
+  const [text, setText] = useState(initialText ?? '');
   const [filename, setFilename] = useState('');
   const [mimeType, setMimeType] = useState('');
   const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);

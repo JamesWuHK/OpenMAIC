@@ -124,6 +124,11 @@ function currentMicrotaskId(project: PBLProjectV2): string | undefined {
 
 const MIN_ROWS = 1;
 const MAX_INPUT_HEIGHT_PX = 200;
+
+export function chatInputHeight(scrollHeight: number, width: number): number | null {
+  if (width <= 0) return null;
+  return Math.max(24, Math.min(scrollHeight, MAX_INPUT_HEIGHT_PX));
+}
 const TASK_READY_TYPEWRITER_DONE_DELAY_MS = 700;
 
 export function PBLV2Chat({
@@ -469,12 +474,26 @@ export function PBLV2Chat({
     [messages, project.evaluations, roleplayHistory],
   );
 
-  // Auto-grow textarea as the learner types.
+  // Auto-grow after input changes AND when a hidden/mobile panel is revealed.
+  // A hidden element has scrollHeight=0; never persist that as its height.
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${Math.min(el.scrollHeight, MAX_INPUT_HEIGHT_PX)}px`;
+    const sync = () => {
+      if (el.clientWidth <= 0) return;
+      el.style.height = 'auto';
+      el.style.height = `${chatInputHeight(el.scrollHeight, el.clientWidth)}px`;
+    };
+    sync();
+    let lastWidth = el.clientWidth;
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
+      if (el.clientWidth === lastWidth) return;
+      lastWidth = el.clientWidth;
+      sync();
+    }) : null;
+    observer?.observe(el);
+    window.addEventListener('resize', sync);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', sync); };
   }, [input]);
 
   // Auto-scroll to bottom on new tokens / new messages.
@@ -701,7 +720,7 @@ export function PBLV2Chat({
                   : t('pbl.v2.chat.placeholder', { name: displayName })
             }
             className={cn(
-              'flex-1 resize-none bg-transparent text-sm leading-6',
+              'flex-1 min-h-6 resize-none bg-transparent text-sm leading-6',
               'text-foreground placeholder:text-muted-foreground focus:outline-none',
               'pbl-v2-scrollbar max-h-[200px] overflow-y-auto whitespace-pre-wrap',
               // While a handover is pending the textarea is disabled; drop

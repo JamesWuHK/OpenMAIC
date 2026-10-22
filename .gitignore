@@ -71,9 +71,15 @@ next-env.d.ts
 # generated data
 /data
 /logs
+/output/
+/artifacts/
+/tmp/
+/.playwright-cli/
 
 # docs
-/docs
+/docs/*
+!/docs/curriculum/
+!/docs/product/
 # Eval results
 eval/whiteboard-layout/results/
 eval/outline-language/results/

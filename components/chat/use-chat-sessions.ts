@@ -25,6 +25,11 @@ import { useUserProfileStore } from '@/lib/store/user-profile';
 import { useAgentRegistry } from '@/lib/orchestration/registry/store';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import {
+  clientModelConfigurationError,
+  toChatModelRequestFields,
+} from '@/lib/chat/client-model-policy';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { USER_AVATAR } from '@/lib/types/roundtable';
 import { StreamBuffer } from '@/lib/buffer/stream-buffer';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
@@ -140,6 +145,7 @@ interface UseChatSessionsOptions {
     fullText: string,
     agentId: string | null,
   ) => void;
+  onStreamingTextDelta?: (messageId: string, delta: string, agentId: string | null) => void;
   /** When provided and returns true, StreamBuffer holds on the current text item after reveal. */
   shouldHoldAfterReveal?: () => { holding: boolean; segmentDone: number } | boolean;
 }
@@ -507,6 +513,7 @@ export function consumePiWhiteboardEvent(
 }
 
 export function useChatSessions(options: UseChatSessionsOptions = {}) {
+  const learnerDeployment = isLearnerDeployment();
   const onLiveSpeechRef = useRef(options.onLiveSpeech);
   const onSpeechProgressRef = useRef(options.onSpeechProgress);
   const onThinkingRef = useRef(options.onThinking);
@@ -516,6 +523,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
   const onSoftCloseSessionRef = useRef(options.onSoftCloseSession);
   const onStopSessionRef = useRef(options.onStopSession);
   const onSegmentSealedRef = useRef(options.onSegmentSealed);
+  const onStreamingTextDeltaRef = useRef(options.onStreamingTextDelta);
   const shouldHoldAfterRevealRef = useRef(options.shouldHoldAfterReveal);
   useEffect(() => {
     onLiveSpeechRef.current = options.onLiveSpeech;
@@ -527,6 +535,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
     onSoftCloseSessionRef.current = options.onSoftCloseSession;
     onStopSessionRef.current = options.onStopSession;
     onSegmentSealedRef.current = options.onSegmentSealed;
+    onStreamingTextDeltaRef.current = options.onStreamingTextDelta;
     shouldHoldAfterRevealRef.current = options.shouldHoldAfterReveal;
   }, [
     options.onLiveSpeech,
@@ -538,6 +547,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
     options.onSoftCloseSession,
     options.onStopSession,
     options.onSegmentSealed,
+    options.onStreamingTextDelta,
     options.shouldHoldAfterReveal,
   ]);
   const { t } = useI18n();
@@ -1122,6 +1132,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
     (sessionId: string, controller: AbortController, sessionType: SessionType) => {
       let currentBuffer: StreamBuffer | null = null;
       let currentMessageId: string | null = null;
+      let currentAgentId: string | null = null;
 
       const onEvent = (event: StatelessEvent) => {
         if (event.type === 'whiteboard') {
@@ -1136,6 +1147,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
           case 'agent_start': {
             const { messageId, agentId, agentName, agentAvatar, agentColor } = event.data;
             currentMessageId = messageId;
+            currentAgentId = agentId;
             currentBuffer.pushAgentStart({
               messageId,
               agentId,
@@ -1150,11 +1162,13 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               messageId: event.data.messageId,
               agentId: event.data.agentId,
             });
+            currentAgentId = null;
             break;
           }
           case 'text_delta': {
             const targetId = event.data.messageId ?? currentMessageId;
             if (!targetId) break;
+            onStreamingTextDeltaRef.current?.(targetId, event.data.content, currentAgentId);
             currentBuffer.pushText(targetId, event.data.content);
             break;
           }
@@ -1662,6 +1676,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
         const userProfileState = useUserProfileStore.getState();
         const mc = getCurrentModelConfig();
+        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         const agentIds =
           useSettingsStore.getState().selectedAgentIds?.length > 0
@@ -1680,11 +1695,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            apiKey: mc.apiKey,
-            baseUrl: mc.baseUrl,
-            model: mc.modelString,
-            providerType: mc.providerType,
-            thinkingConfig: mc.thinkingConfig,
+            ...modelRequestFields,
             directorState: session.directorState,
           },
           controller,
@@ -1708,7 +1719,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         }
       }
     },
-    [clearLiveSessionAfterError, runAgentLoopFn],
+    [clearLiveSessionAfterError, learnerDeployment, runAgentLoopFn],
   );
 
   /**
@@ -1770,11 +1781,12 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
       // Validate model configuration before sending
       const modelConfig = getCurrentModelConfig();
-      if (!modelConfig.modelId) {
+      const modelConfigurationError = clientModelConfigurationError(modelConfig, learnerDeployment);
+      if (modelConfigurationError === 'model') {
         toast.error(t('settings.modelNotConfigured'));
         return;
       }
-      if (modelConfig.requiresApiKey && !modelConfig.apiKey && !modelConfig.isServerConfigured) {
+      if (modelConfigurationError === 'api-key') {
         toast.error(t('settings.setupNeeded'), {
           description: t('settings.apiKeyDesc'),
         });
@@ -1874,6 +1886,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
         const userProfileState = useUserProfileStore.getState();
         const mc = getCurrentModelConfig();
+        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         await runAgentLoopFn(
           sessionId!,
@@ -1887,11 +1900,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            apiKey: mc.apiKey,
-            baseUrl: mc.baseUrl,
-            model: mc.modelString,
-            providerType: mc.providerType,
-            thinkingConfig: mc.thinkingConfig,
+            ...modelRequestFields,
             directorState: existingSession?.directorState,
             ...(options.elementReference ? { elementReference: options.elementReference } : {}),
           },
@@ -1929,6 +1938,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       retireActiveLiveRequest,
       runAgentLoopFn,
       t,
+      learnerDeployment,
     ],
   );
 
@@ -1944,11 +1954,12 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
       // Validate model configuration before starting discussion
       const modelConfig = getCurrentModelConfig();
-      if (!modelConfig.modelId) {
+      const modelConfigurationError = clientModelConfigurationError(modelConfig, learnerDeployment);
+      if (modelConfigurationError === 'model') {
         toast.error(t('settings.modelNotConfigured'));
         return;
       }
-      if (modelConfig.requiresApiKey && !modelConfig.apiKey && !modelConfig.isServerConfigured) {
+      if (modelConfigurationError === 'api-key') {
         toast.error(t('settings.setupNeeded'), {
           description: t('settings.apiKeyDesc'),
         });
@@ -2007,6 +2018,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       try {
         const userProfileState = useUserProfileStore.getState();
         const mc = getCurrentModelConfig();
+        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         await runAgentLoopFn(
           sessionId,
@@ -2023,11 +2035,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            apiKey: mc.apiKey,
-            baseUrl: mc.baseUrl,
-            model: mc.modelString,
-            providerType: mc.providerType,
-            thinkingConfig: mc.thinkingConfig,
+            ...modelRequestFields,
           },
           controller,
           'discussion',
@@ -2054,7 +2062,13 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- t is stable from i18n context
-    [clearLiveSessionAfterError, endSession, registerFirstPiRequest, runAgentLoopFn],
+    [
+      clearLiveSessionAfterError,
+      endSession,
+      learnerDeployment,
+      registerFirstPiRequest,
+      runAgentLoopFn,
+    ],
   );
 
   /**

@@ -22,12 +22,15 @@ import {
   defaultClassroomLoadDeps,
   runClassroomLoad,
 } from '@/lib/classroom/load-classroom';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { resolveClassroomDeploymentPolicy } from '@/lib/learner/classroom-policy';
 
 const log = createLogger('Classroom');
 
 export default function ClassroomDetailPage() {
   const params = useParams();
   const classroomId = params?.id as string;
+  const classroomPolicy = resolveClassroomDeploymentPolicy(isLearnerDeployment());
 
   const { loadFromStorage } = useStageStore();
 
@@ -51,6 +54,7 @@ export default function ClassroomDetailPage() {
         classroomId,
         loadToken,
         isCurrent,
+        recoverFromStorageError: isLearnerDeployment(),
         loadFromStorage,
         getCurrentStage: () => useStageStore.getState().stage,
         fetchClassroom: defaultClassroomLoadDeps.fetchClassroom,
@@ -71,7 +75,14 @@ export default function ClassroomDetailPage() {
         getAgent: (id) => useAgentRegistry.getState().getAgent(id),
         restoreAgentSelection: defaultClassroomLoadDeps.restoreAgentSelection,
         setError,
-        setLoading,
+        setLoading: (nextLoading) => {
+          // Apply the deployment-wide read-only fence before the loading shell
+          // unmounts, so a learner never receives one editable paint.
+          if (!nextLoading && classroomPolicy.forceReadOnly) {
+            useStageStore.getState().setViewerAccess({ isOwner: false });
+          }
+          setLoading(nextLoading);
+        },
         log,
       });
 
@@ -80,7 +91,7 @@ export default function ClassroomDetailPage() {
       // (see `stage-meta-client.ts`). Run it strictly AFTER the load applied
       // its defaults so its answer wins, and fire it without blocking the
       // render that already happened.
-      if (isEffectCurrent()) {
+      if (isEffectCurrent() && classroomPolicy.resolveViewerOwnership) {
         void fetchStageMeta(classroomId)
           .then((result) => {
             if (!isEffectCurrent()) return;
@@ -106,7 +117,7 @@ export default function ClassroomDetailPage() {
           .catch(() => noteStageOwnership(classroomId, false, null));
       }
     },
-    [classroomId, loadFromStorage],
+    [classroomId, classroomPolicy, loadFromStorage],
   );
 
   useEffect(() => {
@@ -140,6 +151,7 @@ export default function ClassroomDetailPage() {
 
   // Auto-resume generation for pending outlines
   useEffect(() => {
+    if (!classroomPolicy.allowGenerationResume) return;
     if (loading || error || generationStartedRef.current) return;
 
     const state = useStageStore.getState();
@@ -218,7 +230,7 @@ export default function ClassroomDetailPage() {
         log.warn('[Classroom] Media generation resume error:', err);
       });
     }
-  }, [loading, error, generateRemaining]);
+  }, [classroomPolicy, loading, error, generateRemaining]);
 
   return (
     <ThemeProvider>

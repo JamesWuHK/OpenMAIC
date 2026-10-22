@@ -95,6 +95,8 @@ import {
   readLastWorkspaceSessionId,
   workspaceResumeHref,
 } from '@/lib/workbench/workspace-session-memory';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { LearnerHome } from '@/components/learner/learner-home';
 
 const log = createLogger('Home');
 
@@ -126,7 +128,7 @@ const initialFormState: FormState = {
   vocationalTestMode: false,
 };
 
-function HomePage() {
+function AuthoringHomePage() {
   const { t } = useI18n();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
@@ -1892,5 +1894,5 @@ function ClassroomCard({
 }
 
 export default function Page() {
-  return <HomePage />;
+  return isLearnerDeployment() ? <LearnerHome /> : <AuthoringHomePage />;
 }

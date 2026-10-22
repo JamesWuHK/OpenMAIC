@@ -87,6 +87,7 @@ export function taskCompletionReadyText(language: string | undefined): string {
   switch (language) {
     case 'zh-CN':
       return '这个任务已经完成了。如果你准备好了，也没有其他问题了，请点击左侧当前任务里的「完成」按钮进入下一步。';
+    case 'zh-HK':
     case 'zh-TW':
       return '這個任務已經完成了。如果你準備好了，也沒有其他問題了，請點擊左側目前任務裡的「完成」按鈕進入下一步。';
     case 'ja-JP':

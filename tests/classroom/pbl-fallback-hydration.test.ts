@@ -262,6 +262,36 @@ describe('classroom server fallback PBL hydration', () => {
     expect(useStageStore.getState().scenes).toEqual([serverScene]);
   });
 
+  it('applies the server design without persistence hydration when browser storage is unavailable', async () => {
+    const stage = makeStage('stage-a');
+    const serverScene = makePBLScene(makeProject());
+    const token = claimStageSceneLoadToken();
+    const hydrateScenes = vi.fn().mockRejectedValue(new Error('must not read runtime storage'));
+    const hydrateChats = vi.fn().mockRejectedValue(new Error('must not read chat storage'));
+    const applyStageAndScenes = vi.fn();
+
+    const applied = await applyHydratedClassroomFallbackScenes(
+      {
+        loadToken: token,
+        stage,
+        scenes: [serverScene],
+        hydrateScenes,
+        hydrateChats,
+        applyStageAndScenes,
+        storageUnavailable: true,
+      } as unknown as Parameters<typeof applyHydratedClassroomFallbackScenes>[0],
+    );
+
+    expect(applied).toBe(true);
+    expect(hydrateScenes).not.toHaveBeenCalled();
+    expect(hydrateChats).not.toHaveBeenCalled();
+    expect(applyStageAndScenes).toHaveBeenCalledWith(stage, [serverScene], {
+      chats: [],
+      chatSnapshot: { sessions: [], restoreMarker: null },
+      persist: false,
+    });
+  });
+
   it('does not apply fallback scenes after a newer stage request starts', async () => {
     const stageA = makeStage('stage-a');
     const stageB = makeStage('stage-b');

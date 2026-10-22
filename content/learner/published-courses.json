@@ -1,0 +1,76 @@
+{
+  "courses": [
+    {
+      "id": "hk-c01-01-debatable-claim",
+      "description": "在虛構社區案例中分辨句子功能，以對象、行動和範圍逐步修訂主張，並保留證據與不確定性邊界。",
+      "publishedAt": 1789406843000,
+      "topics": [
+        "chinese",
+        "leadership"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小六至中三",
+      "language": "zh-hk",
+      "series": "會說服人的中文",
+      "lessonNumber": 1
+    },
+    {
+      "id": "hk-t01-01-bus-eta",
+      "description": "拆解 ETA 的輸入、處理、輸出與更新，用 M-01 模擬證據完成標示不確定性、資料狀態與私隱邊界的資訊卡。",
+      "publishedAt": 1789398796000,
+      "topics": ["hong-kong", "ai-tech"],
+      "audiences": ["primary", "secondary"],
+      "gradeRange": "小五至中三",
+      "language": "zh-hk",
+      "series": "香港智慧城市數據隊",
+      "lessonNumber": 1
+    },
+    {
+      "id": "hk-s04-01-radar-rain",
+      "description": "比較原創雷達示意圖與模擬地面記錄，以「觀察—推斷—限制—行動」完成可覆核的《雷達判讀卡》。",
+      "publishedAt": 1789350027000,
+      "topics": ["hong-kong", "ai-tech", "interests"],
+      "audiences": ["primary", "secondary"],
+      "gradeRange": "小五至中三",
+      "language": "zh-hk",
+      "series": "香港天氣科技實驗室",
+      "lessonNumber": 1
+    },
+    {
+      "id": "hk-t02-01-robot-sensing",
+      "description": "以 M-01 屏幕模擬比較連續距離讀數，建立感知—決定—行動模型，並完成有證據邊界的安全測試卡。",
+      "publishedAt": 1789314347000,
+      "topics": ["ai-tech", "interests"],
+      "audiences": ["primary", "secondary"],
+      "gradeRange": "小四至中一",
+      "language": "zh-hk",
+      "series": "機械人感知實驗室",
+      "lessonNumber": 1
+    },
+    {
+      "id": "hk-a01-02-leaf-classifier",
+      "description": "由圖片分類遊戲出發，學習例子、標籤、特徵、測試與負責任的 AI 判斷。",
+      "publishedAt": 1788784200000,
+      "topics": ["ai-tech", "interests"],
+      "audiences": ["primary", "secondary"],
+      "gradeRange": "小四至中一",
+      "language": "zh-hk",
+      "series": "香港 AI 小偵探",
+      "lessonNumber": 2
+    },
+    {
+      "id": "codex-zh-hk-audio-smoke",
+      "description": "在香港生活情境中分辨人工智能與自動化，建立有證據、有邊界的 AI 判斷。",
+      "publishedAt": 1788775200000,
+      "topics": ["ai-tech"],
+      "audiences": ["primary", "secondary"],
+      "gradeRange": "小四至中一",
+      "language": "zh-hk",
+      "series": "香港 AI 小偵探",
+      "lessonNumber": 1
+    }
+  ]
+}

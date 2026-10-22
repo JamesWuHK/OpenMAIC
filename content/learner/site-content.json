@@ -1,0 +1,814 @@
+{
+  "hero": {
+    "image": "/learner/runtime/wanli-learning-hero-v2.webp",
+    "eyebrow": "HONG KONG LEARNING SIGNAL",
+    "title": "把香港，變成你的 AI 課堂",
+    "description": "從城市、天氣、科技與中文表達出發，跟 AI 老師一起觀察、提問、判斷，再做出自己的作品。"
+  },
+  "topics": [
+    {
+      "id": "ai-tech",
+      "title": "AI 科技",
+      "description": "理解、使用與創造",
+      "accent": "#35d7e1",
+      "wash": "#d9f9fb"
+    },
+    {
+      "id": "chinese",
+      "title": "中文表達",
+      "description": "閱讀、寫作與溝通",
+      "accent": "#ff7a59",
+      "wash": "#ffe7df"
+    },
+    {
+      "id": "hong-kong",
+      "title": "香港探索",
+      "description": "城市、自然與文化",
+      "accent": "#f2b84b",
+      "wash": "#fff2cf"
+    },
+    {
+      "id": "leadership",
+      "title": "領導力與創業",
+      "description": "協作、決策與行動",
+      "accent": "#8b6cf2",
+      "wash": "#ece7ff"
+    },
+    {
+      "id": "life-money",
+      "title": "財商與生活",
+      "description": "選擇、風險與責任",
+      "accent": "#42b883",
+      "wash": "#ddf7e9"
+    },
+    {
+      "id": "interests",
+      "title": "興趣與創造",
+      "description": "科學、藝術與想像",
+      "accent": "#3d7df2",
+      "wash": "#dfeaff"
+    }
+  ],
+  "ageBands": [
+    {
+      "id": "lower-primary",
+      "title": "小一至小三",
+      "description": "親子共學、觀察與表達"
+    },
+    {
+      "id": "upper-primary",
+      "title": "小四至小六",
+      "description": "建立判斷、提問與創作方法"
+    },
+    {
+      "id": "junior-secondary",
+      "title": "中一至中三",
+      "description": "研究真實問題並完成作品"
+    },
+    {
+      "id": "senior-secondary",
+      "title": "中四至中六",
+      "description": "跨學科專題與自主探索"
+    },
+    {
+      "id": "adult",
+      "title": "成人",
+      "description": "工作、生活與終身學習"
+    }
+  ],
+  "sources": [
+    {
+      "id": "edb-ai",
+      "organisation": "香港教育局",
+      "title": "數字教育藍圖及 AI 素養學習框架",
+      "url": "https://www.edb.gov.hk/tc/DEBP/",
+      "use": "校準 AI 素養、跨學科應用、批判思考與負責任使用科技的學習方向。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "edb-chinese",
+      "organisation": "香港教育局",
+      "title": "中國語文課程文件",
+      "url": "https://www.edb.gov.hk/tc/curriculum-development/kla/chi-edu/curriculum-documents.html",
+      "use": "校準聆聽、說話、閱讀、寫作、思維與文化學習的年齡要求。",
+      "reviewedAt": "2026-09-12"
+    },
+    {
+      "id": "edb-il",
+      "organisation": "香港教育局",
+      "title": "香港學生資訊素養學習框架（2024）",
+      "url": "https://www.edb.gov.hk/attachment/tc/edu-system/primary-secondary/applicable-to-primary-secondary/it-in-edu/Information-Literacy/IL_learningFramework/InformationLiteracyforHongKongStudentsLearningFramework%282024%29_20250320_ENG.pdf",
+      "use": "設計搜尋、來源評估、事實核查、資訊整理、私隱與負責任分享活動。",
+      "reviewedAt": "2026-09-12"
+    },
+    {
+      "id": "hko",
+      "organisation": "香港天文台",
+      "title": "氣候及天氣教育資源",
+      "url": "https://www.hko.gov.hk/tc/cis/educationResource.htm",
+      "use": "核對香港天氣、觀測方法、極端天氣與氣候相關事實。",
+      "reviewedAt": "2026-09-12"
+    },
+    {
+      "id": "afcd",
+      "organisation": "漁農自然護理署",
+      "title": "生物多樣性及自然教育資源",
+      "url": "https://www.afcd.gov.hk/tc_chi/conservation/Con_hkbsap/con_hkbsap.html",
+      "use": "核對香港物種、生境、郊野與保育議題，設計觀察任務。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "amo",
+      "organisation": "古物古蹟辦事處",
+      "title": "文物徑及歷史建築資料",
+      "url": "https://www.amo.gov.hk/tc/heritage-trails/index.html",
+      "use": "核對地點、年代、建築與城市歷史背景，建立地方研究問題。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "science-museum",
+      "organisation": "香港科學館",
+      "title": "教育資源",
+      "url": "https://hk.science.museum/tc/web/scm/event/edur.html",
+      "use": "選擇適齡科學主題，重新設計實驗、解釋與互動挑戰。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "space-museum",
+      "organisation": "香港太空館",
+      "title": "天文及太空科學資源",
+      "url": "https://hk.space.museum/tc/web/spm/resources.html",
+      "use": "核對天象、觀測與太空探索知識，設計香港觀星和任務情境。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "pcpd",
+      "organisation": "個人資料私隱專員公署",
+      "title": "人工智能及兒童私隱資源",
+      "url": "https://www.pcpd.org.hk/tc_chi/artificial_intelligence/index.html",
+      "use": "核對個人資料、生成式 AI、深偽與未成年人私隱風險。",
+      "reviewedAt": "2026-09-12"
+    },
+    {
+      "id": "ifec",
+      "organisation": "投資者及理財教育委員會",
+      "title": "兒童及家庭理財教育資源",
+      "url": "https://www.ifec.org.hk/web/tc/parent/tools-activities/index.page",
+      "use": "核對適齡金錢概念，設計需要與想要、預算、消費與風險情境。",
+      "reviewedAt": "2026-09-08"
+    },
+    {
+      "id": "data-gov-traffic",
+      "organisation": "香港政府資料一線通",
+      "title": "交通探測及行程時間開放數據",
+      "url": "https://data.gov.hk/tc-data/dataset/hk-td-tis_28-traffic-data-tdas",
+      "use": "核對交通數據的欄位、更新時間與使用限制，設計到站時間和智慧城市資料任務。",
+      "reviewedAt": "2026-09-13"
+    },
+    {
+      "id": "digital-policy-data",
+      "organisation": "數字政策辦公室",
+      "title": "開放數據政策與指引",
+      "url": "https://www.digitalpolicy.gov.hk/tc/our_work/data_governance/policies_standards/policy/",
+      "use": "核對公共數據的治理與重用原則，建立來源、更新、私隱和責任邊界。",
+      "reviewedAt": "2026-09-13"
+    },
+    {
+      "id": "emsd-energy",
+      "organisation": "機電工程署",
+      "title": "能源效益及可再生能源教育資源",
+      "url": "https://www.emsd.gov.hk/energyland/en/EduKit/home/index.html",
+      "use": "核對能源、能源效益和可再生能源概念，設計安全、可測試的校園能源任務。",
+      "reviewedAt": "2026-09-13"
+    }
+  ],
+  "series": [
+    {
+      "slug": "persuasive-chinese-hong-kong",
+      "title": "會說服人的中文",
+      "question": "有想法，怎樣讓別人願意聽、聽得懂，還願意回應？",
+      "summary": "從一句含糊意見開始，練習提出主張、使用證據、聽懂分歧，最後完成一段有理有據的兩分鐘小提案。",
+      "audience": "小六至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["chinese", "leadership"],
+      "capabilities": ["清楚主張", "證據解釋", "聆聽回應", "受眾意識"],
+      "lessonCount": 6,
+      "minutesPerLesson": "25–35 分鐘",
+      "finalArtifact": "兩分鐘觀點短講、講稿與修訂記錄",
+      "status": "open",
+      "liveCourseIds": ["hk-c01-01-debatable-claim"],
+      "sourceIds": ["edb-chinese", "edb-il", "hko", "pcpd"],
+      "signal": "中文 / C01",
+      "heroImage": "/learner/runtime/persuasive-chinese-hong-kong-cover.webp",
+      "promoHeadline": "不是把聲音放大，而是讓觀點站得住。",
+      "introduction": "孩子每天都在表達：想改變一項安排、不同意一個看法、希望別人採納自己的建議。真正有用的中文能力，不只是說得流利，而是知道自己在主張甚麼、證據能證明到哪裡，也能先聽懂別人再回應。本系列以香港生活化的原創模擬情境，讓學生一步一步把想法整理成別人聽得明、可以討論、也可以修訂的表達。",
+      "highlights": [
+        "不是背演講稿：每一課都要選擇、解釋或修改",
+        "不是鬥大聲：先準確複述，再處理真正分歧",
+        "不是堆數字：分清真實來源、模擬記錄與資料限制",
+        "不是 AI 代寫：AI 老師、助教與同學只負責示範、追問和對練"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "這是感受，還是可討論的觀點？",
+          "question": "「我不喜歡」和「我們應該改變」有甚麼不同？",
+          "summary": "分辨感受、可核對陳述與主張，把模糊口號改成對象、行動和範圍清楚的一句話。",
+          "outcome": "我的第一句清楚主張"
+        },
+        {
+          "number": 2,
+          "title": "理由為何不等於證據？",
+          "question": "有理由，就代表已經證明了嗎？",
+          "summary": "拆開主張、理由、證據和解釋，學會指出資料來源、樣本範圍與仍然不知道的部分。",
+          "outcome": "主張—證據—解釋骨架卡"
+        },
+        {
+          "number": 3,
+          "title": "怎樣才算先聽懂、再回應？",
+          "question": "不同意之前，你真的聽懂對方了嗎？",
+          "summary": "用中性語句複述對方的主張、理由和限定詞，再找出真正的分歧並作回應。",
+          "outcome": "複述—分歧—回應句"
+        },
+        {
+          "number": 4,
+          "title": "同一個觀點，怎樣對不同人說？",
+          "question": "對同學和對管理員，可以說完全相同的話嗎？",
+          "summary": "保持事實與核心主張一致，按照受眾的已有知識、關注和行動調整開場與用語。",
+          "outcome": "兩個受眾版本的開場"
+        },
+        {
+          "number": 5,
+          "title": "如何把觀點排成兩分鐘路線？",
+          "question": "內容很多，怎樣讓聽眾一路跟得上？",
+          "summary": "用開場、主張、兩組論證、回應顧慮和下一步，排出清楚而不超時的短講路線。",
+          "outcome": "120 秒講稿藍圖"
+        },
+        {
+          "number": 6,
+          "title": "如何講出香港小提案並修訂？",
+          "question": "一個有根據的建議，怎樣在回應質疑後變得更好？",
+          "summary": "從生活化模擬情境選題，分清真實來源與模擬記錄，完成短講、回應和兩輪實質修訂。",
+          "outcome": "兩分鐘短講、講稿與修訂記錄"
+        }
+      ]
+    },
+    {
+      "slug": "hong-kong-ai-literacy",
+      "heroImage": "/learner/runtime/hong-kong-ai-literacy-cover.webp",
+      "title": "香港 AI 小偵探",
+      "question": "AI 真的「知道」答案嗎？",
+      "summary": "從香港學生的一天出發，拆解辨認、分類、生成與核查，建立有邊界的 AI 判斷。",
+      "audience": "小四至中一",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech"],
+      "capabilities": ["AI 素養", "提問", "核查", "負責任使用"],
+      "lessonCount": 6,
+      "minutesPerLesson": "15–20 分鐘",
+      "finalArtifact": "給同學的 AI 判斷任務卡",
+      "status": "open",
+      "sourceIds": ["edb-ai", "edb-il", "pcpd"],
+      "liveCourseIds": ["codex-zh-hk-audio-smoke", "hk-a01-02-leaf-classifier"],
+      "signal": "AI / 01",
+      "lessons": [
+        {"number": 1, "title": "AI 藏在香港的一天裡嗎？", "question": "見到自動運作的系統，就代表它用了 AI 嗎？", "summary": "從日常情境分辨 AI、自動化與資料不足，不因外觀或宣傳用語下定論。", "outcome": "AI 判斷證據卡"},
+        {"number": 2, "title": "機器怎樣認出一片葉子？", "question": "圖片、標籤和特徵怎樣幫助機器分類？", "summary": "由圖片分類遊戲理解例子、標籤、特徵、測試與分類錯誤。", "outcome": "葉片分類測試表"},
+        {"number": 3, "title": "問得清楚，才找得到答案", "question": "怎樣把模糊要求變成可核對的問題？", "summary": "練習說明目標、對象、條件和輸出，並辨認尚未提供的資料。", "outcome": "清楚提問四格卡"},
+        {"number": 4, "title": "AI 說天氣：像真的就是真的嗎？", "question": "天氣答案要核對哪些時間、地點和來源？", "summary": "對照原創答案與官方資料，檢查來源、日期、範圍和警告狀態。", "outcome": "天氣答案核查單"},
+        {"number": 5, "title": "AI 會講一座城市的故事嗎？", "question": "怎樣分清城市故事中的事實、解釋和想像？", "summary": "把可核實記錄、合理解釋和原創想像分層標示，避免虛構被當成歷史。", "outcome": "城市故事分層稿"},
+        {"number": 6, "title": "AI 看見了甚麼，又錯過了甚麼？", "question": "一張圖像足夠支持甚麼判斷？", "summary": "檢視圖像中的可見線索、模型信心、拍攝時間與畫面之外的不確定性。", "outcome": "圖像判斷邊界卡"}
+      ]
+    },
+    {
+      "slug": "hong-kong-weather-detectives",
+      "heroImage": "/learner/runtime/hong-kong-weather-detectives-cover.webp",
+      "title": "香港天氣科技實驗室",
+      "question": "雷達看不見雨滴的顏色，為何能畫出雨區？",
+      "summary": "從雷達、地面觀測到臨近預報，學會讀懂天氣科技提供的線索，也看見每個預測的限制。",
+      "audience": "小五至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["hong-kong", "ai-tech", "interests"],
+      "capabilities": ["雷達原理", "數據閱讀", "預測更新", "風險決策"],
+      "lessonCount": 6,
+      "minutesPerLesson": "22–30 分鐘",
+      "finalArtifact": "校園活動天氣決策台",
+      "status": "open",
+      "sourceIds": ["hko", "edb-il", "edb-chinese"],
+      "liveCourseIds": ["hk-s04-01-radar-rain"],
+      "signal": "WX TECH / 02",
+      "promoHeadline": "看見雨區，也看見預測不能保證的部分。",
+      "introduction": "天氣應用的一幅彩色圖，背後是電磁波、地面觀測、時間序列與持續更新的判斷。本系列把香港常見的局部驟雨、活動安排與颱風路徑化成資料任務，讓學生不只會看圖，也懂得問資料從哪裡來、何時更新，以及結論能說到哪一步。",
+      "highlights": [
+        "用原創模擬雷達圖拆解真實科學原理",
+        "比較連續觀測，不以單一畫面下定論",
+        "把不確定性寫進活動決策，而不是假裝預測百分百準確",
+        "所有模擬資料均明確標示，不冒充香港實時天氣"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "雷達怎樣看見雨？",
+          "question": "看不見的電磁波怎樣變成雨區圖？",
+          "summary": "拆解雷達發射、反射、接收與成圖，利用連續模擬圖判斷雨區變化。",
+          "outcome": "雷達證據與限制卡"
+        },
+        {
+          "number": 2,
+          "title": "為何隔幾個港鐵站，雨勢會不同？",
+          "question": "分區觀測怎樣描述局部天氣？",
+          "summary": "比較不同模擬觀測站的時間記錄，認識局部驟雨和空間差異。",
+          "outcome": "分區天氣比較圖"
+        },
+        {
+          "number": 3,
+          "title": "兩幅雷達圖怎樣推測下一小時？",
+          "question": "臨近預報怎樣追蹤雨區移動？",
+          "summary": "由位置、方向和發展變化作有保留的短時間推斷。",
+          "outcome": "雨區移動推斷單"
+        },
+        {
+          "number": 4,
+          "title": "天氣預報為何會改變？",
+          "question": "新觀測怎樣更新判斷？",
+          "summary": "比較先後資料，理解修訂預測是依據新證據作更新。",
+          "outcome": "預測修訂記錄"
+        },
+        {
+          "number": 5,
+          "title": "颱風路徑為何畫成範圍？",
+          "question": "不確定性為何不能縮成一條線？",
+          "summary": "用原創路徑集合比較可能範圍與單一路線的誤導。",
+          "outcome": "風險範圍說明卡"
+        },
+        {
+          "number": 6,
+          "title": "校運會應繼續、延遲還是改場？",
+          "question": "怎樣把天氣資料轉成負責任決定？",
+          "summary": "綜合雷達、地面記錄、警告與現場條件，設定行動和復核點。",
+          "outcome": "校園活動天氣決策台"
+        }
+      ]
+    },
+    {
+      "slug": "truth-investigation-lab",
+      "heroImage": "/learner/runtime/truth-investigation-lab-cover.webp",
+      "title": "真假消息調查局",
+      "question": "看起來很真，就是真的嗎？",
+      "summary": "把一條消息拆成主張、證據和意見，學會跨來源核查，也理解 AI 為何會自信地出錯。",
+      "audience": "小六至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech", "chinese"],
+      "capabilities": ["資訊素養", "來源評估", "批判思考", "清楚表達"],
+      "lessonCount": 6,
+      "minutesPerLesson": "15–20 分鐘",
+      "finalArtifact": "消息可信度調查卡",
+      "status": "planning",
+      "sourceIds": ["edb-il", "edb-ai", "pcpd"],
+      "signal": "IL / 03",
+      "lessons": [
+        {"number": 1, "title": "看起來很真，就是真的嗎？", "question": "一條消息裡，哪些是主張，哪些是證據？", "summary": "把消息拆成可核對主張、證據和意見，找出尚未獲支持的部分。", "outcome": "主張—證據拆解卡"},
+        {"number": 2, "title": "誰是原始說話的人？", "question": "轉發很多次的消息，怎樣追回原始來源？", "summary": "沿著轉載鏈找出原始發布者、完整語境、日期與適用範圍。", "outcome": "消息來源鏈"},
+        {"number": 3, "title": "同一件事，為何有不同標題？", "question": "措詞怎樣改變我們對事件的感覺？", "summary": "比較不同標題的動詞、數字和情緒用語，分辨事實與觀點。", "outcome": "標題措詞比較表"},
+        {"number": 4, "title": "一個來源夠嗎？", "question": "不同來源之間應該比較甚麼？", "summary": "進行橫向查證，比較獨立來源的一致處、衝突處與證據品質。", "outcome": "多來源核查表"},
+        {"number": 5, "title": "AI 為何會「講得像真」？", "question": "語氣很肯定，是否代表內容可靠？", "summary": "理解 AI 可能生成流暢但錯誤的內容，學會標記待查證而不猜測補空。", "outcome": "AI 答案待查清單"},
+        {"number": 6, "title": "發送之前的 60 秒", "question": "分享消息前，哪個核查步驟最不能省？", "summary": "整合主張拆解、來源追溯、橫向核對與不確定性標示。", "outcome": "消息可信度調查卡"}
+      ]
+    },
+    {
+      "slug": "privacy-lab",
+      "heroImage": "/learner/runtime/privacy-lab-cover.webp",
+      "title": "我的資料，誰在使用？",
+      "question": "一張相片交給 AI 後，還能收回嗎？",
+      "summary": "從相片、聲音和聊天內容出發，練習在使用 AI 前辨認個人資料、權限與風險。",
+      "audience": "小五至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech", "life-money"],
+      "capabilities": ["私隱意識", "風險判斷", "數碼公民", "自我保護"],
+      "lessonCount": 5,
+      "minutesPerLesson": "15–20 分鐘",
+      "finalArtifact": "我的 AI 使用安全守則",
+      "status": "planning",
+      "sourceIds": ["pcpd", "edb-ai", "edb-il"],
+      "signal": "SAFE / 04",
+      "lessons": [
+        {"number": 1, "title": "交給 AI 之前，先停一停", "question": "這些資料真的需要提供嗎？", "summary": "從任務目的出發識別個人資料，練習刪除不必要的姓名、學校和位置線索。", "outcome": "AI 分享前檢查卡"},
+        {"number": 2, "title": "一張相片透露了多少？", "question": "主角之外的背景，還藏著哪些線索？", "summary": "檢視校徽、門牌、車牌和他人面孔等背景資料，練習去識別。", "outcome": "相片私隱掃描圖"},
+        {"number": 3, "title": "聲音也是個人資料嗎？", "question": "錄音或複製聲音前，要得到誰的同意？", "summary": "理解聲音可識別個人，在錄製、上載與生成前確認目的和同意。", "outcome": "聲音使用同意流程"},
+        {"number": 4, "title": "刪除按鈕代表已經消失嗎？", "question": "資料上載後可能去了哪裡？", "summary": "畫出裝置、服務、分享對象與備份之間的資料流，不把刪除當成即時保證。", "outcome": "資料流向圖"},
+        {"number": 5, "title": "我的 AI 安全協議", "question": "遇到不確定情境，怎樣停下、選擇和求助？", "summary": "整合資料最少化、權限、同意、刪除與向可信任成人求助的路線。", "outcome": "我的 AI 使用安全守則"}
+      ]
+    },
+    {
+      "slug": "city-memory-detectives",
+      "heroImage": "/learner/runtime/city-memory-detectives-cover.webp",
+      "title": "城市記憶偵探",
+      "question": "一座舊建築，如何說出一段香港故事？",
+      "summary": "從地點、細節和不同來源重組城市故事，分清記錄、觀點與合理想像。",
+      "audience": "小五至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["hong-kong", "chinese"],
+      "capabilities": ["地方研究", "敘事", "來源互證", "文化理解"],
+      "lessonCount": 6,
+      "minutesPerLesson": "18–22 分鐘",
+      "finalArtifact": "三分鐘香港城市故事",
+      "status": "planning",
+      "sourceIds": ["amo", "edb-chinese", "edb-il"],
+      "signal": "CITY / 05",
+      "lessons": [
+        {"number": 1, "title": "建築會自己說故事嗎？", "question": "我們由建築細節能知道甚麼，又不能知道甚麼？", "summary": "先作客觀觀察，再提出有根據的推斷，把事實、推斷與待查證分開。", "outcome": "建築證據便簽"},
+        {"number": 2, "title": "一個地名藏著甚麼？", "question": "地名的說法要怎樣追溯和核對？", "summary": "比較地圖、文字記錄和不同解釋，保留尚無定論的部分。", "outcome": "地名來源線索卡"},
+        {"number": 3, "title": "舊相片沒拍到的事", "question": "一張相片的畫框外面，我們還缺甚麼？", "summary": "讀懂拍攝角度、時間、選擇與沉默，不讓單一圖像代表全部歷史。", "outcome": "相片邊界註釋"},
+        {"number": 4, "title": "記憶與記錄不同怎麼辦？", "question": "當口述記憶和文字記錄不同，誰一定錯？", "summary": "比較來源目的、時間和視角，以多來源互證而非匆忙判決。", "outcome": "城市記憶對照表"},
+        {"number": 5, "title": "如何把「可能」寫得動人又誠實？", "question": "故事可以有想像，但怎樣不把想像偽裝成事實？", "summary": "用限定語、來源標記與原創情境標籤，建立誠實的敘事聲音。", "outcome": "誠實敘事改寫稿"},
+        {"number": 6, "title": "城市記憶導覽站", "question": "怎樣讓聽眾同時感受故事和看見證據？", "summary": "組合地點、證據、多個觀點和明確標示的原創段落。", "outcome": "三分鐘香港城市故事"}
+      ]
+    },
+    {
+      "slug": "nature-observers",
+      "heroImage": "/learner/runtime/nature-observers-cover.webp",
+      "title": "香港自然觀察員",
+      "question": "在城市旁邊，誰正和我們一起生活？",
+      "summary": "以不打擾生物、不收集個人位置的方式觀察香港物種，練習分類、記錄和提出問題。",
+      "audience": "小四至中二",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["hong-kong", "interests", "ai-tech"],
+      "capabilities": ["科學觀察", "分類", "保育意識", "資料倫理"],
+      "lessonCount": 6,
+      "minutesPerLesson": "15–20 分鐘",
+      "finalArtifact": "一頁城市生態觀察誌",
+      "status": "planning",
+      "sourceIds": ["afcd", "science-museum", "edb-ai"],
+      "signal": "ECO / 06",
+      "lessons": [
+        {"number": 1, "title": "誰正和我們一起生活？", "question": "怎樣把「我看到的」寫成可比較的科學描述？", "summary": "用形狀、顏色、行為和環境線索作記錄，不在證據不足時急著猜物種。", "outcome": "城市生物觀察卡"},
+        {"number": 2, "title": "一個特徵夠分類嗎？", "question": "兩種生物很相像時，還要比較甚麼？", "summary": "結合多個特徵建立分類規則，用反例測試單一特徵的限制。", "outcome": "多特徵分類鍵"},
+        {"number": 3, "title": "沒看見就代表沒有嗎？", "question": "觀察時間、地點和方法怎樣影響記錄？", "summary": "理解取樣範圍和偵測限制，把「未觀察到」與「不存在」分開。", "outcome": "觀察限制記錄"},
+        {"number": 4, "title": "應該公開發現地點嗎？", "question": "記錄生物位置時，怎樣保護生物和觀察者？", "summary": "比較精確位置與模糊區域的用途和風險，為敏感物種設計保護規則。", "outcome": "生態資料分享規則"},
+        {"number": 5, "title": "AI 認物種可信嗎？", "question": "分類結果出現後，還要核對哪些證據？", "summary": "把 AI 結果當成待測候選，檢查特徵、圖像品質、可能範圍和可靠來源。", "outcome": "AI 物種核查單"},
+        {"number": 6, "title": "城市生態小展覽", "question": "怎樣讓別人看懂發現，同時不誇大結論？", "summary": "整合觀察、分類、限制、安全位置和待研究問題。", "outcome": "一頁城市生態觀察誌"}
+      ]
+    },
+    {
+      "slug": "young-space-mission",
+      "heroImage": "/learner/runtime/young-space-mission-cover.webp",
+      "title": "少年太空任務",
+      "question": "天文事件發生了，為何我們仍可能看不見？",
+      "summary": "從觀星條件到光譜和軌道，把天象、天氣與本地環境連起來，像任務團隊一樣規劃和復盤。",
+      "audience": "小四至中二",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["interests", "hong-kong", "leadership"],
+      "capabilities": ["科學推理", "計劃", "協作", "不確定性"],
+      "lessonCount": 6,
+      "minutesPerLesson": "20–28 分鐘",
+      "finalArtifact": "香港觀星任務計劃",
+      "status": "planning",
+      "sourceIds": ["space-museum", "hko", "science-museum"],
+      "signal": "SPACE / 07",
+      "promoHeadline": "抬頭之前，先學會讀懂天空的條件。",
+      "introduction": "觀星不只是認星座。雲、月光、城市燈光、天體高度和安全安排，都會改變一次觀測任務。本系列由香港可理解的觀星決策出發，再延伸到大氣、月相、光譜、衛星軌道，讓學生以證據規劃一次真正負責任的太空任務。",
+      "highlights": [
+        "分清天文事件發生與香港本地可見",
+        "用原創星空示意探索光、大氣與軌道",
+        "每個任務都有條件、限制和安全底線",
+        "不把 AI 星空畫面冒充真實觀測照片"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "今晚適合觀星嗎？",
+          "question": "雲、月光、燈光和位置怎樣影響觀測？",
+          "summary": "比較三個模擬方案，把天空條件與安全要求一起納入決定。",
+          "outcome": "觀星條件檢查表"
+        },
+        {
+          "number": 2,
+          "title": "星星為何會閃？",
+          "question": "星光穿過大氣時發生甚麼？",
+          "summary": "以光路示意理解大氣擾動怎樣改變我們接收到的星光。",
+          "outcome": "大氣影響解釋圖"
+        },
+        {
+          "number": 3,
+          "title": "月相為何每天不同？",
+          "question": "月球位置和受光面怎樣改變外觀？",
+          "summary": "操作太陽、地球與月球模型，分開受光與觀看角度。",
+          "outcome": "月相位置模型"
+        },
+        {
+          "number": 4,
+          "title": "光譜是星星的條碼嗎？",
+          "question": "光怎樣透露溫度與成分線索？",
+          "summary": "比較原創光譜示意，理解科學家怎樣由光取得間接證據。",
+          "outcome": "光譜線索卡"
+        },
+        {
+          "number": 5,
+          "title": "衛星為何不會直接掉下來？",
+          "question": "速度、引力和軌道怎樣配合？",
+          "summary": "以逐步模型理解持續下落和向前運動形成軌道的概念。",
+          "outcome": "軌道概念圖"
+        },
+        {
+          "number": 6,
+          "title": "設計一次香港觀星任務",
+          "question": "怎樣統籌時間、方向、天氣與安全？",
+          "summary": "整合天象目標、觀測條件、現場安全和備選方案。",
+          "outcome": "香港觀星任務計劃"
+        }
+      ]
+    },
+    {
+      "slug": "hong-kong-smart-city-data",
+      "heroImage": "/learner/runtime/hong-kong-smart-city-data-cover.webp",
+      "title": "香港智慧城市數據隊",
+      "question": "巴士倒數的幾分鐘，是怎樣估出來的？",
+      "summary": "從到站時間、城市感測器、API 和路線建議，拆解城市數據如何流動、更新和出錯。",
+      "audience": "小五至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech", "hong-kong"],
+      "capabilities": ["數據流程", "時間戳", "誤差診斷", "私隱判斷"],
+      "lessonCount": 6,
+      "minutesPerLesson": "22–30 分鐘",
+      "finalArtifact": "可解釋的到站資訊小面板",
+      "status": "open",
+      "liveCourseIds": ["hk-t01-01-bus-eta"],
+      "sourceIds": ["data-gov-traffic", "digital-policy-data", "edb-il"],
+      "signal": "CITY DATA / 09",
+      "promoHeadline": "看懂一個倒數，便看見整座城市的數據流。",
+      "introduction": "到站時間不是承諾，而是由位置、路線、路況和時間戳共同形成、持續更新的估計。本系列用不收集學生位置的原創情境，帶學生打開智慧城市的數據黑盒，學會分辨測量、預測、延遲、缺值與責任。",
+      "highlights": [
+        "以香港日常交通問題理解數據系統",
+        "不把估計說成精確承諾",
+        "每一課都顯示來源、時間戳和資料不足狀態",
+        "不收集學生住址、學校、常用路線或即時位置"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "巴士還有幾分鐘到？",
+          "question": "系統怎樣由位置和路況估計到站時間？",
+          "summary": "拆解輸入、處理、輸出和更新，解釋倒數為何可能變大。",
+          "outcome": "ETA 證據鏈"
+        },
+        {
+          "number": 2,
+          "title": "城市怎樣感知正在發生甚麼？",
+          "question": "感測器能量度甚麼，又看不到甚麼？",
+          "summary": "為不同城市任務配對資料，辨認感測器的能力與盲點。",
+          "outcome": "城市感測器地圖"
+        },
+        {
+          "number": 3,
+          "title": "API 是系統之間的信差嗎？",
+          "question": "兩個系統怎樣交換結構化資料？",
+          "summary": "用請求與回應卡模擬資料交換、欄位和錯誤狀態。",
+          "outcome": "API 請求—回應卡"
+        },
+        {
+          "number": 4,
+          "title": "最快路線不一定最適合？",
+          "question": "排序目標怎樣改變建議？",
+          "summary": "比較時間、步行、轉乘與無障礙需要，理解推薦背後的目標。",
+          "outcome": "路線比較表"
+        },
+        {
+          "number": 5,
+          "title": "預測錯了，是資料還是模型？",
+          "question": "延遲、缺值和異常怎樣影響結果？",
+          "summary": "沿資料鏈逐步診斷，不把所有錯誤歸咎於 AI。",
+          "outcome": "誤差診斷樹"
+        },
+        {
+          "number": 6,
+          "title": "設計負責任的城市數據面板",
+          "question": "怎樣清楚顯示更新、來源、估計和限制？",
+          "summary": "整合資料來源、可用狀態、私隱和可解釋提示。",
+          "outcome": "到站資訊小面板"
+        }
+      ]
+    },
+    {
+      "slug": "robot-sensing-lab",
+      "heroImage": "/learner/runtime/robot-sensing-lab-cover.webp",
+      "title": "機械人感知實驗室",
+      "question": "機械人收到一個數值，就真的知道前面是甚麼嗎？",
+      "summary": "從感測器、控制規則到執行器，用模擬測試理解機械人的能力、盲點和安全邊界。",
+      "audience": "小四至中一",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech", "interests"],
+      "capabilities": ["系統思維", "感測原理", "測試修訂", "安全設計"],
+      "lessonCount": 6,
+      "minutesPerLesson": "20–28 分鐘",
+      "finalArtifact": "機械人感知—行動流程圖與測試卡",
+      "status": "open",
+      "sourceIds": ["science-museum", "edb-ai", "edb-il"],
+      "liveCourseIds": ["hk-t02-01-robot-sensing"],
+      "signal": "ROBOT / 10",
+      "promoHeadline": "不是讓機械人像人，而是看懂它如何感知、決定和行動。",
+      "introduction": "機械人不是有感情的同學，而是一套由感測、控制和動作組成的系統。本系列透過安全的屏幕模擬，讓學生比較讀數、設定規則、找出盲點，再把測試結果轉成可修訂的校園任務設計。",
+      "highlights": [
+        "不以人形外觀代表全部機械人",
+        "用連續讀數找出感測誤差與盲區",
+        "固定規則與學習模型分開比較",
+        "所有安全測試只在模擬環境進行"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "機械人怎樣知道前面有東西？",
+          "question": "距離感測器怎樣把環境變成數值？",
+          "summary": "比較連續模擬讀數，設計保守的減速、停止與失效處理。",
+          "outcome": "感知證據卡"
+        },
+        {
+          "number": 2,
+          "title": "機械人怎樣讓輪子和手臂動起來？",
+          "question": "執行器怎樣把指令變成動作？",
+          "summary": "把輸入、控制訊號和不同執行器的動作逐一配對。",
+          "outcome": "輸入—動作配對圖"
+        },
+        {
+          "number": 3,
+          "title": "機械人為何要不斷檢查結果？",
+          "question": "回饋迴路怎樣修正動作？",
+          "summary": "觀察偏差、再次量度並調整，建立閉環控制概念。",
+          "outcome": "回饋循環圖"
+        },
+        {
+          "number": 4,
+          "title": "固定規則和學習模型有何不同？",
+          "question": "同一任務可以怎樣用不同方法完成？",
+          "summary": "比較可直接寫出的規則與從例子學習模式的模型。",
+          "outcome": "控制方法比較表"
+        },
+        {
+          "number": 5,
+          "title": "人和機械人怎樣安全合作？",
+          "question": "速度、距離、停止和人工介入為何重要？",
+          "summary": "以模擬情境檢查最壞情況和失效安全設計。",
+          "outcome": "安全測試清單"
+        },
+        {
+          "number": 6,
+          "title": "為校園設計一台任務機械人",
+          "question": "怎樣從需要出發設計、測試和修訂？",
+          "summary": "由問題、限制、感測、行動與測試證據完成方案。",
+          "outcome": "校園任務機械人方案"
+        }
+      ]
+    },
+    {
+      "slug": "future-energy-engineers",
+      "heroImage": "/learner/runtime/future-energy-engineers-cover.webp",
+      "title": "未來能源工程師",
+      "question": "學校最高用電的一刻，等於全日最耗電嗎？",
+      "summary": "從用電曲線、能源效益到太陽能和儲能，以模擬數據設計安全、可測試的校園改進。",
+      "audience": "小五至中三",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["ai-tech", "interests", "hong-kong"],
+      "capabilities": ["圖表閱讀", "能源概念", "公平測試", "工程取捨"],
+      "lessonCount": 6,
+      "minutesPerLesson": "22–30 分鐘",
+      "finalArtifact": "校園能源診斷與可測試改進方案",
+      "status": "planning",
+      "sourceIds": ["emsd-energy", "science-museum", "edb-il"],
+      "signal": "ENERGY / 11",
+      "promoHeadline": "節能不是關掉一切，而是用證據做得更有效率。",
+      "introduction": "一條用電曲線可以顯示何時上升，卻不能單靠自己說出全部原因。本系列讓學生從功率與電量、冷氣照明、太陽能到儲能，逐步建立能源系統觀，再設計一項兼顧安全、舒適、成本和效果的校園改進。",
+      "highlights": [
+        "全部學校資料為清楚標示的課堂模擬",
+        "分清高峰功率與一段時間的總電量",
+        "節能測試不犧牲安全、通風和照度",
+        "結論保留天氣、人數與使用條件的限制"
+      ],
+      "lessons": [
+        {
+          "number": 1,
+          "title": "學校哪一刻最耗電？",
+          "question": "用電曲線怎樣顯示行為與設備變化？",
+          "summary": "閱讀虛構學校曲線，分清高峰、持續時間、可能原因與待查資料。",
+          "outcome": "用電偵探記錄"
+        },
+        {
+          "number": 2,
+          "title": "功率和電量是同一回事嗎？",
+          "question": "即時快慢和一段時間總量怎樣區分？",
+          "summary": "用積木面積比較不同功率和使用時間的總電量。",
+          "outcome": "功率—電量解釋卡"
+        },
+        {
+          "number": 3,
+          "title": "冷氣和照明怎樣更有效率？",
+          "question": "同樣服務可否用較少能源完成？",
+          "summary": "比較多個方案的能源、舒適、安全和可行性。",
+          "outcome": "能源效益方案表"
+        },
+        {
+          "number": 4,
+          "title": "香港的太陽能每天一樣嗎？",
+          "question": "日照、角度、雲和遮擋怎樣影響發電？",
+          "summary": "操作原創條件模型，避免把額定值當成每日固定產量。",
+          "outcome": "太陽能條件模型"
+        },
+        {
+          "number": 5,
+          "title": "電為何有時要儲起來？",
+          "question": "供電、用電和儲能怎樣平衡？",
+          "summary": "在模擬微型電網中安排供需與儲能角色。",
+          "outcome": "微型電網角色圖"
+        },
+        {
+          "number": 6,
+          "title": "怎樣提出可測試的校園節能方案？",
+          "question": "證據、成本、舒適和安全怎樣取捨？",
+          "summary": "選一項安全措施，設計前後比較並說明限制。",
+          "outcome": "校園能源改進提案"
+        }
+      ]
+    },
+    {
+      "slug": "money-decisions",
+      "heroImage": "/learner/runtime/money-decisions-cover.webp",
+      "title": "小小財務決策家",
+      "question": "最便宜，是否一定最適合？",
+      "summary": "從零用錢、網購和優惠出發，分清需要與想要，理解選擇背後的取捨與風險。",
+      "audience": "小四至中一",
+      "language": "正體中文（香港） · 粵語講解",
+      "languages": ["廣東話（香港粵語）"],
+      "ageBands": ["upper-primary", "junior-secondary"],
+      "topics": ["life-money", "leadership"],
+      "capabilities": ["預算", "比較", "延遲滿足", "決策"],
+      "lessonCount": 5,
+      "minutesPerLesson": "15–18 分鐘",
+      "finalArtifact": "我的一週選擇計劃",
+      "status": "planning",
+      "sourceIds": ["ifec", "edb-il"],
+      "signal": "LIFE / 08",
+      "lessons": [
+        {"number": 1, "title": "最平，一定最適合？", "question": "價錢之外，一個選擇還有哪些成本？", "summary": "在課堂模擬情境中分辨需要和想要，比較價格、運費、耐用度與使用條件。", "outcome": "總成本比較卡"},
+        {"number": 2, "title": "預算是限制還是計劃？", "question": "當金錢不夠滿足所有想要，怎樣排優先次序？", "summary": "先留出必要支出，再對選擇作取捨，並說明每個決定的理由。", "outcome": "預算優先次序表"},
+        {"number": 3, "title": "「限時」為何令人心急？", "question": "哪些行銷訊號會讓我們來不及比較？", "summary": "識別倒數、稀缺、原價錨定與同輩訊號，用停一停清單恢復判斷。", "outcome": "行銷線索識別卡"},
+        {"number": 4, "title": "先等一天會改變甚麼？", "question": "延遲決定怎樣幫助我們看見取捨？", "summary": "用等待期重新檢視需要、替代方案與放棄的其他機會。", "outcome": "24 小時決定日誌"},
+        {"number": 5, "title": "我的一週選擇實驗", "question": "怎樣用記錄而不是感覺檢視自己的選擇？", "summary": "設定一項小目標，以模擬或不涉及私隱的記錄完成計劃、觀察與復盤。", "outcome": "我的一週選擇計劃"}
+      ]
+    }
+  ],
+  "originalContentPolicy": {
+    "title": "參考事實，重新創作",
+    "summary": "官方資料只用來核對事實、能力目標與公共資訊。我們不直接複製官方文字、圖片、截圖、圖表或版式；表達形式重新創作，但來源中的事實、數字、範圍與原意不得改動。",
+    "rules": [
+      "先記錄資料來源、發布日期、適用範圍與可核查事實，再開始教學轉化。",
+      "不用改幾個字的方式仿寫原文；課程必須重新組織問題、敘事、例子與活動。",
+      "不下載或改造官方圖片；視覺以原創構圖、AI 生成或自行製作的圖表呈現。",
+      "AI 生成內容必須經人工核對，不把想像畫面當作歷史照片或事實證據。",
+      "以 R 標示可核實事實、M 標示課堂模擬記錄、S 標示原創敘事情境；模擬記錄不得代表香港現況。",
+      "健康、安全、法律、金融、政策與科學結論必須回到合適的一手來源，現實執行所缺的資料要標示為待查證。",
+      "万里 AI 課堂為獨立教育項目，與所列機構不存在合作、認可或隸屬關係；頁面只描述「依據哪些資料研發」，不暗示任何政府部門或公共機構認可、推薦或背書課程。",
+      "外部資料僅用於事實核對和課程研究；課程文字、圖像及教學活動由本項目重新編寫與製作。外部資料可能隨時間更新，請以原機構最新公布為準。"
+    ]
+  },
+  "standardsAlignment": [
+    {
+      "title": "學會應用，也學會判斷",
+      "framework": "AI 素養學習框架",
+      "description": "不只教工具操作；每個任務都要求學生說明目標、限制、證據與人應負的責任。"
+    },
+    {
+      "title": "先查來源，再分享結論",
+      "framework": "資訊素養學習框架",
+      "description": "把搜尋、來源評估、事實與意見、日期與適用範圍，變成可反覆練習的行動。"
+    },
+    {
+      "title": "把想法說清楚、寫明白",
+      "framework": "中國語文課程文件",
+      "description": "以正體書面中文組織內容，以自然粵語講解；普通話與英文使用各自獨立文稿。"
+    },
+    {
+      "title": "從香港真實問題出發",
+      "framework": "跨學科主題學習",
+      "description": "用天氣、城市、自然、私隱和生活選擇承載能力，而不是把框架術語直接塞給學生。"
+    }
+  ]
+}

@@ -264,6 +264,24 @@ export const TTS_PROVIDERS: Record<BuiltInTTSProviderId, TTSProviderConfig> = {
         gender: 'male',
       },
       {
+        id: 'zh-HK-HiuMaanNeural',
+        name: 'HiuMaan（香港粤语女声）',
+        language: 'zh-HK',
+        gender: 'female',
+      },
+      {
+        id: 'zh-HK-HiuGaaiNeural',
+        name: 'HiuGaai（香港粤语女声）',
+        language: 'zh-HK',
+        gender: 'female',
+      },
+      {
+        id: 'zh-HK-WanLungNeural',
+        name: 'WanLung（香港粤语男声）',
+        language: 'zh-HK',
+        gender: 'male',
+      },
+      {
         id: 'en-US-JennyNeural',
         name: 'Jenny',
         language: 'en-US',
@@ -272,6 +290,48 @@ export const TTS_PROVIDERS: Record<BuiltInTTSProviderId, TTSProviderConfig> = {
       { id: 'en-US-GuyNeural', name: 'Guy', language: 'en-US', gender: 'male' },
     ],
     supportedFormats: ['mp3', 'wav', 'ogg'],
+    speedRange: { min: 0.5, max: 2.0, default: 1.0 },
+  },
+
+  'edge-tts': {
+    id: 'edge-tts',
+    name: 'Edge TTS (Free Preview)',
+    requiresApiKey: false,
+    models: [],
+    defaultModelId: '',
+    voices: [
+      {
+        id: 'zh-HK-HiuMaanNeural',
+        name: 'HiuMaan（香港粤语女声）',
+        language: 'zh-HK',
+        gender: 'female',
+      },
+      {
+        id: 'zh-HK-HiuGaaiNeural',
+        name: 'HiuGaai（香港粤语女声）',
+        language: 'zh-HK',
+        gender: 'female',
+      },
+      {
+        id: 'zh-HK-WanLungNeural',
+        name: 'WanLung（香港粤语男声）',
+        language: 'zh-HK',
+        gender: 'male',
+      },
+      {
+        id: 'zh-CN-XiaoxiaoNeural',
+        name: '晓晓（普通话女声）',
+        language: 'zh-CN',
+        gender: 'female',
+      },
+      {
+        id: 'zh-CN-YunxiNeural',
+        name: '云希（普通话男声）',
+        language: 'zh-CN',
+        gender: 'male',
+      },
+    ],
+    supportedFormats: ['mp3'],
     speedRange: { min: 0.5, max: 2.0, default: 1.0 },
   },
 
@@ -1336,6 +1396,7 @@ export const ASR_PROVIDERS: Record<BuiltInASRProviderId, ASRProviderConfig> = {
 export const DEFAULT_TTS_VOICES: Record<BuiltInTTSProviderId, string> = {
   'openai-tts': 'alloy',
   'azure-tts': 'zh-CN-XiaoxiaoNeural',
+  'edge-tts': 'zh-HK-HiuMaanNeural',
   'glm-tts': 'tongtong',
   'qwen-tts': 'Cherry',
   'voxcpm-tts': VOXCPM_AUTO_VOICE_ID,
@@ -1349,6 +1410,7 @@ export const DEFAULT_TTS_VOICES: Record<BuiltInTTSProviderId, string> = {
 export const DEFAULT_TTS_MODELS: Record<BuiltInTTSProviderId, string> = {
   'openai-tts': 'gpt-4o-mini-tts',
   'azure-tts': '',
+  'edge-tts': '',
   'glm-tts': 'glm-tts',
   'qwen-tts': 'qwen3-tts-flash',
   'voxcpm-tts': VOXCPM_VLLM_MODEL_ID,

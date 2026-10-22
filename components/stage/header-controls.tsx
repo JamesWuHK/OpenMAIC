@@ -138,77 +138,79 @@ export function HeaderControls({
   // anchors identically too.
   return (
     <div className="flex items-center gap-4">
-      <div
-        className={cn(
-          'shrink-0 flex items-center gap-1 backdrop-blur-md shadow-sm rounded-full',
-          compact
-            ? 'bg-zinc-100/70 dark:bg-zinc-800/70 border border-zinc-200/60 dark:border-zinc-700/60 px-1.5 py-1'
-            : 'bg-white/60 dark:bg-gray-800/60 border border-gray-100/50 dark:border-gray-700/50 px-2 py-1.5',
-        )}
-      >
-        {/* Language — Radix DropdownMenu so its menu portals to body
-            and never gets clipped by an ancestor's overflow-hidden. */}
-        <LanguageSwitcher />
-
-        {/* Theme — same Portal-backed DropdownMenu pattern. Non-modal keeps
-            Radix from body scroll-locking a fixed-height classroom layout. */}
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
-              aria-label={t('settings.theme')}
-            >
-              {theme === 'light' && <Sun className="w-4 h-4" />}
-              {theme === 'dark' && <Moon className="w-4 h-4" />}
-              {theme === 'system' && <Monitor className="w-4 h-4" />}
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={8} className="min-w-[140px]">
-            <DropdownMenuItem
-              onSelect={() => setTheme('light')}
-              className={cn(
-                'cursor-pointer gap-2',
-                theme === 'light' &&
-                  'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
-              )}
-            >
-              <Sun className="w-4 h-4" />
-              {t('settings.themeOptions.light')}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => setTheme('dark')}
-              className={cn(
-                'cursor-pointer gap-2',
-                theme === 'dark' &&
-                  'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
-              )}
-            >
-              <Moon className="w-4 h-4" />
-              {t('settings.themeOptions.dark')}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => setTheme('system')}
-              className={cn(
-                'cursor-pointer gap-2',
-                theme === 'system' &&
-                  'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
-              )}
-            >
-              <Monitor className="w-4 h-4" />
-              {t('settings.themeOptions.system')}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Settings */}
-        <button
-          onClick={() => setSettingsOpen(true)}
-          className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
-          aria-label={t('settings.title')}
+      {showGlobalControls && (
+        <div
+          className={cn(
+            'shrink-0 flex items-center gap-1 backdrop-blur-md shadow-sm rounded-full',
+            compact
+              ? 'bg-zinc-100/70 dark:bg-zinc-800/70 border border-zinc-200/60 dark:border-zinc-700/60 px-1.5 py-1'
+              : 'bg-white/60 dark:bg-gray-800/60 border border-gray-100/50 dark:border-gray-700/50 px-2 py-1.5',
+          )}
         >
-          <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-        </button>
-      </div>
+          {/* Language — Radix DropdownMenu so its menu portals to body
+            and never gets clipped by an ancestor's overflow-hidden. */}
+          <LanguageSwitcher />
+
+          {/* Theme — same Portal-backed DropdownMenu pattern. Non-modal keeps
+            Radix from body scroll-locking a fixed-height classroom layout. */}
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
+                aria-label={t('settings.theme')}
+              >
+                {theme === 'light' && <Sun className="w-4 h-4" />}
+                {theme === 'dark' && <Moon className="w-4 h-4" />}
+                {theme === 'system' && <Monitor className="w-4 h-4" />}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={8} className="min-w-[140px]">
+              <DropdownMenuItem
+                onSelect={() => setTheme('light')}
+                className={cn(
+                  'cursor-pointer gap-2',
+                  theme === 'light' &&
+                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                )}
+              >
+                <Sun className="w-4 h-4" />
+                {t('settings.themeOptions.light')}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => setTheme('dark')}
+                className={cn(
+                  'cursor-pointer gap-2',
+                  theme === 'dark' &&
+                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                )}
+              >
+                <Moon className="w-4 h-4" />
+                {t('settings.themeOptions.dark')}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => setTheme('system')}
+                className={cn(
+                  'cursor-pointer gap-2',
+                  theme === 'system' &&
+                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                )}
+              >
+                <Monitor className="w-4 h-4" />
+                {t('settings.themeOptions.system')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Settings */}
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group"
+            aria-label={t('settings.title')}
+          >
+            <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
+          </button>
+        </div>
+      )}
 
       {/* Pro Switch — toggle property: on/off both clickable, not a
           one-way "Done" button. Disabled only when the current scene
@@ -264,134 +266,136 @@ export function HeaderControls({
           Not a settings function so it does not belong inside the
           settings pill; kept as a separate sibling sitting between the
           Pro Switch and the right edge of the chrome. */}
-      <DropdownMenu modal={false} open={exportMenuOpen} onOpenChange={setExportMenuOpen}>
-        <DropdownMenuTrigger asChild>
-          <button
-            disabled={!canExport || isExporting || isExportingZip || isExportingScript}
-            title={
-              isExporting || isExportingZip || isExportingScript
-                ? t('export.exporting')
-                : exportLabel
-            }
-            className={cn(
-              'shrink-0 p-2 rounded-full transition-all',
-              canExport && !isExporting && !isExportingZip && !isExportingScript
-                ? 'text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm'
-                : 'text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50',
-            )}
-            aria-label={exportLabel}
-          >
-            {isExporting || isExportingZip || isExportingScript ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : videoRendering ? (
-              // Persistent ring: video render runs in the background; keep it
-              // visible on the button whether or not the menu is open.
-              <CircularProgress value={videoRenderPercent} size={20} className="text-primary" />
-            ) : (
-              <Download className="w-4 h-4" />
-            )}
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" sideOffset={8} className="min-w-[240px]">
-          <DropdownMenuItem
-            disabled={!canExport}
-            onSelect={exportPPTX}
-            className="cursor-pointer gap-2.5"
-            title={canExport ? undefined : t('export.mediaPending')}
-          >
-            <FileDown className="w-4 h-4 text-gray-400 shrink-0" />
-            <span>{t('export.pptx')}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={!canExport}
-            onSelect={exportResourcePack}
-            className="cursor-pointer gap-2.5"
-            title={canExport ? undefined : t('export.mediaPending')}
-          >
-            <Package className="w-4 h-4 text-gray-400 shrink-0" />
-            <div>
-              <div>{t('export.resourcePack')}</div>
-              <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                {t('export.resourcePackDesc')}
-              </div>
-            </div>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={!canExport || isExportingZip}
-            onSelect={exportClassroomZip}
-            className="cursor-pointer gap-2.5"
-            title={canExport ? undefined : t('export.mediaPending')}
-          >
-            <Archive className="w-4 h-4 text-gray-400 shrink-0" />
-            <div>
-              <div>{t('export.classroomZip')}</div>
-              <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                {t('export.classroomZipDesc')}
-              </div>
-            </div>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger
-              disabled={!canExport}
-              title={canExport ? undefined : t('export.mediaPending')}
-              className="cursor-pointer gap-2.5"
+      {showCourseActions && (
+        <DropdownMenu modal={false} open={exportMenuOpen} onOpenChange={setExportMenuOpen}>
+          <DropdownMenuTrigger asChild>
+            <button
+              disabled={!canExport || isExporting || isExportingZip || isExportingScript}
+              title={
+                isExporting || isExportingZip || isExportingScript
+                  ? t('export.exporting')
+                  : exportLabel
+              }
+              className={cn(
+                'shrink-0 p-2 rounded-full transition-all',
+                canExport && !isExporting && !isExportingZip && !isExportingScript
+                  ? 'text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm'
+                  : 'text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50',
+              )}
+              aria-label={exportLabel}
             >
-              <NotebookText className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
-              <span>{t('export.script')}</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="min-w-[240px]">
-              <DropdownMenuItem
-                disabled={!canExport || isExportingScript}
-                onSelect={exportScriptMd}
-                className="cursor-pointer gap-2.5"
-              >
-                <NotebookText className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
-                <div>
-                  <div>{t('export.scriptMd')}</div>
-                  <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                    {t('export.scriptMdDesc')}
-                  </div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={!canExport || isExportingScript}
-                onSelect={exportScriptDocx}
-                className="cursor-pointer gap-2.5"
-              >
-                <NotebookText
-                  className="w-4 h-4 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                />
-                <div>
-                  <div>{t('export.scriptDocx')}</div>
-                  <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                    {t('export.scriptDocxDesc')}
-                  </div>
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          {videoExportEnabled && (
+              {isExporting || isExportingZip || isExportingScript ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : videoRendering ? (
+                // Persistent ring: video render runs in the background; keep it
+                // visible on the button whether or not the menu is open.
+                <CircularProgress value={videoRenderPercent} size={20} className="text-primary" />
+              ) : (
+                <Download className="w-4 h-4" />
+              )}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={8} className="min-w-[240px]">
             <DropdownMenuItem
               disabled={!canExport}
-              onSelect={() => setVideoDialogOpen(true)}
-              className="cursor-pointer gap-2.5 border-t border-gray-200 dark:border-gray-700"
+              onSelect={exportPPTX}
+              className="cursor-pointer gap-2.5"
               title={canExport ? undefined : t('export.mediaPending')}
             >
-              <Film className="w-4 h-4 text-gray-400 shrink-0" />
+              <FileDown className="w-4 h-4 text-gray-400 shrink-0" />
+              <span>{t('export.pptx')}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={!canExport}
+              onSelect={exportResourcePack}
+              className="cursor-pointer gap-2.5"
+              title={canExport ? undefined : t('export.mediaPending')}
+            >
+              <Package className="w-4 h-4 text-gray-400 shrink-0" />
               <div>
-                <div>{t('export.video')}</div>
+                <div>{t('export.resourcePack')}</div>
                 <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                  {t('export.videoDesc')}
+                  {t('export.resourcePackDesc')}
                 </div>
               </div>
             </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <DropdownMenuItem
+              disabled={!canExport || isExportingZip}
+              onSelect={exportClassroomZip}
+              className="cursor-pointer gap-2.5"
+              title={canExport ? undefined : t('export.mediaPending')}
+            >
+              <Archive className="w-4 h-4 text-gray-400 shrink-0" />
+              <div>
+                <div>{t('export.classroomZip')}</div>
+                <div className="text-[11px] text-gray-400 dark:text-gray-500">
+                  {t('export.classroomZipDesc')}
+                </div>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger
+                disabled={!canExport}
+                title={canExport ? undefined : t('export.mediaPending')}
+                className="cursor-pointer gap-2.5"
+              >
+                <NotebookText className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
+                <span>{t('export.script')}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="min-w-[240px]">
+                <DropdownMenuItem
+                  disabled={!canExport || isExportingScript}
+                  onSelect={exportScriptMd}
+                  className="cursor-pointer gap-2.5"
+                >
+                  <NotebookText className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
+                  <div>
+                    <div>{t('export.scriptMd')}</div>
+                    <div className="text-[11px] text-gray-400 dark:text-gray-500">
+                      {t('export.scriptMdDesc')}
+                    </div>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={!canExport || isExportingScript}
+                  onSelect={exportScriptDocx}
+                  className="cursor-pointer gap-2.5"
+                >
+                  <NotebookText
+                    className="w-4 h-4 text-gray-400 dark:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <div>{t('export.scriptDocx')}</div>
+                    <div className="text-[11px] text-gray-400 dark:text-gray-500">
+                      {t('export.scriptDocxDesc')}
+                    </div>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            {videoExportEnabled && (
+              <DropdownMenuItem
+                disabled={!canExport}
+                onSelect={() => setVideoDialogOpen(true)}
+                className="cursor-pointer gap-2.5 border-t border-gray-200 dark:border-gray-700"
+                title={canExport ? undefined : t('export.mediaPending')}
+              >
+                <Film className="w-4 h-4 text-gray-400 shrink-0" />
+                <div>
+                  <div>{t('export.video')}</div>
+                  <div className="text-[11px] text-gray-400 dark:text-gray-500">
+                    {t('export.videoDesc')}
+                  </div>
+                </div>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
-      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
-      {videoExportEnabled && (
+      {showGlobalControls && <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />}
+      {showCourseActions && videoExportEnabled && (
         <VideoExportDialog open={videoDialogOpen} onOpenChange={setVideoDialogOpen} />
       )}
     </div>

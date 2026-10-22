@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { shouldInitializeServerProviders } from '@/lib/config/deployment-mode';
 import { useSettingsStore } from '@/lib/store/settings';
 
 /**
@@ -11,6 +12,7 @@ export function ServerProvidersInit() {
   const fetchServerProviders = useSettingsStore((state) => state.fetchServerProviders);
 
   useEffect(() => {
+    if (!shouldInitializeServerProviders()) return;
     fetchServerProviders();
   }, [fetchServerProviders]);
 

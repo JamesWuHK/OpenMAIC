@@ -219,12 +219,16 @@ export async function runAgentLoop(
           const line = part.trim();
           if (!line.startsWith('data: ')) continue;
 
+          let event: StatelessEvent;
           try {
-            const event: StatelessEvent = JSON.parse(line.slice(6));
-            callbacks.onEvent(event);
+            event = JSON.parse(line.slice(6));
           } catch {
-            // Skip malformed events (heartbeats, etc.)
+            // Only malformed JSON is ignorable. Consumer/provider failures must
+            // reach the caller's error path, not be mistaken for a normal END.
+            continue;
           }
+          callbacks.onEvent(event);
+          if (event.type === 'error') throw new Error(event.data.message);
         }
       }
     } finally {

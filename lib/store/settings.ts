@@ -505,6 +505,7 @@ const getDefaultAudioConfig = () => ({
     // by a stale default (#665).
     'openai-tts': { apiKey: '', baseUrl: '', enabled: true },
     'azure-tts': { apiKey: '', baseUrl: '', enabled: true },
+    'edge-tts': { apiKey: '', baseUrl: '', enabled: true },
     'glm-tts': { apiKey: '', baseUrl: '', enabled: true },
     'qwen-tts': { apiKey: '', baseUrl: '', enabled: true },
     'voxcpm-tts': {

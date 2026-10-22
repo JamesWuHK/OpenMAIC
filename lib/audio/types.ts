@@ -82,6 +82,7 @@
 export type BuiltInTTSProviderId =
   | 'openai-tts'
   | 'azure-tts'
+  | 'edge-tts'
   | 'glm-tts'
   | 'qwen-tts'
   | 'voxcpm-tts'

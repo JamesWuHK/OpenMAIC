@@ -218,7 +218,9 @@ async function directorNode(
     };
   } catch (error) {
     log.error('[Director] Error:', error);
-    return { shouldEnd: true };
+    // A failed provider call is not a pedagogical decision to end discussion.
+    // Propagate to the SSE error boundary instead of emitting a zero-agent done.
+    throw error;
   }
 }
 

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { isAgentRuntimeConfigured, isProWorkbenchEnabled } from '@/lib/config/feature-flags';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { learnerBoundaryDecision } from '@/lib/learner/boundary';
 
 /** Convert string to Uint8Array */
 function encode(str: string): Uint8Array {
@@ -45,6 +47,16 @@ async function verifyToken(token: string, accessCode: string): Promise<boolean> 
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // A learner deployment is a separate product surface, not merely a hidden
+  // button set. Remove authoring pages and APIs before access-code handling so
+  // even an authenticated caller cannot invoke producer capabilities here.
+  if (
+    isLearnerDeployment() &&
+    learnerBoundaryDecision({ method: request.method, pathname }) === 'not-found'
+  ) {
+    return new NextResponse('Not found', { status: 404 });
+  }
 
   // Return an actual server-side 404 when either half of the workbench is off.
   // Edge middleware cannot reliably inspect server-only deployment variables,

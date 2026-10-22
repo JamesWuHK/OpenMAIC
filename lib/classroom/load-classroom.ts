@@ -26,6 +26,10 @@ import {
 import { slideMediaReferenceSlots } from '@/lib/media/slide-media-slots';
 import { isConcreteMediaAddress } from '@/lib/media/resolve-media-ref';
 import { createLogger } from '@/lib/logger';
+import {
+  markBrowserStorageUnavailable,
+  probeBrowserStorage as probeBrowserStorageAvailability,
+} from '@/lib/utils/browser-storage-health';
 
 const moduleLog = createLogger('ClassroomLoad');
 
@@ -57,6 +61,10 @@ export interface RunClassroomLoadArgs<TMediaTasks = unknown> {
   classroomId: string;
   loadToken: StageSceneLoadToken;
   isCurrent: () => boolean;
+  /** Learner playback may use the immutable published copy when browser storage is unavailable. */
+  recoverFromStorageError?: boolean;
+  /** Native preflight used to avoid starting Dexie in a known-broken Chromium profile. */
+  probeBrowserStorage?: () => Promise<boolean>;
   loadFromStorage: (classroomId: string, loadToken: StageSceneLoadToken) => Promise<void>;
   getCurrentStage: () => Stage | null;
   fetchClassroom: (
@@ -67,6 +75,7 @@ export interface RunClassroomLoadArgs<TMediaTasks = unknown> {
     loadToken: StageSceneLoadToken;
     stage: Stage;
     scenes: readonly Scene[];
+    storageUnavailable?: boolean;
   }) => Promise<boolean>;
   loadRestoredMediaTasks: (stageId: string) => Promise<TMediaTasks>;
   applyRestoredMediaTasks: (tasks: TMediaTasks) => void;
@@ -112,6 +121,8 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
   classroomId,
   loadToken,
   isCurrent,
+  recoverFromStorageError = false,
+  probeBrowserStorage = probeBrowserStorageAvailability,
   loadFromStorage,
   getCurrentStage,
   fetchClassroom,
@@ -130,10 +141,34 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
   log,
 }: RunClassroomLoadArgs<TMediaTasks>): Promise<void> {
   try {
-    await loadFromStorage(classroomId, loadToken);
+    let storageUnavailable = false;
+    if (recoverFromStorageError) {
+      const storageAvailable = await probeBrowserStorage();
+      if (!isCurrent()) return;
+      if (!storageAvailable) {
+        storageUnavailable = true;
+        markBrowserStorageUnavailable();
+        log.warn(
+          'Browser storage failed its native preflight; loading the published classroom from the server.',
+        );
+      }
+    }
+    if (!storageUnavailable) {
+      try {
+        await loadFromStorage(classroomId, loadToken);
+      } catch (error) {
+        if (!recoverFromStorageError) throw error;
+        storageUnavailable = true;
+        markBrowserStorageUnavailable();
+        log.warn(
+          'Browser storage unavailable; loading the published classroom from the server:',
+          error,
+        );
+      }
+    }
     if (!isCurrent()) return;
 
-    if (!getCurrentStage()) {
+    if (storageUnavailable || !getCurrentStage()) {
       log.info('No IndexedDB data, trying server-side storage for:', classroomId);
       // The fetch path converts and commits under the per-stage document lock.
       // Once it returns, the document owns every allocation; a later
@@ -144,7 +179,12 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
 
       if (classroom) {
         const { stage, scenes } = classroom;
-        const applied = await applyFallbackScenes({ loadToken, stage, scenes });
+        const applied = await applyFallbackScenes({
+          loadToken,
+          stage,
+          scenes,
+          ...(storageUnavailable ? { storageUnavailable: true } : {}),
+        });
         if (!isCurrent()) return;
         if (!applied) {
           log.info('Stage changed during server-side fallback hydration, skipping load:', {
@@ -161,12 +201,14 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     // Metadata-only on the critical path: the default loader defers object-URL
     // creation for non-priority blobs, so this await is a table read, not a
     // full media hydration (the rest hydrates in the background after apply).
-    const mediaTasks = await loadRestoredMediaTasks(classroomId);
-    if (!isCurrent()) {
-      discardRestoredMediaTasks(mediaTasks);
-      return;
+    if (!storageUnavailable) {
+      const mediaTasks = await loadRestoredMediaTasks(classroomId);
+      if (!isCurrent()) {
+        discardRestoredMediaTasks(mediaTasks);
+        return;
+      }
+      applyRestoredMediaTasks(mediaTasks);
     }
-    applyRestoredMediaTasks(mediaTasks);
 
     // ── Roster hydration: the stage document is the source of truth ──
     // The legacy IndexedDB mirror is consulted as a read-only, per-stage
@@ -191,6 +233,7 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     let effectiveConfigs = documentConfigs ?? [];
     if (
       stageForRoster?.id === classroomId &&
+      !storageUnavailable &&
       rosterNeedsLegacyFallback(documentConfigs) &&
       !fruitlessLegacyProbeStageIds.has(classroomId)
     ) {

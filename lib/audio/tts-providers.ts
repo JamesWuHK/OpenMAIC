@@ -93,6 +93,10 @@
  */
 
 import type { TTSModelConfig } from './types';
+import { execFile } from 'node:child_process';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { isCustomTTSProvider } from './types';
 import { isQwenCloneVoice, resolveTTSModelForVoice, TTS_PROVIDERS } from './constants';
 import { downloadAudio, QwenVoiceCloneError, synthesizeQwenVoiceClone } from './qwen-voice-clone';
@@ -223,6 +227,9 @@ export async function generateTTS(
 
       case 'azure-tts':
         return await generateAzureTTS(config, text, signal);
+
+      case 'edge-tts':
+        return await generateEdgeTTS(config, text, signal);
 
       case 'glm-tts':
         return await generateGLMTTS(config, text, signal);
@@ -650,12 +657,16 @@ async function generateAzureTTS(
   signal: AbortSignal,
 ): Promise<TTSGenerationResult> {
   const baseUrl = config.baseUrl || TTS_PROVIDERS['azure-tts'].defaultBaseUrl;
+  const voiceLanguage =
+    TTS_PROVIDERS['azure-tts'].voices.find((voice) => voice.id === config.voice)?.language ??
+    config.voice?.match(/^([a-z]{2,3}-[A-Z]{2})(?:-|$)/u)?.[1] ??
+    'zh-CN';
 
   // Build SSML
   const rate = config.speed ? `${((config.speed - 1) * 100).toFixed(0)}%` : '0%';
   const ssml = `
-    <speak version='1.0' xml:lang='zh-CN'>
-      <voice xml:lang='zh-CN' name='${config.voice}'>
+    <speak version='1.0' xml:lang='${voiceLanguage}'>
+      <voice xml:lang='${voiceLanguage}' name='${config.voice}'>
         <prosody rate='${rate}'>${escapeXml(text)}</prosody>
       </voice>
     </speak>
@@ -682,6 +693,41 @@ async function generateAzureTTS(
     audio: new Uint8Array(arrayBuffer),
     format: 'mp3',
   };
+}
+
+/**
+ * Microsoft Edge speech synthesis for course narration and the bounded learner
+ * discussion endpoint. Provider configuration remains server-owned for learners.
+ */
+async function generateEdgeTTS(
+  config: TTSModelConfig,
+  text: string,
+  signal: AbortSignal,
+): Promise<TTSGenerationResult> {
+  const workDir = await mkdtemp(join(tmpdir(), 'openmaic-edge-tts-'));
+  const outputPath = join(workDir, 'speech.mp3');
+  const executable = process.env.TTS_EDGE_BIN?.trim() || 'edge-tts';
+  const speed = Math.min(2, Math.max(0.5, config.speed ?? 1));
+  const ratePercent = Math.round((speed - 1) * 100);
+  const rate = `${ratePercent >= 0 ? '+' : ''}${ratePercent}%`;
+
+  try {
+    await new Promise<void>((resolve, reject) => {
+      execFile(
+        executable,
+        ['--text', text, '--voice', config.voice, '--rate', rate, '--write-media', outputPath],
+        { signal, timeout: ttsRequestTimeoutMs() },
+        (error) => (error ? reject(error) : resolve()),
+      );
+    });
+
+    return {
+      audio: new Uint8Array(await readFile(outputPath)),
+      format: 'mp3',
+    };
+  } finally {
+    await rm(workDir, { recursive: true, force: true });
+  }
 }
 
 /**

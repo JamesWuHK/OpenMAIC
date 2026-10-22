@@ -1,0 +1,51 @@
+services:
+  openmaic:
+    image: ${OPENMAIC_LEARNER_IMAGE:-openmaic-learner-openmaic:latest}
+    env_file:
+      - path: ${OPENMAIC_LEARNER_ENV_FILE:-learner.env}
+        required: false
+    build:
+      context: .
+      args:
+        NEXT_BUILD_NODE_OPTIONS: '--max-old-space-size=3072'
+        OPENMAIC_BUILD_CPUS: '1'
+        NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: learner
+        NEXT_PUBLIC_PERSISTENCE: ''
+        NEXT_PUBLIC_PRO_WORKBENCH_ENABLED: 'false'
+        NEXT_PUBLIC_MAIC_EDITOR_ENABLED: 'false'
+        NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED: 'false'
+        NEXT_PUBLIC_PI_CHAT_ENABLED: 'false'
+        NEXT_PUBLIC_ENABLE_VIDEO_EXPORT: 'false'
+        NEXT_PUBLIC_ENABLE_PPTX_IMPORT: 'false'
+    environment:
+      OPENMAIC_DEPLOYMENT_MODE: learner
+      TRUST_PROXY_HEADERS: 'true'
+      LEARNER_SITE_CONTENT_PATH: /app/content/learner/site-content.json
+      LEARNER_PUBLISHED_COURSES_PATH: /app/content/learner/published-courses.json
+      NODE_ENV: production
+    expose:
+      - '3000'
+    volumes:
+      - ./data/classrooms:/app/data/classrooms:ro
+      - ./data/teacher-submissions:/app/data/teacher-submissions
+      - ./content/learner:/app/content/learner:ro
+      - ./content/learner/media:/app/public/learner/runtime:ro
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    depends_on:
+      - openmaic
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

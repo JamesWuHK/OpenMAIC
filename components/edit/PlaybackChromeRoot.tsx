@@ -63,6 +63,8 @@ import {
   getSlideElementTypeLabel,
 } from '@/components/canvas/slide-element-pick-overlay';
 import { shouldClearDraftElementReference } from '@/components/chat/element-reference-receipt';
+import { isBrowserStorageUnavailable } from '@/lib/utils/browser-storage-health';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 type DraftSlideElementReference = {
   reference: SlideElementReference;
@@ -242,7 +244,8 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     const [audioAgentId, setAudioAgentId] = useState<string | null>(null);
 
     const discussionTTS = useDiscussionTTS({
-      enabled: ttsEnabled && !ttsMuted,
+      enabled: (isLearnerDeployment() || ttsEnabled) && !ttsMuted,
+      classroomId: stage?.id,
       agents: selectedAgents,
       onAudioStateChange: (agentId, state) => {
         setAudioAgentId(agentId);
@@ -316,6 +319,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
     const persistCursorSafely = useCallback(
       ({ stageId, cursor }: { stageId: string; cursor: PlaybackCursor }) => {
+        if (isBrowserStorageUnavailable()) return;
         void saveCursor(stageId, cursor).catch((error) => {
           console.warn(`Failed to save playback cursor for stage ${stageId}:`, error);
         });
@@ -325,6 +329,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
     const scheduleCursorSave = useCallback(
       (stageId: string, cursor: PlaybackCursor) => {
+        if (isBrowserStorageUnavailable()) return;
         pendingCursorRef.current = { stageId, cursor };
         if (cursorSaveTimerRef.current) clearTimeout(cursorSaveTimerRef.current);
         cursorSaveTimerRef.current = setTimeout(() => {
@@ -687,7 +692,12 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             : { actionIndex: 0, position: null };
         let savedResumeActionIndex = sessionResumeCursor.actionIndex;
         const playbackStageId = stage?.id ?? currentScene?.stageId;
-        if (currentScene && playbackStageId && !sessionResumeCursor.position) {
+        if (
+          currentScene &&
+          playbackStageId &&
+          !sessionResumeCursor.position &&
+          !isBrowserStorageUnavailable()
+        ) {
           try {
             const cursor = await loadCursor(playbackStageId);
             if (
@@ -1793,6 +1803,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             }}
             onStopSession={handleSessionStop}
             onSegmentSealed={discussionTTS.handleSegmentSealed}
+            onStreamingTextDelta={discussionTTS.handleStreamingTextDelta}
             shouldHoldAfterReveal={discussionTTS.shouldHold}
           />
         </div>

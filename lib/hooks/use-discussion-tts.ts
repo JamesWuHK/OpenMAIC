@@ -18,6 +18,8 @@ import type { AudioIndicatorState } from '@/components/roundtable/audio-indicato
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { isQwenCloneVoice, resolveTTSModelForVoice } from '@/lib/audio/constants';
 import { toast } from 'sonner';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { takeCompleteSpeechSegments } from '@/lib/audio/discussion-speech-segments';
 import {
   isVoiceBindingUnavailable,
   markVoiceBindingNoticeShown,
@@ -27,6 +29,7 @@ import {
 
 interface DiscussionTTSOptions {
   enabled: boolean;
+  classroomId?: string;
   agents: AgentConfig[];
   onAudioStateChange?: (agentId: string | null, state: AudioIndicatorState) => void;
 }
@@ -42,7 +45,19 @@ interface QueueItem {
   fallbackVoice?: ResolvedVoice;
 }
 
-export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: DiscussionTTSOptions) {
+interface StreamingSpeechState {
+  pending: string;
+  partIndex: number;
+  agentId: string | null;
+}
+
+export function useDiscussionTTS({
+  enabled,
+  classroomId,
+  agents,
+  onAudioStateChange,
+}: DiscussionTTSOptions) {
+  const learner = isLearnerDeployment();
   const { locale, t } = useI18n();
   const ttsProvidersConfig = useSettingsStore((s) => s.ttsProvidersConfig);
   const ttsSpeed = useSettingsStore((s) => s.ttsSpeed);
@@ -67,6 +82,8 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
   onAudioStateChangeRef.current = onAudioStateChange;
   const processQueueRef = useRef<() => void>(() => {});
   const agentBindingKeysRef = useRef(new Map<string, string>());
+  const failureNoticeShownRef = useRef(false);
+  const streamingSpeechRef = useRef(new Map<string, StreamingSpeechState>());
 
   const {
     speak: browserSpeak,
@@ -115,6 +132,8 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
 
   const resolveVoiceForAgent = useCallback(
     (agentId: string | null): ResolvedVoice | null => {
+      // Learners use the server-owned classroom voice, regardless of stale authoring settings.
+      if (learner) return { providerId: 'edge-tts', voiceId: 'classroom' };
       // ONE selectable-provider list shared with the AgentBar picker: enabled
       // server/custom providers + opt-in browser-native. Students resolve against
       // it (fixes the #665 student-silence bug); the teacher uses the global
@@ -194,6 +213,7 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
       }
     },
     [
+      learner,
       agents,
       ttsProvidersConfig,
       voiceProfiles,
@@ -232,28 +252,38 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
     try {
       const providerConfig = ttsProvidersConfig[item.providerId];
       const agent = item.agentId ? agents.find((a) => a.id === item.agentId) : undefined;
-      const providerOptions = await resolveAgentVoiceOptions(agent, {
-        providerId: item.providerId,
-        providerConfig: { ...providerConfig, modelId: item.modelId || providerConfig?.modelId },
-        voiceId: item.voiceId,
-        language: locale,
-      });
-      const res = await fetch('/api/generate/tts', {
+      const providerOptions = learner
+        ? undefined
+        : await resolveAgentVoiceOptions(agent, {
+            providerId: item.providerId,
+            providerConfig: { ...providerConfig, modelId: item.modelId || providerConfig?.modelId },
+            voiceId: item.voiceId,
+            language: locale,
+          });
+      const res = await fetch(learner ? '/api/learner/speech' : '/api/generate/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: item.text,
-          audioId: item.partId,
-          ttsProviderId: item.providerId,
-          ttsModelId: item.modelId || providerConfig?.modelId,
-          ttsVoice: item.voiceId,
-          ttsSpeed: ttsSpeed,
-          ttsApiKey: providerConfig?.apiKey,
-          // Managed providers resolve their base URL server-side; only send the
-          // client's own base URL (custom providers).
-          ttsBaseUrl: providerConfig?.baseUrl || providerConfig?.customDefaultBaseUrl,
-          ttsProviderOptions: providerOptions,
-        }),
+        body: JSON.stringify(
+          learner
+            ? {
+                classroomId,
+                agentId: item.agentId ?? agents.find((agent) => agent.role === 'teacher')?.id,
+                text: item.text,
+              }
+            : {
+                text: item.text,
+                audioId: item.partId,
+                ttsProviderId: item.providerId,
+                ttsModelId: item.modelId || providerConfig?.modelId,
+                ttsVoice: item.voiceId,
+                ttsSpeed: ttsSpeed,
+                ttsApiKey: providerConfig?.apiKey,
+                // Managed providers resolve their base URL server-side; only send the
+                // client's own base URL (custom providers).
+                ttsBaseUrl: providerConfig?.baseUrl || providerConfig?.customDefaultBaseUrl,
+                ttsProviderOptions: providerOptions,
+              },
+        ),
         signal: controller.signal,
       });
 
@@ -325,6 +355,10 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
       }
       if ((err as Error).name !== 'AbortError') {
         console.error('[DiscussionTTS] TTS generation failed:', err);
+        if (learner && !failureNoticeShownRef.current) {
+          failureNoticeShownRef.current = true;
+          toast.warning('暫時無法播放討論語音，請檢查音量或稍後重試。');
+        }
       }
       audioRef.current = null;
       isPlayingRef.current = false;
@@ -335,6 +369,8 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
       }
     }
   }, [
+    learner,
+    classroomId,
     agents,
     enabled,
     locale,
@@ -348,7 +384,7 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
 
   processQueueRef.current = processQueue;
 
-  const handleSegmentSealed = useCallback(
+  const enqueueSpeech = useCallback(
     (messageId: string, partId: string, fullText: string, agentId: string | null) => {
       if (!enabled || ttsMuted || !fullText.trim()) return;
 
@@ -403,7 +439,47 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
     ],
   );
 
+  const handleStreamingTextDelta = useCallback(
+    (messageId: string, delta: string, agentId: string | null) => {
+      if (!enabled || ttsMuted || !delta) return;
+      let state = streamingSpeechRef.current.get(messageId);
+      if (!state) {
+        state = { pending: '', partIndex: 0, agentId };
+        streamingSpeechRef.current.set(messageId, state);
+      }
+      state.agentId = agentId ?? state.agentId;
+      state.pending += delta;
+      const { segments, remainder } = takeCompleteSpeechSegments(state.pending);
+      state.pending = remainder;
+      for (const segment of segments) {
+        enqueueSpeech(messageId, `stream-${state.partIndex++}`, segment, state.agentId);
+      }
+    },
+    [enabled, enqueueSpeech, ttsMuted],
+  );
+
+  const handleSegmentSealed = useCallback(
+    (messageId: string, partId: string, fullText: string, agentId: string | null) => {
+      const state = streamingSpeechRef.current.get(messageId);
+      if (!state) {
+        enqueueSpeech(messageId, partId, fullText, agentId);
+        return;
+      }
+      if (state.pending.trim()) {
+        enqueueSpeech(
+          messageId,
+          `stream-${state.partIndex}`,
+          state.pending,
+          agentId ?? state.agentId,
+        );
+      }
+      streamingSpeechRef.current.delete(messageId);
+    },
+    [enqueueSpeech],
+  );
+
   const cleanup = useCallback(() => {
+    failureNoticeShownRef.current = false;
     pausedRef.current = false;
     currentProviderRef.current = null;
     abortControllerRef.current?.abort();
@@ -417,6 +493,7 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
     queueRef.current = [];
     isPlayingRef.current = false;
     segmentDoneCounterRef.current = 0;
+    streamingSpeechRef.current.clear();
     onAudioStateChangeRef.current?.(null, 'idle');
   }, []);
 
@@ -475,6 +552,7 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
 
   return {
     handleSegmentSealed,
+    handleStreamingTextDelta,
     cleanup,
     pause,
     resume,

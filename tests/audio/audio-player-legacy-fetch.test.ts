@@ -184,6 +184,22 @@ describe('AudioPlayer legacy narration fetch', () => {
     expect((player as unknown as { audio: { src: string } | null }).audio?.src).toBe(url);
   });
 
+  it('streams a concrete classroom audio reference without prefetching the whole file', async () => {
+    stubObjectUrl();
+    const fetchMock = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { AudioPlayer } = await import('@/lib/utils/audio-player');
+    const player = new AudioPlayer();
+    const url = '/api/classroom-media/course-1/media/narration.mp3';
+
+    await expect(player.play(url, url)).resolves.toBe(true);
+
+    expect(mocks.resolveAudioBlob).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect((player as unknown as { audio: { src: string } | null }).audio?.src).toBe(url);
+  });
+
   it('treats a zero-byte legacy fetch as no narration and falls back to the media element', async () => {
     stubObjectUrl();
     vi.stubGlobal(

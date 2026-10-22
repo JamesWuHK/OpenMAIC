@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import type { AudioIndicatorState } from './audio-indicator';
 import { CanvasToolbar } from '@/components/canvas/canvas-toolbar';
 import { useAudioRecorder } from '@/lib/hooks/use-audio-recorder';
@@ -210,7 +211,7 @@ export function Roundtable({
   const { t } = useI18n();
   const ttsMuted = useSettingsStore((s) => s.ttsMuted);
   const setTTSMuted = useSettingsStore((s) => s.setTTSMuted);
-  const ttsEnabled = useSettingsStore((state) => state.ttsEnabled);
+  const ttsEnabled = useSettingsStore((state) => state.ttsEnabled) || isLearnerDeployment();
   const asrEnabled = useSettingsStore((state) => state.asrEnabled);
   const chatAreaWidth = useSettingsStore((s) => s.chatAreaWidth);
   const ttsVolume = useSettingsStore((s) => s.ttsVolume);

@@ -17,6 +17,8 @@ import { intersectClientBoxes } from '@/lib/edit/visible-client-rect';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useElementRefsStore } from '@/lib/store/element-refs';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { portfolioReply } from '@/lib/learner/c02-portfolio-bridge.mjs';
+import { d01PortfolioReply } from '@/lib/learner/d01-portfolio-bridge.mjs';
 import {
   ELEMENT_REF_SELECTOR_MAX,
   ELEMENT_SNAPSHOT_MAX,
@@ -168,6 +170,26 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
       ),
     [refs, sceneId],
   );
+
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      // Access can itself throw in private/storage-disabled contexts. The
+      // bridge catches calls to this lazy adapter and reports unsaved state.
+      const frameWindow = iframeRef.current?.contentWindow;
+      const storage = {
+        getItem: (key: string) => window.localStorage.getItem(key),
+        setItem: (key: string, value: string) => window.localStorage.setItem(key, value),
+      };
+      const reply = portfolioReply(event, frameWindow,
+        sceneId, window.location.pathname, {
+          getItem: storage.getItem,
+          setItem: storage.setItem,
+        }) ?? d01PortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage);
+      if (reply) frameWindow?.postMessage(reply, '*');
+    };
+    window.addEventListener('message', receive);
+    return () => window.removeEventListener('message', receive);
+  }, [sceneId]);
 
   // Register the postMessage callback for this scene (moved here from the
   // placeholder, since the iframe now lives in the host). Stable per scene:

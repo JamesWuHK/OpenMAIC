@@ -8,6 +8,7 @@
  */
 
 import { createLogger } from '@/lib/logger';
+import { isConcreteMediaAddress } from '@/lib/media/resolve-media-ref';
 
 const log = createLogger('AudioPlayer');
 
@@ -101,11 +102,16 @@ export class AudioPlayer {
     // A new play supersedes any in-flight legacy fetch of the previous one.
     this.abortLegacyFetch();
     try {
-      let blob = await resolveBytes(audioId);
+      // Concrete classroom-media references are already browser-playable. Use
+      // the media element directly so `play()` remains in the user's click
+      // activation task and the browser can stream/range-request the MP3.
+      // Fetching the whole file first can outlive transient user activation,
+      // causing an otherwise valid narration to be rejected as autoplay.
+      let directUrl = isConcreteMediaAddress(audioId) ? audioId.trimStart() : undefined;
+      let blob = directUrl ? null : await resolveBytes(audioId);
       if (requestToken !== this.requestToken) return false;
 
-      let directUrl: string | undefined;
-      if (!blob && legacyUrl) {
+      if (!blob && !directUrl && legacyUrl) {
         const controller = new AbortController();
         this.fetchAbort = controller;
         const timeout = setTimeout(() => controller.abort(), LEGACY_URL_FETCH_TIMEOUT_MS);

@@ -26,6 +26,8 @@ import { useWorkbenchStore } from '@/lib/workbench/session-store';
 import { useWorkbenchPanelState } from '@/lib/workbench/panel-context';
 import { workspaceHref } from '@/lib/workbench/workspace-panes';
 import { exitProPlaybackToStandalone } from '@/lib/workbench/pro-playback-exit';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { resolveClassroomDeploymentPolicy } from '@/lib/learner/classroom-policy';
 
 /**
  * Stage — top-level classroom container. Standalone classrooms dispatch
@@ -65,8 +67,9 @@ export function Stage({
   const { mode, setMode, scenes, currentSceneId, generatingOutlines, stage } = useStageStore();
   const router = useRouter();
   const enteringWorkbench = useRef(false);
-  const proWorkbenchFlag = isProWorkbenchEnabled();
-  const editorEnabled = isMaicEditorEnabled();
+  const classroomPolicy = resolveClassroomDeploymentPolicy(isLearnerDeployment());
+  const proWorkbenchFlag = classroomPolicy.forceReadOnly ? false : isProWorkbenchEnabled();
+  const editorEnabled = classroomPolicy.forceReadOnly ? false : isMaicEditorEnabled();
   const [proRuntime, setProRuntime] = useState<'pending' | 'on' | 'off'>(
     proWorkbenchFlag ? 'pending' : 'off',
   );
@@ -93,7 +96,7 @@ export function Stage({
   // server-backed mode — their saves would not pass the owner check anyway.
   const isOwner = useStageStore((s) => s.isOwner);
   const readOnly = useStageStore((s) => s.readOnly);
-  const canEditOwnedStage = isOwner && !readOnly;
+  const canEditOwnedStage = !classroomPolicy.forceReadOnly && isOwner && !readOnly;
 
   // Hosted by the Pro workspace's classroom pane. Ambient rather than a prop
   // because `Stage` is built by `ClassroomSurface`, which is mounted by both
@@ -352,7 +355,9 @@ export function Stage({
             hideHeaderBackControl={classroomBackControl === 'hidden'}
             hideHeader={!classroomHeaderControls.showHeader}
             hideHeaderGlobalControls={!classroomHeaderControls.showGlobalControls}
-            hideHeaderCourseActions={!classroomHeaderControls.showCourseActions}
+            hideHeaderCourseActions={
+              !classroomPolicy.showCourseActions || !classroomHeaderControls.showCourseActions
+            }
           />
         </motion.div>
       ) : (

@@ -1,0 +1,21 @@
+class.wanli.ai {
+  encode zstd gzip
+
+  # The current application image contains both authoring and learner shells.
+  # Keep the public root on the verified Wanli learner catalogue even if a
+  # client bundle was built without the learner-mode public flag.
+  redir / /courses 302
+
+  # These audience pages were prototype-only and are not part of the learner
+  # product. Retire both the page and any nested route at the edge so stale
+  # Next.js build artifacts cannot make them public again.
+  @retired_audience_pages path /parents /parents/* /schools /schools/*
+  respond @retired_audience_pages 404
+
+  reverse_proxy openmaic:3000
+
+  header {
+    Referrer-Policy "strict-origin-when-cross-origin"
+    X-Content-Type-Options "nosniff"
+  }
+}

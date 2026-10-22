@@ -1,0 +1,18 @@
+services:
+  openmaic:
+    env_file:
+      - path: ${OPENMAIC_LEARNER_ENV_FILE:-learner.env}
+        required: true
+    build:
+      args:
+        - NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner
+        - NEXT_PUBLIC_PERSISTENCE=1
+        - NEXT_PUBLIC_PERSISTENCE_TOKEN=${NEXT_PUBLIC_PERSISTENCE_TOKEN:?set NEXT_PUBLIC_PERSISTENCE_TOKEN}
+        - NEXT_PUBLIC_MAIC_EDITOR_ENABLED=false
+        - NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=false
+        - NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false
+        - NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false
+    environment:
+      - OPENMAIC_DEPLOYMENT_MODE=learner
+      - DATABASE_URL=${DATABASE_URL:?set DATABASE_URL}
+      - PERSISTENCE_DEV_TOKEN=${PERSISTENCE_DEV_TOKEN:?set PERSISTENCE_DEV_TOKEN}

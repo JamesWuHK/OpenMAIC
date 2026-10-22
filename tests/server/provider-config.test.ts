@@ -29,6 +29,7 @@ const ENV_PREFIXES_TO_CLEAR = [
   'BEDROCK',
   'TTS_OPENAI',
   'TTS_AZURE',
+  'TTS_EDGE',
   'TTS_GLM',
   'TTS_QWEN',
   'TTS_DOUBAO',
@@ -742,6 +743,16 @@ video:
       vi.stubEnv('TTS_OPENAI_API_KEY', 'sk-tts');
       const { getServerTTSProviders } = await import('@/lib/server/provider-config');
       expect(getServerTTSProviders()['openai-tts']).toEqual({});
+    });
+
+    it('enables the keyless local Edge TTS provider with an explicit server flag', async () => {
+      vi.stubEnv('TTS_EDGE_ENABLED', 'true');
+      const { getServerTTSProviders, isServerConfiguredProvider, resolveTTSApiKey } =
+        await import('@/lib/server/provider-config');
+
+      expect(getServerTTSProviders()['edge-tts']).toEqual({});
+      expect(isServerConfiguredProvider('tts', 'edge-tts')).toBe(true);
+      expect(resolveTTSApiKey('edge-tts')).toBe('');
     });
 
     it('force-disables a provider via TTS_<P>_ENABLED=false even when it has a key', async () => {
