@@ -28,6 +28,10 @@ export async function register(): Promise<void> {
   const { validateServerConfig } = await import('@/lib/server/config-validation');
   validateServerConfig();
 
+  const { startTeacherGenerationSchedule } =
+    await import('@/lib/learner/teacher-generation-worker');
+  const teacherGenerationSchedule = startTeacherGenerationSchedule();
+
   let runner: import('@/lib/server/agent-runtime/runner').AgentRunnerHandle | undefined;
   let extractionRunner:
     | import('@/lib/server/material-extraction/runner').MaterialExtractionRunnerHandle
@@ -75,6 +79,11 @@ export async function register(): Promise<void> {
         console.error('[instrumentation] Agent event notify bus drain failed', error);
       }
       try {
+        await teacherGenerationSchedule?.stop();
+      } catch (error) {
+        console.error('[instrumentation] Teacher generation worker drain failed', error);
+      }
+      try {
         await assetSchedule?.stop();
       } catch (error) {
         console.error('[instrumentation] Asset collector drain failed', error);
@@ -94,6 +103,7 @@ export async function register(): Promise<void> {
     return shutdownPromise;
   };
 
-  process.once('SIGTERM', () => void shutdown());
-  process.once('SIGINT', () => void shutdown());
+  const { installProcessShutdownHandlers } =
+    await import('@/lib/server/install-process-shutdown-handlers');
+  installProcessShutdownHandlers(shutdown);
 }

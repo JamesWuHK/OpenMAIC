@@ -143,7 +143,11 @@ function getTTSProviderName(providerId: TTSProviderId, t: (key: string) => strin
     const cfg = useSettingsStore.getState().ttsProvidersConfig[providerId];
     return cfg?.customName || providerId;
   }
-  return resolveTTSProviderName(providerId, t);
+  return resolveTTSProviderName(
+    providerId,
+    t,
+    TTS_PROVIDERS[providerId as keyof typeof TTS_PROVIDERS]?.name,
+  );
 }
 
 function getASRProviderName(providerId: ASRProviderId, t: (key: string) => string): string {

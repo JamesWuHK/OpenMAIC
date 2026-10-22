@@ -51,6 +51,7 @@ import {
   paneAvailabilityRetryDelay,
   shouldResumeClassroomGeneration,
 } from '@/lib/classroom/progressive-load-policy';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 const log = createLogger('Classroom');
 
@@ -108,6 +109,7 @@ export function ClassroomSurface({
           classroomId,
           loadToken,
           isCurrent,
+          recoverFromStorageError: isLearnerDeployment(),
           loadFromStorage,
           getCurrentStage: () => useStageStore.getState().stage,
           fetchClassroom: defaultClassroomLoadDeps.fetchClassroom,

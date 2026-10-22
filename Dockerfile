@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 
+ARG NODE_IMAGE=node:22-alpine
+
 # ---- Stage 1: Base ----
-FROM node:22-alpine AS base
+FROM ${NODE_IMAGE} AS base
 
 ARG ALPINE_MIRROR=""
 ARG NPM_REGISTRY=""
@@ -35,8 +37,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/ ./packages/
 COPY scripts/ ./scripts/
 
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-    npm_registry="$NPM_REGISTRY"; \
+RUN npm_registry="$NPM_REGISTRY"; \
     while [ "${npm_registry%/}" != "$npm_registry" ]; do \
       npm_registry="${npm_registry%/}"; \
     done; \
@@ -46,11 +47,15 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
 
 # ---- Stage 3: Builder ----
-FROM base AS builder
+# Continue from the dependency stage directly. Copying the full pnpm tree into
+# a fresh stage duplicates several gigabytes in BuildKit and can exhaust small
+# developer disks during cross-platform builds.
+FROM deps AS builder
 
 ARG ALLOWED_FRAME_ANCESTORS
 ARG NEXT_PUBLIC_PERSISTENCE
 ARG NEXT_PUBLIC_PERSISTENCE_TOKEN
+ARG NEXT_PUBLIC_PRO_WORKBENCH_ENABLED
 ARG NEXT_PUBLIC_MAIC_EDITOR_ENABLED
 ARG NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED
 ARG NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED
@@ -59,9 +64,13 @@ ARG NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI
 ARG NEXT_PUBLIC_ENABLE_VIDEO_EXPORT
 ARG NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION
 ARG NEXT_PUBLIC_ENABLE_PPTX_IMPORT
+ARG NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE
+ARG NEXT_BUILD_NODE_OPTIONS="--max-old-space-size=4096"
+ARG OPENMAIC_BUILD_CPUS=""
 ENV ALLOWED_FRAME_ANCESTORS=$ALLOWED_FRAME_ANCESTORS
 ENV NEXT_PUBLIC_PERSISTENCE=$NEXT_PUBLIC_PERSISTENCE
 ENV NEXT_PUBLIC_PERSISTENCE_TOKEN=$NEXT_PUBLIC_PERSISTENCE_TOKEN
+ENV NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=$NEXT_PUBLIC_PRO_WORKBENCH_ENABLED
 ENV NEXT_PUBLIC_MAIC_EDITOR_ENABLED=$NEXT_PUBLIC_MAIC_EDITOR_ENABLED
 ENV NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=$NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED
 ENV NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED=$NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED
@@ -70,16 +79,15 @@ ENV NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=$NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI
 ENV NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=$NEXT_PUBLIC_ENABLE_VIDEO_EXPORT
 ENV NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION=$NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION
 ENV NEXT_PUBLIC_ENABLE_PPTX_IMPORT=$NEXT_PUBLIC_ENABLE_PPTX_IMPORT
+ENV NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=$NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE
+ENV OPENMAIC_BUILD_CPUS=$OPENMAIC_BUILD_CPUS
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages ./packages
 COPY . .
-COPY --from=deps /app/public/vendor ./public/vendor
 
-RUN pnpm build
+RUN rm -rf .next && NODE_OPTIONS="$NEXT_BUILD_NODE_OPTIONS" pnpm build
 
 # ---- Stage 4: Runner ----
-FROM node:22-alpine AS runner
+FROM ${NODE_IMAGE} AS runner
 
 ARG ALPINE_MIRROR=""
 
@@ -101,7 +109,14 @@ RUN if [ -n "$ALPINE_MIRROR" ]; then \
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
+# Learner discussion speech uses the same Cantonese engine as course narration.
+RUN apk add --no-cache python3 py3-pip && \
+    python3 -m venv /opt/edge-tts && \
+    /opt/edge-tts/bin/pip install --no-cache-dir edge-tts==7.3.1
+ENV TTS_EDGE_BIN=/opt/edge-tts/bin/edge-tts
+
 COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/content ./content
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 

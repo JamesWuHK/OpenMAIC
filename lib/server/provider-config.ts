@@ -165,6 +165,7 @@ type CapabilitySection = 'tts' | 'asr' | 'image' | 'video' | 'webSearch';
 const DISABLE_ENV_MAPS: Record<CapabilitySection, Record<string, string>> = {
   tts: {
     ...TTS_ENV_MAP,
+    TTS_EDGE: 'edge-tts',
     TTS_BROWSER_NATIVE: 'browser-native-tts',
   },
   asr: {
@@ -454,6 +455,21 @@ function applyOpenAIImageFallback(
   return imageConfig;
 }
 
+function applyEdgeTTSProviderConfig(
+  ttsConfig: Record<string, ServerProviderEntry>,
+  yamlTtsSection: Record<string, Partial<ServerProviderEntry>> | undefined,
+): Record<string, ServerProviderEntry> {
+  const envEnabled = process.env.TTS_EDGE_ENABLED?.trim();
+  const enabled = envEnabled
+    ? parseBooleanEnv(envEnabled)
+    : yamlTtsSection?.['edge-tts']?.enabled === true;
+
+  if (enabled) {
+    ttsConfig['edge-tts'] = { apiKey: '' };
+  }
+  return ttsConfig;
+}
+
 function splitModels(models: string | undefined): string[] | undefined {
   const parsed = models
     ?.split(',')
@@ -509,12 +525,16 @@ function buildConfig(yamlData: YamlData): ServerConfig {
     }),
     yamlData.providers,
   );
+  const tts = applyEdgeTTSProviderConfig(
+    loadEnvSection(TTS_ENV_MAP, yamlData.tts, {
+      keylessProviders: new Set(['voxcpm-tts', 'lemonade-tts']),
+    }),
+    yamlData.tts,
+  );
 
   return {
     providers,
-    tts: loadEnvSection(TTS_ENV_MAP, yamlData.tts, {
-      keylessProviders: new Set(['voxcpm-tts', 'lemonade-tts']),
-    }),
+    tts,
     asr: loadEnvSection(ASR_ENV_MAP, yamlData.asr, {
       keylessProviders: new Set(['funasr-asr', 'lemonade-asr']),
     }),

@@ -16,6 +16,8 @@ import Image from 'next/image';
 import { Maximize2, Workflow } from 'lucide-react';
 import {
   useCallback,
+  useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -32,6 +34,7 @@ import { useI18n } from '@/lib/hooks/use-i18n';
 import type { CSSProperties } from 'react';
 import { runOneStream, type StreamDisplayState, type StreamStatus } from './use-instructor-stream';
 import type { PBLProjectPatch } from '@/lib/pbl/v2/api/sse';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 interface Props {
   readonly project: PBLProjectV2;
@@ -52,6 +55,20 @@ interface Props {
 type PanelSlot = 'sidebar' | 'chat' | 'submission';
 type ResizeHandleSide = 'left' | 'right';
 type CSSVariableProperties = CSSProperties & Record<`--${string}`, string | number>;
+
+const COMPACT_WORKSPACE_WIDTH = 768;
+const MOBILE_PANELS: PanelSlot[] = ['submission', 'chat', 'sidebar'];
+export const MOBILE_WORKSPACE_TAB_MIN_HEIGHT = 55;
+export const MOBILE_WORKSPACE_TAB_ROW_HEIGHT = 64;
+
+export function workspacePanelVisibility(width: number, selected: PanelSlot): Record<PanelSlot, boolean> {
+  const desktop = width >= COMPACT_WORKSPACE_WIDTH;
+  return { sidebar: desktop || selected === 'sidebar', chat: desktop || selected === 'chat', submission: desktop || selected === 'submission' };
+}
+
+export function workspaceProgressVisible(width: number): boolean {
+  return width >= COMPACT_WORKSPACE_WIDTH;
+}
 
 const DEFAULT_PANEL_WIDTHS = {
   sidebar: 22,
@@ -113,6 +130,26 @@ export function PBLV2Workspace({
   onExpand,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const { t } = useI18n();
+  const panelId = useId();
+  const [workspaceWidth, setWorkspaceWidth] = useState(0);
+  const [mobilePanel, setMobilePanel] = useState<PanelSlot>('submission');
+  const mobileTabRefs = useRef<Partial<Record<PanelSlot, HTMLButtonElement>>>({});
+  const compact = workspaceWidth < COMPACT_WORKSPACE_WIDTH;
+  const visiblePanels = workspacePanelVisibility(workspaceWidth, mobilePanel);
+  // Observe this workspace, not the viewport: docked classrooms and full-screen
+  // workspaces can have different widths. Keep every child mounted so switching
+  // panels or resizing never discards a draft or restarts an instructor stream.
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const sync = () => setWorkspaceWidth(root.clientWidth);
+    sync();
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(sync) : null;
+    observer?.observe(root);
+    window.addEventListener('resize', sync);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', sync); };
+  }, []);
   const [panelWidths, setPanelWidths] = useState(DEFAULT_PANEL_WIDTHS);
   const [resizingHandle, setResizingHandle] = useState<ResizeHandleSide | null>(null);
   const [submissionEvaluationStatus, setSubmissionEvaluationStatus] =
@@ -344,10 +381,11 @@ export function PBLV2Workspace({
         'bg-[radial-gradient(circle_at_18%_5%,rgba(119,102,255,0.20),transparent_31%),radial-gradient(circle_at_86%_10%,rgba(20,184,166,0.17),transparent_29%),radial-gradient(circle_at_52%_105%,rgba(96,165,250,0.10),transparent_34%),linear-gradient(180deg,#182542_0%,#111c34_48%,#162743_100%)]',
       )}
       data-pbl-workspace="true"
+      data-pbl-layout={compact ? 'compact' : 'desktop'}
       style={{
         ...PBL_WORKSPACE_THEME,
-        gridTemplateRows: '58px minmax(0, 1fr)',
-        gridTemplateColumns: `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
+        gridTemplateRows: compact ? `58px ${MOBILE_WORKSPACE_TAB_ROW_HEIGHT}px minmax(0, 1fr)` : '58px minmax(0, 1fr)',
+        gridTemplateColumns: compact ? 'minmax(0, 1fr)' : `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
       }}
     >
       <WorkspaceTopBar
@@ -356,8 +394,37 @@ export function PBLV2Workspace({
         panelWidths={panelWidths}
         onReturnToHero={onReturnToHero}
         onExpand={onExpand}
+        compact={compact}
+        workspaceWidth={workspaceWidth}
       />
-      <Panel slot="sidebar">
+      <nav hidden={!compact} role="tablist" aria-label={t('pbl.v2.workspace.breadcrumbCurrent')}
+        className="row-start-2 col-span-full min-w-0 border-b border-cyan-100/15 px-2 py-1">
+        <div className="flex h-full gap-1">
+          {MOBILE_PANELS.map(slot => (
+            <button key={slot} type="button" role="tab" id={`${panelId}-tab-${slot}`}
+              ref={node => { mobileTabRefs.current[slot] = node ?? undefined; }}
+              aria-selected={mobilePanel === slot} aria-controls={`${panelId}-panel-${slot}`}
+              tabIndex={mobilePanel === slot ? 0 : -1}
+              onClick={() => setMobilePanel(slot)}
+              onKeyDown={event => {
+                const index = MOBILE_PANELS.indexOf(slot);
+                const next = event.key === 'ArrowRight' ? (index + 1) % MOBILE_PANELS.length
+                  : event.key === 'ArrowLeft' ? (index + MOBILE_PANELS.length - 1) % MOBILE_PANELS.length
+                    : event.key === 'Home' ? 0 : event.key === 'End' ? MOBILE_PANELS.length - 1 : -1;
+                if (next < 0) return;
+                event.preventDefault();
+                setMobilePanel(MOBILE_PANELS[next]);
+                mobileTabRefs.current[MOBILE_PANELS[next]]?.focus();
+              }}
+              style={{ minHeight: MOBILE_WORKSPACE_TAB_MIN_HEIGHT }}
+              className={cn('min-w-0 flex-1 rounded-lg px-2 text-xs font-semibold focus-visible:outline-2 focus-visible:outline-cyan-200',
+                mobilePanel === slot ? 'bg-violet-300/20 text-white ring-1 ring-violet-200/30' : 'text-indigo-100/75 hover:bg-white/5')}>
+              {slot === 'submission' ? t('pbl.v2.submission.currentTask') : slot === 'chat' ? t('chat.tabs.chat') : t('pbl.v2.sidebar.title')}
+            </button>
+          ))}
+        </div>
+      </nav>
+      <Panel slot="sidebar" compact={compact} hidden={!visiblePanels.sidebar} panelId={panelId}>
         {/* Scene controls ("finish this act" / enter / continue) are disabled
             while ANYTHING is generating: character speaking, narrator,
             evaluation, submission analysis and opener streams all flip
@@ -378,8 +445,9 @@ export function PBLV2Workspace({
         side="left"
         active={resizingHandle === 'left'}
         onMouseDown={handleResizeStart}
+        hidden={compact}
       />
-      <Panel slot="chat">
+      <Panel slot="chat" compact={compact} hidden={!visiblePanels.chat} panelId={panelId}>
         <PBLV2AgentTabs
           project={project}
           onProjectChange={onProjectChange}
@@ -393,8 +461,9 @@ export function PBLV2Workspace({
         side="right"
         active={resizingHandle === 'right'}
         onMouseDown={handleResizeStart}
+        hidden={compact}
       />
-      <Panel slot="submission">
+      <Panel slot="submission" compact={compact} hidden={!visiblePanels.submission} panelId={panelId}>
         {showScenarioBriefing ? (
           <PBLV2RightPanelTabs
             project={project}
@@ -423,31 +492,42 @@ function WorkspaceTopBar({
   panelWidths,
   onReturnToHero,
   onExpand,
+  compact,
+  workspaceWidth,
 }: {
   readonly project: PBLProjectV2;
   readonly activeMilestoneIndex: number;
   readonly panelWidths: typeof DEFAULT_PANEL_WIDTHS;
   readonly onReturnToHero: () => void;
   readonly onExpand?: () => void;
+  readonly compact: boolean;
+  readonly workspaceWidth: number;
 }) {
   const { t } = useI18n();
+  const learnerDeployment = isLearnerDeployment();
   return (
     <header
-      className="relative z-40 col-span-full grid min-w-0 items-center overflow-hidden border-b border-cyan-100/[0.12] bg-[#111d35]/88 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_14px_42px_rgba(5,12,28,0.24)] backdrop-blur-xl"
+      className={cn('relative z-40 col-span-full grid min-w-0 items-center overflow-hidden border-b border-cyan-100/[0.12] bg-[#111d35]/88 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_14px_42px_rgba(5,12,28,0.24)] backdrop-blur-xl', compact && 'pr-14')}
       style={{
-        gridTemplateColumns: `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
+        gridTemplateColumns: compact ? 'minmax(0, 1fr)' : `${panelWidths.sidebar}fr 6px ${panelWidths.chat}fr 6px ${panelWidths.submission}fr`,
       }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(157,140,255,0.20),transparent_30%),radial-gradient(circle_at_78%_0%,rgba(34,211,238,0.13),transparent_26%),linear-gradient(90deg,rgba(255,255,255,0.05),transparent_34%,rgba(255,255,255,0.035))]" />
       <div className="relative flex min-w-0 flex-1 items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-violet-200/25 bg-violet-100/[0.08] shadow-[0_0_24px_rgba(157,140,255,0.18)]">
-          <Image
-            src="/openmaic-mark.png"
-            alt="OpenMAIC"
-            width={28}
-            height={28}
-            className="h-6 w-6"
-          />
+        <div className="flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl border border-violet-200/25 bg-violet-100/[0.08] px-2 shadow-[0_0_24px_rgba(157,140,255,0.18)]">
+          {learnerDeployment ? (
+            <span className="font-mono text-[9px] font-black tracking-[-0.04em] text-cyan-100">
+              wanli.ai
+            </span>
+          ) : (
+            <Image
+              src="/openmaic-mark.png"
+              alt="OpenMAIC"
+              width={28}
+              height={28}
+              className="h-6 w-6"
+            />
+          )}
         </div>
         <div className="min-w-0">
           <div className="flex items-center gap-2">
@@ -479,7 +559,7 @@ function WorkspaceTopBar({
         </div>
       </div>
 
-      <div className="relative col-start-3 hidden min-w-0 items-center gap-2 lg:flex">
+      <div hidden={!workspaceProgressVisible(workspaceWidth)} className="relative col-start-3 hidden min-w-0 items-center gap-2 lg:flex">
         <div className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-indigo-100/[0.14] bg-white/[0.045] px-2.5 text-[11px] font-medium text-indigo-100/82">
           <Workflow className="h-3.5 w-3.5 text-violet-200/90" />
           {t('pbl.v2.workspace.progressLabel')}
@@ -561,14 +641,17 @@ function WorkspaceResizeHandle({
   side,
   active,
   onMouseDown,
+  hidden,
 }: {
   readonly side: ResizeHandleSide;
   readonly active: boolean;
   readonly onMouseDown: (event: ReactMouseEvent, side: ResizeHandleSide) => void;
+  readonly hidden: boolean;
 }) {
   const { t } = useI18n();
   return (
     <div
+      hidden={hidden}
       role="separator"
       aria-orientation="vertical"
       aria-label={
@@ -600,11 +683,17 @@ function WorkspaceResizeHandle({
   );
 }
 
-function Panel({ slot, children }: { readonly slot: PanelSlot; readonly children: ReactNode }) {
+function Panel({ slot, children, compact, hidden, panelId }: { readonly slot: PanelSlot; readonly children: ReactNode; readonly compact: boolean; readonly hidden: boolean; readonly panelId: string }) {
   return (
     <div
+      id={`${panelId}-panel-${slot}`}
+      role={compact ? 'tabpanel' : undefined}
+      aria-labelledby={compact ? `${panelId}-tab-${slot}` : undefined}
+      hidden={hidden}
+      data-pbl-panel={slot}
       className={cn(
-        'relative row-start-2 h-full min-w-0 overflow-hidden backdrop-blur-[2px]',
+        'relative h-full min-h-0 min-w-0 overflow-hidden backdrop-blur-[2px]',
+        compact ? 'row-start-3 col-start-1' : 'row-start-2',
         slot === 'sidebar' &&
           'bg-[linear-gradient(180deg,rgba(28,39,71,0.96)_0%,rgba(22,34,62,0.94)_100%)] shadow-[inset_-18px_0_38px_rgba(5,12,28,0.10)]',
         slot === 'chat' &&

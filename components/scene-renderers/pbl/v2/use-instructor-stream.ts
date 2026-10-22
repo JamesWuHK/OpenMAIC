@@ -48,6 +48,8 @@ import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 import { trackSubmissionScore } from '@/lib/pbl/v2/operations/runtime/dynamic-signals';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/kernel/progress';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import { toPBLModelRequestHeaders } from '@/lib/chat/client-model-policy';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { createLogger } from '@/lib/logger';
 import { applyInstructorEvent } from './apply-instructor-event';
 
@@ -290,13 +292,7 @@ export async function runOneStream(args: OneStreamArgs): Promise<PBLProjectV2> {
   let workingProject = startingProject;
 
   const modelConfig = getCurrentModelConfig();
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    'x-model': modelConfig.modelString,
-    'x-api-key': modelConfig.apiKey,
-  };
-  if (modelConfig.baseUrl) headers['x-base-url'] = modelConfig.baseUrl;
-  if (modelConfig.providerType) headers['x-provider-type'] = modelConfig.providerType;
+  const headers = toPBLModelRequestHeaders(modelConfig, isLearnerDeployment());
   // PBL Planner already reads `x-user-locale` from this header for
   // generation-time language lock; the evaluator route does NOT
   // need it (the project already carries `language`) but forwarding

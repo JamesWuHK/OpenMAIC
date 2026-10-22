@@ -21,6 +21,7 @@ import {
   type VoiceRegistrationRequestConfig,
 } from '@/lib/audio/voice-registration-client';
 import { InvalidReferenceAudioError, validateReferenceAudio } from '@/lib/audio/wav-validate';
+import { isBrowserStorageUnavailable } from '@/lib/utils/browser-storage-health';
 
 export type VoxCPMVoiceProfile = VoiceProfileRecord;
 
@@ -230,6 +231,11 @@ export function useVoxCPMVoiceProfiles() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    if (isBrowserStorageUnavailable()) {
+      setProfiles([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const rows = await db.voiceProfiles
@@ -321,6 +327,11 @@ export function useAllVoiceProfiles() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    if (isBrowserStorageUnavailable()) {
+      setProfiles([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const rows = await db.voiceProfiles.toArray();
@@ -345,6 +356,11 @@ export function useQwenVoiceProfiles() {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    if (isBrowserStorageUnavailable()) {
+      setProfiles([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const rows = await db.voiceProfiles.where('providerId').equals('qwen-tts').toArray();
@@ -450,6 +466,13 @@ export async function getVoxCPMProviderOptions(
     return {
       voiceMode: 'prompt',
       voicePrompt: voiceId,
+    };
+  }
+
+  if (isBrowserStorageUnavailable()) {
+    return {
+      voiceMode: 'auto',
+      voicePrompt: buildAutoVoxCPMVoicePrompt(context),
     };
   }
 

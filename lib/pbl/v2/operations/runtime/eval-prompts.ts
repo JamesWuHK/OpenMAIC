@@ -73,6 +73,14 @@ export function buildTaskEvalPrompt(
     `## Milestone\n${milestone.title} — ${milestone.description ?? ''}`.trim(),
     `## Microtask just completed\n${task.title}\n${task.description ?? ''}`.trim(),
   ];
+  if (trimmedPBLText(task.completionCriteria)) {
+    sections.push(
+      '## Current task completion criteria\n' + trimmedPBLText(task.completionCriteria),
+    );
+  }
+  sections.push(
+    '## Evidence limits\nA written claim that Blender ran is not proof of an editable model, a successful reopen, an animation playback, or a real audience observation. Distinguish plans, learner reports, attached evidence and unverified results. If this task asks only for a plan or initial idea, do not require later-stage execution evidence.',
+  );
   const futureTasks = laterMicrotasksInMilestone(milestone, task);
   if (futureTasks.length) {
     sections.push(

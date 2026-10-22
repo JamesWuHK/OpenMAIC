@@ -1,7 +1,17 @@
 import type { NextConfig } from 'next';
 
+const configuredBuildCpus = Number.parseInt(process.env.OPENMAIC_BUILD_CPUS ?? '', 10);
+
 const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : 'standalone',
+  allowedDevOrigins: ['127.0.0.1'],
+  // Keep bundler identifiers relative to this repository. Without an explicit
+  // root, Next may climb to a parent lockfile and encode the full workspace
+  // path; Turbopack 16 can then split a multi-byte directory name mid-character.
+  turbopack: {
+    root: process.cwd(),
+  },
+  outputFileTracingRoot: process.cwd(),
   outputFileTracingIncludes: {
     '/*': [
       'lib/server/agent-runtime/import-pptx-worker.mjs',
@@ -34,6 +44,13 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     proxyClientMaxBodySize: '200mb',
+    ...(Number.isFinite(configuredBuildCpus) && configuredBuildCpus > 0
+      ? {
+          cpus: configuredBuildCpus,
+          staticGenerationMaxConcurrency: configuredBuildCpus,
+          staticGenerationMinPagesPerWorker: 1,
+        }
+      : {}),
   },
   async headers() {
     const extraAncestors = process.env.ALLOWED_FRAME_ANCESTORS?.trim();

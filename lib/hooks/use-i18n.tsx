@@ -26,7 +26,13 @@ type I18nContextType = {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
+export function I18nProvider({
+  children,
+  preferredLocale,
+}: {
+  children: ReactNode;
+  preferredLocale?: Locale;
+}) {
   const { t, i18n } = useTranslation();
 
   const locale = (i18n.language || defaultLocale) as Locale;
@@ -37,13 +43,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      const raw = stored || navigator.language || defaultLocale;
+      const raw = stored || preferredLocale || navigator.language || defaultLocale;
       const target = resolveLocale(raw);
       if (target !== i18n.language) i18n.changeLanguage(target);
     } catch {
       // localStorage unavailable, keep default
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [i18n, preferredLocale]);
 
   const setLocale = (newLocale: Locale) => {
     i18n.changeLanguage(newLocale);

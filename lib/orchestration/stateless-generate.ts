@@ -26,6 +26,7 @@ import { createOrchestrationGraph, buildInitialState } from './director-graph';
 import { parse as parsePartialJson, Allow } from 'partial-json';
 import { jsonrepair } from 'jsonrepair';
 import { createLogger } from '@/lib/logger';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 const log = createLogger('StatelessGenerate');
 
@@ -501,7 +502,11 @@ export async function* statelessGenerate(
       yield {
         type: 'error',
         data: {
-          message: error instanceof Error ? error.message : String(error),
+          // Provider errors can contain account identifiers and billing URLs.
+          // Keep details in operator logs, never in a student's transcript.
+          message: isLearnerDeployment()
+            ? '課堂討論暫時無法使用。請稍後重試，或聯絡老師檢查服務設定。'
+            : error instanceof Error ? error.message : String(error),
         },
       };
     }

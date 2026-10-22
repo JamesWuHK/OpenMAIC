@@ -31,6 +31,7 @@ import {
   stageDeletionEpoch,
   stageDeletionSettled,
 } from '@/lib/utils/deleted-stages';
+import { isBrowserStorageUnavailable } from '@/lib/utils/browser-storage-health';
 
 const log = createLogger('StageStore');
 
@@ -101,7 +102,7 @@ function schedulePendingSave(): void {
 }
 
 function markPendingChanges(stageId: string | undefined, ...changes: PendingChange[]): void {
-  if (!stageId || isStageDeleted(stageId)) return;
+  if (!stageId || isStageDeleted(stageId) || isBrowserStorageUnavailable()) return;
   if (pendingStageId !== stageId) resetPendingChanges(stageId);
   for (const change of changes) {
     pendingRevision += 1;
@@ -824,6 +825,7 @@ const useStageStoreBase = create<StageState>()((set, get) => ({
   // durability (e.g. setGenerationComplete) can avoid recording state that
   // outruns the scene data.
   saveToStorage: async () => {
+    if (isBrowserStorageUnavailable()) return false;
     const { stage, scenes, currentSceneId, chats, chatSnapshot, outlines, generationComplete } =
       get();
     if (!stage?.id) {
@@ -1187,6 +1189,10 @@ function roundCoversEntry(
  * successful document commit.
  */
 export async function flushStageSave(): Promise<void> {
+  if (isBrowserStorageUnavailable()) {
+    resetPendingChanges();
+    return;
+  }
   const entryStageId = pendingStageId;
   const entryRevision = pendingRevision;
   const entrySnapshot = new Map(

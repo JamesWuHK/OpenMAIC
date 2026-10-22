@@ -27,6 +27,10 @@ import {
 } from '@/lib/utils/deleted-stages';
 import { loadStageData, saveStageDataIncremental } from '@/lib/utils/stage-storage';
 import type { GeneratedAgentConfig, Scene, Stage } from '@/lib/types/stage';
+import {
+  isBrowserStorageUnavailable,
+  resetBrowserStorageHealthForTests,
+} from '@/lib/utils/browser-storage-health';
 
 // The store flush path imports stage-storage dynamically; mock it so a pending
 // mark scheduled by commitMigratedAgentConfigsToStore can never reach a real
@@ -159,6 +163,7 @@ function makeDeps(overrides: Partial<Parameters<typeof runClassroomLoad>[0]> = {
 // The fruitless-probe memo is session-scoped module state; isolate tests.
 beforeEach(() => {
   resetLegacyAgentFallbackProbes();
+  resetBrowserStorageHealthForTests();
   removeAssetMock.mockClear();
 });
 
@@ -974,6 +979,97 @@ describe('runClassroomLoad', () => {
     expect(deps.applyRestoredMediaTasks).toHaveBeenCalledWith(mediaTasks);
     expect(deps.applyGeneratedAgents).toHaveBeenCalledWith('stage-a', stage.generatedAgentConfigs);
     expect(settings.setSelectedAgentIds).toHaveBeenCalledWith(['agent-a']);
+    expect(deps.setLoading).toHaveBeenCalledWith(false);
+  });
+
+  it('loads the published server copy when learner browser storage is unavailable', async () => {
+    const storageError = new DOMException('Internal error', 'UnknownError');
+    const stage = makeStage('stage-a', []);
+    const scene = makeScene('scene-a', 'stage-a');
+    const { deps, setStage } = makeDeps({
+      loadFromStorage: vi.fn().mockRejectedValue(storageError),
+      probeBrowserStorage: vi.fn().mockResolvedValue(true),
+      fetchClassroom: vi.fn().mockResolvedValue({ stage, scenes: [scene] }),
+      ...({ recoverFromStorageError: true } as unknown as Partial<
+        Parameters<typeof runClassroomLoad>[0]
+      >),
+    });
+    deps.applyFallbackScenes = vi.fn().mockImplementation(async () => {
+      setStage(stage);
+      return true;
+    });
+
+    await runClassroomLoad(deps);
+
+    expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
+    expect(deps.applyFallbackScenes).toHaveBeenCalledWith({
+      loadToken: 1,
+      stage,
+      scenes: [scene],
+      storageUnavailable: true,
+    });
+    expect(deps.log.warn).toHaveBeenCalledWith(
+      'Browser storage unavailable; loading the published classroom from the server:',
+      storageError,
+    );
+    expect(isBrowserStorageUnavailable()).toBe(true);
+    expect(deps.setError).not.toHaveBeenCalled();
+    expect(deps.setLoading).toHaveBeenCalledWith(false);
+  });
+
+  it('skips later browser storage reads after learner storage is unavailable', async () => {
+    const storageError = new DOMException('Internal error', 'UnknownError');
+    const stage = makeStage('stage-a', []);
+    const scene = makeScene('scene-a', 'stage-a');
+    const { deps, setStage } = makeDeps({
+      loadFromStorage: vi.fn().mockRejectedValue(storageError),
+      probeBrowserStorage: vi.fn().mockResolvedValue(true),
+      fetchClassroom: vi.fn().mockResolvedValue({ stage, scenes: [scene] }),
+      loadRestoredMediaTasks: vi.fn().mockRejectedValue(storageError),
+      loadLegacyAgentFallbacks: vi.fn().mockRejectedValue(storageError),
+      ...({ recoverFromStorageError: true } as unknown as Partial<
+        Parameters<typeof runClassroomLoad>[0]
+      >),
+    });
+    deps.applyFallbackScenes = vi.fn().mockImplementation(async () => {
+      setStage(stage);
+      return true;
+    });
+
+    await runClassroomLoad(deps);
+
+    expect(deps.loadRestoredMediaTasks).not.toHaveBeenCalled();
+    expect(deps.loadLegacyAgentFallbacks).not.toHaveBeenCalled();
+    expect(deps.setError).not.toHaveBeenCalled();
+    expect(deps.setLoading).toHaveBeenCalledWith(false);
+  });
+
+  it('does not start Dexie when learner browser storage fails the native preflight', async () => {
+    const stage = makeStage('stage-a', []);
+    const scene = makeScene('scene-a', 'stage-a');
+    const { deps, setStage } = makeDeps({
+      recoverFromStorageError: true,
+      probeBrowserStorage: vi.fn().mockResolvedValue(false),
+      loadFromStorage: vi.fn().mockRejectedValue(new Error('Dexie must not be started')),
+      fetchClassroom: vi.fn().mockResolvedValue({ stage, scenes: [scene] }),
+    });
+    deps.applyFallbackScenes = vi.fn().mockImplementation(async () => {
+      setStage(stage);
+      return true;
+    });
+
+    await runClassroomLoad(deps);
+
+    expect(deps.probeBrowserStorage).toHaveBeenCalledOnce();
+    expect(deps.loadFromStorage).not.toHaveBeenCalled();
+    expect(deps.applyFallbackScenes).toHaveBeenCalledWith({
+      loadToken: 1,
+      stage,
+      scenes: [scene],
+      storageUnavailable: true,
+    });
+    expect(isBrowserStorageUnavailable()).toBe(true);
+    expect(deps.setError).not.toHaveBeenCalled();
     expect(deps.setLoading).toHaveBeenCalledWith(false);
   });
 

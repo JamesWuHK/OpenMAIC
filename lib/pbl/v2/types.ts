@@ -81,6 +81,8 @@ export interface PBLEngagementSummary {
 export type PBLMicrotask = RuntimeOverlay<
   ContractPBLMicrotask,
   {
+    /** Authored baseline collection, not an achievement assessment. */
+    assessmentMode?: 'ungraded-reflection';
     /** Internal teaching record from `advance_micro_task`. */
     internalAssessment?: PBLInternalAssessment;
     completionReason?: string;
