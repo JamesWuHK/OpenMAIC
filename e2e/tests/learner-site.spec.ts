@@ -30,13 +30,28 @@ test.beforeAll(async () => {
   await mkdir(screenshotDirectory, { recursive: true });
 });
 
+test.beforeEach(async ({ page }) => {
+  await page.route('**/_next/image?**', async (route) => {
+    const imageUrl = new URL(route.request().url());
+    const source = imageUrl.searchParams.get('url');
+    if (!source?.startsWith('/learner/runtime/')) {
+      await route.continue();
+      return;
+    }
+
+    await route.fulfill({
+      path: path.join(process.cwd(), 'content/learner/media', path.basename(source)),
+    });
+  });
+});
+
 test('homepage communicates the Hong Kong series proposition and navigates to discovery', async ({
   page,
 }, testInfo) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '把每個好奇心，變成一門課' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '從香港真問題出發' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /香港 AI 小偵探/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /香港探索/ })).toBeVisible();
   await expectNoDocumentOverflow(page);
 
   await page.screenshot({
@@ -63,8 +78,8 @@ test('age and topic controls filter planned series without losing navigation con
   await page.getByRole('link', { name: '香港探索' }).click();
   await expect(page).toHaveURL(/topic=hong-kong/);
   await expect(page.getByRole('heading', { name: '小四至小六 · 香港探索' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /香港天氣偵探/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: /城市記憶偵探/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: '查看香港天氣科技實驗室課程詳情' })).toBeVisible();
+  await expect(page.getByRole('link', { name: '查看城市記憶偵探課程詳情' })).toBeVisible();
   await expectNoDocumentOverflow(page);
 });
 
@@ -72,7 +87,7 @@ test('series detail makes the original-content and non-endorsement boundary visi
   page,
 }, testInfo) => {
   await page.goto('/series/hong-kong-weather-detectives');
-  await expect(page.getByRole('heading', { name: '香港天氣偵探' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '香港天氣科技實驗室' })).toBeVisible();
   await expect(page.getByText(/課程文字、例子、角色、圖像與互動均重新創作/)).toBeVisible();
   await expect(page.getByText(/不代表相關機構參與製作或認可本課程/)).toBeVisible();
   await expect(page.getByRole('link', { name: /香港天文台/ })).toHaveAttribute(
@@ -106,14 +121,9 @@ test('standards and source ledger expose the language and source policies', asyn
   });
 });
 
-test('family and school pages stay reachable from the primary navigation', async ({ page }) => {
-  await page.goto('/parents');
-  await expect(
-    page.getByRole('heading', { name: '孩子學會的，不只是怎樣叫 AI 做事' }),
-  ).toBeVisible();
-  await page.getByRole('link', { name: '學校' }).click();
-  await expect(page).toHaveURL(/\/schools$/);
-  await expect(
-    page.getByRole('heading', { name: '把 AI 素養放進學生熟悉的真實問題' }),
-  ).toBeVisible();
+test('teacher submission explains the review gate before generation', async ({ page }) => {
+  await page.goto('/teach');
+  await expect(page.getByRole('heading', { name: '把你的教案，變成一節會互動的課' })).toBeVisible();
+  await expect(page.getByText(/每一份投稿都先由人審核/)).toBeVisible();
+  await expect(page.getByRole('button', { name: '提交審核' })).toBeVisible();
 });
