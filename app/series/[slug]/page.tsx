@@ -64,6 +64,9 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     .map((sourceId) => content.sources.find((source) => source.id === sourceId))
     .filter((source) => source !== undefined);
   const experienceHref = getSeriesExperienceHref(series);
+  const isNobelLecture =
+    series.slug === 'nobel-curiosity-lab' &&
+    series.liveCourseIds.includes('hk-nobel-01-kagan-lecture');
 
   return (
     <LearnerPageShell>
@@ -130,7 +133,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             {[
               [Clock3, `${series.lessonCount} 課`, series.minutesPerLesson],
               [Target, '適合年級', series.audience],
-              [BookOpenCheck, '最後作品', series.finalArtifact],
+              [BookOpenCheck, isNobelLecture ? '學習收穫' : '最後作品', series.finalArtifact],
               [Languages, '授課語言', series.languages.join(' · ')],
             ].map(([Icon, label, value]) => (
               <div key={label as string} className="min-h-36 bg-[#0b2340]/90 p-5">
@@ -204,12 +207,17 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
         </div>
         <div className="rounded-[1.75rem] border border-[#174b80]/10 bg-[#f7fbff] p-7 dark:border-white/10 dark:bg-[#0d1d31]">
           <div className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#1847d6] dark:text-[#71dce5]">
-            Make something
+            {isNobelLecture ? 'Understand the discovery' : 'Make something'}
           </div>
-          <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">不是看完，是做出來</h2>
+          <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">
+            {isNobelLecture ? '聽懂發現，看見科學的意義' : '不是看完，是做出來'}
+          </h2>
           <p className="mt-5 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
-            系列以「{series.finalArtifact}」收束。AI 老師負責講清楚，AI 助教提供分級提示，AI
-            同學帶來不同觀點；最後的判斷與作品由學生完成。
+            {isNobelLecture ? (
+              <>每課以生活例子、清晰講解和原創圖解，介紹一位得主的研究與人類意義。孩子可按自己的步調聆聽、重看，並用簡短理解題整理重點；無需製作或提交作品。</>
+            ) : (
+              <>系列以「{series.finalArtifact}」收束。AI 老師負責講清楚，AI 助教提供分級提示，AI 同學帶來不同觀點；最後的判斷與作品由學生完成。</>
+            )}
           </p>
         </div>
       </section>

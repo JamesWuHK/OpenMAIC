@@ -1,11 +1,11 @@
-name: Nobel 01 exact image candidate
+name: Nobel 01 lecture image candidate
 on:
   push:
-    branches: [codex/nobel01-portfolio-release]
+    branches: [codex/nobel01-lecture-release]
 permissions:
   contents: read
 concurrency:
-  group: nobel01-candidate
+  group: nobel01-lecture-candidate
   cancel-in-progress: false
 jobs:
   candidate:
