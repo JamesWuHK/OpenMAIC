@@ -66,7 +66,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
   const experienceHref = getSeriesExperienceHref(series);
   const isNobelLecture =
     series.slug === 'nobel-curiosity-lab' &&
-    series.liveCourseIds.includes('hk-nobel-01-kagan-lecture');
+    series.liveCourseIds?.includes('hk-nobel-01-kagan-lecture');
 
   return (
     <LearnerPageShell>
