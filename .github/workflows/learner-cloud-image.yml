@@ -1,0 +1,111 @@
+name: Learner cloud image candidate
+
+on:
+  push:
+    branches: [codex/learner-cloud-build]
+  workflow_dispatch:
+
+# Build/test only: no production credentials, package push, or deployment.
+permissions:
+  contents: read
+
+concurrency:
+  group: learner-cloud-image-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    if: github.repository == 'JamesWuHK/OpenMAIC'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      LEARNER_QA_BASE_URL: http://127.0.0.1:3100
+      NEXT_TELEMETRY_DISABLED: '1'
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Relevant regression tests
+        run: >-
+          pnpm exec vitest run tests/pbl/v2/evaluator.test.ts
+          tests/pbl/v2/learner-state.test.ts tests/learner
+          tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Build exact learner image on hosted Linux
+        run: |
+          docker build --platform linux/amd64 \
+            --tag "wanli-learner-ci:$GITHUB_SHA" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            --build-arg NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072 \
+            --build-arg OPENMAIC_BUILD_CPUS=1 \
+            --build-arg NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner \
+            --build-arg NEXT_PUBLIC_PERSISTENCE= \
+            --build-arg NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=false \
+            --build-arg NEXT_PUBLIC_MAIC_EDITOR_ENABLED=false \
+            --build-arg NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=false \
+            --build-arg NEXT_PUBLIC_PI_CHAT_ENABLED=false \
+            --build-arg NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false \
+            --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
+      - name: Start isolated exact-image candidate
+        run: |
+          docker run -d --name learner-candidate -p 127.0.0.1:3100:3000 \
+            -e OPENMAIC_DEPLOYMENT_MODE=learner \
+            -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
+            -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
+            -e DEFAULT_MODEL=openai:gpt-4o-mini \
+            -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
+            -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
+            "wanli-learner-ci:$GITHUB_SHA"
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:3100/api/health >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Image API readiness boundary
+        run: node scripts/qa-learner-image-boundary.mjs
+      - name: Install CI Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Existing learner desktop and mobile browser regression
+        run: pnpm exec playwright test --config playwright.learner.config.ts
+      - name: Export tested candidate (not deployment approval)
+        run: |
+          mkdir -p artifacts/learner-image
+          docker image inspect "wanli-learner-ci:$GITHUB_SHA" --format '{{json .Id}}' > artifacts/learner-image/image-id.json
+          git rev-parse HEAD > artifacts/learner-image/source-sha.txt
+          docker save "wanli-learner-ci:$GITHUB_SHA" | gzip -1 > artifacts/learner-image/image.tar.gz
+          cd artifacts/learner-image
+          sha256sum image.tar.gz > image.tar.gz.sha256
+      - name: Save tested image for manual review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: learner-image-${{ github.sha }}
+          path: artifacts/learner-image/
+          retention-days: 1
+          compression-level: 0
+      - name: Collect candidate diagnostics
+        if: always()
+        run: |
+          mkdir -p artifacts/learner-image-qa
+          if docker inspect learner-candidate >/dev/null 2>&1; then
+            docker logs learner-candidate > artifacts/learner-image-qa/container.log 2>&1
+            docker inspect learner-candidate --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
+            docker rm -f learner-candidate
+          fi
+      - name: Save evidence (not full course acceptance)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: learner-image-qa-${{ github.sha }}
+          path: |
+            artifacts/learner-image-qa/
+            artifacts/learner-site-qa/
+          retention-days: 7

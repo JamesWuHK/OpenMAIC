@@ -31,6 +31,9 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ page }) => {
+  // Exact-image acceptance must use the image's real mounted media, not a
+  // successful local-file response that could hide a broken runtime mount.
+  if (process.env.LEARNER_QA_BASE_URL) return;
   await page.route('**/_next/image?**', async (route) => {
     const imageUrl = new URL(route.request().url());
     const source = imageUrl.searchParams.get('url');

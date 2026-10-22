@@ -3,6 +3,12 @@ import { defineConfig, devices } from '@playwright/test';
 process.env.NO_PROXY = ['127.0.0.1', 'localhost', process.env.NO_PROXY].filter(Boolean).join(',');
 process.env.no_proxy = process.env.NO_PROXY;
 
+// CI tests the already-built image. Never start a second Next server there.
+const externalBaseURL = process.env.LEARNER_QA_BASE_URL;
+if (externalBaseURL && !/^http:\/\/127\.0\.0\.1:\d+$/.test(externalBaseURL)) {
+  throw new Error('LEARNER_QA_BASE_URL must target a loopback CI container.');
+}
+
 export default defineConfig({
   testDir: './e2e/tests',
   testMatch: /learner-site\.spec\.ts/,
@@ -11,7 +17,7 @@ export default defineConfig({
   reporter: 'list',
   outputDir: 'artifacts/learner-site-qa/test-results',
   use: {
-    baseURL: 'http://127.0.0.1:3100',
+    baseURL: externalBaseURL || 'http://127.0.0.1:3100',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -21,7 +27,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         browserName: 'chromium',
-        channel: 'chrome',
+        channel: process.env.CI ? undefined : 'chrome',
         viewport: { width: 1440, height: 900 },
       },
     },
@@ -30,26 +36,28 @@ export default defineConfig({
       use: {
         ...devices['iPhone 13'],
         browserName: 'chromium',
-        channel: 'chrome',
+        channel: process.env.CI ? undefined : 'chrome',
         viewport: { width: 390, height: 844 },
       },
     },
   ],
-  webServer: {
-    command: 'pnpm exec next dev -p 3100',
-    url: 'http://127.0.0.1:3100',
-    reuseExistingServer: true,
-    timeout: 120_000,
-    env: {
-      ACCESS_CODE: '',
-      OPENMAIC_DEPLOYMENT_MODE: 'learner',
-      NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: 'learner',
-      NEXT_PUBLIC_PRO_WORKBENCH_ENABLED: 'false',
-      NEXT_PUBLIC_MAIC_EDITOR_ENABLED: 'false',
-      NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED: 'false',
-      NEXT_PUBLIC_PI_CHAT_ENABLED: 'false',
-      NEXT_PUBLIC_ENABLE_VIDEO_EXPORT: 'false',
-      NEXT_PUBLIC_ENABLE_PPTX_IMPORT: 'false',
-    },
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command: 'pnpm exec next dev -p 3100',
+        url: 'http://127.0.0.1:3100',
+        reuseExistingServer: true,
+        timeout: 120_000,
+        env: {
+          ACCESS_CODE: '',
+          OPENMAIC_DEPLOYMENT_MODE: 'learner',
+          NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: 'learner',
+          NEXT_PUBLIC_PRO_WORKBENCH_ENABLED: 'false',
+          NEXT_PUBLIC_MAIC_EDITOR_ENABLED: 'false',
+          NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED: 'false',
+          NEXT_PUBLIC_PI_CHAT_ENABLED: 'false',
+          NEXT_PUBLIC_ENABLE_VIDEO_EXPORT: 'false',
+          NEXT_PUBLIC_ENABLE_PPTX_IMPORT: 'false',
+        },
+      },
 });
