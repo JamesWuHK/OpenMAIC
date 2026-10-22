@@ -1,7 +1,9 @@
 /**
- * Drain background workers before Next's signal handler exits the process.
+ * Drain background workers after Next finishes its HTTP shutdown, before exit.
  * Next installs its handlers before it invokes instrumentation.register().
- * Merely adding another async listener would let its process.exit race the drain.
+ * Next's signal handler returns void and ultimately calls process.exit; defer
+ * that final exit only during signal shutdown so active requests retain access
+ * to shared resources until the HTTP server has finished draining.
  */
 export function installProcessShutdownHandlers(shutdown: () => Promise<void>): void {
   const signals = ['SIGTERM', 'SIGINT'] as const;
@@ -20,20 +22,31 @@ export function installProcessShutdownHandlers(shutdown: () => Promise<void>): v
     process.on(signal, () => {
       if (started) return;
       started = true;
-      void Promise.resolve()
-        .then(shutdown)
-        .catch((error: unknown) => {
-          console.error('[instrumentation] Process shutdown failed', error);
-        })
-        .then(() => {
-          const listeners = previous.get(signal)!;
-          if (listeners.length === 0) {
-            process.exit(signal === 'SIGTERM' ? 143 : 130);
-          }
-          for (const listener of listeners) {
-            listener.call(process, signal);
-          }
-        });
+      const exit = process.exit;
+      let draining = false;
+      process.exit = ((code?: Parameters<typeof process.exit>[0]) => {
+        if (draining) return;
+        draining = true;
+        // A pending promise alone does not keep Node alive after server.close().
+        const keepAlive = setInterval(() => {}, 1000);
+        void Promise.resolve()
+          .then(shutdown)
+          .catch((error: unknown) => {
+            console.error('[instrumentation] Process shutdown failed', error);
+          })
+          .finally(() => {
+            clearInterval(keepAlive);
+            process.exit = exit;
+            exit.call(process, code);
+          });
+      }) as typeof process.exit;
+      const listeners = previous.get(signal)!;
+      if (listeners.length === 0) {
+        process.exit(signal === 'SIGTERM' ? 143 : 130);
+      }
+      for (const listener of listeners) {
+        listener.call(process, signal);
+      }
     });
   }
 }

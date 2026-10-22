@@ -64,13 +64,13 @@ describe('process shutdown', () => {
   it.each([
     ['SIGTERM', 143],
     ['SIGINT', 130],
-  ] as const)('drains once before handing %s back to the server', async (signal, code) => {
+  ] as const)('drains once before the server exits on %s', async (signal, code) => {
     const result = await runShutdown(signal);
     expect(result.output.trim().split('\n')).toEqual([
       'ready',
+      'framework:' + signal,
       'cleanup:start',
       'cleanup:end',
-      'framework:' + signal,
     ]);
     expect(result.code).toBe(code);
   });
@@ -83,10 +83,81 @@ describe('process shutdown', () => {
     const result = await runShutdown('SIGTERM', true, true);
     expect(result.output.trim().split('\n')).toEqual([
       'ready',
-      'cleanup:start',
       'framework:SIGTERM',
+      'cleanup:start',
     ]);
     expect(result.error).toContain('test cleanup failure');
+    expect(result.code).toBe(143);
+  });
+
+  it('keeps shared resources available until in-flight HTTP requests finish', async () => {
+    const result = await new Promise<{ code: number | null; output: string; error: string }>(
+      (done, reject) => {
+        const child = spawn(
+          process.execPath,
+          [
+            '--input-type=module',
+            '--eval',
+            `
+          import http from 'node:http';
+          import { installProcessShutdownHandlers } from ${JSON.stringify(moduleUrl)};
+          let resourceClosed = false;
+          const server = http.createServer((_request, response) => {
+            console.log('request:start');
+            setTimeout(() => {
+              console.log(resourceClosed ? 'request:failed' : 'request:ok');
+              response.end('done');
+            }, 150);
+          });
+          process.on('SIGTERM', () => {
+            server.close(() => {
+              console.log('http:drained');
+              process.exit(143);
+            });
+          });
+          installProcessShutdownHandlers(async () => {
+            resourceClosed = true;
+            console.log('resource:closed');
+          });
+          server.listen(0, '127.0.0.1', () => {
+            http.get('http://127.0.0.1:' + server.address().port, {
+              headers: { connection: 'close' }
+            }, response => response.resume()).on('error', () => {});
+          });
+        `,
+          ],
+          { stdio: ['ignore', 'pipe', 'pipe'] },
+        );
+        let output = '';
+        let error = '';
+        let signaled = false;
+        const timeout = setTimeout(() => {
+          child.kill('SIGKILL');
+          reject(new Error(output + error));
+        }, 5000);
+        child.stdout.on('data', (data) => {
+          output += data;
+          if (!signaled && output.includes('request:start')) {
+            signaled = true;
+            child.kill('SIGTERM');
+          }
+        });
+        child.stderr.on('data', (data) => {
+          error += data;
+        });
+        child.on('error', reject);
+        child.on('close', (code) => {
+          clearTimeout(timeout);
+          done({ code, output, error });
+        });
+      },
+    );
+    expect(result.output.trim().split('\n')).toEqual([
+      'request:start',
+      'request:ok',
+      'http:drained',
+      'resource:closed',
+    ]);
     expect(result.code).toBe(143);
   });
 });
