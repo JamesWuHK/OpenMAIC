@@ -1,11 +1,11 @@
-name: Nobel 01 lecture image candidate
+name: Nobel 02 lesson navigation image
 on:
   push:
-    branches: [codex/nobel01-lecture-release]
+    branches: [codex/nobel02-lecture-release]
 permissions:
   contents: read
 concurrency:
-  group: nobel01-lecture-candidate
+  group: nobel02-lecture-candidate
   cancel-in-progress: false
 jobs:
   candidate:

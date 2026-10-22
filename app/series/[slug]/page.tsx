@@ -21,6 +21,7 @@ import {
   isSeriesLessonOpen,
 } from '@/lib/learner/series-experience';
 import { readLearnerSiteContent } from '@/lib/learner/site-content.server';
+import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
 
 interface SeriesPageProps {
   readonly params: Promise<{ readonly slug: string }>;
@@ -67,6 +68,11 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
   const isNobelLecture =
     series.slug === 'nobel-curiosity-lab' &&
     series.liveCourseIds?.includes('hk-nobel-01-kagan-lecture');
+  const publishedLessons = isNobelLecture
+    ? (await listFilesystemPublishedCourses())
+        .filter((course) => series.liveCourseIds?.includes(course.id))
+        .sort((a, b) => (a.lessonNumber ?? 0) - (b.lessonNumber ?? 0))
+    : [];
 
   return (
     <LearnerPageShell>
@@ -221,6 +227,33 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
           </p>
         </div>
       </section>
+
+      {isNobelLecture && publishedLessons.length > 0 ? (
+        <section className="pt-16" aria-labelledby="published-lessons-title">
+          <h2 id="published-lessons-title" className="text-3xl font-black tracking-[-0.05em]">
+            已開放的課程
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
+            按課次聆聽，或選擇你最想了解的發現。其餘課次製作完成並通過獨立內容審核後開放。
+          </p>
+          <ol className="mt-6 grid gap-5 md:grid-cols-2">
+            {publishedLessons.map((course) => (
+              <li key={course.id} className="rounded-2xl border border-[#174b80]/15 bg-white p-6 dark:border-white/15 dark:bg-[#0d1d31]">
+                <p className="text-sm font-bold text-[#1847d6] dark:text-[#71dce5]">
+                  第 {course.lessonNumber} 課
+                </p>
+                <h3 className="mt-2 text-xl font-black">{course.name}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
+                  {course.description}
+                </p>
+                <Link href={`/classroom/${course.id}`} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1847d6] px-5 py-3 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35d7e1]">
+                  進入第 {course.lessonNumber} 課 <ArrowRight className="size-4" />
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
 
       {series.lessons?.length ? (
         <section className="pt-16" aria-labelledby="lesson-outline-title">
