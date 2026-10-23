@@ -26,7 +26,7 @@ export function NobelLectureHeader({ title }: { title: string }) {
 export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, playing, speech, muted, volume, onMute, onVolume, onSelect, onPrevious, onNext, onPlayPause, onFullscreen }: {
   muted: boolean; volume: number; onMute: () => void; onVolume: (volume: number) => void;
   scenes: Scene[]; currentSceneId: string | null; currentIndex: number; playing: boolean; speech: string;
-  onSelect: (id: string) => void | Promise<void>; onPrevious: () => void; onNext: () => void; onPlayPause: () => void; onFullscreen: () => void;
+  onSelect: (id: string) => void | Promise<boolean>; onPrevious: () => void; onNext: () => void; onPlayPause: () => void; onFullscreen: () => void;
 }) {
   const l = useLabels();
   const [panel, setPanel] = useState<'contents' | 'script' | null>(null);
