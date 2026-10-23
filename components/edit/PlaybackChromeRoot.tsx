@@ -19,6 +19,7 @@ import { SceneSidebar } from '@/components/stage/scene-sidebar';
 import { Header } from '@/components/header';
 import { CanvasArea } from '@/components/canvas/canvas-area';
 import { Roundtable } from '@/components/roundtable';
+import { NobelLectureHeader, NobelLectureToolbar } from '@/components/classroom/NobelLectureChrome';
 import { PlaybackEngine, computePlaybackView, shouldAutoResumeLecture } from '@/lib/playback';
 import type { EngineMode, TriggerEvent, Effect } from '@/lib/playback';
 import {
@@ -142,6 +143,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     const generationComplete = useStageStore.use.generationComplete();
 
     const currentScene = getCurrentScene();
+    const lectureLayout = isLearnerDeployment() && /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(stage?.id ?? '');
     const piChatEnabled = isPiChatEnabled();
     const [elementPickActive, setElementPickActive] = useState(false);
     const [draftElementReference, setDraftElementReferenceState] =
@@ -1318,6 +1320,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     useEffect(() => {
       const onKeyDown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) return;
+        if (lectureLayout && event.target instanceof Element && event.target.closest('button, a, [role="dialog"]')) return;
         // Let modifier-key combos (Ctrl+C, Ctrl+S, etc.) pass through to the browser
         if (event.ctrlKey || event.metaKey || event.altKey) return;
         if (
@@ -1390,6 +1393,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     }, [
       chatSessionType,
       chatAreaCollapsed,
+      lectureLayout,
       handleNextScene,
       handlePlayPause,
       handlePreviousScene,
@@ -1451,7 +1455,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     // when entering Pro mode.
     const sceneViewerHeight = (() => {
       const headerHeight = isPresenting || hideHeader ? 0 : 80;
-      const roundtableHeight = mode === 'playback' && !isPresenting ? 192 : 0;
+      const roundtableHeight = mode === 'playback' && !isPresenting && !lectureLayout ? 192 : 0;
       return `calc(100% - ${headerHeight + roundtableHeight}px)`;
     })();
 
@@ -1463,20 +1467,21 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           isPresenting && !controlsVisible && 'cursor-none',
         )}
       >
-        <SceneSidebar
+        {!lectureLayout && <SceneSidebar
           collapsed={sidebarCollapsed}
           onCollapseChange={setSidebarCollapsed}
           onSceneSelect={gatedSceneSwitch}
           onRetryOutline={onRetryOutline}
           isCourseComplete={isCourseComplete}
-        />
+        />}
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0 relative">
           {/* Header — playback only. The Pro Switch fires `onEnterProMode`
             (passed by the parent Stage) which awaits our `teardown()`
             before the parent flips mode to 'edit'. */}
-          {!isPresenting && !hideHeader && (
+          {lectureLayout && !isPresenting && <NobelLectureHeader title={stage?.name ?? ''} />}
+          {!lectureLayout && !isPresenting && !hideHeader && (
             <Header
               currentSceneTitle={
                 currentScene?.title ||
@@ -1542,7 +1547,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
               onToggleElementPick={handleToggleElementPick}
               onPickElement={handlePickElement}
               onCancelElementPick={() => setElementPickActive(false)}
-              hideToolbar={mode === 'playback' || (isPresenting && !controlsVisible)}
+              hideToolbar={lectureLayout || mode === 'playback' || (isPresenting && !controlsVisible)}
               isPendingScene={isPendingScene}
               isCourseComplete={isCourseComplete}
               isGenerationFailed={
@@ -1556,8 +1561,26 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             />
           </div>
 
+          {lectureLayout && (
+            <NobelLectureToolbar
+              scenes={scenes}
+              currentSceneId={currentSceneId}
+              currentIndex={currentSceneIndex}
+              playing={canvasEngineState === 'playing'}
+              speech={currentScene?.actions?.filter((a): a is SpeechAction => a.type === 'speech').map((a) => a.text).join('\n\n') || ''}
+              muted={ttsMuted}
+              volume={ttsVolume}
+              onMute={() => setTTSMuted(!ttsMuted)}
+              onVolume={setTTSVolume}
+              onSelect={gatedSceneSwitch}
+              onPrevious={handlePreviousScene}
+              onNext={handleNextScene}
+              onPlayPause={handlePlayPause}
+              onFullscreen={togglePresentation}
+            />
+          )}
           {/* Roundtable Area */}
-          {mode === 'playback' && (
+          {mode === 'playback' && !lectureLayout && (
             <div
               className={cn(
                 'transition-opacity duration-300',
@@ -1736,7 +1759,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
         {/* Chat Area — playback / autonomous always renders it here; Pro
           (edit) mode unmounts this whole PlaybackChromeRoot, so the
           edit branch has no chat. */}
-        <div className="flex shrink-0">
+        <div className={lectureLayout ? 'hidden' : 'flex shrink-0'} aria-hidden={lectureLayout || undefined}>
           <ChatArea
             ref={chatAreaRef}
             width={chatAreaWidth}

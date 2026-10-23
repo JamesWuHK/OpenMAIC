@@ -1,11 +1,11 @@
-name: Nobel story licensed photo image
+name: Nobel lecture courseware shell image
 on:
   push:
-    branches: [codex/nobel-story-photo-20261023]
+    branches: [codex/nobel-lecture-shell-20261023]
 permissions:
   contents: read
 concurrency:
-  group: nobel-story-photo-candidate
+  group: nobel-lecture-shell-candidate
   cancel-in-progress: false
 jobs:
   candidate:
