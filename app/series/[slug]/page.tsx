@@ -325,7 +325,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             這個系列依據什麼？
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[#607994] dark:text-[#91a9c0]">
-            下列資料只作事實核對與課程設計依據。課程文字、例子、角色、圖像與互動均重新創作，不代表相關機構參與製作或認可本課程。
+            {isNobelLecture ? '想進一步了解這些發現，可以閱讀以下資料。課內的資料圖片另標作者、來源及授權；引用不代表原機構認可本課程。' : '下列資料只作事實核對與課程設計依據。課程文字、例子、角色、圖像與互動均重新創作，不代表相關機構參與製作或認可本課程。'}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
