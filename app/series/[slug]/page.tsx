@@ -175,7 +175,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             <div className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#e65f43] dark:text-[#ff9c83]">
               Why this course
             </div>
-            <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">課程設計重點</h2>
+            <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">{isNobelLecture ? '你會發現甚麼？' : '課程設計重點'}</h2>
             <div className="mt-6 space-y-4">
               {series.highlights?.map((highlight) => (
                 <div
@@ -218,7 +218,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
           </h2>
           <p className="mt-5 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
             {isNobelLecture ? (
-              <>每課以生活例子、清晰講解和原創圖解，介紹一位得主的研究與人類意義。孩子可按自己的步調聆聽、重看，並用簡短理解題整理重點；無需製作或提交作品。</>
+              <>從熟悉的生活現象出發，跟隨科學家的探索，聽懂研究背後的想法。你可以隨時暫停、重聽，或用理解題看看自己掌握了甚麼。</>
             ) : (
               <>系列以「{series.finalArtifact}」收束。AI 老師負責講清楚，AI 助教提供分級提示，AI 同學帶來不同觀點；最後的判斷與作品由學生完成。</>
             )}
@@ -229,10 +229,10 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
       {isNobelLecture && publishedLessons.length > 0 ? (
         <section className="pt-16" aria-labelledby="published-lessons-title">
           <h2 id="published-lessons-title" className="text-3xl font-black tracking-[-0.05em]">
-            已開放的課程
+            開始探索
           </h2>
           <p className="mt-3 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
-            按課次聆聽，或選擇你最想了解的發現。其餘課次製作完成並通過獨立內容審核後開放。
+            選擇你最想了解的發現，開始今天的科學旅程。
           </p>
           <ol className="mt-6 grid gap-5 md:grid-cols-2">
             {publishedLessons.map((course) => (

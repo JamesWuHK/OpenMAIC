@@ -1,11 +1,11 @@
-name: Nobel lecture versioned navigation image
+name: Nobel student public copy image
 on:
   push:
-    branches: [codex/nobel-series-versioned-20261023]
+    branches: [codex/nobel-public-copy-20261023]
 permissions:
   contents: read
 concurrency:
-  group: nobel-series-versioned-candidate
+  group: nobel-public-copy-candidate
   cancel-in-progress: false
 jobs:
   candidate:
