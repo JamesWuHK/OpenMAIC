@@ -1210,16 +1210,23 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
       const currentIndex = scenes.findIndex((s) => s.id === currentSceneId);
       if (currentIndex < scenes.length - 1) {
         void gatedSceneSwitch(scenes[currentIndex + 1].id);
-      } else if (canAdvanceToPendingSlot) {
+      } else if (canAdvanceToPendingSlot && !lectureLayout) {
         // On last real scene → advance to pending slot (generating or completion page)
         void gatedSceneSwitch(PENDING_SCENE_ID);
       }
-    }, [currentSceneId, gatedSceneSwitch, canAdvanceToPendingSlot, isPendingScene, scenes]);
+    }, [currentSceneId, gatedSceneSwitch, canAdvanceToPendingSlot, isPendingScene, scenes, lectureLayout]);
 
     const currentSceneIndex = isPendingScene
       ? scenes.length
       : scenes.findIndex((s) => s.id === currentSceneId);
     const totalScenesCount = scenes.length + (canAdvanceToPendingSlot ? 1 : 0);
+    useEffect(() => {
+      // A lecture ends on its final courseware page. Recover old completion
+      // cursors rather than exposing the general classroom completion tools.
+      if (lectureLayout && isPendingScene && scenes.length) {
+        void gatedSceneSwitch(scenes[scenes.length - 1].id);
+      }
+    }, [lectureLayout, isPendingScene, scenes, gatedSceneSwitch]);
     const showElementReference = piChatEnabled && mode === 'playback';
     const canPickSlideElement = Boolean(
       showElementReference &&
@@ -1320,7 +1327,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     useEffect(() => {
       const onKeyDown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) return;
-        if (lectureLayout && event.target instanceof Element && event.target.closest('button, a, [role="dialog"]')) return;
+        if (lectureLayout && event.key !== 'Escape' && event.target instanceof Element && event.target.closest('button, a, [role="dialog"]')) return;
         // Let modifier-key combos (Ctrl+C, Ctrl+S, etc.) pass through to the browser
         if (event.ctrlKey || event.metaKey || event.altKey) return;
         if (

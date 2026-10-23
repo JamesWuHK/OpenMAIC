@@ -58,6 +58,7 @@ export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, play
     // The open panel determines which toggle regains focus.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panel]);
+  const displayIndex = Math.min(Math.max(currentIndex, 0), Math.max(scenes.length - 1, 0));
   const button = 'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-medium hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-35 dark:hover:bg-slate-800';
   return <>
     {panel && <div className="absolute inset-0 z-40 flex items-end justify-center bg-slate-950/35 p-3 sm:items-center" onClick={close}>
@@ -69,9 +70,9 @@ export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, play
       </div>
     </div>}
     <footer data-testid="lecture-toolbar" className="shrink-0 border-t border-slate-200 bg-white px-2 pb-[env(safe-area-inset-bottom)] dark:border-slate-700 dark:bg-slate-950">
-      <div className="h-0.5 bg-slate-100 dark:bg-slate-800"><div className="h-full bg-teal-600 transition-[width]" style={{ width: `${((currentIndex + 1) / Math.max(scenes.length, 1)) * 100}%` }} /></div>
+      <div className="h-0.5 bg-slate-100 dark:bg-slate-800"><div className="h-full bg-teal-600 transition-[width]" style={{ width: `${((displayIndex + 1) / Math.max(scenes.length, 1)) * 100}%` }} /></div>
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-1 py-1 sm:py-2">
-        <div className="flex items-center"><button ref={contentsRef} className={button} aria-haspopup="dialog" aria-expanded={panel === 'contents'} onClick={() => toggle('contents')}><List size={18} /><span>{l.contents}</span></button><span className="px-2 text-xs tabular-nums text-slate-500" aria-live="polite">{currentIndex + 1} / {scenes.length}</span></div>
+        <div className="flex items-center"><button ref={contentsRef} className={button} aria-haspopup="dialog" aria-expanded={panel === 'contents'} onClick={() => toggle('contents')}><List size={18} /><span>{l.contents}</span></button><span className="px-2 text-xs tabular-nums text-slate-500" aria-live="polite">{displayIndex + 1} / {scenes.length}</span></div>
         <div className="order-last flex w-full items-center justify-center gap-2 sm:order-none sm:w-auto">
           <button className={button} disabled={currentIndex <= 0} aria-label={l.previous} onClick={onPrevious}><ChevronLeft size={20} /><span>{l.previous}</span></button>
           <button className={`${button} min-w-32 bg-teal-700 text-white hover:bg-teal-800 dark:hover:bg-teal-600`} aria-label={playing ? l.pause : l.play} onClick={onPlayPause}>{playing ? <Pause size={20} /> : <Play size={20} />}<span>{playing ? l.pause : l.play}</span></button>
