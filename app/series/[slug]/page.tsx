@@ -65,9 +65,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     .map((sourceId) => content.sources.find((source) => source.id === sourceId))
     .filter((source) => source !== undefined);
   const experienceHref = getSeriesExperienceHref(series);
-  const isNobelLecture =
-    series.slug === 'nobel-curiosity-lab' &&
-    series.liveCourseIds?.includes('hk-nobel-01-kagan-lecture');
+  const isNobelLecture = series.slug === 'nobel-curiosity-lab';
   const publishedLessons = isNobelLecture
     ? (await listFilesystemPublishedCourses())
         .filter((course) => series.liveCourseIds?.includes(course.id))

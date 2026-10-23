@@ -1,11 +1,11 @@
-name: Nobel 02 lesson navigation image
+name: Nobel lecture versioned navigation image
 on:
   push:
-    branches: [codex/nobel02-lecture-release]
+    branches: [codex/nobel-series-versioned-20261023]
 permissions:
   contents: read
 concurrency:
-  group: nobel02-lecture-candidate
+  group: nobel-series-versioned-candidate
   cancel-in-progress: false
 jobs:
   candidate:
