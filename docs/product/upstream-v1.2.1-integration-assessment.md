@@ -20,23 +20,27 @@ failed that comparison because it contains older lesson IDs and site content.
 The current release references 237 classroom media URLs and 14 site media URLs;
 all 251 have a local source across the canonical checkout, the new Nobel
 payload, and the separate Nobel 03 v3 release. **Two leaf-classifier image
-sources are owner-only mode 0600**, so the stricter
-`qa-learner-release-media.mjs` now fails the container-readability gate for
-`gen_img_0B49IQj9.png` and `gen_img_Uyovku9U.png`. Both public URLs
-repeatedly returned HTTP 502 on 2026-10-24; the other 52 of 53 sampled live
-media requests succeeded. A permission/read-stream failure is plausible but
-unconfirmed without server logs. Do not label media or browser QA passed, and
-do not silently copy these files with their current mode into a new release.
+sources were owner-only mode 0600**, and both public URLs repeatedly returned
+HTTP 502 on 2026-10-24; the other 52 of 53 sampled live media requests
+succeeded. The server copies were independently confirmed to be 0600 while the
+Web container runs as UID 1001. The exact two media files were backed up at
+`/opt/openmaic-learner/backups/leaf-media-permissions-20261024-1548`, then
+changed to 0644 without changing bytes. Both public URLs now return HTTP 200
+and their images decoded at 1024x576 in browser scenes 2 and 5. No course
+JSON, catalog, service or container was changed; Web and Caddy restart counts
+remained zero. The local source copies were likewise changed to 0644, and
+`qa-learner-release-media.mjs` now passes all 237 classroom and 14 site media
+references across the current release roots. This is a narrow media repair,
+not a full release/browser/audio acceptance of the v1.2.1 upgrade.
 The two local files have SHA-256
 `62958b02b51879324aa4f91caabc9f6a606bc820c0f86bb84d1179d3eec40696`
 and `22b38b6bfaeddcc19d35914e9323ddece3a06c39c187d525e17f8a9f65210cef`,
 respectively. Both are JPEG-encoded data despite their `.png` names. This
-format mismatch needs browser verification, but their bytes and classroom
-references must not be changed without a separate content review. The
+format mismatch did not prevent these two images from decoding in the checked
+browser, but their bytes and classroom references must not be changed without
+a separate content review. The
 content publisher now normalizes public media permissions on transfer, so a
-future `rsync -a` cannot propagate owner-only source modes unchanged. This
-does not repair the currently deployed files; inspect their server-side modes
-and logs before a narrowly scoped repair.
+future `rsync -a` cannot propagate owner-only source modes unchanged.
 
 The ten current classroom files also loaded through the candidate's v1.2.1
 HTTP document client and structural validators. Candidate code now reads only
@@ -63,9 +67,12 @@ and local Docker is offline). A complete candidate build, browser checks, and re
 remain outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
 the image's pinned 7.3.1 produced decodable Cantonese clips for all three
 classroom roles in isolated testing, not on the live site.
-The configured `wanli-lightsail-ops` identity is valid, but a read-only
-`lightsail:GetInstance` call for `openmaic-learner-hk` was denied by IAM. No
-server login, permission change, media upload, or container restart was made.
+The configured `wanli-lightsail-ops` identity is valid. Its single-instance
+`lightsail:GetInstance` call is denied by IAM, but the existing authorized
+`GetInstances` and `GetInstanceAccessDetails` path worked for the same account
+and instance. The temporary SSH credential files used for the narrow media
+repair were removed after use. No IAM change, media upload or container restart
+was made.
 
 ## Historical merge preflight on the integration branch
 
