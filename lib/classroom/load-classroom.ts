@@ -24,6 +24,7 @@ import {
 } from '@/lib/media/generated-media-references';
 import { isConcreteMediaAddress } from '@/lib/media/resolve-media-ref';
 import { createLogger } from '@/lib/logger';
+import { isBrowserStorageUnavailable } from '@/lib/utils/browser-storage-health';
 
 const moduleLog = createLogger('ClassroomLoad');
 
@@ -174,7 +175,7 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     let effectiveConfigs = documentConfigs ?? [];
     if (
       stageForRoster?.id === classroomId &&
-      !storageUnavailable &&
+      !isBrowserStorageUnavailable() &&
       rosterNeedsLegacyFallback(documentConfigs) &&
       !fruitlessLegacyProbeStageIds.has(classroomId)
     ) {

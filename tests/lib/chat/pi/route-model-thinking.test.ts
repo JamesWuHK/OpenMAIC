@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NextRequest } from 'next/server';
-import { ModelAuthorizationError } from '@/lib/server/model-config/model-authorization';
-import { SlotRequirementError } from '@/lib/server/model-config/llm';
 import {
   INTERACTIVE_SOURCE_DEPTH_LIMIT,
   INTERACTIVE_SOURCE_NODE_LIMIT,
@@ -148,6 +146,8 @@ describe('POST /api/chat/pi model and thinking resolution', () => {
   });
 
   it('returns 403 before starting discussion when the managed model is not authorized', async () => {
+    const { ModelAuthorizationError } =
+      await import('@/lib/server/model-config/model-authorization');
     mocks.resolveModel.mockRejectedValue(new ModelAuthorizationError());
 
     const { POST } = await import('@/app/api/chat/pi/route');
@@ -158,6 +158,7 @@ describe('POST /api/chat/pi model and thinking resolution', () => {
   });
 
   it('returns a configuration error before starting discussion for a known non-tool model', async () => {
+    const { SlotRequirementError } = await import('@/lib/server/model-config/llm');
     mocks.resolveModel.mockRejectedValue(new SlotRequirementError('classroom.chat', 'toolCalling'));
 
     const { POST } = await import('@/app/api/chat/pi/route');

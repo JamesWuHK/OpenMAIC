@@ -155,13 +155,19 @@ let enabled: boolean;
 let agents: AgentConfig[];
 const stateChange = vi.fn();
 const requests: Array<{
+  url: string;
   body: Record<string, unknown>;
   signal: AbortSignal;
   response: ReturnType<typeof deferred<Response>>;
 }> = [];
 
 function Probe() {
-  const result = useDiscussionTTS({ enabled, agents, onAudioStateChange: stateChange });
+  const result = useDiscussionTTS({
+    enabled,
+    classroomId: 'published-lesson',
+    agents,
+    onAudioStateChange: stateChange,
+  });
   useEffect(() => {
     hook = result;
   });
@@ -193,9 +199,10 @@ beforeEach(() => {
   vi.stubGlobal('Audio', FakeAudio);
   vi.stubGlobal(
     'fetch',
-    vi.fn((_url: string, init: RequestInit) => {
+    vi.fn((url: string, init: RequestInit) => {
       const response = deferred<Response>();
       requests.push({
+        url,
         body: JSON.parse(init.body as string),
         signal: init.signal as AbortSignal,
         response,
@@ -210,7 +217,24 @@ beforeEach(() => {
 afterEach(() => {
   act(() => root.unmount());
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   vi.restoreAllMocks();
+});
+
+describe('learner discussion speech boundary', () => {
+  it('uses only the published-course speech endpoint with no client provider credentials', async () => {
+    vi.stubEnv('NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE', 'learner');
+    await act(async () => root.render(createElement(Probe)));
+
+    await seal('A');
+    expect(requests).toHaveLength(1);
+    expect(requests[0].url).toBe('/api/learner/speech');
+    expect(requests[0].body).toEqual({
+      classroomId: 'published-lesson',
+      agentId: 'teacher',
+      text: 'Sentence A.',
+    });
+  });
 });
 
 describe('discussion TTS synthesis lookahead', () => {

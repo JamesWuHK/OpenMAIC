@@ -231,7 +231,9 @@ describe('classroom surfaces feed the sidecar into the gate', () => {
     const retry = source.slice(retryStart, effectStart);
     const initialLoad = source.slice(loadStart, loadEnd);
     for (const loadPath of [retry, initialLoad]) {
-      expect(loadPath).toMatch(/if \(outcome === 'loaded'\) \{\s*refreshOwnership\(isCurrent\);/);
+      expect(loadPath).toMatch(
+        /if \(outcome === 'loaded'\) \{\s*if \(classroomPolicy\.resolveViewerOwnership\) refreshOwnership\(isCurrent\);/,
+      );
     }
 
     const callSites = [...source.matchAll(/\brefreshOwnership\(isCurrent\)/g)].map(

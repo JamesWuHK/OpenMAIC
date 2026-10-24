@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NextRequest } from 'next/server';
 import { APICallError } from 'ai';
-import { ModelAuthorizationError } from '@/lib/server/model-config/model-authorization';
 
 const mocks = vi.hoisted(() => ({
   resolveModel: vi.fn(),
@@ -58,6 +57,8 @@ describe('POST /api/verify-model', () => {
   });
 
   it('returns 403 before a provider call for a server-managed model denial', async () => {
+    const { ModelAuthorizationError } =
+      await import('@/lib/server/model-config/model-authorization');
     mocks.resolveModel.mockRejectedValue(new ModelAuthorizationError());
 
     const res = await postVerifyModel({ model: 'openai:unlisted-model' });
