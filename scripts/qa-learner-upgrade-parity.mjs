@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
 
 const FIELDS = [
@@ -23,9 +24,11 @@ async function jsonAt(baseUrl, pathname, fetchImpl) {
 
 /** Read-only parity check before replacing a learner deployment. */
 export async function checkLearnerUpgradeParity({ baselineUrl, candidateUrl, fetchImpl = fetch }) {
-  const [baseline, candidate] = await Promise.all([
+  const [baseline, candidate, baselineSite, candidateSite] = await Promise.all([
     jsonAt(baselineUrl, '/api/learner/courses', fetchImpl),
     jsonAt(candidateUrl, '/api/learner/courses', fetchImpl),
+    jsonAt(baselineUrl, '/api/learner/site-content', fetchImpl),
+    jsonAt(candidateUrl, '/api/learner/site-content', fetchImpl),
   ]);
   if (!Array.isArray(baseline.courses) || !Array.isArray(candidate.courses)) {
     throw new Error('Both catalog responses must contain a courses array');
@@ -33,6 +36,12 @@ export async function checkLearnerUpgradeParity({ baselineUrl, candidateUrl, fet
   if (baseline.courses.length === 0) throw new Error('Baseline catalog is empty');
 
   const errors = [];
+  // The site document contains every series and its lesson links. Checking
+  // only the published course list could silently drop planning series or
+  // break the entry points to the first one or two live lessons.
+  if (!isDeepStrictEqual(baselineSite, candidateSite)) {
+    errors.push('Candidate series/site content differs from baseline');
+  }
   const candidateById = new Map(candidate.courses.map((course) => [course.id, course]));
   const baselineIds = new Set(baseline.courses.map((course) => course.id));
   if (candidateById.size !== candidate.courses.length)

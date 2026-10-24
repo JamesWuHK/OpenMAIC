@@ -15,13 +15,22 @@ const course = {
   audiences: ['primary'],
 };
 
-function fixture(candidateCourses, documents = {}) {
+function fixture(
+  candidateCourses,
+  documents = {},
+  candidateSite = { series: [] },
+  baselineSite = { series: [] },
+) {
   return async (url) => {
     const target = new URL(url);
     const value =
       target.pathname === '/api/learner/courses'
         ? { courses: target.hostname === 'baseline.test' ? [course] : candidateCourses }
-        : documents[target.pathname];
+        : target.pathname === '/api/learner/site-content'
+          ? target.hostname === 'baseline.test'
+            ? baselineSite
+            : candidateSite
+          : documents[target.pathname];
     return value === undefined ? { ok: false, status: 404 } : { ok: true, json: async () => value };
   };
 }
@@ -52,6 +61,25 @@ test('rejects dropped labels, missing classrooms and unexpected courses', async 
   assert.match(result.errors.join('\n'), /language changed/);
   assert.match(result.errors.join('\n'), /classroom unavailable/);
   assert.match(result.errors.join('\n'), /unexpected candidate catalog entry/);
+});
+
+test('rejects a candidate that keeps lessons but drops a series entry', async () => {
+  const result = await checkLearnerUpgradeParity({
+    baselineUrl: 'https://baseline.test',
+    candidateUrl: 'https://candidate.test',
+    fetchImpl: fixture(
+      [course],
+      {
+        '/api/persistence/documents/hk-lesson-1': {
+          stage: { id: course.id },
+          scenes: [{ id: 'one' }, { id: 'two' }],
+        },
+      },
+      { series: [] },
+      { series: [{ slug: 'missing-series', liveCourseIds: [] }] },
+    ),
+  });
+  assert.match(result.errors.join('\n'), /series\/site content differs/);
 });
 
 test('does not pass an empty baseline', async () => {
