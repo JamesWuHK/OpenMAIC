@@ -10,11 +10,13 @@ import path from 'path';
 import yaml from 'js-yaml';
 import { createLogger } from '@/lib/logger';
 import {
+  ASR_PROVIDERS,
   DEFAULT_QWEN_TTS_VOICE_CLONE_MODEL,
   isQwenCatalogVoice,
   isQwenVoiceCloneModel,
   TTS_PROVIDERS,
 } from '@/lib/audio/constants';
+import { CLAUDE_WEB_SEARCH_DEFAULT_MODEL } from '@/lib/web-search/constants';
 
 const log = createLogger('ServerProviderConfig');
 
@@ -818,13 +820,18 @@ export function resolveServerASRProviderId(): string | undefined {
 /**
  * Resolve the ASR model. When the operator pinned models server-side
  * (`ASR_<PREFIX>_MODELS`), the allowlisted client choice wins and the first
- * entry is the managed default; otherwise the client model wins.
+ * entry is the managed default. A managed provider without a model list uses
+ * its adapter default, never an arbitrary client model.
  */
 export function resolveASRModel(providerId: string, clientModel?: string): string | undefined {
-  const serverModels = getConfig().asr[providerId]?.models;
+  const managed = getConfig().asr[providerId];
+  const serverModels = managed?.models;
   if (serverModels?.length) {
     if (clientModel && serverModels.includes(clientModel)) return clientModel;
     return serverModels[0];
+  }
+  if (managed) {
+    return ASR_PROVIDERS[providerId as keyof typeof ASR_PROVIDERS]?.defaultModelId || undefined;
   }
   return clientModel;
 }
@@ -1007,7 +1014,8 @@ export function resolveWebSearchBaseUrl(
 /**
  * Resolve the web-search model for model-based providers (currently Claude).
  * A managed provider may pin its model server-side (`${PREFIX}_MODELS`, first
- * entry) — authoritative like its key/baseUrl. Otherwise the client model wins.
+ * entry) — authoritative like its key/baseUrl. A managed Claude provider
+ * without a model list uses the adapter default, not a client-selected model.
  */
 export function resolveWebSearchModel(
   providerId: string,
@@ -1015,6 +1023,7 @@ export function resolveWebSearchModel(
 ): string | undefined {
   const entry = getConfig().webSearch[providerId];
   if (entry?.models && entry.models.length > 0) return entry.models[0];
+  if (entry) return providerId === 'claude' ? CLAUDE_WEB_SEARCH_DEFAULT_MODEL : undefined;
   return clientModel;
 }
 

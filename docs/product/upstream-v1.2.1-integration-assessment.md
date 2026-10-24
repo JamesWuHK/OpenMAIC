@@ -8,7 +8,21 @@ Status: isolated integration candidate; no upstream merge or production change.
 
 - A focused authorization guard now exists on this integration branch for `resolveModel`: a server-managed provider accepts only its operator-listed models, its operator-configured default, or the selected operator stage route. Unlisted client-selected models fail before the provider client is created.
 - Legacy classroom chat, Pi classroom chat and model verification translate that denial to HTTP 403. Targeted unit/route checks passed (152 tests across six files), as did changed-file ESLint and Prettier checks.
-- This is not the full upstream security advisory backport: media, speech and other provider paths have not been audited or changed here. It has not been built, deployed or browser-tested. The original checkout and live site remain untouched.
+- This is not the full upstream security advisory backport: authoring-mode media and speech provider paths remain unaddressed. It has not been built, deployed or browser-tested. The original checkout and live site remain untouched.
+
+### Learner-reachable provider audit
+
+The current learner boundary allows classroom chat, PBL, quiz grading, transcription, web search and the dedicated learner speech endpoint. It hides the generic image, video and TTS generation endpoints. This is a source-code boundary check, not proof of the live deployment's configuration.
+
+| Path | Learner boundary | Result in this candidate |
+| --- | --- | --- |
+| `/api/chat`, `/api/chat/pi`, PBL and quiz grading | Allowed | LLM resolution now rejects client-selected models outside server-managed authorization. Chat routes return 403; PBL/quiz error-status behavior still needs review. |
+| `/api/transcription` | Allowed | Managed ASR without an explicit model list now uses its adapter default, not the client's model. |
+| `/api/web-search` | Allowed | Managed Claude web search without a model list now uses the adapter default. Its optional LLM query rewrite uses the central LLM guard. |
+| `/api/learner/speech` | Allowed | Existing route accepts no provider credentials and fixes Edge TTS, voice and speed server-side. No change needed for this model-selection issue. |
+| `/api/generate/image`, `/api/generate/video`, `/api/generate/tts` | Hidden | Not reachable through the learner boundary; authoring-mode security still requires a separate audit. |
+
+The ASR and Claude web-search changes passed provider-config, learner-boundary and API-level route tests (177 Vitest checks across four files). Learner speech passed eight Node tests, with its external synthesis check skipped. An isolated build and deployment check are still required before any release.
 
 ## Verified inputs
 

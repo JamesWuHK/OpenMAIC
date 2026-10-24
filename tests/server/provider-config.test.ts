@@ -468,6 +468,14 @@ providers:
       expect(resolveWebSearchModel('claude', 'claude-opus-5')).toBe('claude-opus-5');
       expect(resolveWebSearchModel('claude')).toBeUndefined();
     });
+
+    it('uses the adapter default instead of a client model with a managed Claude key', async () => {
+      vi.stubEnv('WEB_SEARCH_CLAUDE_API_KEY', 'claude-env-key');
+      const { resolveWebSearchModel } = await import('@/lib/server/provider-config');
+
+      expect(resolveWebSearchModel('claude', 'claude-opus-5')).toBe('claude-sonnet-5');
+      expect(resolveWebSearchModel('claude')).toBe('claude-sonnet-5');
+    });
   });
 
   describe('baseUrl-only providers (e.g. mineru)', () => {
@@ -711,6 +719,14 @@ video:
     it('lets the client ASR model win when nothing is pinned server-side', async () => {
       const { resolveASRModel } = await import('@/lib/server/provider-config');
       expect(resolveASRModel('openai-whisper', 'client-model')).toBe('client-model');
+    });
+
+    it('uses the adapter default instead of a client model with a managed ASR key', async () => {
+      vi.stubEnv('ASR_OPENAI_API_KEY', 'sk-asr');
+      const { resolveASRModel } = await import('@/lib/server/provider-config');
+
+      expect(resolveASRModel('openai-whisper', 'client-model')).toBe('gpt-4o-mini-transcribe');
+      expect(resolveASRModel('openai-whisper')).toBe('gpt-4o-mini-transcribe');
     });
 
     it('returns undefined for the ASR model when neither client nor server provides one', async () => {

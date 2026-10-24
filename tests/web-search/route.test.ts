@@ -269,6 +269,25 @@ describe('POST /api/web-search', () => {
     );
   });
 
+  it('uses the Claude adapter default with a server key and no pinned model list', async () => {
+    vi.stubEnv('WEB_SEARCH_CLAUDE_API_KEY', 'claude-server-key');
+
+    const res = await postWebSearch({
+      query: 'test query',
+      providerId: 'claude',
+      claudeModelId: 'client-unlisted-model',
+    });
+
+    expect(res.status).toBe(200);
+    expect(mocks.searchWeb).toHaveBeenCalledWith(
+      expect.objectContaining({
+        providerId: 'claude',
+        apiKey: 'claude-server-key',
+        claudeModelId: 'claude-sonnet-5',
+      }),
+    );
+  });
+
   it('rejects Claude requests without an API key, naming the env var', async () => {
     const res = await postWebSearch({
       query: 'test query',
