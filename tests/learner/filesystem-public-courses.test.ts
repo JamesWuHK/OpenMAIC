@@ -3,7 +3,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
+import {
+  isAllowlistedLearnerCourseId,
+  listFilesystemPublishedCourses,
+} from '@/lib/learner/filesystem-public-courses';
 
 const temporaryDirectories: string[] = [];
 
@@ -43,6 +46,16 @@ afterEach(async () => {
 });
 
 describe('filesystem learner course catalog', () => {
+  it('uses the catalog as the media and classroom allowlist', async () => {
+    const directory = await temporaryClassroomsDir();
+    const catalogPath = await temporaryCatalogPath(directory);
+    await expect(
+      isAllowlistedLearnerCourseId('hk-a01-02-leaf-classifier', catalogPath),
+    ).resolves.toBe(true);
+    await expect(isAllowlistedLearnerCourseId('draft-course', catalogPath)).resolves.toBe(false);
+    await expect(isAllowlistedLearnerCourseId('../draft-course', catalogPath)).resolves.toBe(false);
+  });
+
   it('returns only allowlisted classroom files that are present and valid', async () => {
     const directory = await temporaryClassroomsDir();
     const catalogPath = await temporaryCatalogPath(directory);

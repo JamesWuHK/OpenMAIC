@@ -1,6 +1,8 @@
 import { promises as fs, createReadStream, type ReadStream } from 'fs';
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { isAllowlistedLearnerCourseId } from '@/lib/learner/filesystem-public-courses';
 import {
   CLASSROOMS_DIR,
   classroomMediaMimeType,
@@ -67,14 +69,25 @@ export async function GET(
   const resolvedBase = path.resolve(CLASSROOMS_DIR, classroomId);
 
   try {
-    // Media reads are capability-by-id. Only a tombstone revokes that
-    // capability; legacy media folders may have no database row.
-    const access = await readStageAccessIncludingDeleted(classroomId);
-    if (access !== null && access.deletedAt !== null) {
+    const learnerDeployment = isLearnerDeployment();
+    const successCacheHeaders = learnerDeployment ? ERROR_CACHE_HEADERS : SUCCESS_CACHE_HEADERS;
+    if (learnerDeployment && !(await isAllowlistedLearnerCourseId(classroomId))) {
       return NextResponse.json(
         { error: 'Not found' },
         { status: 404, headers: ERROR_CACHE_HEADERS },
       );
+    }
+    if (!learnerDeployment) {
+      // Authoring deployments retain database tombstones. On learner hosts
+      // the explicit mounted catalog is authoritative, including after a
+      // same-ID content update; media must not depend on a stale DB copy.
+      const access = await readStageAccessIncludingDeleted(classroomId);
+      if (access !== null && access.deletedAt !== null) {
+        return NextResponse.json(
+          { error: 'Not found' },
+          { status: 404, headers: ERROR_CACHE_HEADERS },
+        );
+      }
     }
 
     // Resolve symlinks and verify the real path stays within the classroom dir
@@ -116,7 +129,7 @@ export async function GET(
       return new NextResponse(toWebStream(stream), {
         status: 206,
         headers: {
-          ...SUCCESS_CACHE_HEADERS,
+          ...successCacheHeaders,
           'Content-Type': contentType,
           'Content-Length': String(range.end - range.start + 1),
           'Content-Range': `bytes ${range.start}-${range.end}/${stat.size}`,
@@ -129,7 +142,7 @@ export async function GET(
     return new NextResponse(toWebStream(createReadStream(realPath)), {
       status: 200,
       headers: {
-        ...SUCCESS_CACHE_HEADERS,
+        ...successCacheHeaders,
         'Content-Type': contentType,
         'Content-Length': String(stat.size),
         'Accept-Ranges': 'bytes',

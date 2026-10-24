@@ -10,11 +10,8 @@ export async function GET(): Promise<Response> {
   }
 
   // The runtime catalog is the learner site's publication allowlist and the
-  // source of its reviewed language, age and series labels. PostgreSQL backs
-  // classroom playback after v1.2.1, but switching the catalog to stage_meta
-  // would hide file-imported lessons (private by default) and discard those
-  // labels. This preserves catalog publication only; classroom file updates
-  // still require a separate database import path before content-only release.
+  // source of its reviewed language, age and series labels. Public playback
+  // reads the allowlisted files directly; drafts stay inaccessible.
   const courses = await listFilesystemPublishedCourses();
   return Response.json(
     { courses },

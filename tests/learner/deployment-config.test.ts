@@ -58,12 +58,26 @@ describe('learner container configuration', () => {
     expect(compose).toContain('required: false');
   });
 
+  it('does not import every classroom into PostgreSQL on the learner host', async () => {
+    const instrumentation = await readFile(`${root}/instrumentation.ts`, 'utf8');
+    const browserBootstrap = await readFile(`${root}/lib/persistence/bootstrap.ts`, 'utf8');
+    expect(instrumentation).toContain('const legacyClassroomImport = authoringWorkersEnabled');
+    expect(browserBootstrap).toContain('if (!isLearnerDeployment()) {');
+    expect(browserBootstrap).toContain('scheduleLegacyBrowserImport');
+  });
+
   it('validates runtime course metadata before content-only publishing', async () => {
     const script = await readFile(`${root}/scripts/publish-learner-content.sh`, 'utf8');
     const packageJson = JSON.parse(await readFile(`${root}/package.json`, 'utf8'));
     expect(script).toContain('pnpm validate:learner-content');
     expect(script.indexOf('pnpm validate:learner-content')).toBeLessThan(script.indexOf('rsync'));
     expect(script).not.toMatch(/docker\s+(?:build|compose|restart)/);
+    expect(script).not.toMatch(/rsync[^\n]*--delete/);
+    expect(script).toContain('StrictHostKeyChecking=yes');
+    expect(script.indexOf('data/classrooms/$course_id.json"')).toBeLessThan(
+      script.indexOf('published-courses.json.next'),
+    );
+    expect(script).toContain('node scripts/qa-learner-published-content.mjs');
     expect(packageJson.scripts['validate:learner-content']).toBe(
       'tsx scripts/validate-learner-site-content.ts',
     );

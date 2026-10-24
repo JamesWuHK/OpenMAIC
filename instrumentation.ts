@@ -57,12 +57,15 @@ export async function register(): Promise<void> {
   const { warnAboutInstanceSecret } = await import('@/lib/server/instance-secret-check');
   void warnAboutInstanceSecret();
 
-  // The one-time import of classrooms earlier versions stored as files
-  // (lib/server/legacy-classroom-import.ts). It reads the disk and the
-  // database, so it runs in the background, retrying with backoff until it
-  // completes: `register` must not wait on it.
-  const { startLegacyClassroomImport } = await import('@/lib/server/legacy-classroom-import');
-  const legacyClassroomImport = startLegacyClassroomImport();
+  const { isLearnerDeployment } = await import('@/lib/config/deployment-mode');
+  const authoringWorkersEnabled = !isLearnerDeployment();
+
+  // Published learner classrooms remain file-backed and read-only. Importing
+  // every file into PostgreSQL would also import drafts, waste asset storage,
+  // and create a second stale copy after a content-only update.
+  const legacyClassroomImport = authoringWorkersEnabled
+    ? (await import('@/lib/server/legacy-classroom-import')).startLegacyClassroomImport()
+    : null;
 
   // Imported dynamically so the Edge bundle never pulls in `pg`.
   const { startAssetCollectorSchedule } =
@@ -80,8 +83,6 @@ export async function register(): Promise<void> {
   const { startTeacherGenerationSchedule } =
     await import('@/lib/learner/teacher-generation-worker');
   const teacherGenerationSchedule = startTeacherGenerationSchedule();
-  const { isLearnerDeployment } = await import('@/lib/config/deployment-mode');
-  const authoringWorkersEnabled = !isLearnerDeployment();
 
   let runner: import('@/lib/server/agent-runtime/runner').AgentRunnerHandle | undefined;
   let extractionRunner:
@@ -177,7 +178,7 @@ export async function register(): Promise<void> {
         console.error('[instrumentation] Teacher generation worker drain failed', error);
       }
       try {
-        await legacyClassroomImport.stop();
+        await legacyClassroomImport?.stop();
       } catch (error) {
         console.error('[instrumentation] Legacy classroom import drain failed', error);
       }

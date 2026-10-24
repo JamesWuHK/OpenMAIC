@@ -11,6 +11,8 @@ import {
 } from '@openmaic/storage/server';
 
 import { validateAppScene, validateAppStage } from '@/lib/document-store/validators';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { readPublishedClassroom } from '@/lib/learner/published-classroom';
 import { createLogger } from '@/lib/logger';
 import { configuredAssetByteEgress } from '@/lib/persistence/asset-byte-egress';
 import { resolveAssetCollectionGraceMs } from '@/lib/persistence/asset-collection-grace';
@@ -502,6 +504,28 @@ async function handlePersistenceRequestInner(
   request: Request,
   deps: PersistenceRequestDeps,
 ): Promise<Response> {
+  const path = routeRelativePath(request);
+  if (isLearnerDeployment() && (path === '/documents' || path.startsWith('/documents/'))) {
+    const action = parseDocumentAction(request.method, path);
+    if (action.kind !== 'read') {
+      return jsonError(403, 'LEARNER_DOCUMENT_READ_ONLY', 'learner documents are read only');
+    }
+    try {
+      const document = await readPublishedClassroom(action.stageId);
+      return document
+        ? Response.json(document, {
+            headers: {
+              'Cache-Control': 'private, no-store',
+              'X-Learner-Classroom-SHA256': document.sourceSha256,
+            },
+          })
+        : jsonError(404, 'DOCUMENT_NOT_FOUND', '@openmaic/storage: document not found');
+    } catch (error) {
+      log.error(`Published learner classroom ${action.stageId} could not be loaded`, error);
+      return jsonError(503, 'LEARNER_CLASSROOM_UNAVAILABLE', 'learner classroom is unavailable');
+    }
+  }
+
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     return jsonError(404, 'PERSISTENCE_NOT_CONFIGURED', 'server persistence not configured');
@@ -510,7 +534,6 @@ async function handlePersistenceRequestInner(
   return withRequestOwner(request, async (principal, responseHeaders) => {
     const { ownerId } = principal;
     try {
-      const path = routeRelativePath(request);
       if (path === LEARNER_KEY_PATH) {
         return request.method === 'GET'
           ? learnerKeyResponse(ownerId, responseHeaders)

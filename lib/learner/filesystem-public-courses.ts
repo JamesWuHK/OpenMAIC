@@ -2,9 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
 
-import type {
-  LearnerCourseSummary,
-} from './public-courses';
+import type { LearnerCourseSummary } from './public-courses';
 import {
   LEARNER_COURSE_AUDIENCES,
   LEARNER_COURSE_LANGUAGES,
@@ -12,7 +10,7 @@ import {
 } from './public-courses';
 
 const filesystemCourseDefinitionSchema = z.object({
-  id: z.string().min(1),
+  id: z.string().regex(/^[A-Za-z0-9_-]+$/),
   description: z.string().min(1),
   publishedAt: z.number().finite(),
   topics: z.array(z.enum(LEARNER_COURSE_TOPICS)).min(1),
@@ -52,8 +50,7 @@ export const DEFAULT_LEARNER_PUBLISHED_COURSES_PATH = path.join(
 
 export function learnerPublishedCoursesPath(): string {
   return (
-    process.env.LEARNER_PUBLISHED_COURSES_PATH?.trim() ||
-    DEFAULT_LEARNER_PUBLISHED_COURSES_PATH
+    process.env.LEARNER_PUBLISHED_COURSES_PATH?.trim() || DEFAULT_LEARNER_PUBLISHED_COURSES_PATH
   );
 }
 
@@ -62,6 +59,17 @@ async function readPublishedCourseDefinitions(
 ): Promise<FilesystemCourseDefinition[]> {
   const raw = await readFile(catalogPath, 'utf8');
   return filesystemCourseCatalogSchema.parse(JSON.parse(raw)).courses;
+}
+
+/** The mounted catalog is the sole public-course allowlist on learner hosts. */
+export async function isAllowlistedLearnerCourseId(
+  stageId: string,
+  catalogPath = learnerPublishedCoursesPath(),
+): Promise<boolean> {
+  if (!/^[A-Za-z0-9_-]+$/.test(stageId)) return false;
+  return (await readPublishedCourseDefinitions(catalogPath)).some(
+    (course) => course.id === stageId,
+  );
 }
 
 function timestamp(value: unknown, fallback: number): number {

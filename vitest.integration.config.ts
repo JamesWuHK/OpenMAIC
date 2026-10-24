@@ -8,12 +8,23 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: /^htmlparser2$/,
+        replacement: resolve(
+          __dirname,
+          'node_modules/.pnpm/htmlparser2@8.0.2/node_modules/htmlparser2/lib/index.js',
+        ),
+      },
+      {
         find: /^@openmaic\/generation\/(.+)$/,
         replacement: resolve(__dirname, 'packages/@openmaic/generation/src/$1.ts'),
       },
       {
         find: /^@openmaic\/generation$/,
         replacement: resolve(__dirname, 'packages/@openmaic/generation/src/index.ts'),
+      },
+      {
+        find: /^@openmaic\/storage\/server$/,
+        replacement: resolve(__dirname, 'packages/@openmaic/storage/src/server/index.ts'),
       },
       {
         find: /^@openmaic\/storage\/(.+)$/,
