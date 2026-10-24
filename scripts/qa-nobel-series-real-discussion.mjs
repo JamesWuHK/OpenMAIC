@@ -51,10 +51,13 @@ function generatedReplies(bytes) {
   // model configuration, headers, hidden reasoning or complete SSE bodies.
   const messages = new Map();
   let currentId = null;
+  const protocol = { done: false, errors: [] };
   for (const block of bytes.toString('utf8').split(/\r?\n\r?\n/)) {
     const data = block.split(/\r?\n/).filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n');
     if (!data || data === '[DONE]') continue;
     let event; try { event = JSON.parse(data); } catch { continue; }
+    if (event.type === 'done') protocol.done = true;
+    if (event.type === 'error') protocol.errors.push(safeText(event.data?.message || 'stream error'));
     if (event.type === 'agent_start') {
       currentId = event.data?.messageId;
       if (currentId) messages.set(currentId, { messageId: currentId, agentId: event.data.agentId || null, sender: event.data.agentName || null, text: '' });
@@ -66,7 +69,7 @@ function generatedReplies(bytes) {
     }
     if (event.type === 'agent_end') currentId = null;
   }
-  return [...messages.values()].filter((message) => message.text.trim());
+  return { replies: [...messages.values()].filter((message) => message.text.trim()), ...protocol };
 }
 
 const files = (await readdir(fixtureRoot)).filter((name) => /^hk-nobel-0[1-6]-.+\.json$/.test(name)).sort();
@@ -161,10 +164,10 @@ async function installObserver(context) {
 
 async function readReplies(page) {
   return page.locator('#nobel-classroom-interaction').evaluate((panel) => {
-    return [...panel.querySelectorAll('span.whitespace-pre-wrap.break-words, p.whitespace-pre-wrap.break-words')].filter((element) => element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden').map((element) => {
+    return [...panel.querySelectorAll('span.whitespace-pre-wrap.break-words, p.whitespace-pre-wrap.break-words')].filter((element) => element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden').map((element, ordinal) => {
       const content = element.parentElement?.parentElement;
       const row = content?.parentElement;
-      return { text: element.textContent?.trim() || '', sender: content?.querySelector(':scope > span.block')?.textContent?.trim() || null, isUser: row?.classList.contains('flex-row-reverse') || false };
+      return { ordinal, text: element.textContent?.trim() || '', sender: content?.querySelector(':scope > span.block')?.textContent?.trim() || null, isUser: row?.classList.contains('flex-row-reverse') || false };
     }).filter((item) => item.text);
   });
 }
@@ -210,7 +213,7 @@ async function runCase(item, viewport) {
     if (isChat(response.url())) {
       const row = { endpoint: endpoint(response.url()), status: response.status(), at: Date.now(), completed: false };
       record.chatResponses.push(row);
-      const read = response.body().then((bytes) => { row.completeGeneratedReplies = generatedReplies(bytes); row.completed = true; }).catch((error) => { row.readError = safeText(error.message); });
+      const read = response.body().then((bytes) => { const parsed = generatedReplies(bytes); row.completeGeneratedReplies = parsed.replies; row.protocolDone = parsed.done; row.protocolErrors = parsed.errors; row.completed = true; }).catch((error) => { row.readError = safeText(error.message); });
       pendingReads.add(read); void read.finally(() => pendingReads.delete(read));
     }
     if (isSpeech(response.url())) {
@@ -255,7 +258,7 @@ async function runCase(item, viewport) {
     await checkLayout(page, record, 'loaded-question-panel');
 
     const runTurn = async (prompt, number) => {
-      const beforeReplies = new Set((await readReplies(page)).map((reply) => `${reply.sender}:${reply.text}`));
+      const beforeReplies = new Set((await readReplies(page)).map((reply) => reply.ordinal));
       const audioBaseline = (await readAudio()).length;
       const chatBaseline = record.chatResponses.length, speechBaseline = record.speechResponses.length;
       const turn = { number, prompt, sentAt: Date.now(), continuedThroughUI: 0, pass: false };
@@ -272,12 +275,12 @@ async function runCase(item, viewport) {
       const deadline = Date.now() + turnTimeoutMs;
       let settled = false;
       while (Date.now() < deadline) {
-        const replies = (await readReplies(page)).filter((reply) => !reply.isUser && reply.text !== prompt && !beforeReplies.has(`${reply.sender}:${reply.text}`));
+        const replies = (await readReplies(page)).filter((reply) => !reply.isUser && reply.text !== prompt && !beforeReplies.has(reply.ordinal));
         const audio = (await readAudio()).slice(audioBaseline);
         const signature = JSON.stringify({ replies, audio: audio.map(({ agentId, ended, error }) => ({ agentId, ended, error })), speechCount: record.speechResponses.length });
         if (signature !== previousSignature) { previousSignature = signature; stableSince = Date.now(); }
         const keepOpen = page.locator('#nobel-classroom-interaction').getByRole('button', { name: /^繼續討論/ }).filter({ visible: true });
-        if (await keepOpen.count()) { await keepOpen.first().click(); turn.continuedThroughUI++; }
+        if (await keepOpen.count()) { await keepOpen.first().click({ timeout: 2500 }); turn.continuedThroughUI++; }
         const realSpeech = audio.filter((entry) => entry.kind === 'discussion');
         if (replies.some((reply) => reply.text.length > 20) && realSpeech.some((entry) => entry.audibleStarted && entry.advanced) && realSpeech.every((entry) => entry.ended || entry.error) && pendingChats.size === 0 && pendingSpeech.size === 0 && pendingReads.size === 0 && Date.now() - Math.max(stableSince, lastActivityAt) >= 5000) { settled = true; break; }
         await page.waitForTimeout(250);
@@ -285,16 +288,25 @@ async function runCase(item, viewport) {
       turn.chatResponses = record.chatResponses.slice(chatBaseline);
       turn.speechResponses = record.speechResponses.slice(speechBaseline);
       turn.audio = (await readAudio()).slice(audioBaseline).map((entry) => ({ ...entry, role: byId.get(entry.agentId)?.role || null }));
-      turn.completeVisibleReplies = (await readReplies(page)).filter((reply) => !reply.isUser && reply.text !== prompt && !beforeReplies.has(`${reply.sender}:${reply.text}`)).map((reply) => ({ ...reply, roleByVisibleName: roster.find((agent) => agent.name === reply.sender)?.role || null }));
+      turn.completeVisibleReplies = (await readReplies(page)).filter((reply) => !reply.isUser && reply.text !== prompt && !beforeReplies.has(reply.ordinal)).map((reply) => ({ ...reply, roleByVisibleName: roster.find((agent) => agent.name === reply.sender)?.role || null }));
       turn.completeGeneratedReplies = turn.chatResponses.flatMap((response) => response.completeGeneratedReplies || []).map((reply) => ({ ...reply, roleByAgentId: byId.get(reply.agentId)?.role || null }));
       assert.ok(settled, `Turn ${number}: response/real speech did not completely settle within ${turnTimeoutMs}ms`);
-      assert.ok(turn.chatResponses.length && turn.chatResponses.every((response) => response.status === 200 && response.completed), `Turn ${number}: every real chat request must finish with 200`);
+      assert.ok(turn.chatResponses.length && turn.chatResponses.every((response) => response.status === 200 && response.completed && response.protocolDone && response.protocolErrors.length === 0), `Turn ${number}: every real chat request must finish with 200 and a clean done event`);
       assert.ok(turn.speechResponses.some((response) => response.status === 200), `Turn ${number}: no real speech 200`);
       assert.ok(turn.speechResponses.every((response) => response.status === 200), `Turn ${number}: failed speech response`);
       assert.ok(turn.audio.some((entry) => entry.kind === 'discussion' && entry.audibleStarted && entry.advanced && entry.ended && entry.volume > 0 && !entry.muted), `Turn ${number}: no completed audible real speech with progress`);
       assert.ok(turn.audio.every((entry) => !entry.error && entry.playbackRate === 1), `Turn ${number}: media error or unexpected browser playbackRate`);
       assert.ok(turn.completeVisibleReplies.some((reply) => reply.text.length > 20), `Turn ${number}: no visible AI answer`);
       assert.ok(turn.completeGeneratedReplies.some((reply) => reply.text.length > 20), `Turn ${number}: no complete generated text events captured`);
+      assert.ok(turn.completeVisibleReplies.every((reply) => {
+        const tags = ['<tool_call', '</tool_call', '<function_call', '</function_call', '<function_calls', '</function_calls', '<arg_key', '</arg_key', '<arg_value', '</arg_value'];
+        const text = reply.text.toLowerCase();
+        for (let i = text.indexOf('<'); i !== -1; i = text.indexOf('<', i + 1)) {
+          const tail = text.slice(i);
+          if (tags.some((tag) => tag.startsWith(tail) || (tail.startsWith(tag) && /^[>\s=]/.test(tail.slice(tag.length))))) return false;
+        }
+        return true;
+      }), `Turn ${number}: native tool control markup or fragment leaked into visible speech`);
       const normalize = (text) => text.replace(/\s+/g, ' ').trim();
       turn.generatedTextFullyRendered = turn.completeGeneratedReplies.every((generated) => turn.completeVisibleReplies.some((visible) => normalize(visible.text).includes(normalize(generated.text))));
       assert.ok(turn.generatedTextFullyRendered, `Turn ${number}: complete generated answer was not rendered in the visible chat transcript`);
@@ -310,10 +322,29 @@ async function runCase(item, viewport) {
     await runTurn(`這是本課的科學問題，不含個人資料。${questions[courseNumber]} 請知衡老師先用兩句粵語回答；AI助教明理和AI同學阿問如有需要，可各補一句或提出一個常見疑問。請只根據本課，分清價值和限制，回答後等我追問。`, 1);
     await runTurn('跟住上一個答案，請用一個普通人容易理解的具體例子，說明一項研究價值和一項仍未證實、不能保證的事情。若AI助教或AI同學剛才未參與，可以請他們補充或提出一個疑問；請短答，然後等我按結束問答。', 2);
     const end = page.locator('#nobel-classroom-interaction').getByRole('button', { name: /^(結束問答|結束討論)$/ }).filter({ visible: true }).first();
-    await end.waitFor({ state: 'visible' });
-    record.normalEndLabel = await end.innerText();
-    await end.click();
-    await end.waitFor({ state: 'hidden' });
+    if (await end.count()) {
+      record.normalEndLabel = await end.innerText();
+      await end.click({ timeout: 5000 });
+      await end.waitFor({ state: 'hidden' });
+      record.endMode = 'manual UI stop';
+    } else {
+      // The legacy director may return END after the complete answer/audio.
+      // This is a normal platform completion, recorded separately from a user
+      // stop. Manual stop itself is covered by the exact-image 36-case suite.
+      record.latestSessionCompletion = await page.locator('#nobel-classroom-interaction').evaluate((panel) => {
+        const bubbles = [...panel.querySelectorAll('span.whitespace-pre-wrap.break-words, p.whitespace-pre-wrap.break-words')].filter((node) => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden');
+        const last = bubbles.at(-1);
+        for (let node = last?.parentElement; node && node !== panel; node = node.parentElement) {
+          if ([...node.children].some((child) => child.classList.contains('space-y-1'))) {
+            return { lastReplyText: last.textContent?.trim(), ended: [...node.querySelectorAll('span')].some((label) => label.textContent?.trim() === '已結束' && label.getClientRects().length > 0) };
+          }
+        }
+        return { ended: false };
+      });
+      assert.ok(record.latestSessionCompletion.ended, 'Latest reply session has no active stop control or completed indicator');
+      assert.ok(record.turns.at(-1).completeVisibleReplies.some((reply) => reply.text === record.latestSessionCompletion.lastReplyText), 'Completed indicator does not belong to the final reply session');
+      record.endMode = 'director completed normally';
+    }
     await page.waitForTimeout(1000);
     record.normalEnd = true;
     await checkLayout(page, record, 'normally-ended');
