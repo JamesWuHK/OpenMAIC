@@ -1,5 +1,7 @@
 'use client';
 
+import { sampleInteractiveState } from '@/lib/interactive/chat-observation';
+
 import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   nextChatUpdatedAt,
@@ -12,28 +14,23 @@ import {
   type DirectorState,
   type PiSessionBoundaryContext,
   type StatelessEvent,
-  type SlideElementReference,
+  type ElementReference,
 } from '@/lib/types/chat';
 import type { DiscussionRequest } from '@/components/roundtable';
-import type { Action, SpotlightAction, DiscussionAction } from '@/lib/types/action';
+import type { Action } from '@/lib/types/action';
+import type { Stage } from '@/lib/types/stage';
 import type { UIMessage } from 'ai';
-import type { ThinkingConfig } from '@/lib/types/provider';
 import { useStageStore } from '@/lib/store';
 import { useCanvasStore } from '@/lib/store/canvas';
-import { useSettingsStore, type SettingsState } from '@/lib/store/settings';
+import { useSettingsStore } from '@/lib/store/settings';
 import { useUserProfileStore } from '@/lib/store/user-profile';
 import { useAgentRegistry } from '@/lib/orchestration/registry/store';
 import { useI18n } from '@/lib/hooks/use-i18n';
-import { getCurrentModelConfig } from '@/lib/utils/model-config';
-import {
-  clientModelConfigurationError,
-  toChatModelRequestFields,
-} from '@/lib/chat/client-model-policy';
-import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { classroomChatUsable, loadModelCapabilities } from '@/lib/model-settings/capabilities';
 import { USER_AVATAR } from '@/lib/types/roundtable';
 import { StreamBuffer } from '@/lib/buffer/stream-buffer';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
-import { runAgentLoop, type AgentLoopStoreState } from '@/lib/chat/agent-loop';
+import type { AgentLoopStoreState } from '@/lib/chat/store-state';
 import { ActionEngine } from '@/lib/action/engine';
 import {
   buildQuizResultsForStoreState,
@@ -41,11 +38,9 @@ import {
 } from '@/lib/chat/quiz-results-for-store-state';
 import { toast } from 'sonner';
 import { createLogger } from '@/lib/logger';
-import { isPiChatEnabled } from '@/lib/config/feature-flags';
 import type { CleanupSource } from '@/lib/playback/auto-resume';
 import { nanoid } from 'nanoid';
-import type { BaiduSubSources, WebSearchProviderId } from '@/lib/web-search/types';
-import { getPersistenceRequestHeaders } from '@/lib/persistence/bootstrap';
+import { isWhiteboardReferenceAvailable } from '@/lib/whiteboard/element-reference';
 import { refreshWhiteboardRuntimeProjection } from '@/lib/whiteboard/runtime/browser-projection';
 
 const log = createLogger('ChatSessions');
@@ -132,7 +127,7 @@ interface UseChatSessionsOptions {
   onLiveSpeech?: (text: string | null, agentId?: string | null) => void;
   onSpeechProgress?: (ratio: number | null) => void;
   onThinking?: (state: { stage: string; agentId?: string } | null) => void;
-  onCueUser?: (fromAgentId?: string, prompt?: string) => void;
+  onCueUser?: (fromAgentId?: string, prompt?: string, options?: string[]) => void;
   onActiveBubble?: (messageId: string | null) => void;
   onLiveSessionError?: () => void;
   /** Called immediately when the server semantically closes a QA/Discussion session. */
@@ -160,23 +155,13 @@ export type ChatRequestTemplate = {
     [key: string]: unknown;
   };
   userProfile?: { nickname?: string; bio?: string };
-  apiKey: string;
-  baseUrl?: string;
-  model?: string;
-  providerType?: string;
-  thinkingConfig?: ThinkingConfig;
   directorState?: DirectorState;
   piSessionBoundary?: PiSessionBoundaryContext;
-  webSearchProviderId?: WebSearchProviderId;
-  webSearchApiKey?: string;
-  webSearchBaseUrl?: string;
-  webSearchModelId?: string;
-  baiduSubSources?: BaiduSubSources;
-  elementReference?: SlideElementReference;
+  elementReference?: ElementReference;
 };
 
 export interface ChatMessageSendOptions {
-  elementReference?: SlideElementReference;
+  elementReference?: ElementReference;
   onResponseAccepted?: (response: Response) => void;
 }
 
@@ -223,40 +208,27 @@ export function withPiInclassWhiteboardTools<T extends ChatRequestTemplate>(requ
   };
 }
 
-type PiWebSearchSettings = Pick<
-  SettingsState,
-  'webSearchProviderId' | 'webSearchProvidersConfig' | 'baiduSubSources'
->;
-
-/** Snapshot only the selected provider fields accepted by the classroom resolver. */
-export function withPiWebSearchSettings<T extends ChatRequestTemplate>(
-  requestTemplate: T,
-  settings: PiWebSearchSettings,
-): T {
-  const providerId = settings.webSearchProviderId;
-  const providerConfig = settings.webSearchProvidersConfig[providerId];
-  const request = { ...requestTemplate };
-  delete request.webSearchProviderId;
-  delete request.webSearchApiKey;
-  delete request.webSearchBaseUrl;
-  delete request.webSearchModelId;
-  delete request.baiduSubSources;
-  return {
-    ...request,
-    webSearchProviderId: providerId,
-    ...(providerConfig?.apiKey ? { webSearchApiKey: providerConfig.apiKey } : {}),
-    ...(providerConfig?.baseUrl && !providerConfig.isServerConfigured && providerId !== 'searxng'
-      ? { webSearchBaseUrl: providerConfig.baseUrl }
-      : {}),
-    ...(providerId === 'claude' && providerConfig?.modelId
-      ? { webSearchModelId: providerConfig.modelId }
-      : {}),
-    ...(providerId === 'baidu' ? { baiduSubSources: { ...settings.baiduSubSources } } : {}),
-  } as T;
-}
-
 export function shouldAwaitPresentationAction(actionName: string): boolean {
   return actionName.startsWith('wb_');
+}
+
+type LectureVisualAction = Extract<Action, { type: 'spotlight' | 'laser' | 'discussion' }>;
+
+/** Persist params for lecture action badges. Omit optional members JSON would drop as undefined. */
+export function lectureActionPersistParams(action: LectureVisualAction): Record<string, unknown> {
+  if (action.type === 'spotlight') {
+    return {
+      elementId: action.elementId,
+      ...(action.dimOpacity === undefined ? {} : { dimOpacity: action.dimOpacity }),
+    };
+  }
+  if (action.type === 'laser') {
+    return { elementId: action.elementId };
+  }
+  return {
+    topic: action.topic,
+    ...(action.prompt === undefined ? {} : { prompt: action.prompt }),
+  };
 }
 
 export async function retireLiveRequestResources<
@@ -396,15 +368,48 @@ export async function runPiSingleRequest(
   onResponseAccepted?: (response: Response) => void,
 ): Promise<void> {
   const consumer = createConsumer(sessionId, controller, sessionType);
-  const persistenceHeaders = await getPersistenceRequestHeaders();
+  // Every send re-samples the current Scene, including a follow-up with no reference.
+  const interactiveState = await sampleInteractiveState(
+    requestTemplate.storeState,
+    controller.signal,
+  );
+  if (controller.signal.aborted) throw new DOMException('Aborted', 'AbortError');
+  const reference = requestTemplate.elementReference;
+  if (reference?.kind === 'whiteboard_element') {
+    const canvas = useCanvasStore.getState();
+    // Check the snapshot POSTed below; a runtime projection disables referencing.
+    if (
+      canvas.whiteboardClearing ||
+      !isWhiteboardReferenceAvailable(
+        reference,
+        requestTemplate.storeState.stage as Stage | null,
+        canvas.runtimeWhiteboardProjection,
+      )
+    ) {
+      throw new Error(t('chat.elementReference.whiteboardChanged'));
+    }
+  }
   const response = await fetch('/api/chat/pi', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...persistenceHeaders },
-    body: JSON.stringify(requestTemplate),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...requestTemplate, ...(interactiveState ? { interactiveState } : {}) }),
     signal: controller.signal,
   });
 
   if (!response.ok) {
+    const errorBody = await response.json().catch(() => null);
+    if (
+      reference?.kind === 'whiteboard_element' &&
+      errorBody?.reason === 'whiteboard_reference_changed'
+    ) {
+      throw new Error(t('chat.elementReference.whiteboardChanged'));
+    }
+    if (response.status === 400 && errorBody?.reason === 'gemini_native_required') {
+      throw new Error(t('chat.error.geminiNativeRequired'));
+    }
+    if (response.status === 400 && errorBody?.reason === 'tool_calling_required') {
+      throw new Error(t('chat.error.toolCallingRequired'));
+    }
     throw new Error(`Pi chat request failed: ${response.status}`);
   }
   if (!response.body) {
@@ -474,12 +479,10 @@ export async function respondToWhiteboardVisibilityQuery(
   signal: AbortSignal,
 ): Promise<void> {
   if (signal.aborted || useStageStore.getState().stage?.id !== data.stageId) return;
-  const headers = await getPersistenceRequestHeaders();
-  if (signal.aborted || useStageStore.getState().stage?.id !== data.stageId) return;
   const visibility = useCanvasStore.getState().whiteboardOpen ? 'open' : 'closed';
   const response = await fetch('/api/chat/pi/whiteboard-visibility', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...headers },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       queryId: data.queryId,
       stageId: data.stageId,
@@ -513,7 +516,6 @@ export function consumePiWhiteboardEvent(
 }
 
 export function useChatSessions(options: UseChatSessionsOptions = {}) {
-  const learnerDeployment = isLearnerDeployment();
   const onLiveSpeechRef = useRef(options.onLiveSpeech);
   const onSpeechProgressRef = useRef(options.onSpeechProgress);
   const onThinkingRef = useRef(options.onThinking);
@@ -1058,7 +1060,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
             onThinkingRef.current?.(data);
           },
 
-          onCueUser(fromAgentId?: string, prompt?: string) {
+          onCueUser(fromAgentId?: string, prompt?: string, options?: string[]) {
             // Track cue_user for agent loop
             if (loopDoneDataRef.current) {
               loopDoneDataRef.current.cueUserReceived = true;
@@ -1068,7 +1070,8 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
                 cueUserReceived: true,
               };
             }
-            onCueUserRef.current?.(fromAgentId, prompt);
+            if (options) onCueUserRef.current?.(fromAgentId, prompt, options);
+            else onCueUserRef.current?.(fromAgentId, prompt);
           },
 
           onDone(data: {
@@ -1232,10 +1235,9 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
   );
 
   /**
-   * Frontend-driven agent loop. Delegates to the shared runAgentLoop
-   * from lib/chat/agent-loop.ts, wiring StreamBuffer for UI pacing.
-   *
-   * Each iteration: POST /api/chat → process SSE → wait for buffer drain → check outcome.
+   * Run one classroom turn: a single POST /api/chat/pi, whose server owns the
+   * whole director loop. The SSE stream is paced through StreamBuffer, and the
+   * done event decides the session outcome.
    */
   const runAgentLoopFn = useCallback(
     async (
@@ -1256,115 +1258,39 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         requestTemplate.config.agentConfigs = generatedConfigs;
       }
 
-      if (isPiChatEnabled()) {
-        // Pi bypasses runAgentLoop's per-iteration getStoreState, so its single
-        // request needs the snapshot built here — /api/chat/pi rejects bodies
-        // without storeState.
-        const storeState = await buildFreshAgentLoopStoreState();
-        const firstRequestContext = getFirstPiRequestContext(sessionId);
-        const piRequestTemplate = firstRequestContext
-          ? { ...requestTemplate, storeState, piSessionBoundary: firstRequestContext }
-          : { ...requestTemplate, storeState };
-        const piRequestWithWebSearch = withPiWebSearchSettings(
-          piRequestTemplate,
-          useSettingsStore.getState(),
-        );
-        await runPiSingleRequest(
-          sessionId,
-          withPiInclassWhiteboardTools(piRequestWithWebSearch),
-          controller,
-          sessionType,
-          createStatelessStreamConsumer,
-          clearLiveSessionAfterError,
-          enterSoftClosing,
-          markSessionCompleted,
-          storeDirectorState,
-          onStopSessionRef,
-          t,
-          firstRequestContext || onElementReferenceResponseAccepted
-            ? (response) => {
-                if (firstRequestContext) {
-                  consumePiSessionBoundaryContext(
-                    piSessionBoundariesRef.current,
-                    sessionId,
-                    firstRequestContext,
-                  );
-                }
-                onElementReferenceResponseAccepted?.(response);
+      // The single request needs a fresh store snapshot built here —
+      // /api/chat/pi rejects bodies without storeState.
+      const storeState = await buildFreshAgentLoopStoreState();
+      const firstRequestContext = getFirstPiRequestContext(sessionId);
+      const piRequestTemplate = firstRequestContext
+        ? { ...requestTemplate, storeState, piSessionBoundary: firstRequestContext }
+        : { ...requestTemplate, storeState };
+      // Web search is the workspace's webSearch slot, resolved on the server.
+      await runPiSingleRequest(
+        sessionId,
+        withPiInclassWhiteboardTools(piRequestTemplate),
+        controller,
+        sessionType,
+        createStatelessStreamConsumer,
+        clearLiveSessionAfterError,
+        enterSoftClosing,
+        markSessionCompleted,
+        storeDirectorState,
+        onStopSessionRef,
+        t,
+        firstRequestContext || onElementReferenceResponseAccepted
+          ? (response) => {
+              if (firstRequestContext) {
+                consumePiSessionBoundaryContext(
+                  piSessionBoundariesRef.current,
+                  sessionId,
+                  firstRequestContext,
+                );
               }
-            : undefined,
-        );
-        return;
-      }
-
-      const streamConsumer = createStatelessStreamConsumer(sessionId, controller, sessionType);
-
-      const outcome = await runAgentLoop(
-        {
-          config: requestTemplate.config,
-          userProfile: requestTemplate.userProfile,
-          apiKey: requestTemplate.apiKey,
-          baseUrl: requestTemplate.baseUrl,
-          model: requestTemplate.model,
-          providerType: requestTemplate.providerType,
-          thinkingConfig: requestTemplate.thinkingConfig,
-        },
-        {
-          getStoreState: buildFreshAgentLoopStoreState,
-
-          getMessages: () => {
-            const currentSession = sessionsRef.current.find((s) => s.id === sessionId);
-            return currentSession?.messages ?? requestTemplate.messages;
-          },
-
-          fetchChat: (body, signal) =>
-            fetch('/api/chat', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(body),
-              signal,
-            }),
-
-          onEvent: streamConsumer.onEvent,
-          onIterationEnd: streamConsumer.onIterationEnd,
-        },
-        controller.signal,
+              onElementReferenceResponseAccepted?.(response);
+            }
+          : undefined,
       );
-
-      // Handle loop completion (UI-specific). Map each outcome.reason to a
-      // distinct session state — don't conflate error paths with completion.
-      if (!controller.signal.aborted) {
-        switch (outcome.reason) {
-          case 'cue_user':
-            // Session stays active; UI waits for the next user message.
-            break;
-          case 'end':
-            setSessions((prev) =>
-              prev.map((s) =>
-                s.id === sessionId
-                  ? {
-                      ...s,
-                      status: 'completed' as SessionStatus,
-                      updatedAt: nextChatUpdatedAt(s),
-                    }
-                  : s,
-              ),
-            );
-            onStopSessionRef.current?.({ sessionId, source: 'turn_complete' });
-            break;
-          case 'empty_turns':
-            clearLiveSessionAfterError(sessionId, t('chat.error.emptyAgentResponses'));
-            onStopSessionRef.current?.({ sessionId, source: 'error' });
-            break;
-          case 'no_done':
-            clearLiveSessionAfterError(sessionId, t('chat.error.streamInterrupted'));
-            onStopSessionRef.current?.({ sessionId, source: 'error' });
-            break;
-          case 'aborted':
-            // Already handled elsewhere via abort signal.
-            break;
-        }
-      }
     },
     [
       clearLiveSessionAfterError,
@@ -1675,8 +1601,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         log.info(`[ChatArea] Resuming session: ${sessionId}`);
 
         const userProfileState = useUserProfileStore.getState();
-        const mc = getCurrentModelConfig();
-        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         const agentIds =
           useSettingsStore.getState().selectedAgentIds?.length > 0
@@ -1695,7 +1619,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            ...modelRequestFields,
             directorState: session.directorState,
           },
           controller,
@@ -1719,7 +1642,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         }
       }
     },
-    [clearLiveSessionAfterError, learnerDeployment, runAgentLoopFn],
+    [clearLiveSessionAfterError, runAgentLoopFn],
   );
 
   /**
@@ -1779,17 +1702,10 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       // Capture the next request only after that mutation has settled.
       await pendingRetirementRef.current;
 
-      // Validate model configuration before sending
-      const modelConfig = getCurrentModelConfig();
-      const modelConfigurationError = clientModelConfigurationError(modelConfig, learnerDeployment);
-      if (modelConfigurationError === 'model') {
+      // Validate model configuration before sending: chat resolves the
+      // workspace's classroom slot (assigned there or inherited).
+      if (!classroomChatUsable(await loadModelCapabilities())) {
         toast.error(t('settings.modelNotConfigured'));
-        return;
-      }
-      if (modelConfigurationError === 'api-key') {
-        toast.error(t('settings.setupNeeded'), {
-          description: t('settings.apiKeyDesc'),
-        });
         return;
       }
 
@@ -1885,8 +1801,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         );
 
         const userProfileState = useUserProfileStore.getState();
-        const mc = getCurrentModelConfig();
-        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         await runAgentLoopFn(
           sessionId!,
@@ -1900,7 +1814,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            ...modelRequestFields,
             directorState: existingSession?.directorState,
             ...(options.elementReference ? { elementReference: options.elementReference } : {}),
           },
@@ -1938,7 +1851,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       retireActiveLiveRequest,
       runAgentLoopFn,
       t,
-      learnerDeployment,
     ],
   );
 
@@ -1952,17 +1864,10 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       // but being explicit guards against future refactors)
       livePausedRef.current = false;
 
-      // Validate model configuration before starting discussion
-      const modelConfig = getCurrentModelConfig();
-      const modelConfigurationError = clientModelConfigurationError(modelConfig, learnerDeployment);
-      if (modelConfigurationError === 'model') {
+      // Validate model configuration before starting discussion: it resolves
+      // the workspace's classroom slot (assigned there or inherited).
+      if (!classroomChatUsable(await loadModelCapabilities())) {
         toast.error(t('settings.modelNotConfigured'));
-        return;
-      }
-      if (modelConfigurationError === 'api-key') {
-        toast.error(t('settings.setupNeeded'), {
-          description: t('settings.apiKeyDesc'),
-        });
         return;
       }
 
@@ -2017,8 +1922,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
       try {
         const userProfileState = useUserProfileStore.getState();
-        const mc = getCurrentModelConfig();
-        const modelRequestFields = toChatModelRequestFields(mc, learnerDeployment);
 
         await runAgentLoopFn(
           sessionId,
@@ -2035,7 +1938,6 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
               nickname: userProfileState.nickname || undefined,
               bio: userProfileState.bio || undefined,
             },
-            ...modelRequestFields,
           },
           controller,
           'discussion',
@@ -2062,13 +1964,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- t is stable from i18n context
-    [
-      clearLiveSessionAfterError,
-      endSession,
-      learnerDeployment,
-      registerFirstPiRequest,
-      runAgentLoopFn,
-    ],
+    [clearLiveSessionAfterError, endSession, registerFirstPiRequest, runAgentLoopFn],
   );
 
   /**
@@ -2211,18 +2107,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
           messageId,
           actionId: `${action.type}-${now}`,
           actionName: action.type,
-          params:
-            action.type === 'spotlight'
-              ? {
-                  elementId: action.elementId,
-                  dimOpacity: (action as SpotlightAction).dimOpacity,
-                }
-              : action.type === 'laser'
-                ? { elementId: action.elementId }
-                : {
-                    topic: (action as DiscussionAction).topic,
-                    prompt: (action as DiscussionAction).prompt,
-                  },
+          params: lectureActionPersistParams(action),
           agentId: 'default-1',
         });
       }

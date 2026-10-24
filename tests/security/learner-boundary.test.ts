@@ -8,7 +8,6 @@ describe('learner deployment boundary', () => {
     ['GET', '/classroom/course-1'],
     ['GET', '/open-source-licenses'],
     ['GET', '/api/health'],
-    ['POST', '/api/chat'],
     ['POST', '/api/chat/pi'],
     ['GET', '/api/classroom?id=course-1'],
     ['GET', '/api/classroom-media/course-1/image.png'],

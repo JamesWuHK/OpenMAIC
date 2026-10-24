@@ -9,12 +9,12 @@
  * vs Redis job store, local-disk vs S3 artifacts) can be swapped for a
  * demo-scale deployment without the app noticing:
  *
- *   POST   /render                 multipart: project(zip) + fps/quality/format → 202 { jobId }
- *   POST   /preview                JSON: scene + stage + viewport → PNG
- *   GET    /render/:jobId          → { status, progress, currentStage, done, ... }
- *   GET    /render/:jobId/download → stream MP4 (or 302 to a presigned URL)
- *   DELETE /render/:jobId          → cancel
- *   GET    /health                 → { ok: true, accepting: boolean, ... }
+ *   POST   /owner-bound/render                 multipart: project(zip) + fps/quality/format → 202 { jobId }
+ *   POST   /preview                            JSON: scene + stage + viewport → PNG
+ *   GET    /owner-bound/render/:jobId          → { status, progress, currentStage, done, ... }
+ *   GET    /owner-bound/render/:jobId/download → stream MP4 (or 302 to a presigned URL)
+ *   DELETE /owner-bound/render/:jobId          → cancel
+ *   GET    /health                             → { ok: true, accepting: boolean, ... }
  *
  * NOTE: this file must NOT be named `server.ts`. `@hyperframes/producer`'s main
  * module auto-starts its own bundled HTTP server (on PRODUCER_PORT, default
@@ -36,10 +36,12 @@ import {
   RenderRejectedError,
   makeProjectDir as defaultMakeProjectDir,
 } from './render-coordinator.js';
-import { InProcessExecutor } from './render-executor.js';
+import { InProcessExecutor, type RenderExecutor } from './render-executor.js';
 import { InvalidProjectError, unzipProject as defaultUnzipProject } from './unzip.js';
+import { hardenProjectDirectory } from './project-html-hardening.js';
 import { capBodyStream } from './capped-stream.js';
 import { Semaphore } from './semaphore.js';
+import { emitRenderEvent, type RenderEventSink } from './events.js';
 import { PreviewGate, PreviewRejectedError } from './preview-gate.js';
 import {
   ChromiumPreviewRenderer,
@@ -53,7 +55,14 @@ import {
 import { invalidSlideCanvasElementError, previewabilityError } from './preview-validation.js';
 import type { JobStore } from './job-store.js';
 import type { ArtifactStore } from './artifact-store.js';
-import { isTerminal, type RenderOptions } from './types.js';
+import {
+  isAdmissionIdentity,
+  isRenderOwnerId,
+  isTerminal,
+  type AdmissionIdentity,
+  type RenderOptions,
+  type RenderOwnerId,
+} from './types.js';
 import { collectRuntimeVersions } from './runtime-info.js';
 import { publicResourceProfile, validateResourceProfileStartup } from './resource-profile.js';
 import type { RuntimeVersions } from './types.js';
@@ -81,6 +90,8 @@ export interface AppDeps {
   extractionGate: Semaphore;
   /** Independent preview admission, injectable for focused route tests. */
   previewGate?: PreviewGate;
+  /** Preview execution capacity, independent of the video render queue. */
+  previewExecutionGate?: Semaphore;
   /** Render one validated persisted scene to PNG. */
   previewRenderer?: PreviewRenderer;
   /** Preview wall-clock deadline, injectable for focused route tests. */
@@ -89,10 +100,20 @@ export interface AppDeps {
   previewMaxJsonBytes?: number;
   /** Extract a validated archive into a dir. Overridable in tests. */
   unzipProject?: (zip: Uint8Array, destDir: string) => Promise<void>;
+  /** Inject the untrusted render CSP into an extracted project. Overridable in tests. */
+  hardenProject?: (projectDir: string) => Promise<void>;
   /** Create a fresh per-render scratch dir. Overridable in tests. */
   makeProjectDir?: () => Promise<string>;
+  /**
+   * Where route-level events go. The coordinator takes its own sink; pass the
+   * same one here so an embedder that injects a sink receives every event type
+   * rather than silently losing the two the routes emit.
+   */
+  onEvent?: RenderEventSink;
   /** Runtime identity reported by health and copied into per-render metrics. */
   runtimeVersions?: RuntimeVersions;
+  /** The systemd resource executor fences video renders only; previews are disabled. */
+  resourceMode?: boolean;
 }
 
 interface PreviewPayload {
@@ -100,6 +121,20 @@ interface PreviewPayload {
   scene: PreviewScene;
   stage: PreviewStageContext;
   viewport: PreviewViewport;
+}
+
+const RENDER_OWNER_HEADER = 'x-openmaic-render-owner';
+const RENDER_OWNER_BOUND_HEADER = 'x-openmaic-render-owner-bound';
+const ADMISSION_IDENTITY_HEADER = 'x-openmaic-client';
+
+function requestOwner(c: Context): RenderOwnerId | null {
+  const value = c.req.header(RENDER_OWNER_HEADER)?.trim();
+  return isRenderOwnerId(value) ? value : null;
+}
+
+function admissionIdentity(c: Context): AdmissionIdentity | null {
+  const value = c.req.header(ADMISSION_IDENTITY_HEADER)?.trim();
+  return isAdmissionIdentity(value) ? value : null;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -229,14 +264,22 @@ function parseOptions(form: FormData): RenderOptions | string {
 export function createApp(deps: AppDeps): Hono {
   const { jobs, artifacts, coordinator, extractionGate } = deps;
   const unzipProject = deps.unzipProject ?? defaultUnzipProject;
+  const hardenProject = deps.hardenProject ?? hardenProjectDirectory;
   const makeProjectDir = deps.makeProjectDir ?? defaultMakeProjectDir;
   const previewRenderer = deps.previewRenderer ?? new ChromiumPreviewRenderer();
   const previewDeadlineMs = deps.previewDeadlineMs ?? config.previewDeadlineMs;
   const previewMaxJsonBytes = deps.previewMaxJsonBytes ?? config.previewMaxJsonBytes;
+  const onEvent = deps.onEvent ?? emitRenderEvent;
   const previewGate =
     deps.previewGate ?? new PreviewGate(config.previewMaxInFlight, config.previewMaxPerUser);
+  const previewExecutionGate =
+    deps.previewExecutionGate ?? new Semaphore(config.previewMaxConcurrency);
 
   const app = new Hono();
+  app.use('*', async (c, next) => {
+    await next();
+    c.header(RENDER_OWNER_BOUND_HEADER, '1');
+  });
 
   app.get('/health', (c) =>
     c.json({
@@ -244,12 +287,17 @@ export function createApp(deps: AppDeps): Hono {
       // Aggregate-only by design — the full rationale lives on
       // RenderCoordinator#accepting (never queue depths or per-identity data).
       accepting: coordinator.accepting,
+      previewMaxConcurrency: config.previewMaxConcurrency,
       resourceProfile: publicResourceProfile(config.resourceProfile),
       versions: deps.runtimeVersions ?? null,
     }),
   );
 
-  app.post('/render', async (c) => {
+  app.post('/owner-bound/render', async (c) => {
+    const ownerId = requestOwner(c);
+    const identity = admissionIdentity(c);
+    if (!ownerId || !identity) return c.json({ error: 'Invalid render identity' }, 400);
+
     // Reject an oversized body by declared length first (courtesy 413 for honest
     // clients). The real bound is the byte-counting cap below, since
     // Content-Length is client-supplied and absent on chunked uploads.
@@ -258,18 +306,21 @@ export function createApp(deps: AppDeps): Hono {
       return c.json({ error: 'Upload too large' }, 413);
     }
 
-    // Identity is derived by the trusted proxy (client IP) and passed in a header;
-    // a client-supplied multipart `userId` is deliberately ignored so it can't be
-    // rotated to bypass the per-identity guard.
-    const identity = c.req.header('x-openmaic-client')?.trim() || 'anonymous';
-
     // Reserve a queue slot BEFORE the buffering permit, so a rejected caller
     // (queue full / per-identity limit) never enters buffering or extraction.
     let reservation;
     try {
       reservation = coordinator.reserve(identity);
     } catch (error) {
-      if (error instanceof RenderRejectedError) return c.json(rejectionBody(error), 429);
+      if (error instanceof RenderRejectedError) {
+        onEvent({
+          event: 'render_admission_rejected',
+          route: '/owner-bound/render',
+          reason: error.reason ?? 'unspecified',
+          status: 429,
+        });
+        return c.json(rejectionBody(error), 429);
+      }
       throw error;
     }
 
@@ -316,7 +367,9 @@ export function createApp(deps: AppDeps): Hono {
         projectDir = await makeProjectDir();
         const bytes = new Uint8Array(await file.arrayBuffer());
         await unzipProject(bytes, projectDir);
-        return coordinator.submit(reservation, projectDir, options);
+        // Harden the extracted HTML before the producer reads any of it.
+        await hardenProject(projectDir);
+        return coordinator.submit({ reservation, ownerId, projectDir, options });
       });
       return c.json({ jobId }, 202);
     } catch (error) {
@@ -325,12 +378,45 @@ export function createApp(deps: AppDeps): Hono {
       if (error instanceof UploadTooLargeError) return c.json({ error: error.message }, 413);
       if (error instanceof BadRequestError) return c.json({ error: error.message }, 400);
       if (error instanceof InvalidProjectError) return c.json({ error: error.message }, 400);
-      if (error instanceof RenderRejectedError) return c.json(rejectionBody(error), 429);
+      if (error instanceof RenderRejectedError) {
+        onEvent({
+          event: 'render_admission_rejected',
+          route: '/owner-bound/render',
+          reason: error.reason ?? 'unspecified',
+          status: 429,
+        });
+        return c.json(rejectionBody(error), 429);
+      }
       throw error;
     }
   });
 
+  // Times every response the preview route produces — 200, 413, 429, 504, 500
+  // alike. A synchronous preview reports failure in its status, so this is the
+  // one place a deployment can see the route's real success rate and latency.
+  app.use('/preview', async (c, next) => {
+    const startedAt = Date.now();
+    await next();
+    onEvent({
+      event: 'preview_request',
+      route: '/preview',
+      status: c.res.status,
+      durationMs: Date.now() - startedAt,
+    });
+  });
+
   app.post('/preview', async (c) => {
+    // Resource mode cannot run Chromium here: this HTTP process is outside the
+    // per-task cgroup. Reject before inspecting or buffering the request body.
+    if (deps.resourceMode) {
+      return c.json(
+        {
+          error: 'Preview is unavailable while per-task resource budgets are enabled',
+          reason: 'resource_mode_unsupported',
+        },
+        503,
+      );
+    }
     const declared = Number(c.req.header('content-length') ?? '0');
     if (Number.isFinite(declared) && declared > previewMaxJsonBytes) {
       return c.json({ error: 'Upload too large' }, 413);
@@ -341,7 +427,15 @@ export function createApp(deps: AppDeps): Hono {
     try {
       release = previewGate.acquire(identity);
     } catch (error) {
-      if (error instanceof PreviewRejectedError) return c.json(rejectionBody(error), 429);
+      if (error instanceof PreviewRejectedError) {
+        onEvent({
+          event: 'render_admission_rejected',
+          route: '/preview',
+          reason: (error as Error & { reason?: string }).reason ?? 'unspecified',
+          status: 429,
+        });
+        return c.json(rejectionBody(error), 429);
+      }
       throw error;
     }
 
@@ -367,24 +461,26 @@ export function createApp(deps: AppDeps): Hono {
       if (typeof payload === 'string') throw new BadRequestError(payload);
       const unpreviewable = previewabilityError(payload.scene);
       if (unpreviewable) throw new UnprocessablePreviewError(unpreviewable);
-      const execution = coordinator.tryRunWithExecutionSlot(
-        () =>
-          previewRenderer.render({
-            scene: payload.scene,
-            stage: payload.stage,
-            viewport: payload.viewport,
-            signal,
-            deadlineMs: previewDeadlineMs,
-          }),
-        signal,
-      );
-      if (!execution) {
+      signal.throwIfAborted();
+      const releaseExecution = previewExecutionGate.tryAcquire();
+      if (!releaseExecution) {
         throw new PreviewRejectedError(
-          'Preview capacity is busy with another render; retry shortly.',
+          'Preview capacity is busy with another preview; retry shortly.',
           'capacity_busy',
         );
       }
-      const png = await execution;
+      let png: Uint8Array;
+      try {
+        png = await previewRenderer.render({
+          scene: payload.scene,
+          stage: payload.stage,
+          viewport: payload.viewport,
+          signal,
+          deadlineMs: previewDeadlineMs,
+        });
+      } finally {
+        releaseExecution();
+      }
       if (png.byteLength === 0) throw new Error('Preview renderer returned an empty image');
 
       const body = new Uint8Array(png.byteLength);
@@ -402,7 +498,15 @@ export function createApp(deps: AppDeps): Hono {
       if (error instanceof UnprocessablePreviewError) {
         return c.json({ error: error.message }, 422);
       }
-      if (error instanceof PreviewRejectedError) return c.json(rejectionBody(error), 429);
+      if (error instanceof PreviewRejectedError) {
+        onEvent({
+          event: 'render_admission_rejected',
+          route: '/preview',
+          reason: (error as Error & { reason?: string }).reason ?? 'unspecified',
+          status: 429,
+        });
+        return c.json(rejectionBody(error), 429);
+      }
       if (error instanceof PreviewTimeoutError || deadlineAbort.signal.aborted) {
         return c.json({ error: 'Preview exceeded the deadline' }, 504);
       }
@@ -416,8 +520,10 @@ export function createApp(deps: AppDeps): Hono {
     }
   });
 
-  app.get('/render/:jobId', async (c) => {
-    const job = await jobs.get(c.req.param('jobId'));
+  app.get('/owner-bound/render/:jobId', async (c) => {
+    const ownerId = requestOwner(c);
+    if (!ownerId) return c.json({ error: 'Invalid render identity' }, 400);
+    const job = await jobs.getForOwner(c.req.param('jobId'), ownerId);
     if (!job) return c.json({ error: 'Job not found' }, 404);
     return c.json({
       jobId: job.id,
@@ -427,20 +533,31 @@ export function createApp(deps: AppDeps): Hono {
       framesRendered: job.framesRendered,
       totalFrames: job.totalFrames,
       metrics: job.metrics,
+      resources: job.resources && {
+        published: job.resources.published,
+        cleanupVerified: job.resources.cleanupVerified,
+        reservationReturned: job.resources.reservationReturned,
+        admissionClosed: job.resources.admissionClosed,
+        ...(job.resources.diagnosticCode ? { diagnosticCode: job.resources.diagnosticCode } : {}),
+      },
       error: job.error,
       done: isTerminal(job.status),
     });
   });
 
-  app.delete('/render/:jobId', async (c) => {
-    const ok = await coordinator.cancel(c.req.param('jobId'));
+  app.delete('/owner-bound/render/:jobId', async (c) => {
+    const ownerId = requestOwner(c);
+    if (!ownerId) return c.json({ error: 'Invalid render identity' }, 400);
+    const ok = await coordinator.cancelForOwner(c.req.param('jobId'), ownerId);
     if (!ok) return c.json({ error: 'Job not found' }, 404);
     return c.json({ cancelled: true });
   });
 
-  app.get('/render/:jobId/download', async (c) => {
+  app.get('/owner-bound/render/:jobId/download', async (c) => {
+    const ownerId = requestOwner(c);
+    if (!ownerId) return c.json({ error: 'Invalid render identity' }, 400);
     const jobId = c.req.param('jobId');
-    const job = await jobs.get(jobId);
+    const job = await jobs.getForOwner(jobId, ownerId);
     if (!job) return c.json({ error: 'Job not found' }, 404);
     if (job.status !== 'succeeded') {
       return c.json({ error: `Job not ready (status: ${job.status})` }, 409);
@@ -469,26 +586,29 @@ export function createApp(deps: AppDeps): Hono {
 }
 
 /** Wire the production collaborators and start the server (skipped under tests). */
-async function main(): Promise<void> {
+export async function startService(resourceExecutor?: RenderExecutor): Promise<void> {
   const artifacts = new LocalDiskArtifactStore();
   validateResourceProfileStartup(config.resourceProfile);
   const runtimeVersions = await collectRuntimeVersions();
-  const executor = new InProcessExecutor({
-    runtimeVersions,
-    ...(config.chunkExecutionEnabled
-      ? {
-          chunkExecution: {
-            chunkCount: config.chunkCount,
-            chunkWorkers: config.chunkWorkers,
-            maxParallelChunks: config.maxParallelChunks,
-            ...(config.chunkSizeFrames > 0 ? { chunkSizeFrames: config.chunkSizeFrames } : {}),
-            ...(config.targetChunkFrames > 0
-              ? { targetChunkFrames: config.targetChunkFrames }
-              : {}),
-          },
-        }
-      : {}),
-  });
+  if (resourceExecutor) runtimeVersions.producer = '0.8.37 (official, outer resource fence)';
+  const executor =
+    resourceExecutor ??
+    new InProcessExecutor({
+      runtimeVersions,
+      ...(config.chunkExecutionEnabled
+        ? {
+            chunkExecution: {
+              chunkCount: config.chunkCount,
+              chunkWorkers: config.chunkWorkers,
+              maxParallelChunks: config.maxParallelChunks,
+              ...(config.chunkSizeFrames > 0 ? { chunkSizeFrames: config.chunkSizeFrames } : {}),
+              ...(config.targetChunkFrames > 0
+                ? { targetChunkFrames: config.targetChunkFrames }
+                : {}),
+            },
+          }
+        : {}),
+    });
   // Assigned after `jobs` so its reap callback can close over the coordinator.
   // eslint-disable-next-line prefer-const
   let coordinator: RenderCoordinator;
@@ -501,7 +621,7 @@ async function main(): Promise<void> {
 
   // Build the browser mount off the request path so the first preview does not
   // pay the cold esbuild cost while holding admission and execution permits.
-  await buildSlideClientBundle();
+  if (!resourceExecutor) await buildSlideClientBundle();
 
   const app = createApp({
     jobs,
@@ -511,6 +631,7 @@ async function main(): Promise<void> {
     // can't stack across a burst of admitted requests.
     extractionGate: new Semaphore(config.maxConcurrentExtractions),
     runtimeVersions,
+    resourceMode: resourceExecutor !== undefined,
   });
 
   // Ensure the scratch root exists before accepting work. On the documented
@@ -539,5 +660,5 @@ async function main(): Promise<void> {
 
 // Only auto-start when run as the entrypoint, not when imported by tests.
 if (process.env.RENDER_SERVICE_NO_LISTEN !== 'true') {
-  await main();
+  await startService();
 }

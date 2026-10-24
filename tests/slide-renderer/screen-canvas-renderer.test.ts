@@ -7,6 +7,7 @@ import { PlaybackScreenCanvas } from '@/components/slide-renderer/Editor/ScreenC
 import { getPlaybackImageState } from '@/components/slide-renderer/Editor/RendererScreenCanvas';
 import type { SlideContent } from '@/lib/types/stage';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
+import { setModelSettingsViewForTests } from '../helpers/model-settings-view';
 
 vi.mock('@/lib/hooks/use-i18n', () => ({
   useI18n: () => ({ t: (key: string) => key }),
@@ -64,6 +65,7 @@ describe('PlaybackScreenCanvas', () => {
   });
 
   afterEach(() => {
+    setModelSettingsViewForTests(null);
     if (original === undefined) {
       delete process.env[flag];
     } else {
@@ -145,8 +147,15 @@ describe('PlaybackScreenCanvas', () => {
     }
   });
 
-  it('renders an untracked generated placeholder as pending in renderer playback mode', () => {
+  // With image generation off — the default — an untracked generated
+  // placeholder is a slide whose media will not arrive, and that is what it
+  // says. It briefly claimed to be pending only because asking the asset pool
+  // about the placeholder left a lease in flight during the first paint; the
+  // pool never held such a ref, so it is no longer asked.
+  it('renders an untracked generated placeholder as disabled when generation is off', () => {
     process.env[flag] = 'true';
+    // The workspace's image slot resolves to nothing.
+    setModelSettingsViewForTests({});
     const imageContent: SlideContent = {
       ...content,
       canvas: {
@@ -183,7 +192,7 @@ describe('PlaybackScreenCanvas', () => {
       ),
     );
 
-    expect(html).toContain('data-media-state="pending"');
+    expect(html).toContain('data-media-state="disabled"');
     expect(html).not.toContain('src="gen_img_1"');
   });
 

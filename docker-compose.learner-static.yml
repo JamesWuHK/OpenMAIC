@@ -3,14 +3,13 @@ services:
     image: ${OPENMAIC_LEARNER_IMAGE:-openmaic-learner-openmaic:latest}
     env_file:
       - path: ${OPENMAIC_LEARNER_ENV_FILE:-learner.env}
-        required: false
+        required: true
     build:
       context: .
       args:
         NEXT_BUILD_NODE_OPTIONS: '--max-old-space-size=3072'
         OPENMAIC_BUILD_CPUS: '1'
         NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: learner
-        NEXT_PUBLIC_PERSISTENCE: ''
         NEXT_PUBLIC_PRO_WORKBENCH_ENABLED: 'false'
         NEXT_PUBLIC_MAIC_EDITOR_ENABLED: 'false'
         NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED: 'false'
@@ -23,6 +22,9 @@ services:
       LEARNER_SITE_CONTENT_PATH: /app/content/learner/site-content.json
       LEARNER_PUBLISHED_COURSES_PATH: /app/content/learner/published-courses.json
       NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
     expose:
       - '3000'
     volumes:
@@ -30,6 +32,23 @@ services:
       - ./data/teacher-submissions:/app/data/teacher-submissions
       - ./content/learner:/app/content/learner:ro
       - ./content/learner/media:/app/public/learner/runtime:ro
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    env_file:
+      - path: ${OPENMAIC_LEARNER_ENV_FILE:-learner.env}
+        required: true
+    environment:
+      POSTGRES_DB: openmaic
+      POSTGRES_USER: openmaic
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U openmaic -d openmaic']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - learner_postgres:/var/lib/postgresql/data
     restart: unless-stopped
 
   caddy:
@@ -49,3 +68,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  learner_postgres:

@@ -1,19 +1,18 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const learnerRecoverySetting = 'recoverFromStorageError: isLearnerDeployment()';
+describe('learner classroom server-storage wiring', () => {
+  it('routes the classroom page through the shared server-first surface', () => {
+    const page = readFileSync('app/classroom/[id]/page.tsx', 'utf8');
+    const surface = readFileSync('components/classroom/ClassroomSurface.tsx', 'utf8');
 
-describe('learner classroom storage recovery wiring', () => {
-  it.each([
-    'app/classroom/[id]/page.tsx',
-    'components/classroom/ClassroomSurface.tsx',
-  ])('enables learner-only recovery in %s', (sourcePath) => {
-    const source = readFileSync(sourcePath, 'utf8');
-
-    expect(source).toContain(learnerRecoverySetting);
+    expect(page).toContain('<ClassroomSurface classroomId={params.id} variant="page" />');
+    expect(surface).toContain('resolveClassroomDeploymentPolicy(isLearnerDeployment())');
+    expect(surface).toContain('classroomPolicy.forceReadOnly');
+    expect(surface).not.toContain('recoverFromStorageError');
   });
 
-  it('keeps later playback and stage persistence offline after recovery', () => {
+  it('keeps browser-storage-unavailable guards for playback preferences', () => {
     const playbackSource = readFileSync('components/edit/PlaybackChromeRoot.tsx', 'utf8');
     const stageStoreSource = readFileSync('lib/store/stage.ts', 'utf8');
     const voiceProfilesSource = readFileSync('lib/audio/voxcpm-voices.ts', 'utf8');

@@ -23,10 +23,20 @@
  */
 import { create } from 'zustand';
 import { isSkillLoadTool, skillLoadId } from './skill-load';
-import { defaultWorkbenchTranslator, type WorkbenchCopyKey } from '@/lib/i18n/workbench';
+import {
+  defaultWorkbenchTranslator,
+  type WorkbenchCopyKey,
+  type WorkbenchTranslator,
+} from '@/lib/i18n/workbench';
 import { parseElementRefs, type ElementRef } from './element-refs';
 import { parseCourseRefs, type CourseRef } from './course-refs';
 import { appendCourseSighting, courseSightingsOf } from './run-courses';
+import {
+  isWorkbenchMaterialMime,
+  MEDIA_MIME_TYPES,
+  resolveWorkbenchMaterialMime,
+} from './material-upload-policy';
+import { fetchMaterialPolicy, type MaterialPolicy } from '@/lib/generation-run-client/api';
 
 export type ChatNodeKind =
   | 'user'
@@ -2121,23 +2131,133 @@ export interface WorkbenchMaterial {
   extractionStatus?: 'idle' | 'pending' | 'running' | 'done' | 'failed';
 }
 
+/**
+ * Display mebibytes for a byte cap. One fractional digit, rounded down, with
+ * the caller's decimal separator. A positive cap below 0.1 MiB, or a runtime
+ * that will not floor, returns undefined so the caller can use the generic
+ * message instead of showing 0 or an overstated limit.
+ */
+function formatMaterialUploadLimit(
+  maxBytes: number | undefined,
+  locale: string,
+): string | undefined {
+  if (typeof maxBytes !== 'number' || !Number.isFinite(maxBytes) || maxBytes <= 0) return undefined;
+  const limit = maxBytes / (1024 * 1024);
+  if (limit < 0.1) return undefined;
+  try {
+    const formatter = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
+      roundingMode: 'floor',
+      useGrouping: false,
+      numberingSystem: 'latn',
+    });
+    if (formatter.resolvedOptions().roundingMode !== 'floor') return undefined;
+    return formatter.format(limit);
+  } catch {
+    return undefined;
+  }
+}
+
 export class WorkbenchMaterialUploadError extends Error {
   constructor(
     message: string,
     readonly status: number,
     readonly requestId?: string,
+    readonly maxBytes?: number,
   ) {
     super(message);
     this.name = 'WorkbenchMaterialUploadError';
+  }
+
+  userMessage(t: WorkbenchTranslator, locale: string): string {
+    if (this.status === 415) return t('workbench.material.unsupportedType');
+    if (this.status === 429) return t('workbench.material.quotaExceeded');
+    if (this.status !== 413) return this.message;
+    const limit = formatMaterialUploadLimit(this.maxBytes, locale);
+    return limit === undefined
+      ? t('workbench.material.fileTooLarge')
+      : t('workbench.material.fileTooLargeWithLimit', { limit });
+  }
+}
+
+// Share discovery across concurrent uploads for this page. Only the server's
+// advertised caps are authoritative; a failed or slow read must not block
+// uploading (the server's 413 still applies), and the next upload should try
+// discovery again. A slow read stays cached so later uploads can use it once
+// it answers; until then, uploads after its first timeout do not wait again.
+const MATERIAL_POLICY_WAIT_MS = 5_000;
+let materialPolicyPromise: Promise<MaterialPolicy | undefined> | undefined;
+let materialPolicyOverdue = false;
+let materialPolicyAnswered = false;
+
+async function workbenchMaterialPolicy(): Promise<MaterialPolicy | undefined> {
+  if (!materialPolicyPromise) {
+    materialPolicyOverdue = false;
+    materialPolicyAnswered = false;
+    materialPolicyPromise = fetchMaterialPolicy().then(
+      (policy) => {
+        materialPolicyAnswered = true;
+        return policy;
+      },
+      () => {
+        materialPolicyPromise = undefined;
+        return undefined;
+      },
+    );
+  }
+  if (materialPolicyOverdue && !materialPolicyAnswered) return undefined;
+  const timedOut = Symbol('timed out');
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const policy = await Promise.race([
+      materialPolicyPromise,
+      new Promise<typeof timedOut>((resolve) => {
+        timer = setTimeout(resolve, MATERIAL_POLICY_WAIT_MS, timedOut);
+      }),
+    ]);
+    if (policy !== timedOut) return policy;
+    materialPolicyOverdue = true;
+    return undefined;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
 /** Upload one file into the caller's durable material library. */
 export async function uploadWorkbenchMaterial(file: File): Promise<WorkbenchMaterial> {
-  const res = await fetch('/api/materials', {
+  // Some Linux browsers report every OOXML file with the generic
+  // `application/vnd.ms-office` MIME (#1497) — resolve the concrete type
+  // from the filename so the server gate sees what the file actually is.
+  const mimeType = resolveWorkbenchMaterialMime({
+    mimeType: file.type,
+    fileName: file.name,
+  });
+  // The route rejects an unsupported type (415) before it applies a size cap;
+  // leave those to it so the user is told the format, not the size, is wrong.
+  const policy = isWorkbenchMaterialMime(mimeType) ? await workbenchMaterialPolicy() : undefined;
+  const maxBytes = MEDIA_MIME_TYPES.includes(mimeType)
+    ? policy?.maxMediaBytes
+    : policy?.maxDocumentBytes;
+  if (
+    typeof maxBytes === 'number' &&
+    Number.isFinite(maxBytes) &&
+    maxBytes > 0 &&
+    file.size > maxBytes
+  ) {
+    throw new WorkbenchMaterialUploadError(
+      `upload exceeds ${maxBytes} bytes`,
+      413,
+      undefined,
+      maxBytes,
+    );
+  }
+  // A session extracts what it binds itself: the library's own extraction
+  // (for classic generation) is not started for it.
+  const res = await fetch('/api/materials?extract=false', {
     method: 'POST',
     headers: {
-      'content-type': file.type || 'application/octet-stream',
+      'content-type': mimeType || 'application/octet-stream',
       'x-material-filename': encodeURIComponent(file.name),
     },
     body: file,
@@ -2152,6 +2272,7 @@ export async function uploadWorkbenchMaterial(file: File): Promise<WorkbenchMate
     extraction?: { status?: WorkbenchMaterial['extractionStatus'] };
     error?: string;
     message?: string;
+    maxBytes?: unknown;
   };
   if (!res.ok || !body.materialId) {
     const requestId = res.headers.get('x-request-id') ?? undefined;
@@ -2160,13 +2281,19 @@ export async function uploadWorkbenchMaterial(file: File): Promise<WorkbenchMate
       requestId ? `${message} [requestId=${requestId}]` : message,
       res.status,
       requestId,
+      typeof body.maxBytes === 'number' && Number.isFinite(body.maxBytes) && body.maxBytes > 0
+        ? body.maxBytes
+        : undefined,
     );
   }
+  // Prefer the server's echo; fall back to the locally resolved MIME (never
+  // the raw browser value, which may be the generic Office container).
+  const recordMime = body.mime || mimeType || file.type;
   return {
     materialId: body.materialId,
     name: body.originalName ?? file.name,
     bytes: body.bytes ?? file.size,
-    ...(body.mime || file.type ? { mimeType: body.mime || file.type } : {}),
+    ...(recordMime ? { mimeType: recordMime } : {}),
     ...(body.extraction?.status ? { extractionStatus: body.extraction.status } : {}),
   };
 }

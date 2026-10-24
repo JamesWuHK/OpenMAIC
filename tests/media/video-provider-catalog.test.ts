@@ -12,6 +12,7 @@ const adapterMocks = vi.hoisted(() => {
     'minimax-video': { generate: vi.fn(), test: vi.fn(connectivity) },
     'grok-video': { generate: vi.fn(), test: vi.fn(connectivity) },
     happyhorse: { generate: vi.fn(), test: vi.fn(connectivity) },
+    'openrouter-video': { generate: vi.fn(), test: vi.fn(connectivity) },
   };
 });
 
@@ -39,11 +40,22 @@ vi.mock('@/lib/media/adapters/happyhorse-adapter', () => ({
   generateWithHappyHorse: adapterMocks.happyhorse.generate,
   testHappyHorseConnectivity: adapterMocks.happyhorse.test,
 }));
+vi.mock('@/lib/media/adapters/openrouter-video-adapter', () => ({
+  generateWithOpenRouterVideo: adapterMocks['openrouter-video'].generate,
+  testOpenRouterVideoConnectivity: adapterMocks['openrouter-video'].test,
+}));
 
 /** Every catalog id must dispatch to its own adapter in both switches. */
 const CATALOG_IDS = Object.keys(VIDEO_PROVIDERS) as VideoProviderId[];
 
 describe('video provider catalog', () => {
+  it('keeps the retiring Seedance Lite T2V model selectable until shutdown', () => {
+    expect(VIDEO_PROVIDERS.seedance.models).toContainEqual({
+      id: 'doubao-seedance-1-0-lite-t2v-250428',
+      name: 'Seedance 1.0 Lite T2V',
+    });
+  });
+
   it('does not list a selectable provider that has no adapter (sora)', () => {
     // `sora` used to be selectable in the catalog with no connectivity or
     // generation case, so choosing it failed only at execution time. A catalog

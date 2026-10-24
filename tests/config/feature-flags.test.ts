@@ -3,9 +3,9 @@ import {
   isAgentRuntimeConfigured,
   isAgentRuntimeEnabled,
   isEditorRendererEnabled,
+  isCoursewareReferenceEnabled,
   isMaicEditorEnabled,
   isPlaybackRendererEnabled,
-  isPiChatEnabled,
   isPiNativeChildRuntimeEnabled,
   isPiNativeChildSpotlightEnabled,
   isPptxImportEnabled,
@@ -193,8 +193,8 @@ describe('isEditorRendererEnabled', () => {
   });
 });
 
-describe('isPiChatEnabled', () => {
-  const flag = 'NEXT_PUBLIC_PI_CHAT_ENABLED';
+describe('isCoursewareReferenceEnabled', () => {
+  const flag = 'NEXT_PUBLIC_COURSEWARE_REFERENCE_ENABLED';
   let original: string | undefined;
 
   beforeEach(() => {
@@ -202,32 +202,29 @@ describe('isPiChatEnabled', () => {
   });
 
   afterEach(() => {
-    if (original === undefined) {
-      delete process.env[flag];
-    } else {
-      process.env[flag] = original;
-    }
+    if (original === undefined) delete process.env[flag];
+    else process.env[flag] = original;
   });
 
   it('defaults off when unset', () => {
     delete process.env[flag];
-    expect(isPiChatEnabled()).toBe(false);
+    expect(isCoursewareReferenceEnabled()).toBe(false);
   });
 
   it("returns true for 'true' and '1'", () => {
     process.env[flag] = 'true';
-    expect(isPiChatEnabled()).toBe(true);
+    expect(isCoursewareReferenceEnabled()).toBe(true);
 
     process.env[flag] = '1';
-    expect(isPiChatEnabled()).toBe(true);
+    expect(isCoursewareReferenceEnabled()).toBe(true);
   });
 
   it('returns false for other values', () => {
     process.env[flag] = 'false';
-    expect(isPiChatEnabled()).toBe(false);
+    expect(isCoursewareReferenceEnabled()).toBe(false);
 
     process.env[flag] = 'yes';
-    expect(isPiChatEnabled()).toBe(false);
+    expect(isCoursewareReferenceEnabled()).toBe(false);
   });
 });
 

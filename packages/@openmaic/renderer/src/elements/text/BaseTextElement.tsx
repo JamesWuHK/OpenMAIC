@@ -1,10 +1,11 @@
 'use client';
 
-import type { CSSProperties, ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import type { PPTTextElement } from '@openmaic/dsl';
 import { useElementShadow } from '../shared/useElementShadow';
 import { ElementOutline } from '../shared/ElementOutline';
 import { preservesPlainTextLineBreaks } from '../../utils/richText';
+import { useInlineMath, useInnerHtml } from '../../utils/inlineMath';
 
 export interface BaseTextElementProps {
   elementInfo: PPTTextElement;
@@ -14,19 +15,34 @@ export interface BaseTextElementProps {
 
 export function BaseTextElement({ elementInfo, target, renderContent }: BaseTextElementProps) {
   const { shadowStyle } = useElementShadow(elementInfo.shadow);
+  const proseRef = useRef<HTMLDivElement>(null);
+  const innerHtml = useInnerHtml(elementInfo.content);
+  useInlineMath(proseRef, elementInfo.content);
+  // Imported OOXML text carries its own bodyPr insets on the outer div.
+  // Adding the editor's default inset again shifts vertical text left and
+  // reduces the available line width for horizontal text.
+  const hasExplicitTextInsets = /^\s*<div\b[^>]*\sdata-pptx-text-insets\s*=\s*(["'])true\1/i.test(
+    elementInfo.content,
+  );
+  // Legacy saved slides predate the marker. Retain their existing inset behavior.
+  const hasTextInsets =
+    hasExplicitTextInsets ||
+    /^\s*<div\b[^>]*\bstyle\s*=\s*["'][^"']*\bpadding\s*:/i.test(elementInfo.content);
 
   const vAlign = elementInfo.vAlign ?? 'top';
   const justifyContent =
     vAlign === 'middle' ? 'center' : vAlign === 'bottom' ? 'flex-end' : 'flex-start';
   const defaultContent = (
     <div
+      ref={proseRef}
+      data-inline-math-root=""
       className="text ProseMirror-static"
       style={{
         position: 'relative',
         pointerEvents: target === 'thumbnail' ? 'none' : undefined,
         whiteSpace: preservesPlainTextLineBreaks(elementInfo.content) ? 'pre-line' : undefined,
       }}
-      dangerouslySetInnerHTML={{ __html: elementInfo.content }}
+      dangerouslySetInnerHTML={innerHtml}
     />
   );
 
@@ -60,7 +76,7 @@ export function BaseTextElement({ elementInfo, target, renderContent }: BaseText
           style={{
             position: 'relative',
             boxSizing: 'border-box',
-            padding: '10px',
+            padding: hasTextInsets ? 0 : '10px',
             overflowWrap: 'break-word',
             width: elementInfo.vertical ? 'auto' : '100%',
             height: elementInfo.vertical ? '100%' : 'auto',
