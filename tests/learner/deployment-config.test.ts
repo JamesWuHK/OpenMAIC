@@ -9,6 +9,8 @@ describe('learner container configuration', () => {
     expect(dockerfile).toContain('ARG NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE');
     expect(dockerfile).not.toContain('OPENMAIC_SKIP_BUILD_TYPECHECK');
     expect(dockerfile).toContain('ARG NEXT_PUBLIC_PRO_WORKBENCH_ENABLED');
+    // edge-tts 7.2.8 uses the retired read-aloud handshake and returns 403.
+    expect(dockerfile).toContain('edge-tts==7.3.1');
     expect(dockerfile).toContain(
       'ENV NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=$NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE',
     );
