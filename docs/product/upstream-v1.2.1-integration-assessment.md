@@ -66,6 +66,12 @@ document endpoint and compares every classroom source SHA-256. Its three
 focused tests passed locally, including a stale document with unchanged scene
 IDs and count. The already-running retry at `8d2b1511` does **not** include
 this gate; a subsequent exact-source candidate must execute it before release.
+That next workflow also includes `qa-learner-candidate-speech.mjs`, an HTTP
+smoke using one synthetic Cantonese sentence for each of the teacher,
+assistant and student discussion roles. Its three unit tests passed. Against
+the unchanged public baseline on 2026-10-24, all three returned nonempty MP3
+data in about 2.4 s, 2.6 s and 1.4 s respectively. This is a speech-endpoint
+baseline, not a microphone, full discussion or v1.2.1 browser acceptance.
 
 Read-only production inspection on 2026-10-24 found the running Lightsail
 student host has exactly `openmaic` and `caddy` services, with no
