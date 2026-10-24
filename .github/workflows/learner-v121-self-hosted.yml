@@ -1,8 +1,6 @@
 name: Learner v1.2.1 self-hosted candidate
 
 on:
-  push:
-    branches: [codex/upstream-v121-integration]
   workflow_dispatch:
     inputs:
       checks:
