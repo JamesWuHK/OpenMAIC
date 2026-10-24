@@ -43,7 +43,6 @@ jobs:
       IMAGE_TAG: wanli-learner-v121:${{ github.run_id }}-${{ github.sha }}
       CONTAINER_NAME: learner-v121-${{ github.run_id }}
       POSTGRES_CONTAINER_NAME: learner-v121-postgres-${{ github.run_id }}
-      CANDIDATE_NETWORK: learner-v121-network-${{ github.run_id }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -160,8 +159,10 @@ jobs:
       - name: Isolated HTTP smoke test
         if: github.event_name == 'workflow_dispatch' && inputs.build
         run: |
-          docker network create "$CANDIDATE_NETWORK"
-          docker run -d --name "$POSTGRES_CONTAINER_NAME" --network "$CANDIDATE_NETWORK" \
+          # This self-hosted runner's custom Docker bridges cannot reach Edge TTS.
+          # The default bridge passed an external synthetic speech probe; link
+          # only these two run-scoped containers for the isolated DB smoke.
+          docker run -d --name "$POSTGRES_CONTAINER_NAME" --network bridge \
             --tmpfs /var/lib/postgresql/data:rw,size=256m \
             -e POSTGRES_DB=openmaic -e POSTGRES_USER=openmaic \
             -e POSTGRES_PASSWORD=synthetic-ci-postgres-not-a-secret \
@@ -172,7 +173,7 @@ jobs:
           done
           docker exec "$POSTGRES_CONTAINER_NAME" pg_isready -U openmaic -d openmaic
           docker run -d --name "$CONTAINER_NAME" -p 127.0.0.1::3000 \
-            --network "$CANDIDATE_NETWORK" \
+            --network bridge --link "$POSTGRES_CONTAINER_NAME:$POSTGRES_CONTAINER_NAME" \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e DATABASE_URL="postgres://openmaic:synthetic-ci-postgres-not-a-secret@$POSTGRES_CONTAINER_NAME:5432/openmaic" \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
@@ -222,9 +223,6 @@ jobs:
           fi
           if docker container inspect "$POSTGRES_CONTAINER_NAME" >/dev/null 2>&1; then
             docker container rm -f "$POSTGRES_CONTAINER_NAME"
-          fi
-          if docker network inspect "$CANDIDATE_NETWORK" >/dev/null 2>&1; then
-            docker network rm "$CANDIDATE_NETWORK"
           fi
           if docker image inspect "$IMAGE_TAG" >/dev/null 2>&1; then
             docker image rm "$IMAGE_TAG"
