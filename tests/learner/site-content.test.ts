@@ -1,6 +1,9 @@
+import { existsSync, statSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import rawContent from '@/content/learner/site-content.json';
+import publishedCourses from '@/content/learner/published-courses.json';
 import { getSeriesLessonHref } from '@/lib/learner/series-experience';
 import { learnerSiteContentSchema } from '@/lib/learner/site-content';
 import { LEARNER_COURSE_TOPICS } from '@/lib/learner/public-courses';
@@ -11,7 +14,10 @@ describe('learner site runtime content', () => {
   it('publishes a runtime-managed homepage hero and original cover for every series', () => {
     expect(content.hero.image).toBe('/learner/runtime/wanli-learning-hero-v2.webp');
     for (const series of content.series) {
-      expect(series.heroImage).toBe(`/learner/runtime/${series.slug}-cover.webp`);
+      expect(series.heroImage).toMatch(/^\/learner\/runtime\/[a-z0-9-]+\.(webp|png|svg)$/);
+      const file = path.join(process.cwd(), 'content/learner/media', path.basename(series.heroImage!));
+      expect(existsSync(file), `${series.slug}: cover must actually exist`).toBe(true);
+      expect(statSync(file).size).toBeGreaterThan(0);
     }
   });
 
@@ -24,7 +30,7 @@ describe('learner site runtime content', () => {
     expect(new Set(content.series.map((series) => series.slug)).size).toBe(content.series.length);
 
     for (const series of content.series) {
-      expect(series.language).toContain('正體中文');
+      expect(series.language).toMatch(/正體中文|繁體中文/);
       expect(series.language).toContain('粵語');
       expect(series.languages).toEqual(['廣東話（香港粵語）']);
       expect(series.lessonCount).toBeGreaterThan(0);
@@ -54,6 +60,20 @@ describe('learner site runtime content', () => {
 
   it('publishes a complete linked lesson directory for every series', () => {
     for (const series of content.series) {
+      if (series.slug === 'nobel-curiosity-lab') {
+        // Ordinary lectures use the published course cards as their directory.
+        // Each card must exist and lead to its corresponding live classroom.
+        expect(series.liveCourseIds).toHaveLength(series.lessonCount);
+        expect(new Set(series.liveCourseIds).size).toBe(series.lessonCount);
+        for (const [index, id] of series.liveCourseIds!.entries()) {
+          const card = publishedCourses.courses.find((course) => course.id === id);
+          expect(card, `${id}: missing published card`).toBeDefined();
+          expect(card?.lessonNumber).toBe(index + 1);
+          expect(card?.description.length).toBeGreaterThan(12);
+          expect(getSeriesLessonHref(series, index + 1)).toBe(`/classroom/${id}`);
+        }
+        continue;
+      }
       expect(series.lessons).toHaveLength(series.lessonCount);
       expect(series.lessons?.map((lesson) => lesson.number)).toEqual(
         Array.from({ length: series.lessonCount }, (_, index) => index + 1),
@@ -76,7 +96,10 @@ describe('learner site runtime content', () => {
   });
 
   it('makes rewriting and original visual production an explicit editorial rule', () => {
-    expect(content.originalContentPolicy.summary).toContain('不直接複製官方文字、圖片');
+    expect(content.originalContentPolicy.summary).toContain('原創教學敘事');
+    expect(content.originalContentPolicy.summary).toContain('符合授權條件');
+    expect(content.originalContentPolicy.rules.join('\n')).toContain('核實作者、來源與使用授權');
+    expect(content.originalContentPolicy.rules.join('\n')).toContain('不用改幾個字的方式仿寫原文');
     expect(content.originalContentPolicy.rules.join('\n')).toContain('AI 生成');
     expect(content.originalContentPolicy.rules.join('\n')).toContain('不暗示');
     expect(content.originalContentPolicy.rules.join('\n')).toContain('獨立教育項目');

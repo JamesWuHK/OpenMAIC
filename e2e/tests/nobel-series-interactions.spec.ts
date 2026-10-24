@@ -8,11 +8,13 @@ import { expect, test, type FrameLocator, type Locator, type Page } from '@playw
  * CI must include this file in testMatch and run Chromium desktop 1440x900 and
  * mobile 390x844 projects. This spec never starts a server or supplies media.
  *
- * AI calls alone are intercepted: a protocol-only cue_user response proves the
+ * Current image builds NEXT_PUBLIC_PI_CHAT_ENABLED=false. AI calls alone are
+ * intercepted: a protocol-only legacy /api/chat cue_user response proves the
  * request path/UI wiring. It proves neither a real provider response nor the
  * accuracy, safety, voice quality or content of a generated discussion. Those
  * remain release acceptance work with the configured provider. Narration below
  * is the real mounted MP3, decoded and progressing in Chromium; no audio mock.
+ * The zero-agent mock is not a successful Pi-runtime protocol acceptance test.
  */
 type Action = { type: string; audioId?: string; topic?: string };
 type Scene = { id: string; title: string; actions: Action[]; content: { html: string } };
@@ -30,6 +32,16 @@ if (courses.length !== 6) throw new Error(`Expected six Nobel candidates, found 
 const toolbar = (page: Page) => page.getByTestId('lecture-toolbar');
 const iframe = (page: Page, scene: Scene) => page.locator(`iframe[title="Interactive Scene ${scene.id}"]`);
 const frame = (page: Page, scene: Scene) => page.frameLocator(`iframe[title="Interactive Scene ${scene.id}"]`);
+
+// GET /api/classroom returns parsed JSON inside { success, classroom }, so its
+// bytes cannot equal the whitespace-bearing source file. Compare a canonical
+// SHA256 of the entire loaded object, retaining the raw file SHA in evidence.
+function canonicalJSON(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJSON).join(',')}]`;
+  if (value !== null && typeof value === 'object') return `{${Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => `${JSON.stringify(key)}:${canonicalJSON(item)}`).join(',')}}`;
+  return JSON.stringify(value);
+}
+const jsonHash = (value: unknown) => createHash('sha256').update(canonicalJSON(value)).digest('hex');
 
 async function noOverflow(page: Page, scene?: Scene) {
   const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -74,7 +86,22 @@ const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$
 
 async function openCourse(page: Page, course: Course) {
   await page.addInitScript(() => localStorage.setItem('locale', 'zh-TW'));
+  // This is the classroom loader's actual network response, not a separate
+  // request that could pass while the UI renders stale browser storage.
+  const loadedCourse = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return response.request().method() === 'GET' && url.pathname === '/api/classroom' && url.searchParams.get('id') === course.id;
+  });
   await page.goto(`/classroom/${course.id}`);
+  const response = await loadedCourse;
+  expect(response.status()).toBe(200);
+  const payload = await response.json() as { success?: boolean; classroom?: unknown };
+  expect(payload.success).toBe(true);
+  expect(payload.classroom).toBeDefined();
+  const expectedHash = jsonHash(course);
+  const actualHash = jsonHash(payload.classroom);
+  expect(actualHash, `${course.id}: runtime JSON must equal the entire candidate JSON`).toBe(expectedHash);
+  await test.info().attach('runtime-classroom-json-identity', { body: JSON.stringify({ course: course.id, responseURL: response.url(), representation: 'SHA256 of recursively key-sorted JSON, all fields included', expectedHash, actualHash }, null, 2), contentType: 'application/json' });
   await expect(page.getByTestId('lecture-header').getByRole('heading')).toHaveText(course.stage.name, { timeout: 30_000 });
   await expect(toolbar(page)).toBeVisible();
   await expect(iframe(page, course.scenes[0])).toBeVisible();
@@ -148,27 +175,61 @@ async function exerciseModel(page: Page, widget: FrameLocator, scene: Scene) {
   const customPicture = scene.content.html.includes('data-condition-picture=');
   const picture = widget.locator(customPicture ? '[data-condition-picture]' : '.gate');
   const stateAttribute = customPicture ? 'data-ready' : 'data-open';
+  const drawing = customPicture ? picture : picture.locator('.gate-picture');
+  const leaves = drawing.locator(customPicture ? '.nobel-condition-leaf' : '.gate-leaf');
+  const particle = drawing.locator(customPicture ? '.nobel-condition-particle' : '.gate-particle');
+  await expect(leaves).toHaveCount(2);
+  const readGeometry = () => drawing.evaluate((element, custom) => {
+    const leaf = element.querySelectorAll(custom ? '.nobel-condition-leaf' : '.gate-leaf');
+    const left = leaf[0].getBoundingClientRect(), right = leaf[1].getBoundingClientRect();
+    const middle = element.querySelector(custom ? '.nobel-condition-particle' : '.gate-particle')!.getBoundingClientRect();
+    return { gap: right.left - left.right, particleWidth: middle.width, leftWidth: left.width, rightWidth: right.width, leftHeight: left.height, rightHeight: right.height };
+  }, customPicture);
+  const assertGeometry = async (open: boolean) => {
+    await aboveToolbar(page, drawing);
+    await expect(drawing).toBeVisible();
+    await expect(leaves.nth(0)).toBeVisible();
+    await expect(leaves.nth(1)).toBeVisible();
+    // Authored CSS makes two 36x65 leaves touch when closed, and separates
+    // them by a 65px visible particle when open. Measuring rendered rectangles
+    // catches a broken/missing selector even when data-ready/open still changes.
+    await expect.poll(async () => Math.abs((await readGeometry()).gap - (open ? 65 : 0))).toBeLessThanOrEqual(1);
+    await expect.poll(async () => Math.abs((await readGeometry()).particleWidth - (open ? 65 : 0))).toBeLessThanOrEqual(1);
+    const dimensions = await readGeometry();
+    expect(dimensions.leftWidth).toBeCloseTo(36, 0);
+    expect(dimensions.rightWidth).toBeCloseTo(36, 0);
+    expect(dimensions.leftHeight).toBeCloseTo(65, 0);
+    expect(dimensions.rightHeight).toBeCloseTo(65, 0);
+    if (open) await expect(particle).toBeVisible();
+    return dimensions;
+  };
   const explanation = widget.locator('#logic-feedback, #door-copy, #gate-copy');
   const initialCopy = await explanation.innerText();
   await expect(protein).toHaveAttribute('aria-pressed', 'false');
   await expect(light).toHaveAttribute('aria-pressed', 'false');
+  const initialGeometry = await assertGeometry(false);
   await light.click();
   await expect(picture).toHaveAttribute(stateAttribute, 'false');
   await expect(light).toHaveAttribute('aria-pressed', 'true');
+  await assertGeometry(false);
   await protein.click();
   await expect(picture).toHaveAttribute(stateAttribute, 'true');
+  await assertGeometry(true);
   expect(await explanation.innerText()).not.toBe(initialCopy);
   await aboveToolbar(page, picture);
   await aboveToolbar(page, explanation);
   await light.click();
   await expect(picture).toHaveAttribute(stateAttribute, 'false');
   await expect(light).toHaveAttribute('aria-pressed', 'false');
+  await assertGeometry(false);
   await light.click();
   await expect(picture).toHaveAttribute(stateAttribute, 'true');
+  await assertGeometry(true);
   await widget.getByRole('button', { name: '重設兩個條件', exact: true }).click();
   await expect(protein).toHaveAttribute('aria-pressed', 'false');
   await expect(light).toHaveAttribute('aria-pressed', 'false');
   await expect(picture).toHaveAttribute(stateAttribute, 'false');
+  expect(await assertGeometry(false), 'Reset must restore the initial rendered geometry').toEqual(initialGeometry);
 }
 
 async function exerciseInlineQuestion(page: Page, widget: FrameLocator, kind: 'bell' | 'inquiry') {
@@ -260,6 +321,7 @@ for (const { course, sha256 } of courses) {
     for (const choice of ['skip', 'join'] as const) test(`optional discussion ${choice}: real narration then invitation; mock AI request wiring only`, async ({ page }, testInfo) => {
       const requests: { url: string; body: unknown }[] = [];
       await page.route(/\/api\/chat(?:\/pi)?$/, async (route) => {
+        expect(new URL(route.request().url()).pathname, 'This candidate must use PI=false legacy chat; Pi success is outside this mock protocol').toBe('/api/chat');
         requests.push({ url: route.request().url(), body: route.request().postDataJSON() });
         await route.fulfill({ status: 200, contentType: 'text/event-stream', body: [
           { type: 'cue_user', data: { prompt: 'CI transport mock: no AI answer was generated.' } },
