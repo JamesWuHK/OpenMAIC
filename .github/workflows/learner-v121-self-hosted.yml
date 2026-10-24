@@ -1,0 +1,108 @@
+name: Learner v1.2.1 self-hosted candidate
+
+on:
+  push:
+    branches: [codex/upstream-v121-integration]
+  workflow_dispatch:
+    inputs:
+      build:
+        description: Run candidate tests and image build after resource preflight
+        type: boolean
+        required: true
+        default: false
+
+# Build/test only: no AWS/model credentials, image upload, or deployment.
+permissions:
+  contents: read
+concurrency:
+  group: learner-v121-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    if: github.repository == 'JamesWuHK/OpenMAIC'
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      IMAGE_TAG: wanli-learner-v121:${{ github.run_id }}-${{ github.sha }}
+      CONTAINER_NAME: learner-v121-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify exact source and runner headroom
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          test "$(uname -m)" = x86_64
+          docker info --format 'Docker server {{.ServerVersion}}'
+          available_kib=$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')
+          memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
+          printf 'Available disk: %s KiB; available memory: %s KiB\n' "$available_kib" "$memory_kib"
+          test "$available_kib" -ge 20971520
+          test "$memory_kib" -ge 5242880
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install and compile workspace packages
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          NODE_OPTIONS=--max-old-space-size=1024 pnpm run build:packages
+      - name: Learner regressions and TypeScript
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          node --test tests/learner/release-media.test.mjs tests/learner/live-source-parity.test.mjs tests/learner/upgrade-parity.test.mjs
+          pnpm exec vitest run tests/learner tests/api/classroom-media-range.test.ts tests/security/learner-boundary.test.ts
+          NODE_OPTIONS=--max-old-space-size=4096 pnpm exec tsc --noEmit
+      - name: Build exact linux/amd64 learner image
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          docker build --platform linux/amd64 --tag "$IMAGE_TAG" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            --build-arg NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072 \
+            --build-arg OPENMAIC_BUILD_CPUS=1 \
+            --build-arg NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner \
+            --build-arg NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=false \
+            --build-arg NEXT_PUBLIC_MAIC_EDITOR_ENABLED=false \
+            --build-arg NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=false \
+            --build-arg NEXT_PUBLIC_PI_CHAT_ENABLED=true \
+            --build-arg NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false \
+            --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
+          docker image inspect "$IMAGE_TAG" --format 'Image ID {{.Id}}; architecture {{.Architecture}}; source {{index .Config.Labels "org.opencontainers.image.revision"}}'
+      - name: Isolated HTTP smoke test
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          docker run -d --name "$CONTAINER_NAME" -p 127.0.0.1::3000 \
+            -e OPENMAIC_DEPLOYMENT_MODE=learner \
+            -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
+            -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
+            -e DEFAULT_MODEL=openai:gpt-4o-mini \
+            -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
+            -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
+            "$IMAGE_TAG"
+          port=$(docker port "$CONTAINER_NAME" 3000/tcp | sed 's/.*://')
+          for attempt in {1..30}; do
+            if curl -fsS "http://127.0.0.1:$port/api/health" >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS "http://127.0.0.1:$port/api/health" >/dev/null
+          curl -fsS "http://127.0.0.1:$port/api/learner/courses" >/dev/null
+          curl -fsS "http://127.0.0.1:$port/courses" >/dev/null
+      - name: Clean up only this run's candidate
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          docker logs "$CONTAINER_NAME" --tail 60 2>&1 || true
+          if docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
+            docker container rm -f "$CONTAINER_NAME"
+          fi
+          if docker image inspect "$IMAGE_TAG" >/dev/null 2>&1; then
+            docker image rm "$IMAGE_TAG"
+          fi
