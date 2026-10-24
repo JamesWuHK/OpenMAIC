@@ -180,14 +180,19 @@ export function buildStructuredPrompt(
       .replace(/## Action Usage Guidelines\n[\s\S]*?(?=# Responding to the User)/,
         '## Action Usage Guidelines\nNo actions are available. Give a spoken explanation using text objects.\n\n');
   }
+  const neutrinoGuard = /^hk-nobel-03-/.test(storeState.stage?.id ?? '')
+    ? '\nScientific boundaries for this lesson: Do not say astronomy previously used only light; solar and SN1987A neutrinos were already observed. IceCube adds evidence about high-energy cosmic neutrinos. Visible light comes from secondary charged particles produced after neutrino interactions, not from seeing neutrinos directly. A reconstructed direction has uncertainty; atmospheric backgrounds and other observations must be considered. A single detected event does not guarantee a particular cosmic source. Do not rank neutrinos as a universally best messenger; observations complement one another.\n'
+    : '';
   return system + '\n\n# Ordinary Nobel lecture conversation\n' +
     'Answer the learner directly with brief, natural Hong Kong traditional Chinese speech. ' +
     'Use the course teaching notes; preserve scientist attribution and application limits. ' +
+    'Use only facts and analogies supported by those authored notes; simplify their wording rather than inventing extra history, comparisons or applications. ' +
+    'Unless the learner explicitly asks for detail, answer in at most three short sentences, avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question. ' +
     'An analogy request is a request for an explanation, not permission to replace the lesson with a whiteboard. ' +
     (effectiveActions.length ? 'The learner requested drawing: available actions may support your spoken explanation. ' : 'No drawing actions are available this turn. Reply using text objects only; keep the lecture visible. ') +
     'Return exactly a JSON array of text/action objects in the specified schema. ' +
     'Never output native tool_call, arg_key or arg_value markup, tool instructions, or internal planning as speech. ' +
-    'Always give a meaningful spoken explanation; tools alone are not an answer.';
+    'Always give a meaningful spoken explanation; tools alone are not an answer.' + neutrinoGuard;
 }
 
 // ==================== Length Guidelines ====================

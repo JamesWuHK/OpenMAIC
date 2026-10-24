@@ -439,9 +439,11 @@ export async function* statelessGenerate(
 
     let totalActions = 0;
     let totalAgents = 0;
+    let cueAlreadyReceived = false;
     // Tracks whether the agent dispatched in this turn produced any text or actions.
     // Each statelessGenerate call handles exactly one agent turn (client loops externally).
     let agentHadContent = false;
+    let agentHasVisibleText = false;
 
     // Track current agent turn to build updated directorState
     let currentAgentId: string | null = null;
@@ -452,14 +454,19 @@ export async function* statelessGenerate(
 
     for await (const chunk of stream) {
       const event = chunk as StatelessEvent;
+      if (event.type === 'cue_user') cueAlreadyReceived = true;
 
       if (event.type === 'agent_start') {
         totalAgents++;
         currentAgentId = event.data.agentId;
         currentAgentName = event.data.agentName;
         contentPreview = '';
+        agentHasVisibleText = false;
         agentActionCount = 0;
         agentWbActions.length = 0;
+      }
+      if (event.type === 'text_delta' && event.data.content.trim().length > 0) {
+        agentHasVisibleText = true;
       }
       if (event.type === 'text_delta' && contentPreview.length < 100) {
         contentPreview = (contentPreview + event.data.content).slice(0, 100);
@@ -510,9 +517,19 @@ export async function* statelessGenerate(
             whiteboardLedger: prevLedger,
           };
 
+    // An ordinary lecture Q&A returns control after one actual answer. Native
+    // group discussions keep the existing director loop and all agent roles.
+    const pauseNobelQA = request.config.sessionType === 'qa' &&
+      /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(request.storeState.stage?.id ?? '') &&
+      totalAgents > 0 && agentHasVisibleText;
+    if (pauseNobelQA && !cueAlreadyReceived) {
+      yield { type: 'cue_user', data: { fromAgentId: currentAgentId ?? undefined } };
+    }
     yield {
       type: 'done',
-      data: { totalActions, totalAgents, agentHadContent, directorState },
+      data: { totalActions, totalAgents, agentHadContent, directorState,
+        ...(pauseNobelQA ? { cueUserReceived: true } : {}),
+      },
     };
 
     log.info(

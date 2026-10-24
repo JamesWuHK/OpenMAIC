@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { LanguageModel } from 'ai';
 
 import { AISdkLangGraphAdapter } from '@/lib/orchestration/ai-sdk-adapter';
+import * as directorGraph from '@/lib/orchestration/director-graph';
 import { buildStructuredPrompt } from '@/lib/orchestration/prompt-builder';
 import type { AgentConfig } from '@/lib/orchestration/registry/types';
 import { getConversationActions } from '@/lib/orchestration/tool-schemas';
@@ -116,6 +117,37 @@ describe('Nobel system prompt constraints agree with the effective action policy
   });
 });
 
+describe('Nobel answers stay within authored facts and necessary depth', () => {
+  it.each([
+    'hk-nobel-01-kagan-lecture-v5', 'hk-nobel-02-soai-lecture-v5',
+    'hk-nobel-03-halzen-lecture-v4', 'hk-nobel-04-deisseroth-lecture-v3',
+    'hk-nobel-05-hegemann-lecture-v2', 'hk-nobel-06-nagel-lecture-v2',
+  ])('requires supported facts/analogies and at most three short sentences for %s', (id) => {
+    const prompt = promptFor(id, '請解釋本課的價值與限制。');
+    expect(prompt).toContain('Use only facts and analogies supported by those authored notes; simplify their wording rather than inventing extra history, comparisons or applications.');
+    expect(prompt).toContain('Unless the learner explicitly asks for detail, answer in at most three short sentences');
+    expect(prompt).toContain('avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question.');
+  });
+
+  it.each(['teacher', 'assistant', 'student'])('applies the lesson-03 factual boundaries to the %s role', (role) => {
+    const prompt = buildStructuredPrompt({ ...agent, role }, storeState('hk-nobel-03-halzen-lecture-v4'), undefined, undefined, undefined, undefined, []);
+    expect(prompt).toContain('Do not say astronomy previously used only light; solar and SN1987A neutrinos were already observed.');
+    expect(prompt).toContain('IceCube adds evidence about high-energy cosmic neutrinos.');
+    expect(prompt).toContain('Visible light comes from secondary charged particles produced after neutrino interactions, not from seeing neutrinos directly.');
+    expect(prompt).toContain('A reconstructed direction has uncertainty; atmospheric backgrounds and other observations must be considered.');
+    expect(prompt).toContain('A single detected event does not guarantee a particular cosmic source.');
+    expect(prompt).toContain('Do not rank neutrinos as a universally best messenger; observations complement one another.');
+  });
+
+  it('does not add lesson-03 neutrino rules to other Nobel lessons or ordinary courses', () => {
+    expect(promptFor(nobelId, '解釋。')).not.toContain('Scientific boundaries for this lesson:');
+    const ordinary = promptFor('ordinary-course', '解釋。');
+    expect(ordinary).not.toContain('Scientific boundaries for this lesson:');
+    expect(ordinary).not.toContain('Use only facts and analogies supported by those authored notes');
+    expect(ordinary).not.toContain('answer in at most three short sentences');
+  });
+});
+
 function parseStream(text: string, chunkSize = text.length) {
   const state = createParserState();
   const results: ParseResult[] = [];
@@ -211,5 +243,144 @@ describe('actual legacy graph uses the same prompt and execution action list', (
     if (stageId === nobelId) {
       expect(actualPrompt).toContain(expectWhiteboard ? 'The learner requested drawing:' : 'No drawing actions are available this turn.');
     } else expect(actualPrompt).not.toContain('# Ordinary Nobel lecture conversation');
+  });
+});
+
+function conversationRequest(stageId: string, sessionType: 'qa' | 'discussion' | undefined = 'qa', text = '請解釋本課。'): StatelessChatRequest {
+  return {
+    apiKey: 'synthetic-test-never-used',
+    messages: [{ id: 'user-1', role: 'user', parts: [{ type: 'text', text }] }],
+    storeState: storeState(stageId),
+    config: { agentIds: [agent.id], sessionType, agentConfigs: [agent] },
+  };
+}
+
+async function collectConversation(request: StatelessChatRequest): Promise<StatelessEvent[]> {
+  const events: StatelessEvent[] = [];
+  for await (const event of statelessGenerate(request, new AbortController().signal, {} as LanguageModel)) events.push(event);
+  expect(events.filter((event) => event.type === 'error')).toEqual([]);
+  return events;
+}
+
+function mockModelText(content: string) {
+  return vi.spyOn(AISdkLangGraphAdapter.prototype, 'streamGenerate').mockImplementation(async function* (): ReturnType<AISdkLangGraphAdapter['streamGenerate']> {
+    yield { type: 'delta', content };
+    yield { type: 'done', content };
+  });
+}
+
+describe('ordinary Nobel Q&A returns the next turn to the learner', () => {
+  it.each(['teacher', 'assistant', 'student'])('cues the learner after one real %s answer without deleting the authored multi-role roster', async (role) => {
+    const answeringAgent = { ...agent, id: `${role}-answerer`, role };
+    const roster = ['teacher', 'assistant', 'student'].map((rosterRole) => rosterRole === role ? answeringAgent : { ...agent, id: `${rosterRole}-peer`, role: rosterRole });
+    const request = conversationRequest(nobelId);
+    request.config = { ...request.config, agentIds: roster.map((entry) => entry.id), agentConfigs: roster, triggerAgentId: answeringAgent.id };
+    const model = mockModelText('[{"type":"text","content":"研究有價值，但應用仍要驗證。"}]');
+    const events = await collectConversation(request);
+    expect(model).toHaveBeenCalledOnce();
+    expect(request.config.agentIds).toHaveLength(3);
+    const cues = events.filter((event) => event.type === 'cue_user');
+    expect(cues).toEqual([{ type: 'cue_user', data: { fromAgentId: answeringAgent.id } }]);
+    const done = events.find((event) => event.type === 'done');
+    expect(done?.data).toMatchObject({ totalAgents: 1, agentHadContent: true, cueUserReceived: true });
+    expect(events.findIndex((event) => event.type === 'cue_user')).toBeGreaterThan(events.findIndex((event) => event.type === 'agent_end'));
+    expect(events.at(-1)?.type).toBe('done');
+  });
+
+  it('does not emit a second cue when the underlying graph already cued the learner', async () => {
+    const existingCue: StatelessEvent = { type: 'cue_user', data: { fromAgentId: agent.id } };
+    const graphEvents: StatelessEvent[] = [
+      { type: 'agent_start', data: { messageId: 'answer-1', agentId: agent.id, agentName: agent.name } },
+      { type: 'text_delta', data: { messageId: 'answer-1', content: '這是真正的口頭回答。' } },
+      { type: 'agent_end', data: { messageId: 'answer-1', agentId: agent.id } }, existingCue,
+    ];
+    // Substitute only the graph event seam to exercise an existing-cue stream;
+    // the stateless generator's cue/done policy remains the real implementation.
+    vi.spyOn(directorGraph, 'createOrchestrationGraph').mockReturnValue({
+      stream: async () => (async function* () { for (const event of graphEvents) yield event; })(),
+    } as unknown as ReturnType<typeof directorGraph.createOrchestrationGraph>);
+    const events = await collectConversation(conversationRequest(nobelId));
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([existingCue]);
+    expect(events.find((event) => event.type === 'done')?.data).toMatchObject({ cueUserReceived: true, agentHadContent: true });
+  });
+
+  it('preserves an existing director cue without inventing an answer when no agent spoke', async () => {
+    const request = conversationRequest(nobelId);
+    request.directorState = { turnCount: 1, agentResponses: [], whiteboardLedger: [] };
+    const model = mockModelText('[]');
+    const events = await collectConversation(request);
+    expect(model).not.toHaveBeenCalled();
+    expect(events.filter((event) => event.type === 'cue_user')).toHaveLength(1);
+    expect(events.find((event) => event.type === 'done')?.data).toMatchObject({ totalAgents: 0, agentHadContent: false });
+    expect(events.filter((event) => event.type === 'text_delta')).toEqual([]);
+  });
+
+  it.each(['[]', '[{"type":"text","content":"   "}]', '<tool_call>wb_open</tool_call>'])('does not add an answer cue for empty or suppressed output: %s', async (content) => {
+    mockModelText(content);
+    const events = await collectConversation(conversationRequest(nobelId));
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([]);
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).not.toBe(true);
+  });
+
+  it('does not count an allowed drawing action as a spoken answer', async () => {
+    mockModelText('[{"type":"action","name":"wb_open","params":{}}]');
+    const events = await collectConversation(conversationRequest(nobelId, 'qa', '請畫圖。'));
+    expect(events.filter((event) => event.type === 'action')).toHaveLength(1);
+    expect(events.filter((event) => event.type === 'text_delta')).toEqual([]);
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([]);
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).not.toBe(true);
+  });
+
+  it('still cues after real text follows a streamed whitespace prefix longer than the preview budget', async () => {
+    const answer = '研究工具有價值，具體應用仍要驗證。';
+    const graphEvents: StatelessEvent[] = [
+      { type: 'agent_start', data: { messageId: 'whitespace-answer', agentId: agent.id, agentName: agent.name } },
+      { type: 'text_delta', data: { messageId: 'whitespace-answer', content: ' '.repeat(150) } },
+      { type: 'text_delta', data: { messageId: 'whitespace-answer', content: answer } },
+      { type: 'agent_end', data: { messageId: 'whitespace-answer', agentId: agent.id } },
+    ];
+    // Exercise the exact event boundary whose preview is capped at 100 chars;
+    // partial-json may otherwise coalesce an unfinished whitespace-only string.
+    vi.spyOn(directorGraph, 'createOrchestrationGraph').mockReturnValue({
+      stream: async () => (async function* () { for (const event of graphEvents) yield event; })(),
+    } as unknown as ReturnType<typeof directorGraph.createOrchestrationGraph>);
+    const events = await collectConversation(conversationRequest(nobelId));
+    const deltas = events.filter((event) => event.type === 'text_delta').map((event) => event.data.content);
+    expect(deltas.some((delta) => delta.length >= 100 && delta.trim() === '')).toBe(true);
+    expect(deltas.join('')).toBe(`${' '.repeat(150)}${answer}`);
+    expect(events.filter((event) => event.type === 'cue_user')).toHaveLength(1);
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).toBe(true);
+  });
+
+  it('does not cue when output is only whitespace longer than the preview budget', async () => {
+    mockModelText(JSON.stringify([{ type: 'text', content: ' '.repeat(150) }]));
+    const events = await collectConversation(conversationRequest(nobelId));
+    expect(events.filter((event) => event.type === 'text_delta').map((event) => event.data.content).join('').trim()).toBe('');
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([]);
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).not.toBe(true);
+  });
+
+  it('keeps the three-role native discussion roster and leaves continuation to the director', async () => {
+    const roster = ['teacher', 'assistant', 'student'].map((role) => ({ ...agent, id: `${role}-native`, role }));
+    const request = conversationRequest(nobelId, 'discussion');
+    request.config = { ...request.config, agentIds: roster.map((entry) => entry.id), agentConfigs: roster, triggerAgentId: 'student-native' };
+    mockModelText('[{"type":"text","content":"我想問，研究工具等於現成療法嗎？"}]');
+    const events = await collectConversation(request);
+    expect(request.config.agentIds).toEqual(['teacher-native', 'assistant-native', 'student-native']);
+    expect(events.find((event) => event.type === 'agent_start')?.data.agentId).toBe('student-native');
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([]);
+    expect(events.find((event) => event.type === 'done')?.data).toMatchObject({ totalAgents: 1, agentHadContent: true });
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).not.toBe(true);
+  });
+
+  it.each([
+    [nobelId, 'discussion'], ['ordinary-course', 'qa'], ['ordinary-course', 'discussion'],
+  ] as const)('preserves the existing director continuation contract for %s / %s', async (stageId, sessionType) => {
+    mockModelText('[{"type":"text","content":"這是原本的角色回答。"}]');
+    const events = await collectConversation(conversationRequest(stageId, sessionType));
+    expect(events.filter((event) => event.type === 'text_delta').map((event) => event.data.content).join('')).toBe('這是原本的角色回答。');
+    expect(events.filter((event) => event.type === 'cue_user')).toEqual([]);
+    expect(events.find((event) => event.type === 'done')?.data).toMatchObject({ totalAgents: 1, agentHadContent: true });
+    expect(events.find((event) => event.type === 'done')?.data.cueUserReceived).not.toBe(true);
   });
 });
