@@ -36,7 +36,6 @@ jobs:
       CONTAINER_NAME: learner-v121-${{ github.run_id }}
       POSTGRES_CONTAINER_NAME: learner-v121-postgres-${{ github.run_id }}
       CANDIDATE_NETWORK: learner-v121-network-${{ github.run_id }}
-      CANDIDATE_ROOT: ${{ runner.temp }}/learner-v121-${{ github.run_id }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -45,6 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           git rev-parse HEAD
+          printf 'CANDIDATE_ROOT=%s/learner-v121-%s\n' "$RUNNER_TEMP" "$GITHUB_RUN_ID" >> "$GITHUB_ENV"
           test "$(uname -m)" = x86_64
           docker info --format 'Docker server {{.ServerVersion}}'
           available_kib=$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')
