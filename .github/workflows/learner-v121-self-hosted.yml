@@ -217,6 +217,53 @@ jobs:
             LEARNER_QA_CATALOG_PATH="$CANDIDATE_ROOT/content/learner/published-courses.json" \
             LEARNER_QA_CLASSROOMS_DIR="$CANDIDATE_ROOT/data/classrooms" \
             node scripts/qa-learner-live-source-parity.mjs
+      - name: Isolated real-browser learner playback smoke
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          set -euo pipefail
+          # CLI-first browser check against the still-running temporary candidate.
+          # Browser files stay in this runner's cache, outside the production host.
+          npx --yes --package @playwright/cli@0.1.9 playwright-cli install-browser chromium
+          export PLAYWRIGHT_CLI_SESSION="learner-v121-$GITHUB_RUN_ID"
+          pw() { npx --yes --package @playwright/cli@0.1.9 playwright-cli "$@"; }
+          trap 'pw close >/dev/null 2>&1 || true' EXIT
+          port=$(docker port "$CONTAINER_NAME" 3000/tcp | sed 's/.*://')
+          test -n "$port"
+          pw open "http://127.0.0.1:$port/classroom/hk-a01-02-leaf-classifier"
+          snapshot=''
+          play_ref=''
+          for attempt in {1..20}; do
+            snapshot=$(pw snapshot)
+            play_ref=$(printf '%s\n' "$snapshot" | sed -n 's/.*button "Play" \[ref=\(e[0-9]*\)\].*/\1/p' | head -1)
+            if [ -n "$play_ref" ]; then break; fi
+            sleep 2
+          done
+          test -n "$play_ref"
+          printf '%s\n' "$snapshot" | grep -F '開場：四張圖怎樣分？'
+          pw run-code 'async (page) => { await page.addInitScript(() => { const OriginalAudio = window.Audio; window.__probeAudio = []; window.Audio = function (...args) { const audio = new OriginalAudio(...args); window.__probeAudio.push(audio); return audio; }; window.Audio.prototype = OriginalAudio.prototype; }); await page.reload(); return "narration instrumented"; }'
+          for attempt in {1..20}; do
+            snapshot=$(pw snapshot)
+            play_ref=$(printf '%s\n' "$snapshot" | sed -n 's/.*button "Play" \[ref=\(e[0-9]*\)\].*/\1/p' | head -1)
+            if [ -n "$play_ref" ]; then break; fi
+            sleep 2
+          done
+          test -n "$play_ref"
+          pw click "$play_ref"
+          pw run-code 'async (page) => { await page.waitForFunction(() => (window.__probeAudio || []).some(a => a.currentTime > 0.5 && !a.paused && a.readyState >= 3), null, { timeout: 15000 }); const state = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth, audio: (window.__probeAudio || []).map(a => ({ currentTime: a.currentTime, readyState: a.readyState, src: a.currentSrc })) })); if (state.overflow) throw new Error("Desktop horizontal overflow"); const src = state.audio.find(a => a.currentTime > 0.5)?.src; if (!src) throw new Error("Narration did not advance"); const response = await page.request.get(src, { headers: { Range: "bytes=0-1023" } }); if (![200,206].includes(response.status()) || !response.headers()["content-type"]?.startsWith("audio/")) throw new Error("Narration media response failed: " + response.status()); return { state, mediaStatus: response.status(), mediaType: response.headers()["content-type"] }; }'
+          pw resize 390 844
+          pw reload
+          for attempt in {1..20}; do
+            snapshot=$(pw snapshot)
+            play_ref=$(printf '%s\n' "$snapshot" | sed -n 's/.*button "Play" \[ref=\(e[0-9]*\)\].*/\1/p' | head -1)
+            if [ -n "$play_ref" ]; then break; fi
+            sleep 2
+          done
+          test -n "$play_ref"
+          pw click "$play_ref"
+          pw run-code 'async (page) => { await page.waitForFunction(() => (window.__probeAudio || []).some(a => a.currentTime > 0.5 && !a.paused && a.readyState >= 3), null, { timeout: 15000 }); const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth })); if (dimensions.scrollWidth > dimensions.width) throw new Error("390px horizontal overflow: " + JSON.stringify(dimensions)); return dimensions; }'
+          console_output=$(pw console error)
+          printf '%s\n' "$console_output"
+          printf '%s\n' "$console_output" | grep -Eq 'Errors: 0|Total messages: 0'
       - name: Clean up only this run's candidate
         if: always() && github.event_name == 'workflow_dispatch' && inputs.build
         run: |

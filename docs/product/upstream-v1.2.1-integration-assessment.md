@@ -2,12 +2,33 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: upstream v1.2.1 merged into the isolated integration branch. A
-PostgreSQL-backed cloud candidate built and started with the current 11
-lessons, but discussion speech returned 502. A diagnostic rebuild is pending.
-No candidate promotion or production service change.
+Status: upstream v1.2.1 merged into the isolated integration branch. The
+PostgreSQL-backed cloud candidate passed exact-content, narration Range and
+synthetic three-role speech HTTP checks with 12 published lessons. Real-browser
+playback/discussion and production acceptance remain open. No candidate
+promotion or production service change.
 
-## Latest candidate status (2026-10-24 14:50 UTC)
+## Latest candidate status (2026-10-25 HKT)
+
+Run `40113064471` at `c2925542` completed successfully on the isolated
+self-hosted runner. The `linux/amd64` image was
+`sha256:5e3368595f31cc19776a81b6b349bccbe90b8673736c30e29b56535fcb82795f`.
+The frozen production source had 12 published lessons and 282 media files.
+All catalog and classroom documents matched their source hashes, and 36/36
+sampled first/middle/last narration Range responses passed. Direct Edge TTS
+7.3.1 inside the candidate produced a 20,160-byte Cantonese MP3. The
+synthetic teacher, assistant and student `/api/learner/speech` checks returned
+valid MP3s of 20,160, 19,728 and 23,472 bytes in approximately 1.0, 2.9
+and 1.2 seconds. The production source parity check still matched at the end.
+This is HTTP and generated-audio evidence, **not** actual audible browser
+playback, microphone/discussion acceptance or production deployment. The
+workflow removed its run-specific image, containers and snapshot afterward;
+there is no staged release image to promote.
+
+The intervening run `40111475982` built the image but the runner rejected
+legacy Docker `--link` on its default bridge. The passing run used a
+run-specific PostgreSQL address mapped with `--add-host`, retaining the
+default bridge's working Edge TTS egress. Neither run changed production.
 
 Update, 2026-10-25 HKT: run `40104195344` ultimately failed during Docker
 build after the guarded cleanup left 1,053,059 free inodes. The `vfs` driver
