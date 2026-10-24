@@ -2,10 +2,10 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: upstream v1.2.1 merged into the isolated integration branch. The first
-cloud candidate at `b9bc5898f5579a75363d213a5cd0061d20d14229` built but
-failed startup; a PostgreSQL-backed candidate is being prepared. No candidate
-promotion or production service change.
+Status: upstream v1.2.1 merged into the isolated integration branch. A
+PostgreSQL-backed cloud candidate built and started, but its live-baseline
+comparison failed when production gained a new lesson during the run. No
+candidate promotion or production service change.
 
 ## Cloud candidate verification (2026-10-24)
 
@@ -33,6 +33,26 @@ while GitHub's API rate limit is exhausted. The following workflow revision
 places guarded reclamation before preflight, and manual dispatch replaces
 automatic push runs to avoid further queue contention. No production cleanup
 or PostgreSQL installation has occurred.
+
+Run `40093194877` at `8d2b1511` passed guarded runner cleanup, package
+compilation, learner regressions, full TypeScript and `linux/amd64` image
+construction (`sha256:1a645c23…`). It froze 10 published classrooms and 251
+media files at 13:02:27 UTC. Its temporary PostgreSQL container accepted
+connections, and the candidate responded to health, catalog and `/courses`
+requests. At 13:02:43 UTC, the live site had advanced to 11 lessons, so the
+candidate/live parity check correctly failed on the site document, catalog
+order and new `hk-nobel-05-hegemann-lecture-v1` entry. The workflow then
+removed its run-specific candidate image, containers and snapshot. This is a
+moving-production-baseline failure, **not** proof of v1.2.1 audio, discussion
+or browser acceptance. The next revision tests candidate content, audio and
+speech against its frozen snapshot first, then checks that the public baseline
+has not drifted; a drift still blocks release but no longer masks candidate
+function results.
+After that concurrent content release settled, the read-only source-parity
+check matched all 11 complete classroom JSON documents, catalog order and
+site content to the ten-lesson package plus the Nobel 05 r2 payload. The live
+first/middle/last narration Range check passed 33/33 clips. These are public
+baseline checks, not a successful v1.2.1 candidate smoke.
 
 The original workflow run mounted the repository's smaller sample learner catalog for its
 HTTP smoke. That smoke cannot establish preservation of the ten published
@@ -83,7 +103,7 @@ host. The initial attempt to retain a two-service deployment failed because
 this upstream version requires a database even in learner mode. The user
 authorized adding PostgreSQL. The revised candidate Compose has `openmaic`,
 `postgres` and `caddy`, with a separate PostgreSQL credential file, persistent
-volume, health dependency and 384 MiB database memory cap. The ten published
+volume, health dependency and 384 MiB database memory cap. The published
 classrooms and media remain on read-only filesystem mounts; the new DB does
 not import or replace them. Production Compose, environment, services and
 mounts remain unchanged until isolated candidate and host-headroom checks pass.
@@ -103,15 +123,17 @@ classroom-response observation, not merely a healthy database container.
 The live `class.wanli.ai` site is the release baseline, not the six-course
 catalog in this Git checkout or the older Nobel 01/02/04 snapshots. The current
 live source is the separate, unpublished code-worktree-independent package at
-`output/nobel-series-20261024-release/candidate` in the canonical checkout.
-It has **13 series, 10 published classrooms, and 6 open series**. The current
-Nobel lesson IDs are 01 v4, 02 v4, 03 v3, and 04 v2. The read-only
-`qa-learner-live-source-parity.mjs` check compared this package with the public
-site on 2026-10-24: site content, catalog IDs/order, and all ten complete
-classroom JSON files matched. The older `nobel03-story-v3-release` package
+`output/nobel-series-20261024-release/candidate` plus the Nobel 05 r2 payload
+at `output/nobel05-content-release-20261024-r2/payload` in the canonical
+checkout. It has **13 series, 11 published classrooms, and 6 open series**.
+The current Nobel lesson IDs are 01 v4, 02 v4, 03 v3, 04 v2 and 05 v1. The read-only
+`qa-learner-live-source-parity.mjs` check compared these sources with the public
+site on 2026-10-24: site content, catalog IDs/order, and all eleven complete
+classroom JSON files matched with Nobel 05 as an explicit override. The first
+ten also matched before the Nobel 05 release. The older `nobel03-story-v3-release` package
 failed that comparison because it contains older lesson IDs and site content.
-The current release references 237 classroom media URLs and 14 site media URLs;
-all 251 have a local source across the canonical checkout, the new Nobel
+Before Nobel 05, the release referenced 237 classroom media URLs and 14 site media URLs;
+all 251 had a local source across the canonical checkout, the new Nobel
 payload, and the separate Nobel 03 v3 release. **Two leaf-classifier image
 sources were owner-only mode 0600**, and both public URLs repeatedly returned
 HTTP 502 on 2026-10-24; the other 52 of 53 sampled live media requests
@@ -156,10 +178,11 @@ and no packaged classrooms; its content-publish preflight correctly fails.
 
 Current execution gaps: the first cloud Docker build failed its startup smoke
 because PostgreSQL was absent; the second build ran out of Docker `vfs`
-inodes, and the guarded cleanup/retry has not completed. A successful
-PostgreSQL-backed exact-content build/test is still required.
-Candidate testing with
-the exact ten-classroom content mounts, real-browser playback/discussion,
+inodes. The third built and started with PostgreSQL but was interrupted by a
+concurrent 10-to-11-lesson public baseline change. A successful
+PostgreSQL-backed exact-content build/test against the current 11 lessons is
+still required. Candidate testing with the current classroom mounts,
+real-browser playback/discussion,
 desktop/mobile checks, a durable image transfer, and a release decision remain
 outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
 the image's pinned 7.3.1 produced decodable Cantonese clips for all three

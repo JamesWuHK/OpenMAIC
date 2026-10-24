@@ -38,6 +38,9 @@ export async function checkPublishedLearnerContent({
 
   const errors = [];
   if (!isDeepStrictEqual(site, liveSite)) errors.push('Published site content differs from source');
+  if (!isDeepStrictEqual(catalog, liveCatalog)) {
+    errors.push('Published catalog content differs from source');
+  }
   const localIds = catalog.courses.map((course) => course.id);
   const liveIds = liveCatalog.courses.map((course) => course.id);
   if (!isDeepStrictEqual(localIds, liveIds)) errors.push('Published course IDs/order differ');

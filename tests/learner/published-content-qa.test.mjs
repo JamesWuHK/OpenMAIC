@@ -9,6 +9,8 @@ import { checkPublishedLearnerContent } from '../../scripts/qa-learner-published
 
 const course = {
   id: 'lesson-1',
+  name: '香港課堂',
+  sceneCount: 2,
   publishedAt: 1,
   topics: ['ai-tech'],
   audiences: ['primary'],
@@ -39,14 +41,14 @@ async function withFixture(work) {
   }
 }
 
-function mockFetch(sceneIds = ['one', 'two'], sourceHash) {
+function mockFetch(sceneIds = ['one', 'two'], sourceHash, catalogOverride) {
   return async (url) => {
     const pathname = new URL(url).pathname;
     const value =
       pathname === '/api/learner/site-content'
         ? { series: [] }
         : pathname === '/api/learner/courses'
-          ? { courses: [{ ...course, name: '香港課堂', sceneCount: 2 }] }
+          ? { courses: [catalogOverride ?? course] }
           : {
               stage: classroom.stage,
               scenes: sceneIds.map((id) => ({ id })),
@@ -90,4 +92,14 @@ test('blocks stale classroom content even when the scene IDs and count match', (
       fetchImpl: mockFetch(['one', 'two'], 'stale-source-hash'),
     });
     assert.match(result.errors.join('\n'), /file hash differs from source/);
+  }));
+
+test('blocks changed catalog copy even when IDs and scene counts match', () =>
+  withFixture(async (files) => {
+    const result = await checkPublishedLearnerContent({
+      ...files,
+      publicUrl: 'https://learner.example',
+      fetchImpl: mockFetch(['one', 'two'], undefined, { ...course, description: 'stale copy' }),
+    });
+    assert.match(result.errors.join('\n'), /catalog content differs from source/);
   }));
