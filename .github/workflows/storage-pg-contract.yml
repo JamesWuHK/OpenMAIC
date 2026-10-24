@@ -13,26 +13,35 @@ concurrency:
 jobs:
   storage-pg-contract:
     name: Storage Contract (PostgreSQL 16)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     timeout-minutes: 10
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_DB: openmaic
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d openmaic"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # Job-level service containers are unavailable on self-hosted runners; start Postgres via Docker.
     env:
-      PG_CONTRACT_URL: postgresql://postgres:postgres@localhost:5432/openmaic
+      PG_CONTRACT_URL: postgresql://postgres:postgres@127.0.0.1:5432/openmaic
       STORAGE_PG_CONTRACT_REQUIRED: '1'
+      OPENMAIC_PG_CONTAINER: openmaic-pg-ci-${{ github.run_id }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start PostgreSQL 16
+        run: |
+          set -euo pipefail
+          docker rm -f "$OPENMAIC_PG_CONTAINER" >/dev/null 2>&1 || true
+          docker run -d --name "$OPENMAIC_PG_CONTAINER" \
+            -e POSTGRES_DB=openmaic \
+            -e POSTGRES_PASSWORD=postgres \
+            -p 5432:5432 \
+            postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec "$OPENMAIC_PG_CONTAINER" pg_isready -U postgres -d openmaic >/dev/null 2>&1; then
+              echo "PostgreSQL ready after ${attempt} attempt(s)."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::PostgreSQL did not become ready in time."
+          docker logs "$OPENMAIC_PG_CONTAINER" || true
+          exit 1
 
       - uses: pnpm/action-setup@v4
 
@@ -65,3 +74,7 @@ jobs:
 
       - name: Whiteboard RuntimeStore PostgreSQL app-domain contract
         run: pnpm exec vitest run tests/lib/whiteboard/runtime-store.pg.test.ts
+
+      - name: Stop PostgreSQL
+        if: always()
+        run: docker rm -f "$OPENMAIC_PG_CONTAINER" >/dev/null 2>&1 || true

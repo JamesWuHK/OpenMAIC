@@ -74,7 +74,7 @@ jobs:
   # dry run stays useful to contributors.
   validate:
     name: Validate release candidate
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     # This job runs `pnpm install` and the package builds, which execute
     # third-party code. It gets no write scope and no git credential.
     permissions:
@@ -82,20 +82,30 @@ jobs:
     # storage's PostgreSQL contract suites skip themselves without a database.
     # Publishing storage without ever running them would ship the one backend
     # whose behaviour only a real PostgreSQL can confirm.
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_DB: openmaic
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d openmaic"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # Job-level service containers are unavailable on self-hosted runners; start Postgres via Docker.
+    env:
+      OPENMAIC_PG_CONTAINER: openmaic-pg-publish-${{ github.run_id }}
     steps:
+      - name: Start PostgreSQL 16
+        run: |
+          set -euo pipefail
+          docker rm -f "$OPENMAIC_PG_CONTAINER" >/dev/null 2>&1 || true
+          docker run -d --name "$OPENMAIC_PG_CONTAINER" \
+            -e POSTGRES_DB=openmaic \
+            -e POSTGRES_PASSWORD=postgres \
+            -p 5432:5432 \
+            postgres:16
+          for attempt in $(seq 1 30); do
+            if docker exec "$OPENMAIC_PG_CONTAINER" pg_isready -U postgres -d openmaic >/dev/null 2>&1; then
+              echo "PostgreSQL ready after ${attempt} attempt(s)."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::PostgreSQL did not become ready in time."
+          docker logs "$OPENMAIC_PG_CONTAINER" || true
+          exit 1
+
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
@@ -204,7 +214,7 @@ jobs:
       # the tests for exactly that reason.
       - name: Test & typecheck
         env:
-          PG_CONTRACT_URL: postgresql://postgres:postgres@localhost:5432/openmaic
+          PG_CONTRACT_URL: postgresql://postgres:postgres@127.0.0.1:5432/openmaic
           STORAGE_PG_CONTRACT_REQUIRED: "1"
           STORAGE_VITEST_RESULTS: ${{ runner.temp }}/storage-vitest.json
           STORAGE_PG_BASELINE: ${{ runner.temp }}/storage-pg-baseline.json
@@ -236,6 +246,10 @@ jobs:
           RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
         run: pnpm test:package-tarballs -- "$RELEASE_ARTIFACTS"
 
+      - name: Stop PostgreSQL
+        if: always()
+        run: docker rm -f "$OPENMAIC_PG_CONTAINER" >/dev/null 2>&1 || true
+
   # The only job that can reach NPM_TOKEN. It is separate so the environment,
   # and therefore the token, is never attached to a run that is merely
   # validating.
@@ -243,7 +257,7 @@ jobs:
     name: Publish to npm
     needs: validate
     if: github.event_name == 'push' || inputs.dry_run == false
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     environment: release
     outputs:
       published_versions: ${{ steps.publish.outputs.published_versions }}
@@ -424,7 +438,7 @@ jobs:
   mark:
     name: Mark released versions
     needs: publish
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     permissions:
       contents: write # required to push the release marker tags
     steps:

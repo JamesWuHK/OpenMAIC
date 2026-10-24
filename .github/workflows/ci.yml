@@ -28,7 +28,7 @@ concurrency:
 jobs:
   check:
     name: Lint, Typecheck & Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -188,7 +188,7 @@ jobs:
 
   render-service:
     name: Render Service (typecheck + tests)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     timeout-minutes: 10
     # The producer dep bundles puppeteer; skip its Chromium download — the unit
     # tests exercise the service's boundaries (unzip, admission, body caps) and
@@ -224,7 +224,7 @@ jobs:
 
   e2e:
     name: E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, openmaic, cloud-ci]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -248,9 +248,8 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
-      # Browser tarball only. `install-deps` talks to Ubuntu apt; on this
-      # runner fleet that mirror has sat through the whole 15-minute job
-      # budget. ubuntu-latest already ships the libraries Chromium needs.
+      # Browser tarball only — no `install-deps` / `--with-deps` (needs root).
+      # OS libs for Chromium are preinstalled on openmaic-cloud-linux, same as khread.
       # Bound the Microsoft CDN download so a stall retries instead of hanging.
       - name: Install Playwright Chromium
         run: |
