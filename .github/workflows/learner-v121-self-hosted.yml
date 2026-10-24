@@ -43,6 +43,25 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+      - name: Reclaim only failed learner build residue
+        if: inputs.reclaim_failed_build_cache
+        run: |
+          set -euo pipefail
+          test -z "$(docker ps --quiet)"
+          failed_container=cb62a4450221
+          expected_image=9c5d243c1eb7
+          if docker container inspect "$failed_container" >/dev/null 2>&1; then
+            actual_image=$(docker container inspect "$failed_container" --format '{{.Image}}')
+            expected_full_image=$(docker image inspect "$expected_image" --format '{{.Id}}')
+            test "$actual_image" = "$expected_full_image"
+            test "$(docker container inspect "$failed_container" --format '{{.State.Status}}')" = created
+            docker container rm "$failed_container"
+          fi
+          docker image prune --force
+          df -h /var/lib/docker
+          df -i /var/lib/docker
+          free_inodes=$(df -Pi /var/lib/docker | awk 'NR==2 {print $4}')
+          test "$free_inodes" -ge 500000
       - name: Verify exact source and runner headroom
         run: |
           set -euo pipefail
@@ -72,25 +91,6 @@ jobs:
           else
             test "$available_kib" -ge 2097152
           fi
-      - name: Reclaim only failed learner build residue
-        if: github.event_name == 'workflow_dispatch' && inputs.reclaim_failed_build_cache
-        run: |
-          set -euo pipefail
-          test -z "$(docker ps --quiet)"
-          failed_container=cb62a4450221
-          expected_image=9c5d243c1eb7
-          if docker container inspect "$failed_container" >/dev/null 2>&1; then
-            actual_image=$(docker container inspect "$failed_container" --format '{{.Image}}')
-            expected_full_image=$(docker image inspect "$expected_image" --format '{{.Id}}')
-            test "$actual_image" = "$expected_full_image"
-            test "$(docker container inspect "$failed_container" --format '{{.State.Status}}')" = created
-            docker container rm "$failed_container"
-          fi
-          docker image prune --force
-          df -h /var/lib/docker
-          df -i /var/lib/docker
-          free_inodes=$(df -Pi /var/lib/docker | awk 'NR==2 {print $4}')
-          test "$free_inodes" -ge 500000
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         if: github.event_name == 'workflow_dispatch' && (inputs.checks || inputs.build)
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
