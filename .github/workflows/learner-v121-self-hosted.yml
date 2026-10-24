@@ -175,6 +175,11 @@ jobs:
           LEARNER_QA_BASELINE_URL=https://class.wanli.ai \
             LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
             node scripts/qa-learner-upgrade-parity.mjs
+          (
+            cd "$CANDIDATE_ROOT"
+            LEARNER_PUBLIC_URL="http://127.0.0.1:$port" \
+              node "$GITHUB_WORKSPACE/scripts/qa-learner-published-content.mjs"
+          )
           LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
             node scripts/qa-learner-candidate-audio.mjs
       - name: Clean up only this run's candidate
