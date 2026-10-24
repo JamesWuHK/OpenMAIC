@@ -3,9 +3,30 @@
 Date: 2026-10-24 (Asia/Hong_Kong)
 
 Status: upstream v1.2.1 merged into the isolated integration branch. A
-PostgreSQL-backed cloud candidate built and started, but its live-baseline
-comparison failed when production gained a new lesson during the run. No
-candidate promotion or production service change.
+PostgreSQL-backed cloud candidate built and started with the current 11
+lessons, but discussion speech returned 502. A diagnostic rebuild is pending.
+No candidate promotion or production service change.
+
+## Latest candidate status (2026-10-24 14:50 UTC)
+
+Run `40097123328` at `30e8b9d0` built and started the isolated PostgreSQL-backed
+candidate with the current 11 published lessons. Exact catalog/classroom
+content and SHA-256 checks passed, as did 33/33 sampled narration Range
+responses. The three synthetic classroom discussion voices returned HTTP 502,
+so this candidate failed and was removed; no real-browser acceptance followed.
+Run `40101687343` then proved the same pinned Edge TTS 7.3.1 can produce a
+20,160-byte Cantonese MP3 in two seconds from the runner's default Docker
+network. This does not prove the candidate's custom-network or API path.
+
+Run `40101825700` at `d910648f` did not reach the new direct-container and
+HTTP speech diagnostics. Its Docker `vfs` build failed with `no space left on
+device` while materializing `node_modules`, despite 79 GiB of free bytes; the
+runner had only 555,558 free inodes before the build. The same runner had
+1,380,162 free inodes after the prior guarded dangling-image cleanup. Run
+`40104195344` at `9abf31b3` is now repeating build/test with that guarded
+cleanup enabled and a one-million-free-inode preflight. It has passed cleanup
+and preflight; its candidate outcome is pending. All runs are build/test only:
+no production image, PostgreSQL service, classroom JSON, or media was changed.
 
 ## Cloud candidate verification (2026-10-24)
 
