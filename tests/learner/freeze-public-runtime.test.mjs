@@ -19,7 +19,7 @@ function fixture() {
     }
     if (pathname === '/api/classroom') {
       return Response.json({
-        classroom: { stage: { id }, scenes: [{ actions: [{ audioUrl: audio }] }] },
+        classroom: { id, stage: { id }, scenes: [{ actions: [{ audioUrl: audio }] }] },
       });
     }
     if (pathname === audio || pathname === cover) {

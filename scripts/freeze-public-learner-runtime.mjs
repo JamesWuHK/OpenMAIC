@@ -63,7 +63,7 @@ export async function freezePublicLearnerRuntime({ baseUrl, outputRoot, fetchImp
     ids.add(id);
     const result = await getJson(baseUrl, `/api/classroom?id=${encodeURIComponent(id)}`, fetchImpl);
     const classroom = result.classroom;
-    if (classroom?.stage?.id !== id || !Array.isArray(classroom.scenes)) {
+    if (classroom?.id !== id || classroom.stage?.id !== id || !Array.isArray(classroom.scenes)) {
       throw new Error(`${id}: malformed public classroom`);
     }
     await saveJson(outputRoot, `data/classrooms/${id}.json`, classroom);
