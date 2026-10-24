@@ -1,0 +1,79 @@
+{
+  "voice": "Sinji (macOS zh_HK)",
+  "rate": "175 wpm",
+  "actions": {
+    "nobel05-story-v1-speech-meet": {
+      "fingerprint": "fb80745aa83060f6920140f29276cfbd465e27f597d554cd6a00e7efaa916e24",
+      "filename": "tts-sinji-nobel05-story-v1-speech-meet.mp3",
+      "audioSha256": "6fd63d54da9bba6b368b4dc6ad0e766e62c1752615b00c2476c7d8e98037b86a",
+      "durationSeconds": 47.333878
+    },
+    "nobel05-story-v1-speech-tiny": {
+      "fingerprint": "4a175b68042957229cfb6bf448c7da715c50e6e2d79599b55d2e62fdfa854186",
+      "filename": "tts-sinji-nobel05-story-v1-speech-tiny.mp3",
+      "audioSha256": "7fc544f55ddf39d7610115d4e9227c3dfbbac891c9f3cd39d8d042cfa1f5c062",
+      "durationSeconds": 41.769796
+    },
+    "nobel05-story-v1-speech-noeye": {
+      "fingerprint": "553e672fcc394c494870e2654310a5a53957388f77cd991a5d359ad8142d4e5d",
+      "filename": "tts-sinji-nobel05-story-v1-speech-noeye.mp3",
+      "audioSha256": "ee365661465d33802f64158b8a63ea70f86d9a7617c74a04b5971d7b27353909",
+      "durationSeconds": 48.613878
+    },
+    "nobel05-story-v1-speech-question": {
+      "fingerprint": "029feccb2330288d268237228f778f11faab45c8b1eac23c570565b6e75a3008",
+      "filename": "tts-sinji-nobel05-story-v1-speech-question.mp3",
+      "audioSha256": "2f29c055a1748355e0f2df59fbcc03e878f7e5a3b541c800b595ad24469e6a8d",
+      "durationSeconds": 49.084082
+    },
+    "nobel05-story-v1-speech-timeline": {
+      "fingerprint": "8cf74837c1e269cc0246a3979b98be731139a62b3f5449f80999204b58881fd0",
+      "filename": "tts-sinji-nobel05-story-v1-speech-timeline.mp3",
+      "audioSha256": "59d81232ef0bda368f0f0add5ba3264f612c5eb26359645bab4a880ae00b0e0e",
+      "durationSeconds": 47.595102
+    },
+    "nobel05-story-v1-speech-protein": {
+      "fingerprint": "29a401bcba9894e69d2dccf4781af06951e1a97a85fde3c7df395930d938111c",
+      "filename": "tts-sinji-nobel05-story-v1-speech-protein.mp3",
+      "audioSha256": "8e9a69d1eb917b9a5c3da696a63c0ab7be4876b22701b726f3f50b7d1bd930f5",
+      "durationSeconds": 47.542857
+    },
+    "nobel05-story-v1-speech-switch": {
+      "fingerprint": "8465b291619421e77407a6cca0f3e31db150c0173239d107e4a310f34b844ad8",
+      "filename": "tts-sinji-nobel05-story-v1-speech-switch.mp3",
+      "audioSha256": "83649a93ce7ade7a425ccaa8b09e36b9bb51a31230f0e2d66f276931186ca354",
+      "durationSeconds": 38.50449
+    },
+    "nobel05-story-v1-speech-handoff": {
+      "fingerprint": "35a44032385f53fc983d0633698f33e4c12251e862858cdd69484fdb4906d884",
+      "filename": "tts-sinji-nobel05-story-v1-speech-handoff.mp3",
+      "audioSha256": "3f6f5e21c9f166d1e62f1ec20ded1c220a535c644451ed537e913587c49115c0",
+      "durationSeconds": 44.721633
+    },
+    "nobel05-story-v1-speech-why": {
+      "fingerprint": "5d5e5aead2296422121d887dffe0b673dc9323226424430471447ef65a01c0c6",
+      "filename": "tts-sinji-nobel05-story-v1-speech-why.mp3",
+      "audioSha256": "98862188d6e24b516abe2def83d2e8201247f97d47dbd5bf1499cbdee4716217",
+      "durationSeconds": 50.285714
+    },
+    "nobel05-story-v1-speech-ordinary": {
+      "fingerprint": "b2e38c4aa25842ae95dc532e41254028ae84c3542472f51145414a43825ee198",
+      "filename": "tts-sinji-nobel05-story-v1-speech-ordinary.mp3",
+      "audioSha256": "e16944ac37bdb2e08d3cae3035d7b7909dbf47f54647253bf1c65656a314c4a6",
+      "durationSeconds": 52.58449
+    },
+    "nobel05-story-v1-speech-quiz": {
+      "fingerprint": "d2a161c591e38b16c8ee5cd512b3f13eb10e8495c34299ee6c586f3533dbdfc6",
+      "filename": "tts-sinji-nobel05-story-v1-speech-quiz.mp3",
+      "audioSha256": "136b1d598cbc7fd13fab9f8e764668d726e5a1703075576cbe09a9a92d51e1d4",
+      "durationSeconds": 24.868571
+    },
+    "nobel05-story-v1-speech-bio": {
+      "fingerprint": "83927422d4280bbe91cd578f4533210b70c5dba0f310cf9bcdd920c9c3df674d",
+      "filename": "tts-sinji-nobel05-story-v1-speech-bio.mp3",
+      "audioSha256": "4cac03ebf75e05206dacc46c0696226e3043d2b40b4848c6eb1f5eeb4ac65c82",
+      "durationSeconds": 52.741224
+    }
+  },
+  "totalDurationSeconds": 545.646
+}

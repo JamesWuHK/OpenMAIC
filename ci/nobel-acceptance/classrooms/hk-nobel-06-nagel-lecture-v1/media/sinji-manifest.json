@@ -1,0 +1,79 @@
+{
+  "voice": "Sinji (macOS zh_HK)",
+  "rate": "175 wpm",
+  "actions": {
+    "nobel01-series06-nagel-story-v1-speech-meet": {
+      "fingerprint": "c7bfcd270ffb8d421157bb135d00ea27b5568901ed160f71e044490c08934d5b",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-meet.mp3",
+      "audioSha256": "33c6a997d2a8a72b05092e4103661103fc0f18215992331871e5c2b5aac83231",
+      "durationSeconds": 37.564082
+    },
+    "nobel01-series06-nagel-story-v1-speech-alga": {
+      "fingerprint": "7be3d98f0cd8dd6bae46100535853ee1a8bdc65a7f6758c693e53e80638eb712",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-alga.mp3",
+      "audioSha256": "3d807f167cc73f103fb65e3a6f091eaf6b7c3b786ac4e94025739fa0b65512a0",
+      "durationSeconds": 30.223673
+    },
+    "nobel01-series06-nagel-story-v1-speech-person": {
+      "fingerprint": "3d1e4ec3d1dd76abec9d7ae50c5a40cda8516357364098c92c911ba8cd66f379",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-person.mp3",
+      "audioSha256": "978803843e263c3c9e8e2dd3b80058c136a6187b647fada852e446dcc5ea27b0",
+      "durationSeconds": 36.179592
+    },
+    "nobel01-series06-nagel-story-v1-speech-candidate": {
+      "fingerprint": "4a3b604d36dc554e1766e86b3efd18630426398a059175d5909ed17054800241",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-candidate.mp3",
+      "audioSha256": "b3c333250124cefe3672a1d1227cd65bf95feb093b4bf9b048c2f804e5b02887",
+      "durationSeconds": 33.17551
+    },
+    "nobel01-series06-nagel-story-v1-speech-measure": {
+      "fingerprint": "deb719586ea0a87b074ad322d28e792c857b0c816da3be4c7b65534859e9f94d",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-measure.mp3",
+      "audioSha256": "7f61e3e49df08f5e73bf56deba7837adde5407f673c440cd5ffabc3181f3d606",
+      "durationSeconds": 30.667755
+    },
+    "nobel01-series06-nagel-story-v1-speech-gate": {
+      "fingerprint": "1e18c73a5435eef2789fb4743d5a4a84f8b04ccf881e75ba9971d5f835f4f13c",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-gate.mp3",
+      "audioSha256": "4d56fd1bd63244fb3fa22ba5138cda73b6569213be8a49b3ba1d8739904e2e19",
+      "durationSeconds": 33.097143
+    },
+    "nobel01-series06-nagel-story-v1-speech-two": {
+      "fingerprint": "6bf3875757a1fbb6a9a740fee0cd1adc36b58f639a59e608e49693215b64a551",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-two.mp3",
+      "audioSha256": "50f9bdcc7407e71257caf2cf7a5ec571796b59d3eb1fd96ceb0f2460f8e1d685",
+      "durationSeconds": 34.821224
+    },
+    "nobel01-series06-nagel-story-v1-speech-test": {
+      "fingerprint": "c03d633991e79982d6df95ea93519c998e74d152e593b78bc61589af06686b2b",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-test.mp3",
+      "audioSha256": "f999d4b478c8744d98b2d728ace8e87941fc7845bdfb0c27bef8aea4fe36a53b",
+      "durationSeconds": 28.26449
+    },
+    "nobel01-series06-nagel-story-v1-speech-handoff": {
+      "fingerprint": "fb50ebff41f48bed0428d98ed31ceadf15303813f1a6165be5af143cbea154c8",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-handoff.mp3",
+      "audioSha256": "a1c7de6aaa4c9c2b21d55d703e6fc686c045436bd1a28c748aef345c6113a1ee",
+      "durationSeconds": 39.235918
+    },
+    "nobel01-series06-nagel-story-v1-speech-why": {
+      "fingerprint": "8da9ded1b2b1d319c08eff060d7b58103cbc8cd2cda29e668f5a400c1238357e",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-why.mp3",
+      "audioSha256": "55b0291c7cb9818c977fe4e09ea6d16eeaae0763d809fc4cc93514a27d64e62e",
+      "durationSeconds": 36.754286
+    },
+    "nobel01-series06-nagel-story-v1-speech-people": {
+      "fingerprint": "d70104c160ac05ebdaaac07f4f6372f2a55e588e86251770235e699aa8299421",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-people.mp3",
+      "audioSha256": "eaed03a5f6b4d4119e8b8934493b14bafffa47572fdf67d8169967ad8fb1d662",
+      "durationSeconds": 37.982041
+    },
+    "nobel01-series06-nagel-story-v1-speech-quiz": {
+      "fingerprint": "0f4824842bb7696f9f10715e13d9559b5f71eeeccedd046669917408e5cfc126",
+      "filename": "tts-sinji-nobel01-series06-nagel-story-v1-speech-quiz.mp3",
+      "audioSha256": "32530b561a0ad96b8d836474bb6effbe014cbfd41166cdd1aa1bf3c6236dd556",
+      "durationSeconds": 19.356735
+    }
+  },
+  "totalDurationSeconds": 397.322
+}

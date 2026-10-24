@@ -44,6 +44,8 @@ export interface DiscussionRequest {
 
 interface RoundtableProps {
   readonly startInputOpen?: boolean;
+  readonly presentationBottomOffset?: number;
+  readonly hidePlaybackToolbar?: boolean;
   readonly mode?: 'playback' | 'autonomous';
   readonly initialParticipants?: Participant[];
   readonly playbackView?: PlaybackView; // Centralised derived state from Stage
@@ -154,6 +156,8 @@ function VoiceWaveformBars({ barClassName }: { readonly barClassName: string }) 
 export function Roundtable({
   mode: _mode = 'autonomous',
   startInputOpen = false,
+  presentationBottomOffset = 0,
+  hidePlaybackToolbar = false,
   initialParticipants = [],
   playbackView,
   currentSpeech,
@@ -760,6 +764,7 @@ export function Roundtable({
         {(isInputOpen || isVoiceOpen) && (
           <div
             className="fixed top-0 left-0 right-0 bottom-14 z-[45] pointer-events-auto"
+            style={{ bottom: presentationBottomOffset + (hidePlaybackToolbar ? 0 : 56) }}
             onClick={() => {
               setIsInputOpen(false);
               setIsVoiceOpen(false);
@@ -769,17 +774,17 @@ export function Roundtable({
         )}
 
         {/* ── Toolbar — pinned to bottom of screen ── */}
-        <div
+        {!hidePlaybackToolbar && <div
           className={cn(
             'fixed bottom-0 left-0 z-[40] pointer-events-none flex items-center justify-center transition-all duration-300',
             controlsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
           )}
-          style={{ right: chatCollapsed === false ? (chatAreaWidth ?? 320) : 0 }}
+          style={{ right: chatCollapsed === false ? (chatAreaWidth ?? 320) : 0, bottom: presentationBottomOffset }}
         >
           <div className="mb-3 px-2 py-1 rounded-full bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto">
             {toolbar}
           </div>
-        </div>
+        </div>}
 
         {/* ── End flash notification ── */}
         <AnimatePresence>
@@ -799,6 +804,7 @@ export function Roundtable({
               className="fixed bottom-20 -translate-x-1/2 z-[50] bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-md text-gray-700 dark:text-white px-3.5 py-1.5 rounded-full text-xs font-medium pointer-events-none"
               style={{
                 left: `calc((100vw - ${chatCollapsed === false ? (chatAreaWidth ?? 320) : 0}px) / 2)`,
+                bottom: presentationBottomOffset + 80,
               }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block mr-1.5" />
@@ -812,7 +818,7 @@ export function Roundtable({
         {/* ── Center stack: input / voice / thinking — anchored above toolbar ── */}
         <div
           className="fixed bottom-14 left-0 z-[50] flex flex-col items-center justify-center gap-3 pointer-events-none transition-[right] duration-300"
-          style={{ right: chatCollapsed === false ? (chatAreaWidth ?? 320) : 0 }}
+          style={{ right: chatCollapsed === false ? (chatAreaWidth ?? 320) : 0, bottom: presentationBottomOffset + (hidePlaybackToolbar ? 12 : 56) }}
         >
           {referencePill}
           {/* Input panel */}
@@ -955,7 +961,7 @@ export function Roundtable({
         {/* ── Right-side stack: bubble + dock — flex column, no hardcoded px ── */}
         <div
           className="fixed bottom-5 z-[48] flex flex-col items-end gap-3 pointer-events-none transition-[right] duration-300"
-          style={{ right: chatCollapsed ? 20 : 20 + (chatAreaWidth ?? 320) }}
+          style={{ right: chatCollapsed ? 20 : 20 + (chatAreaWidth ?? 320), bottom: presentationBottomOffset + 20 }}
         >
           {/* Right-side speech bubble (flows above dock via flex) */}
           <PresentationSpeechOverlay
@@ -1152,14 +1158,14 @@ export function Roundtable({
       )}
     >
       {/* ── Toolbar strip — merged from CanvasArea ── */}
-      <div
+      {!hidePlaybackToolbar && <div
         className={cn(
           'transition-opacity duration-300',
           isPresenting && !controlsVisible && 'opacity-0 pointer-events-none',
         )}
       >
         {toolbar}
-      </div>
+      </div>}
       {/* ── Interaction area — three-column layout ── */}
       <div className="flex-1 flex items-stretch min-h-0">
         {/* Left: Teacher identity */}

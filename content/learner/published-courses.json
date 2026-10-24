@@ -2,8 +2,8 @@
   "courses": [
     {
       "id": "hk-c01-01-debatable-claim",
+      "name": "這是感受，還是可討論的觀點？",
       "description": "在虛構社區案例中分辨句子功能，以對象、行動和範圍逐步修訂主張，並保留證據與不確定性邊界。",
-      "publishedAt": 1789406843000,
       "topics": [
         "chinese",
         "leadership"
@@ -15,62 +15,232 @@
       "gradeRange": "小六至中三",
       "language": "zh-hk",
       "series": "會說服人的中文",
-      "lessonNumber": 1
+      "lessonNumber": 1,
+      "createdAt": 1789408126916,
+      "updatedAt": 1789408126916,
+      "sceneCount": 10,
+      "publishedAt": 1789406843000
     },
     {
       "id": "hk-t01-01-bus-eta",
-      "description": "拆解 ETA 的輸入、處理、輸出與更新，用 M-01 模擬證據完成標示不確定性、資料狀態與私隱邊界的資訊卡。",
-      "publishedAt": 1789398796000,
-      "topics": ["hong-kong", "ai-tech"],
-      "audiences": ["primary", "secondary"],
+      "name": "巴士還有幾分鐘到？",
+      "description": "以 M-01 模擬資料經歷「先判斷—舉證—修訂」：分辨四種資料角色，完成並修訂一張清楚標示不確定性與私隱邊界的 ETA 資訊卡。建議 25–30 分鐘：互動舉證 6 分鐘、討論 4 分鐘、PBL 修訂 8 分鐘、自評 2 分鐘。",
+      "topics": [
+        "hong-kong",
+        "ai-tech"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
       "gradeRange": "小五至中三",
       "language": "zh-hk",
       "series": "香港智慧城市數據隊",
-      "lessonNumber": 1
+      "lessonNumber": 1,
+      "createdAt": 1789407029580,
+      "updatedAt": 1789407029580,
+      "sceneCount": 10,
+      "publishedAt": 1789398796000
     },
     {
       "id": "hk-s04-01-radar-rain",
+      "name": "雷達怎樣看見雨？",
       "description": "比較原創雷達示意圖與模擬地面記錄，以「觀察—推斷—限制—行動」完成可覆核的《雷達判讀卡》。",
-      "publishedAt": 1789350027000,
-      "topics": ["hong-kong", "ai-tech", "interests"],
-      "audiences": ["primary", "secondary"],
+      "topics": [
+        "hong-kong",
+        "ai-tech",
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
       "gradeRange": "小五至中三",
       "language": "zh-hk",
       "series": "香港天氣科技實驗室",
-      "lessonNumber": 1
+      "lessonNumber": 1,
+      "createdAt": 1789323497174,
+      "updatedAt": 1789323497173,
+      "sceneCount": 10,
+      "publishedAt": 1789350027000
     },
     {
       "id": "hk-t02-01-robot-sensing",
+      "name": "機械人怎樣知道前面有東西？",
       "description": "以 M-01 屏幕模擬比較連續距離讀數，建立感知—決定—行動模型，並完成有證據邊界的安全測試卡。",
-      "publishedAt": 1789314347000,
-      "topics": ["ai-tech", "interests"],
-      "audiences": ["primary", "secondary"],
+      "topics": [
+        "ai-tech",
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
       "gradeRange": "小四至中一",
       "language": "zh-hk",
       "series": "機械人感知實驗室",
-      "lessonNumber": 1
+      "lessonNumber": 1,
+      "createdAt": 1789308831781,
+      "updatedAt": 1789314229036,
+      "sceneCount": 10,
+      "publishedAt": 1789314347000
     },
     {
       "id": "hk-a01-02-leaf-classifier",
+      "name": "機器怎樣認出一片葉子？",
       "description": "由圖片分類遊戲出發，學習例子、標籤、特徵、測試與負責任的 AI 判斷。",
-      "publishedAt": 1788784200000,
-      "topics": ["ai-tech", "interests"],
-      "audiences": ["primary", "secondary"],
+      "topics": [
+        "ai-tech",
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
       "gradeRange": "小四至中一",
       "language": "zh-hk",
       "series": "香港 AI 小偵探",
-      "lessonNumber": 2
+      "lessonNumber": 2,
+      "createdAt": 1788777288599,
+      "updatedAt": 1788776698942,
+      "sceneCount": 10,
+      "publishedAt": 1788784200000
     },
     {
       "id": "codex-zh-hk-audio-smoke",
+      "name": "【香港粵語版】AI 藏在香港的一天裡嗎？",
       "description": "在香港生活情境中分辨人工智能與自動化，建立有證據、有邊界的 AI 判斷。",
-      "publishedAt": 1788775200000,
-      "topics": ["ai-tech"],
-      "audiences": ["primary", "secondary"],
+      "topics": [
+        "ai-tech"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
       "gradeRange": "小四至中一",
       "language": "zh-hk",
       "series": "香港 AI 小偵探",
-      "lessonNumber": 1
+      "lessonNumber": 1,
+      "createdAt": 1788710935602,
+      "updatedAt": 1788711417000,
+      "sceneCount": 8,
+      "publishedAt": 1788775200000
+    },
+    {
+      "id": "hk-nobel-01-kagan-lecture-v5",
+      "name": "分子也有左右手？——卡甘的諾獎發現",
+      "description": "諾貝爾化學獎得主卡甘，從分子的左右手出發，追問生命中的許多重要分子為甚麼偏向同一種鏡像方向。透過薄荷與葛縷子氣味的例子，認識卡甘的非線性效應如何與硤合的自催化研究互補，為化學家研究分子形狀提供線索；這仍不是生命起源的完整答案。",
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三",
+      "language": "zh-hk",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 1,
+      "createdAt": 1792731071639,
+      "updatedAt": 1792731071639,
+      "sceneCount": 13,
+      "publishedAt": 1792823636046
+    },
+    {
+      "id": "hk-nobel-02-soai-lecture-v5",
+      "name": "細小偏向，竟然能越變越明顯？——硤合憲三與自催化",
+      "description": "產物能不能幫忙製造更多同類產物？先認識諾貝爾化學獎得主硤合憲三，再跟著他和團隊追查自催化的奇特現象，理解這項發現為何與卡甘的非線性效應一起獲獎、為化學研究帶來什麼線索，以及它還不能證明什麼。",
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三",
+      "language": "zh-hk",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 2,
+      "createdAt": 1792731071675,
+      "updatedAt": 1792731071675,
+      "sceneCount": 13,
+      "publishedAt": 1792823636046
+    },
+    {
+      "id": "hk-nobel-03-halzen-lecture-v4",
+      "name": "哈爾岑：在南極深冰尋找宇宙線索",
+      "description": "先認識哈爾岑為甚麼被中微子吸引，再看他與團隊如何用南極深冰追查宇宙線索，並用簡單例子理解研究為何值得諾貝爾獎。",
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三",
+      "language": "zh-hk",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 3,
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "sceneCount": 12,
+      "publishedAt": 1792751140882
+    },
+    {
+      "id": "hk-nobel-04-deisseroth-lecture-v3",
+      "name": "戴瑟羅斯：他向藻類借來一束光",
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三（以初一為主）",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 4,
+      "createdAt": 1792770054565,
+      "updatedAt": 1792770054565,
+      "sceneCount": 12,
+      "publishedAt": 1792823636046,
+      "language": "zh-hk",
+      "description": "跟著戴瑟羅斯的故事，看看科學家怎樣借用藻類的感光本領，用光改變選定腦細胞的活動，再比較結果。我們用「受光控制的小門」作比喻，理解光遺傳學為甚麼能幫助研究大腦，也認識這項工具目前的能力與邊界。"
+    },
+    {
+      "id": "hk-nobel-05-hegemann-lecture-v2",
+      "description": "先認識研究微藻感光的彼得·黑格曼，再跟著「沒有人的眼睛，怎樣朝光游？」這個真實問題，了解光控蛋白如何成為研究神經細胞的工具。",
+      "publishedAt": 1792831562483,
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三（以初一為主）",
+      "language": "zh-hk",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 5
+    },
+    {
+      "id": "hk-nobel-06-nagel-lecture-v2",
+      "name": "光一閃，細胞裏的小門會打開嗎？——納格爾與光控通道",
+      "description": "先認識生物物理學家格奧爾格·納格爾，再追問一個真實問題，看看研究者如何量度光照後的細胞電流，證明藻類蛋白能成為光控通道。從這項發現與後續腦科學研究的接力，理解它為何值得諾獎，也分清研究工具與醫療保證。",
+      "topics": [
+        "interests"
+      ],
+      "audiences": [
+        "primary",
+        "secondary"
+      ],
+      "gradeRange": "小五至中三（以初一為主）",
+      "language": "zh-hk",
+      "series": "諾獎好奇心實驗室",
+      "lessonNumber": 6,
+      "sceneCount": 12,
+      "createdAt": "2026-10-24T14:58:10.401Z",
+      "updatedAt": "2026-10-24T14:58:10.401Z",
+      "publishedAt": 1792854325626
     }
   ]
 }

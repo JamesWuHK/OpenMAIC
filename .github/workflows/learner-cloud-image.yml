@@ -21,6 +21,7 @@ jobs:
     env:
       CI: 'true'
       LEARNER_QA_BASE_URL: http://127.0.0.1:3100
+      NOBEL_QA_CLASSROOMS_DIR: ci/nobel-acceptance/classrooms
       NEXT_TELEMETRY_DISABLED: '1'
       PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
@@ -39,6 +40,7 @@ jobs:
           tests/pbl/v2/learner-state.test.ts tests/learner
           tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
           tests/server/install-process-shutdown-handlers.test.ts
+          tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
       - name: TypeScript
         run: pnpm exec tsc --noEmit
       - name: Build exact learner image on hosted Linux
@@ -58,11 +60,15 @@ jobs:
             --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
       - name: Start isolated exact-image candidate
         run: |
+          mkdir -p ci/nobel-acceptance/teacher-submissions
+          sudo chown 1001:1001 ci/nobel-acceptance/teacher-submissions
           docker run -d --name learner-candidate -p 127.0.0.1:3100:3000 \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
             -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
             -e DEFAULT_MODEL=openai:gpt-4o-mini \
+            -v "$GITHUB_WORKSPACE/ci/nobel-acceptance/classrooms:/app/data/classrooms:ro" \
+            -v "$GITHUB_WORKSPACE/ci/nobel-acceptance/teacher-submissions:/app/data/teacher-submissions" \
             -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
             -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
             "wanli-learner-ci:$GITHUB_SHA"
@@ -77,6 +83,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Existing learner desktop and mobile browser regression
         run: pnpm exec playwright test --config playwright.learner.config.ts
+      - name: Nobel six-course desktop and mobile acceptance
+        run: pnpm exec playwright test --config playwright.nobel.config.ts
       - name: Export tested candidate (not deployment approval)
         run: |
           mkdir -p artifacts/learner-image

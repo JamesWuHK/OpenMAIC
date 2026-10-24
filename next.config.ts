@@ -1,8 +1,13 @@
 import type { NextConfig } from 'next';
+import { nobelCourseRedirects } from './lib/config/nobel-course-redirects';
 
 const configuredBuildCpus = Number.parseInt(process.env.OPENMAIC_BUILD_CPUS ?? '', 10);
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    const learner = process.env.NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE === 'learner' || process.env.OPENMAIC_DEPLOYMENT_MODE === 'learner';
+    return learner ? nobelCourseRedirects() : [];
+  },
   output: process.env.VERCEL ? undefined : 'standalone',
   allowedDevOrigins: ['127.0.0.1'],
   // Keep bundler identifiers relative to this repository. Without an explicit

@@ -1,0 +1,93 @@
+{
+  "portrait": {
+    "title": "Halzen-Neutel (cropped).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Halzen-Neutel_(cropped).jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Halzen-Neutel_%28cropped%29.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Halzen-Neutel_%28cropped%29.jpg",
+    "filename": "portrait.jpg",
+    "sha256": "57cd484a927de51b98c36fa937531d8804a823ea769da020ec404c0d30b6fbb1",
+    "author": "Mauro.mezzetto",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "provenance": "Commons cropped version; not cropped again",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "camp": {
+    "title": "IceCube drill camp 2009.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:IceCube_drill_camp_2009.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/5/50/IceCube_drill_camp_2009.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/5/50/IceCube_drill_camp_2009.jpg",
+    "filename": "camp.jpg",
+    "sha256": "f34e51663ebfed539102438f44eaa9171734290a98b3e0a4ec02e6c063855aa9",
+    "author": "Amble",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "provenance": "Commons original file",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "dom": {
+    "title": "ICECUBE dom taklampa.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:ICECUBE_dom_taklampa.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/6/6f/ICECUBE_dom_taklampa.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/6/6f/ICECUBE_dom_taklampa.jpg",
+    "filename": "dom.jpg",
+    "sha256": "8cfbb5143de1b860587069078b2014f7c2541470be749d2ba1c27387c1491102",
+    "author": "Amble",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "provenance": "Commons file with source-author background cleanup",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "dawn": {
+    "title": "The ICL at Dawn.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_ICL_at_Dawn.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/6/6f/The_ICL_at_Dawn.jpg",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/The_ICL_at_Dawn.jpg/1280px-The_ICL_at_Dawn.jpg",
+    "filename": "dawn.jpg",
+    "sha256": "7bd68a6db721f3cb0fd095d41701c52a1039a849955b64d55de88eb871ee4a79",
+    "author": "John Hardin",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "provenance": "Commons 1280px thumbnail",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "night": {
+    "title": "The ICL at Night.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_ICL_at_Night.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/6/69/The_ICL_at_Night.jpg",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/The_ICL_at_Night.jpg/1280px-The_ICL_at_Night.jpg",
+    "filename": "night.jpg",
+    "sha256": "118860b6482b694350fe5bc496dc11de380673366136752d52bd218aacbc78dc",
+    "author": "John Hardin",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "provenance": "Commons 1280px thumbnail; author exposure-fused original",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "array": {
+    "title": "The IceCube Neutrino Observatory.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_IceCube_Neutrino_Observatory.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/5/59/The_IceCube_Neutrino_Observatory.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/5/59/The_IceCube_Neutrino_Observatory.jpg",
+    "filename": "array.jpg",
+    "sha256": "18262cb4dd8cdf49695167d0af57cdf5d9874c5395443af1512cfdf377ba62f4",
+    "author": "Karen Andeen and Matthias Plum for IceCube Collaboration",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "provenance": "2019 paper diagram: https://doi.org/10.1051/epjconf/201921003005",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  },
+  "face": {
+    "title": "Francis Halzen (2025).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Francis_Halzen_(2025).jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/1/19/Francis_Halzen_%282025%29.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/1/19/Francis_Halzen_%282025%29.jpg",
+    "filename": "face.jpg",
+    "sha256": "15d614c84fb8c87aac2931c2f694b3f8ed8031a8d84584cc833ac2834a82ec98",
+    "author": "INFN",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "provenance": "https://agenda.infn.it/event/44606/page/10593-photo-gallery",
+    "localChanges": "None; rendered with object-fit:contain; Commons-provided version retained byte for byte"
+  }
+}

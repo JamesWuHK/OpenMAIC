@@ -1,0 +1,50 @@
+{
+  "reviewedAt": "2026-10-24",
+  "assets": {
+    "portrait.jpg": {
+      "author": "Millencolin",
+      "title": "Peter Hegemann receiving the Hertie Senior Professor Award",
+      "date": "2015 (photo page uploaded 2020)",
+      "source": "https://commons.wikimedia.org/wiki/File:Peter_Hegemann.jpg",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "changes": "None; shown as supplied"
+    },
+    "alga.jpg": {
+      "author": "Dartmouth Electron Microscope Facility, Dartmouth College",
+      "title": "Scanning electron microscope image of Chlamydomonas reinhardtii",
+      "date": "2007-09-20",
+      "source": "https://commons.wikimedia.org/wiki/File:Chlamydomonas2-1.jpg",
+      "license": "Public domain dedication by the author",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Chlamydomonas2-1.jpg#Licensing",
+      "changes": "Resized by Commons thumbnail service"
+    },
+    "tem.jpg": {
+      "author": "Dartmouth Electron Microscope Facility, Dartmouth College",
+      "title": "Transmission electron microscope section through Chlamydomonas",
+      "date": "2007-09-20",
+      "source": "https://commons.wikimedia.org/wiki/File:Chlamydomonas_TEM_07.jpg",
+      "license": "Public domain dedication by the author",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Chlamydomonas_TEM_07.jpg#Licensing",
+      "changes": "Resized by Commons thumbnail service"
+    },
+    "alga-detail.jpg": {
+      "author": "Dartmouth Electron Microscope Facility, Dartmouth College",
+      "title": "Close view of Chlamydomonas with flagella (scanning electron microscope)",
+      "date": "2007-09-20",
+      "source": "https://commons.wikimedia.org/wiki/File:Chlamydomonas2-2.jpg",
+      "license": "Public domain dedication by the author",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Chlamydomonas2-2.jpg#Licensing",
+      "changes": "Resized by Commons thumbnail service"
+    },
+    "tem01.jpg": {
+      "author": "Dartmouth Electron Microscope Facility, Dartmouth College",
+      "title": "Chlamydomonas thin section listing eyespot and flagellar basal-body structures (transmission electron microscope)",
+      "date": "2007-09-20",
+      "source": "https://commons.wikimedia.org/wiki/File:Chlamydomonas_TEM_01.jpg",
+      "license": "Public domain dedication by the author",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Chlamydomonas_TEM_01.jpg#Licensing",
+      "changes": "Resized by Commons thumbnail service"
+    }
+  }
+}

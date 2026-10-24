@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type CSSProperties,
 } from 'react';
 import { useStageStore } from '@/lib/store';
 import { PENDING_SCENE_ID } from '@/lib/store/stage';
@@ -217,6 +218,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     const [controlsVisible, setControlsVisible] = useState(true);
     const [isPresentationInteractionActive, setIsPresentationInteractionActive] = useState(false);
     const [classroomInteractionOpen, setClassroomInteractionOpen] = useState(false);
+    const [lectureToolbarHeight, setLectureToolbarHeight] = useState(104);
 
     // Whiteboard state (from canvas store so AI tools can open it)
     const whiteboardOpen = useCanvasStore.use.whiteboardOpen();
@@ -1470,6 +1472,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     return (
       <div
         ref={stageRef}
+        style={lectureLayout ? { '--nobel-toolbar-height': `${lectureToolbarHeight}px` } as CSSProperties : undefined}
         className={cn(
           'flex-1 flex overflow-hidden bg-gray-50 dark:bg-gray-900',
           isPresenting && !controlsVisible && 'cursor-none',
@@ -1586,6 +1589,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
               onPlayPause={handlePlayPause}
               onFullscreen={togglePresentation}
               interactionOpen={classroomInteractionOpen}
+              onHeightChange={setLectureToolbarHeight}
               onInteractionToggle={() => {
                 const nextOpen = !classroomInteractionOpen;
                 setClassroomInteractionOpen(nextOpen);
@@ -1594,19 +1598,21 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             />
           )}
           {/* Roundtable Area */}
-          {mode === 'playback' && (!lectureLayout || classroomInteractionOpen) && (
+          {mode === 'playback' && (!lectureLayout || classroomInteractionOpen || discussionRequest) && (
             <div
               className={cn(
                 'transition-opacity duration-300',
                 !isPresenting && 'shrink-0',
                 isPresenting && 'absolute inset-x-0 bottom-0 z-20',
-                lectureLayout && 'absolute inset-x-0 bottom-16 z-30',
+                lectureLayout && 'absolute inset-x-0 bottom-[var(--nobel-toolbar-height)] z-30',
               )}
               data-testid={lectureLayout ? 'nobel-classroom-interaction' : undefined}
             >
               <Roundtable
                 mode={mode}
                 startInputOpen={lectureLayout && classroomInteractionOpen}
+                presentationBottomOffset={lectureLayout ? lectureToolbarHeight : 0}
+                hidePlaybackToolbar={lectureLayout}
                 initialParticipants={participants}
                 playbackView={playbackView}
                 currentSpeech={liveSpeech}
@@ -1691,6 +1697,10 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                   setThinkingState({ stage: 'director' });
                 }}
                 onDiscussionStart={() => {
+                  if (lectureLayout) {
+                    setClassroomInteractionOpen(true);
+                    chatAreaRef.current?.switchToTab('chat');
+                  }
                   // User clicks "Join" on ProactiveCard
                   engineRef.current?.confirmDiscussion();
                 }}
@@ -1781,7 +1791,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           className={cn(
             lectureLayout
               ? classroomInteractionOpen
-                ? 'fixed inset-x-2 bottom-[calc(16rem+env(safe-area-inset-bottom))] top-20 z-40 flex flex-col overflow-hidden sm:inset-y-20 sm:left-auto sm:right-3 sm:bottom-20 sm:w-[min(360px,calc(100vw-1.5rem))]'
+                ? 'fixed inset-x-2 bottom-[calc(var(--nobel-toolbar-height)+12rem)] top-20 z-40 flex flex-col overflow-hidden sm:top-20 sm:left-auto sm:right-3 sm:bottom-[calc(var(--nobel-toolbar-height)+1rem)] sm:w-[min(360px,calc(100vw-1.5rem))]'
                 : 'hidden'
               : 'flex shrink-0',
           )}

@@ -37,3 +37,6 @@ docs
 # isolated MP4 render service — built as its own image (render-service/Dockerfile),
 # never part of the main app image.
 render-service
+
+# Runtime QA fixtures are mounted, never baked into the learner image.
+ci/nobel-acceptance

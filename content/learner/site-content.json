@@ -180,6 +180,270 @@
       "url": "https://www.emsd.gov.hk/energyland/en/EduKit/home/index.html",
       "use": "核對能源、能源效益和可再生能源概念，設計安全、可測試的校園能源任務。",
       "reviewedAt": "2026-09-13"
+    },
+    {
+      "id": "nobel-kva-2026-chem",
+      "organisation": "The Royal Swedish Academy of Sciences",
+      "title": "The Nobel Prize in Chemistry 2026",
+      "url": "https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/",
+      "use": "瑞典皇家科學院介紹這一年的化學獎得主，以及他們的發現為甚麼重要。",
+      "reviewedAt": "2026-10-22"
+    },
+    {
+      "id": "iupac-chirality",
+      "organisation": "IUPAC",
+      "title": "Gold Book: chirality",
+      "url": "https://goldbook.iupac.org/terms/view/C01058",
+      "use": "化學名詞「手性」的定義：鏡像之間不能完全重合。",
+      "reviewedAt": "2026-10-22"
+    },
+    {
+      "id": "kagan-1986-nonlinear",
+      "organisation": "Puchot et al., Journal of the American Chemical Society",
+      "title": "Nonlinear effects in asymmetric synthesis (1986)",
+      "url": "https://doi.org/10.1021/ja00269a036",
+      "use": "卡甘與合作者在1986年發表的研究，介紹不對稱合成中的非線性效應。",
+      "reviewedAt": "2026-10-22"
+    },
+    {
+      "id": "soai-nobel-2026",
+      "organisation": "Nobel Prize",
+      "title": "The Nobel Prize in Chemistry 2026",
+      "url": "https://www.nobelprize.org/prizes/chemistry/2026/summary/",
+      "use": "諾貝爾獎官方頁面，介紹2026年化學獎得主與授獎理由。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "soai-1995",
+      "organisation": "Soai, Shibata, Morioka, Choji · Nature",
+      "title": "Asymmetric autocatalysis and amplification of enantiomeric excess of a chiral molecule (1995)",
+      "url": "https://doi.org/10.1038/378767a0",
+      "use": "硤合與合作者在1995年發表的研究：產物參與催化，並放大分子的鏡像偏向。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "soai-2003",
+      "organisation": "Sato, Urabe, Ishiguro, Shibata, Soai · Angewandte Chemie",
+      "title": "Amplification of chirality from extremely low to greater than 99.5% ee by asymmetric autocatalysis (2003)",
+      "url": "https://doi.org/10.1002/anie.200390105",
+      "use": "2003年的研究，展示極小的鏡像偏向如何經自催化變得十分明顯。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "soai-2022",
+      "organisation": "Kenso Soai · Tetrahedron",
+      "title": "The Soai reaction and its implications with the life's characteristic features of self-replication and homochirality (2022)",
+      "url": "https://doi.org/10.1016/j.tet.2022.133017",
+      "use": "硤合回顧自催化與生命分子偏向同一種鏡像形式之間的研究線索。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "nobel-physics-2026",
+      "organisation": "Nobel Prize",
+      "title": "The Nobel Prize in Physics 2026",
+      "url": "https://www.nobelprize.org/prizes/physics/2026/summary/",
+      "use": "諾貝爾獎官方頁面，介紹2026年物理學獎得主與授獎理由。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "kva-physics-2026",
+      "organisation": "The Royal Swedish Academy of Sciences",
+      "title": "Elusive particles from the universe captured at the South Pole",
+      "url": "https://www.kva.se/en/news/the-nobel-prize-in-physics-2026/",
+      "use": "瑞典皇家科學院介紹哈爾岑、IceCube 與宇宙高能中微子的發現。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-detector",
+      "organisation": "IceCube Collaboration",
+      "title": "IceCube detector",
+      "url": "https://icecube.wisc.edu/science/icecube/",
+      "use": "認識深冰中的感光儀器，以及用微光記錄粒子事件的方法。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-detect",
+      "organisation": "IceCube Masterclass",
+      "title": "Detecting Neutrinos",
+      "url": "https://masterclass.icecube.wisc.edu/en/icecube-and-neutrinos/detecting-neutrinos/",
+      "use": "了解光的時間、光量和圖樣怎樣提供事件線索。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-2013",
+      "organisation": "IceCube Collaboration · Science",
+      "title": "Evidence for high-energy extraterrestrial neutrinos at the IceCube detector (2013)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24264993/",
+      "use": "IceCube 團隊在2013年發表的宇宙高能中微子研究摘要。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-alerts",
+      "organisation": "IceCube Collaboration",
+      "title": "Real-Time Alerts",
+      "url": "https://icecube.wisc.edu/science/real-time-alerts/",
+      "use": "了解中微子觀測怎樣與世界各地的天文台互相配合。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "halzen-bio",
+      "organisation": "University of Wisconsin–Madison",
+      "title": "Francis Halzen",
+      "url": "https://www.physics.wisc.edu/directory/halzen-francis/",
+      "use": "認識哈爾岑的物理訓練、研究經歷與 IceCube 工作。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-amanda-history",
+      "organisation": "IceCube Collaboration",
+      "title": "AMANDA：冰中氣泡與更深的試驗",
+      "url": "https://icecube.wisc.edu/timeline_slider_post/1993/",
+      "use": "IceCube回顧早期南極試驗，以及氣泡問題怎樣影響後來的設計。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "icecube-2018-followup",
+      "organisation": "IceCube Collaboration",
+      "title": "IceCube neutrinos point to long-sought cosmic ray accelerator",
+      "url": "https://icecube.wisc.edu/news/press-releases/2018/07/icecube-neutrinos-point-to-long-sought-cosmic-ray-accelerator/",
+      "use": "2017年的觀測通知，讓多種望遠鏡一起追查高能中微子來源；研究於2018年發表。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "nobel-medicine-2026",
+      "organisation": "Nobel Prize",
+      "title": "2026年生理學或醫學獎",
+      "url": "https://www.nobelprize.org/prizes/medicine/2026/press-release/",
+      "use": "閱讀三位共同得主的研究貢獻與頒獎理由。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "assembly-medicine-2026",
+      "organisation": "Nobel Assembly at Karolinska Institutet",
+      "title": "2026年生理學或醫學獎公告",
+      "url": "https://www.nobelprizemedicine.org/the-nobel-prize-in-physiology-or-medicine-2026/",
+      "use": "頒獎機構公布的共同得主與獲獎理由。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "deisseroth-bio",
+      "organisation": "Stanford Medicine",
+      "title": "Karl Deisseroth",
+      "url": "https://med.stanford.edu/profiles/karl-deisseroth",
+      "use": "認識他的學習、臨床訓練與研究工作。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "boyden-2005",
+      "organisation": "Nature Neuroscience",
+      "title": "Millisecond-timescale, genetically targeted optical control of neural activity",
+      "url": "https://www.nature.com/articles/nn1525",
+      "use": "了解2005年光控制神經活動的研究與共同作者。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "tye-2011",
+      "organisation": "Nature",
+      "title": "Amygdala circuitry mediating reversible and bidirectional control of anxiety",
+      "url": "https://www.nature.com/articles/nature09820",
+      "use": "小鼠研究如何用更精細的方法追查特定連接與焦慮樣行為。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "sahel-2021",
+      "organisation": "Nature Medicine",
+      "title": "Partial recovery of visual function in a blind patient after optogenetic therapy",
+      "url": "https://www.nature.com/articles/s41591-021-01351-4",
+      "use": "閱讀特定患者部分視覺功能恢復的研究案例與適用條件。",
+      "reviewedAt": "2026-10-23"
+    },
+    {
+      "id": "halzen-neutrino-motivation",
+      "organisation": "IceCube / APS Physics",
+      "title": "Prof. Francis Halzen honored with the 2026 APS Medal",
+      "url": "https://icecube.wisc.edu/news/awards/2025/12/prof-francis-halzen-honored-with-the-2026-aps-medal/",
+      "use": "哈爾岑回顧他為何對中微子望遠鏡感興趣，以及IceCube如何記錄中微子留下的光線索。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "deisseroth-interview",
+      "organisation": "Neurophotonics",
+      "title": "Illuminating the brain: an interview with Karl Deisseroth",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8594449/",
+      "use": "戴瑟羅斯談自己如何走近腦科學與精神科。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "deisseroth-ki-interview",
+      "organisation": "Karolinska Institutet / Medicinsk Vetenskap",
+      "title": "Karl Deisseroth: “Becoming a psychiatrist wasn’t even on the map”",
+      "url": "https://ki.se/en/research/popular-science-and-dialogue/interviews-and-portraits/the-moment-becoming-a-psychiatrist-wasnt-even-on-the-map",
+      "use": "核對醫學院精神科見習經歷與職涯轉向。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "ki-research",
+      "organisation": "Karolinska Institutet",
+      "title": "The Nobel Prize to the pioneers of optogenetics",
+      "url": "https://news.ki.se/the-nobel-prize-to-the-pioneers-of-optogenetics-peter-hegemann-georg-nagel-and-karl-deisseroth",
+      "use": "核對藻類通道視紫紅質、光遺傳學研究用途及醫療探索邊界。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "nagel-2002",
+      "organisation": "Science / PubMed",
+      "title": "Channelrhodopsin-1: a light-gated proton channel in green algae",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12089443/",
+      "use": "核對2002年共同作者研究及藻類感光通道。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "nagel-2003",
+      "organisation": "PNAS / PubMed",
+      "title": "Channelrhodopsin-2, a directly light-gated cation-selective membrane channel",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14615590/",
+      "use": "核對2003年通道視紫紅質研究與基本機制。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "hegemann-bio",
+      "organisation": "Humboldt Innovation",
+      "title": "Research Impact: Nobel Prize for Peter Hegemann",
+      "url": "https://humboldt-innovation.de/en/news/research-impact-nobel-prize-peter-hegemann",
+      "use": "核對黑格曼的學習、研究訓練與長期微藻研究經歷。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "nagel-bio-wuerzburg",
+      "organisation": "University of Würzburg Biozentrum",
+      "title": "Nobel Prize for Würzburg Professor Georg Nagel",
+      "url": "https://www.biozentrum.uni-wuerzburg.de/en/news/archive/news-single/news/nobelprize-georg-nagel-2/",
+      "use": "核對 Georg Nagel 的人物經歷、團隊研究與獲獎背景。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "nagel-profile-wuerzburg",
+      "organisation": "University of Würzburg Biozentrum",
+      "title": "Prof. Dr. Georg Nagel",
+      "url": "https://www.biozentrum.uni-wuerzburg.de/en/bot1/research/prof-dr-georg-nagel/",
+      "use": "核對 Nagel 的研究方向與學術職涯。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "hegemann-nagel-history-2013",
+      "organisation": "EMBO Molecular Medicine",
+      "title": "From channelrhodopsins to optogenetics",
+      "url": "https://link.springer.com/article/10.1002/emmm.201202387",
+      "use": "核對 Hegemann 團隊、Suneel Kateriya 與 Nagel 合作者的研究分工。",
+      "reviewedAt": "2026-10-24"
+    },
+    {
+      "id": "nobel-prize-conversations",
+      "organisation": "Nobel Prize",
+      "title": "Nobel Prize Conversations",
+      "url": "https://www.nobelprize.org/nobel-prize-conversations/",
+      "use": "諾貝爾獎官方人物訪談系列。",
+      "reviewedAt": "2026-10-24"
     }
   ],
   "series": [
@@ -190,16 +454,36 @@
       "summary": "從一句含糊意見開始，練習提出主張、使用證據、聽懂分歧，最後完成一段有理有據的兩分鐘小提案。",
       "audience": "小六至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["chinese", "leadership"],
-      "capabilities": ["清楚主張", "證據解釋", "聆聽回應", "受眾意識"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "chinese",
+        "leadership"
+      ],
+      "capabilities": [
+        "清楚主張",
+        "證據解釋",
+        "聆聽回應",
+        "受眾意識"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "25–35 分鐘",
       "finalArtifact": "兩分鐘觀點短講、講稿與修訂記錄",
       "status": "open",
-      "liveCourseIds": ["hk-c01-01-debatable-claim"],
-      "sourceIds": ["edb-chinese", "edb-il", "hko", "pcpd"],
+      "sourceIds": [
+        "edb-chinese",
+        "edb-il",
+        "hko",
+        "pcpd"
+      ],
+      "liveCourseIds": [
+        "hk-c01-01-debatable-claim"
+      ],
       "signal": "中文 / C01",
       "heroImage": "/learner/runtime/persuasive-chinese-hong-kong-cover.webp",
       "promoHeadline": "不是把聲音放大，而是讓觀點站得住。",
@@ -257,51 +541,126 @@
     },
     {
       "slug": "hong-kong-ai-literacy",
-      "heroImage": "/learner/runtime/hong-kong-ai-literacy-cover.webp",
       "title": "香港 AI 小偵探",
       "question": "AI 真的「知道」答案嗎？",
       "summary": "從香港學生的一天出發，拆解辨認、分類、生成與核查，建立有邊界的 AI 判斷。",
       "audience": "小四至中一",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech"],
-      "capabilities": ["AI 素養", "提問", "核查", "負責任使用"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech"
+      ],
+      "capabilities": [
+        "AI 素養",
+        "提問",
+        "核查",
+        "負責任使用"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "15–20 分鐘",
       "finalArtifact": "給同學的 AI 判斷任務卡",
       "status": "open",
-      "sourceIds": ["edb-ai", "edb-il", "pcpd"],
-      "liveCourseIds": ["codex-zh-hk-audio-smoke", "hk-a01-02-leaf-classifier"],
+      "sourceIds": [
+        "edb-ai",
+        "edb-il",
+        "pcpd"
+      ],
+      "liveCourseIds": [
+        "codex-zh-hk-audio-smoke",
+        "hk-a01-02-leaf-classifier"
+      ],
       "signal": "AI / 01",
+      "heroImage": "/learner/runtime/hong-kong-ai-literacy-cover.webp",
       "lessons": [
-        {"number": 1, "title": "AI 藏在香港的一天裡嗎？", "question": "見到自動運作的系統，就代表它用了 AI 嗎？", "summary": "從日常情境分辨 AI、自動化與資料不足，不因外觀或宣傳用語下定論。", "outcome": "AI 判斷證據卡"},
-        {"number": 2, "title": "機器怎樣認出一片葉子？", "question": "圖片、標籤和特徵怎樣幫助機器分類？", "summary": "由圖片分類遊戲理解例子、標籤、特徵、測試與分類錯誤。", "outcome": "葉片分類測試表"},
-        {"number": 3, "title": "問得清楚，才找得到答案", "question": "怎樣把模糊要求變成可核對的問題？", "summary": "練習說明目標、對象、條件和輸出，並辨認尚未提供的資料。", "outcome": "清楚提問四格卡"},
-        {"number": 4, "title": "AI 說天氣：像真的就是真的嗎？", "question": "天氣答案要核對哪些時間、地點和來源？", "summary": "對照原創答案與官方資料，檢查來源、日期、範圍和警告狀態。", "outcome": "天氣答案核查單"},
-        {"number": 5, "title": "AI 會講一座城市的故事嗎？", "question": "怎樣分清城市故事中的事實、解釋和想像？", "summary": "把可核實記錄、合理解釋和原創想像分層標示，避免虛構被當成歷史。", "outcome": "城市故事分層稿"},
-        {"number": 6, "title": "AI 看見了甚麼，又錯過了甚麼？", "question": "一張圖像足夠支持甚麼判斷？", "summary": "檢視圖像中的可見線索、模型信心、拍攝時間與畫面之外的不確定性。", "outcome": "圖像判斷邊界卡"}
+        {
+          "number": 1,
+          "title": "AI 藏在香港的一天裡嗎？",
+          "question": "見到自動運作的系統，就代表它用了 AI 嗎？",
+          "summary": "從日常情境分辨 AI、自動化與資料不足，不因外觀或宣傳用語下定論。",
+          "outcome": "AI 判斷證據卡"
+        },
+        {
+          "number": 2,
+          "title": "機器怎樣認出一片葉子？",
+          "question": "圖片、標籤和特徵怎樣幫助機器分類？",
+          "summary": "由圖片分類遊戲理解例子、標籤、特徵、測試與分類錯誤。",
+          "outcome": "葉片分類測試表"
+        },
+        {
+          "number": 3,
+          "title": "問得清楚，才找得到答案",
+          "question": "怎樣把模糊要求變成可核對的問題？",
+          "summary": "練習說明目標、對象、條件和輸出，並辨認尚未提供的資料。",
+          "outcome": "清楚提問四格卡"
+        },
+        {
+          "number": 4,
+          "title": "AI 說天氣：像真的就是真的嗎？",
+          "question": "天氣答案要核對哪些時間、地點和來源？",
+          "summary": "對照原創答案與官方資料，檢查來源、日期、範圍和警告狀態。",
+          "outcome": "天氣答案核查單"
+        },
+        {
+          "number": 5,
+          "title": "AI 會講一座城市的故事嗎？",
+          "question": "怎樣分清城市故事中的事實、解釋和想像？",
+          "summary": "把可核實記錄、合理解釋和原創想像分層標示，避免虛構被當成歷史。",
+          "outcome": "城市故事分層稿"
+        },
+        {
+          "number": 6,
+          "title": "AI 看見了甚麼，又錯過了甚麼？",
+          "question": "一張圖像足夠支持甚麼判斷？",
+          "summary": "檢視圖像中的可見線索、模型信心、拍攝時間與畫面之外的不確定性。",
+          "outcome": "圖像判斷邊界卡"
+        }
       ]
     },
     {
       "slug": "hong-kong-weather-detectives",
-      "heroImage": "/learner/runtime/hong-kong-weather-detectives-cover.webp",
       "title": "香港天氣科技實驗室",
       "question": "雷達看不見雨滴的顏色，為何能畫出雨區？",
       "summary": "從雷達、地面觀測到臨近預報，學會讀懂天氣科技提供的線索，也看見每個預測的限制。",
       "audience": "小五至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["hong-kong", "ai-tech", "interests"],
-      "capabilities": ["雷達原理", "數據閱讀", "預測更新", "風險決策"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "hong-kong",
+        "ai-tech",
+        "interests"
+      ],
+      "capabilities": [
+        "雷達原理",
+        "數據閱讀",
+        "預測更新",
+        "風險決策"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "22–30 分鐘",
       "finalArtifact": "校園活動天氣決策台",
       "status": "open",
-      "sourceIds": ["hko", "edb-il", "edb-chinese"],
-      "liveCourseIds": ["hk-s04-01-radar-rain"],
+      "sourceIds": [
+        "hko",
+        "edb-il",
+        "edb-chinese"
+      ],
+      "liveCourseIds": [
+        "hk-s04-01-radar-rain"
+      ],
       "signal": "WX TECH / 02",
+      "heroImage": "/learner/runtime/hong-kong-weather-detectives-cover.webp",
       "promoHeadline": "看見雨區，也看見預測不能保證的部分。",
       "introduction": "天氣應用的一幅彩色圖，背後是電磁波、地面觀測、時間序列與持續更新的判斷。本系列把香港常見的局部驟雨、活動安排與颱風路徑化成資料任務，讓學生不只會看圖，也懂得問資料從哪裡來、何時更新，以及結論能說到哪一步。",
       "highlights": [
@@ -357,129 +716,354 @@
     },
     {
       "slug": "truth-investigation-lab",
-      "heroImage": "/learner/runtime/truth-investigation-lab-cover.webp",
       "title": "真假消息調查局",
       "question": "看起來很真，就是真的嗎？",
       "summary": "把一條消息拆成主張、證據和意見，學會跨來源核查，也理解 AI 為何會自信地出錯。",
       "audience": "小六至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech", "chinese"],
-      "capabilities": ["資訊素養", "來源評估", "批判思考", "清楚表達"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech",
+        "chinese"
+      ],
+      "capabilities": [
+        "資訊素養",
+        "來源評估",
+        "批判思考",
+        "清楚表達"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "15–20 分鐘",
       "finalArtifact": "消息可信度調查卡",
       "status": "planning",
-      "sourceIds": ["edb-il", "edb-ai", "pcpd"],
+      "sourceIds": [
+        "edb-il",
+        "edb-ai",
+        "pcpd"
+      ],
       "signal": "IL / 03",
+      "heroImage": "/learner/runtime/truth-investigation-lab-cover.webp",
       "lessons": [
-        {"number": 1, "title": "看起來很真，就是真的嗎？", "question": "一條消息裡，哪些是主張，哪些是證據？", "summary": "把消息拆成可核對主張、證據和意見，找出尚未獲支持的部分。", "outcome": "主張—證據拆解卡"},
-        {"number": 2, "title": "誰是原始說話的人？", "question": "轉發很多次的消息，怎樣追回原始來源？", "summary": "沿著轉載鏈找出原始發布者、完整語境、日期與適用範圍。", "outcome": "消息來源鏈"},
-        {"number": 3, "title": "同一件事，為何有不同標題？", "question": "措詞怎樣改變我們對事件的感覺？", "summary": "比較不同標題的動詞、數字和情緒用語，分辨事實與觀點。", "outcome": "標題措詞比較表"},
-        {"number": 4, "title": "一個來源夠嗎？", "question": "不同來源之間應該比較甚麼？", "summary": "進行橫向查證，比較獨立來源的一致處、衝突處與證據品質。", "outcome": "多來源核查表"},
-        {"number": 5, "title": "AI 為何會「講得像真」？", "question": "語氣很肯定，是否代表內容可靠？", "summary": "理解 AI 可能生成流暢但錯誤的內容，學會標記待查證而不猜測補空。", "outcome": "AI 答案待查清單"},
-        {"number": 6, "title": "發送之前的 60 秒", "question": "分享消息前，哪個核查步驟最不能省？", "summary": "整合主張拆解、來源追溯、橫向核對與不確定性標示。", "outcome": "消息可信度調查卡"}
+        {
+          "number": 1,
+          "title": "看起來很真，就是真的嗎？",
+          "question": "一條消息裡，哪些是主張，哪些是證據？",
+          "summary": "把消息拆成可核對主張、證據和意見，找出尚未獲支持的部分。",
+          "outcome": "主張—證據拆解卡"
+        },
+        {
+          "number": 2,
+          "title": "誰是原始說話的人？",
+          "question": "轉發很多次的消息，怎樣追回原始來源？",
+          "summary": "沿著轉載鏈找出原始發布者、完整語境、日期與適用範圍。",
+          "outcome": "消息來源鏈"
+        },
+        {
+          "number": 3,
+          "title": "同一件事，為何有不同標題？",
+          "question": "措詞怎樣改變我們對事件的感覺？",
+          "summary": "比較不同標題的動詞、數字和情緒用語，分辨事實與觀點。",
+          "outcome": "標題措詞比較表"
+        },
+        {
+          "number": 4,
+          "title": "一個來源夠嗎？",
+          "question": "不同來源之間應該比較甚麼？",
+          "summary": "進行橫向查證，比較獨立來源的一致處、衝突處與證據品質。",
+          "outcome": "多來源核查表"
+        },
+        {
+          "number": 5,
+          "title": "AI 為何會「講得像真」？",
+          "question": "語氣很肯定，是否代表內容可靠？",
+          "summary": "理解 AI 可能生成流暢但錯誤的內容，學會標記待查證而不猜測補空。",
+          "outcome": "AI 答案待查清單"
+        },
+        {
+          "number": 6,
+          "title": "發送之前的 60 秒",
+          "question": "分享消息前，哪個核查步驟最不能省？",
+          "summary": "整合主張拆解、來源追溯、橫向核對與不確定性標示。",
+          "outcome": "消息可信度調查卡"
+        }
       ]
     },
     {
       "slug": "privacy-lab",
-      "heroImage": "/learner/runtime/privacy-lab-cover.webp",
       "title": "我的資料，誰在使用？",
       "question": "一張相片交給 AI 後，還能收回嗎？",
       "summary": "從相片、聲音和聊天內容出發，練習在使用 AI 前辨認個人資料、權限與風險。",
       "audience": "小五至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech", "life-money"],
-      "capabilities": ["私隱意識", "風險判斷", "數碼公民", "自我保護"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech",
+        "life-money"
+      ],
+      "capabilities": [
+        "私隱意識",
+        "風險判斷",
+        "數碼公民",
+        "自我保護"
+      ],
       "lessonCount": 5,
       "minutesPerLesson": "15–20 分鐘",
       "finalArtifact": "我的 AI 使用安全守則",
       "status": "planning",
-      "sourceIds": ["pcpd", "edb-ai", "edb-il"],
+      "sourceIds": [
+        "pcpd",
+        "edb-ai",
+        "edb-il"
+      ],
       "signal": "SAFE / 04",
+      "heroImage": "/learner/runtime/privacy-lab-cover.webp",
       "lessons": [
-        {"number": 1, "title": "交給 AI 之前，先停一停", "question": "這些資料真的需要提供嗎？", "summary": "從任務目的出發識別個人資料，練習刪除不必要的姓名、學校和位置線索。", "outcome": "AI 分享前檢查卡"},
-        {"number": 2, "title": "一張相片透露了多少？", "question": "主角之外的背景，還藏著哪些線索？", "summary": "檢視校徽、門牌、車牌和他人面孔等背景資料，練習去識別。", "outcome": "相片私隱掃描圖"},
-        {"number": 3, "title": "聲音也是個人資料嗎？", "question": "錄音或複製聲音前，要得到誰的同意？", "summary": "理解聲音可識別個人，在錄製、上載與生成前確認目的和同意。", "outcome": "聲音使用同意流程"},
-        {"number": 4, "title": "刪除按鈕代表已經消失嗎？", "question": "資料上載後可能去了哪裡？", "summary": "畫出裝置、服務、分享對象與備份之間的資料流，不把刪除當成即時保證。", "outcome": "資料流向圖"},
-        {"number": 5, "title": "我的 AI 安全協議", "question": "遇到不確定情境，怎樣停下、選擇和求助？", "summary": "整合資料最少化、權限、同意、刪除與向可信任成人求助的路線。", "outcome": "我的 AI 使用安全守則"}
+        {
+          "number": 1,
+          "title": "交給 AI 之前，先停一停",
+          "question": "這些資料真的需要提供嗎？",
+          "summary": "從任務目的出發識別個人資料，練習刪除不必要的姓名、學校和位置線索。",
+          "outcome": "AI 分享前檢查卡"
+        },
+        {
+          "number": 2,
+          "title": "一張相片透露了多少？",
+          "question": "主角之外的背景，還藏著哪些線索？",
+          "summary": "檢視校徽、門牌、車牌和他人面孔等背景資料，練習去識別。",
+          "outcome": "相片私隱掃描圖"
+        },
+        {
+          "number": 3,
+          "title": "聲音也是個人資料嗎？",
+          "question": "錄音或複製聲音前，要得到誰的同意？",
+          "summary": "理解聲音可識別個人，在錄製、上載與生成前確認目的和同意。",
+          "outcome": "聲音使用同意流程"
+        },
+        {
+          "number": 4,
+          "title": "刪除按鈕代表已經消失嗎？",
+          "question": "資料上載後可能去了哪裡？",
+          "summary": "畫出裝置、服務、分享對象與備份之間的資料流，不把刪除當成即時保證。",
+          "outcome": "資料流向圖"
+        },
+        {
+          "number": 5,
+          "title": "我的 AI 安全協議",
+          "question": "遇到不確定情境，怎樣停下、選擇和求助？",
+          "summary": "整合資料最少化、權限、同意、刪除與向可信任成人求助的路線。",
+          "outcome": "我的 AI 使用安全守則"
+        }
       ]
     },
     {
       "slug": "city-memory-detectives",
-      "heroImage": "/learner/runtime/city-memory-detectives-cover.webp",
       "title": "城市記憶偵探",
       "question": "一座舊建築，如何說出一段香港故事？",
       "summary": "從地點、細節和不同來源重組城市故事，分清記錄、觀點與合理想像。",
       "audience": "小五至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["hong-kong", "chinese"],
-      "capabilities": ["地方研究", "敘事", "來源互證", "文化理解"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "hong-kong",
+        "chinese"
+      ],
+      "capabilities": [
+        "地方研究",
+        "敘事",
+        "來源互證",
+        "文化理解"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "18–22 分鐘",
       "finalArtifact": "三分鐘香港城市故事",
       "status": "planning",
-      "sourceIds": ["amo", "edb-chinese", "edb-il"],
+      "sourceIds": [
+        "amo",
+        "edb-chinese",
+        "edb-il"
+      ],
       "signal": "CITY / 05",
+      "heroImage": "/learner/runtime/city-memory-detectives-cover.webp",
       "lessons": [
-        {"number": 1, "title": "建築會自己說故事嗎？", "question": "我們由建築細節能知道甚麼，又不能知道甚麼？", "summary": "先作客觀觀察，再提出有根據的推斷，把事實、推斷與待查證分開。", "outcome": "建築證據便簽"},
-        {"number": 2, "title": "一個地名藏著甚麼？", "question": "地名的說法要怎樣追溯和核對？", "summary": "比較地圖、文字記錄和不同解釋，保留尚無定論的部分。", "outcome": "地名來源線索卡"},
-        {"number": 3, "title": "舊相片沒拍到的事", "question": "一張相片的畫框外面，我們還缺甚麼？", "summary": "讀懂拍攝角度、時間、選擇與沉默，不讓單一圖像代表全部歷史。", "outcome": "相片邊界註釋"},
-        {"number": 4, "title": "記憶與記錄不同怎麼辦？", "question": "當口述記憶和文字記錄不同，誰一定錯？", "summary": "比較來源目的、時間和視角，以多來源互證而非匆忙判決。", "outcome": "城市記憶對照表"},
-        {"number": 5, "title": "如何把「可能」寫得動人又誠實？", "question": "故事可以有想像，但怎樣不把想像偽裝成事實？", "summary": "用限定語、來源標記與原創情境標籤，建立誠實的敘事聲音。", "outcome": "誠實敘事改寫稿"},
-        {"number": 6, "title": "城市記憶導覽站", "question": "怎樣讓聽眾同時感受故事和看見證據？", "summary": "組合地點、證據、多個觀點和明確標示的原創段落。", "outcome": "三分鐘香港城市故事"}
+        {
+          "number": 1,
+          "title": "建築會自己說故事嗎？",
+          "question": "我們由建築細節能知道甚麼，又不能知道甚麼？",
+          "summary": "先作客觀觀察，再提出有根據的推斷，把事實、推斷與待查證分開。",
+          "outcome": "建築證據便簽"
+        },
+        {
+          "number": 2,
+          "title": "一個地名藏著甚麼？",
+          "question": "地名的說法要怎樣追溯和核對？",
+          "summary": "比較地圖、文字記錄和不同解釋，保留尚無定論的部分。",
+          "outcome": "地名來源線索卡"
+        },
+        {
+          "number": 3,
+          "title": "舊相片沒拍到的事",
+          "question": "一張相片的畫框外面，我們還缺甚麼？",
+          "summary": "讀懂拍攝角度、時間、選擇與沉默，不讓單一圖像代表全部歷史。",
+          "outcome": "相片邊界註釋"
+        },
+        {
+          "number": 4,
+          "title": "記憶與記錄不同怎麼辦？",
+          "question": "當口述記憶和文字記錄不同，誰一定錯？",
+          "summary": "比較來源目的、時間和視角，以多來源互證而非匆忙判決。",
+          "outcome": "城市記憶對照表"
+        },
+        {
+          "number": 5,
+          "title": "如何把「可能」寫得動人又誠實？",
+          "question": "故事可以有想像，但怎樣不把想像偽裝成事實？",
+          "summary": "用限定語、來源標記與原創情境標籤，建立誠實的敘事聲音。",
+          "outcome": "誠實敘事改寫稿"
+        },
+        {
+          "number": 6,
+          "title": "城市記憶導覽站",
+          "question": "怎樣讓聽眾同時感受故事和看見證據？",
+          "summary": "組合地點、證據、多個觀點和明確標示的原創段落。",
+          "outcome": "三分鐘香港城市故事"
+        }
       ]
     },
     {
       "slug": "nature-observers",
-      "heroImage": "/learner/runtime/nature-observers-cover.webp",
       "title": "香港自然觀察員",
       "question": "在城市旁邊，誰正和我們一起生活？",
       "summary": "以不打擾生物、不收集個人位置的方式觀察香港物種，練習分類、記錄和提出問題。",
       "audience": "小四至中二",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["hong-kong", "interests", "ai-tech"],
-      "capabilities": ["科學觀察", "分類", "保育意識", "資料倫理"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "hong-kong",
+        "interests",
+        "ai-tech"
+      ],
+      "capabilities": [
+        "科學觀察",
+        "分類",
+        "保育意識",
+        "資料倫理"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "15–20 分鐘",
       "finalArtifact": "一頁城市生態觀察誌",
       "status": "planning",
-      "sourceIds": ["afcd", "science-museum", "edb-ai"],
+      "sourceIds": [
+        "afcd",
+        "science-museum",
+        "edb-ai"
+      ],
       "signal": "ECO / 06",
+      "heroImage": "/learner/runtime/nature-observers-cover.webp",
       "lessons": [
-        {"number": 1, "title": "誰正和我們一起生活？", "question": "怎樣把「我看到的」寫成可比較的科學描述？", "summary": "用形狀、顏色、行為和環境線索作記錄，不在證據不足時急著猜物種。", "outcome": "城市生物觀察卡"},
-        {"number": 2, "title": "一個特徵夠分類嗎？", "question": "兩種生物很相像時，還要比較甚麼？", "summary": "結合多個特徵建立分類規則，用反例測試單一特徵的限制。", "outcome": "多特徵分類鍵"},
-        {"number": 3, "title": "沒看見就代表沒有嗎？", "question": "觀察時間、地點和方法怎樣影響記錄？", "summary": "理解取樣範圍和偵測限制，把「未觀察到」與「不存在」分開。", "outcome": "觀察限制記錄"},
-        {"number": 4, "title": "應該公開發現地點嗎？", "question": "記錄生物位置時，怎樣保護生物和觀察者？", "summary": "比較精確位置與模糊區域的用途和風險，為敏感物種設計保護規則。", "outcome": "生態資料分享規則"},
-        {"number": 5, "title": "AI 認物種可信嗎？", "question": "分類結果出現後，還要核對哪些證據？", "summary": "把 AI 結果當成待測候選，檢查特徵、圖像品質、可能範圍和可靠來源。", "outcome": "AI 物種核查單"},
-        {"number": 6, "title": "城市生態小展覽", "question": "怎樣讓別人看懂發現，同時不誇大結論？", "summary": "整合觀察、分類、限制、安全位置和待研究問題。", "outcome": "一頁城市生態觀察誌"}
+        {
+          "number": 1,
+          "title": "誰正和我們一起生活？",
+          "question": "怎樣把「我看到的」寫成可比較的科學描述？",
+          "summary": "用形狀、顏色、行為和環境線索作記錄，不在證據不足時急著猜物種。",
+          "outcome": "城市生物觀察卡"
+        },
+        {
+          "number": 2,
+          "title": "一個特徵夠分類嗎？",
+          "question": "兩種生物很相像時，還要比較甚麼？",
+          "summary": "結合多個特徵建立分類規則，用反例測試單一特徵的限制。",
+          "outcome": "多特徵分類鍵"
+        },
+        {
+          "number": 3,
+          "title": "沒看見就代表沒有嗎？",
+          "question": "觀察時間、地點和方法怎樣影響記錄？",
+          "summary": "理解取樣範圍和偵測限制，把「未觀察到」與「不存在」分開。",
+          "outcome": "觀察限制記錄"
+        },
+        {
+          "number": 4,
+          "title": "應該公開發現地點嗎？",
+          "question": "記錄生物位置時，怎樣保護生物和觀察者？",
+          "summary": "比較精確位置與模糊區域的用途和風險，為敏感物種設計保護規則。",
+          "outcome": "生態資料分享規則"
+        },
+        {
+          "number": 5,
+          "title": "AI 認物種可信嗎？",
+          "question": "分類結果出現後，還要核對哪些證據？",
+          "summary": "把 AI 結果當成待測候選，檢查特徵、圖像品質、可能範圍和可靠來源。",
+          "outcome": "AI 物種核查單"
+        },
+        {
+          "number": 6,
+          "title": "城市生態小展覽",
+          "question": "怎樣讓別人看懂發現，同時不誇大結論？",
+          "summary": "整合觀察、分類、限制、安全位置和待研究問題。",
+          "outcome": "一頁城市生態觀察誌"
+        }
       ]
     },
     {
       "slug": "young-space-mission",
-      "heroImage": "/learner/runtime/young-space-mission-cover.webp",
       "title": "少年太空任務",
       "question": "天文事件發生了，為何我們仍可能看不見？",
       "summary": "從觀星條件到光譜和軌道，把天象、天氣與本地環境連起來，像任務團隊一樣規劃和復盤。",
       "audience": "小四至中二",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["interests", "hong-kong", "leadership"],
-      "capabilities": ["科學推理", "計劃", "協作", "不確定性"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "interests",
+        "hong-kong",
+        "leadership"
+      ],
+      "capabilities": [
+        "科學推理",
+        "計劃",
+        "協作",
+        "不確定性"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "20–28 分鐘",
       "finalArtifact": "香港觀星任務計劃",
       "status": "planning",
-      "sourceIds": ["space-museum", "hko", "science-museum"],
+      "sourceIds": [
+        "space-museum",
+        "hko",
+        "science-museum"
+      ],
       "signal": "SPACE / 07",
+      "heroImage": "/learner/runtime/young-space-mission-cover.webp",
       "promoHeadline": "抬頭之前，先學會讀懂天空的條件。",
       "introduction": "觀星不只是認星座。雲、月光、城市燈光、天體高度和安全安排，都會改變一次觀測任務。本系列由香港可理解的觀星決策出發，再延伸到大氣、月相、光譜、衛星軌道，讓學生以證據規劃一次真正負責任的太空任務。",
       "highlights": [
@@ -535,23 +1119,42 @@
     },
     {
       "slug": "hong-kong-smart-city-data",
-      "heroImage": "/learner/runtime/hong-kong-smart-city-data-cover.webp",
       "title": "香港智慧城市數據隊",
       "question": "巴士倒數的幾分鐘，是怎樣估出來的？",
       "summary": "從到站時間、城市感測器、API 和路線建議，拆解城市數據如何流動、更新和出錯。",
       "audience": "小五至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech", "hong-kong"],
-      "capabilities": ["數據流程", "時間戳", "誤差診斷", "私隱判斷"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech",
+        "hong-kong"
+      ],
+      "capabilities": [
+        "數據流程",
+        "時間戳",
+        "誤差診斷",
+        "私隱判斷"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "22–30 分鐘",
       "finalArtifact": "可解釋的到站資訊小面板",
       "status": "open",
-      "liveCourseIds": ["hk-t01-01-bus-eta"],
-      "sourceIds": ["data-gov-traffic", "digital-policy-data", "edb-il"],
+      "sourceIds": [
+        "data-gov-traffic",
+        "digital-policy-data",
+        "edb-il"
+      ],
+      "liveCourseIds": [
+        "hk-t01-01-bus-eta"
+      ],
       "signal": "CITY DATA / 09",
+      "heroImage": "/learner/runtime/hong-kong-smart-city-data-cover.webp",
       "promoHeadline": "看懂一個倒數，便看見整座城市的數據流。",
       "introduction": "到站時間不是承諾，而是由位置、路線、路況和時間戳共同形成、持續更新的估計。本系列用不收集學生位置的原創情境，帶學生打開智慧城市的數據黑盒，學會分辨測量、預測、延遲、缺值與責任。",
       "highlights": [
@@ -607,23 +1210,42 @@
     },
     {
       "slug": "robot-sensing-lab",
-      "heroImage": "/learner/runtime/robot-sensing-lab-cover.webp",
       "title": "機械人感知實驗室",
       "question": "機械人收到一個數值，就真的知道前面是甚麼嗎？",
       "summary": "從感測器、控制規則到執行器，用模擬測試理解機械人的能力、盲點和安全邊界。",
       "audience": "小四至中一",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech", "interests"],
-      "capabilities": ["系統思維", "感測原理", "測試修訂", "安全設計"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech",
+        "interests"
+      ],
+      "capabilities": [
+        "系統思維",
+        "感測原理",
+        "測試修訂",
+        "安全設計"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "20–28 分鐘",
       "finalArtifact": "機械人感知—行動流程圖與測試卡",
       "status": "open",
-      "sourceIds": ["science-museum", "edb-ai", "edb-il"],
-      "liveCourseIds": ["hk-t02-01-robot-sensing"],
+      "sourceIds": [
+        "science-museum",
+        "edb-ai",
+        "edb-il"
+      ],
+      "liveCourseIds": [
+        "hk-t02-01-robot-sensing"
+      ],
       "signal": "ROBOT / 10",
+      "heroImage": "/learner/runtime/robot-sensing-lab-cover.webp",
       "promoHeadline": "不是讓機械人像人，而是看懂它如何感知、決定和行動。",
       "introduction": "機械人不是有感情的同學，而是一套由感測、控制和動作組成的系統。本系列透過安全的屏幕模擬，讓學生比較讀數、設定規則、找出盲點，再把測試結果轉成可修訂的校園任務設計。",
       "highlights": [
@@ -679,22 +1301,40 @@
     },
     {
       "slug": "future-energy-engineers",
-      "heroImage": "/learner/runtime/future-energy-engineers-cover.webp",
       "title": "未來能源工程師",
       "question": "學校最高用電的一刻，等於全日最耗電嗎？",
       "summary": "從用電曲線、能源效益到太陽能和儲能，以模擬數據設計安全、可測試的校園改進。",
       "audience": "小五至中三",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["ai-tech", "interests", "hong-kong"],
-      "capabilities": ["圖表閱讀", "能源概念", "公平測試", "工程取捨"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "ai-tech",
+        "interests",
+        "hong-kong"
+      ],
+      "capabilities": [
+        "圖表閱讀",
+        "能源概念",
+        "公平測試",
+        "工程取捨"
+      ],
       "lessonCount": 6,
       "minutesPerLesson": "22–30 分鐘",
       "finalArtifact": "校園能源診斷與可測試改進方案",
       "status": "planning",
-      "sourceIds": ["emsd-energy", "science-museum", "edb-il"],
+      "sourceIds": [
+        "emsd-energy",
+        "science-museum",
+        "edb-il"
+      ],
       "signal": "ENERGY / 11",
+      "heroImage": "/learner/runtime/future-energy-engineers-cover.webp",
       "promoHeadline": "節能不是關掉一切，而是用證據做得更有效率。",
       "introduction": "一條用電曲線可以顯示何時上升，卻不能單靠自己說出全部原因。本系列讓學生從功率與電量、冷氣照明、太陽能到儲能，逐步建立能源系統觀，再設計一項兼顧安全、舒適、成本和效果的校園改進。",
       "highlights": [
@@ -750,43 +1390,171 @@
     },
     {
       "slug": "money-decisions",
-      "heroImage": "/learner/runtime/money-decisions-cover.webp",
       "title": "小小財務決策家",
       "question": "最便宜，是否一定最適合？",
       "summary": "從零用錢、網購和優惠出發，分清需要與想要，理解選擇背後的取捨與風險。",
       "audience": "小四至中一",
       "language": "正體中文（香港） · 粵語講解",
-      "languages": ["廣東話（香港粵語）"],
-      "ageBands": ["upper-primary", "junior-secondary"],
-      "topics": ["life-money", "leadership"],
-      "capabilities": ["預算", "比較", "延遲滿足", "決策"],
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "life-money",
+        "leadership"
+      ],
+      "capabilities": [
+        "預算",
+        "比較",
+        "延遲滿足",
+        "決策"
+      ],
       "lessonCount": 5,
       "minutesPerLesson": "15–18 分鐘",
       "finalArtifact": "我的一週選擇計劃",
       "status": "planning",
-      "sourceIds": ["ifec", "edb-il"],
+      "sourceIds": [
+        "ifec",
+        "edb-il"
+      ],
       "signal": "LIFE / 08",
+      "heroImage": "/learner/runtime/money-decisions-cover.webp",
       "lessons": [
-        {"number": 1, "title": "最平，一定最適合？", "question": "價錢之外，一個選擇還有哪些成本？", "summary": "在課堂模擬情境中分辨需要和想要，比較價格、運費、耐用度與使用條件。", "outcome": "總成本比較卡"},
-        {"number": 2, "title": "預算是限制還是計劃？", "question": "當金錢不夠滿足所有想要，怎樣排優先次序？", "summary": "先留出必要支出，再對選擇作取捨，並說明每個決定的理由。", "outcome": "預算優先次序表"},
-        {"number": 3, "title": "「限時」為何令人心急？", "question": "哪些行銷訊號會讓我們來不及比較？", "summary": "識別倒數、稀缺、原價錨定與同輩訊號，用停一停清單恢復判斷。", "outcome": "行銷線索識別卡"},
-        {"number": 4, "title": "先等一天會改變甚麼？", "question": "延遲決定怎樣幫助我們看見取捨？", "summary": "用等待期重新檢視需要、替代方案與放棄的其他機會。", "outcome": "24 小時決定日誌"},
-        {"number": 5, "title": "我的一週選擇實驗", "question": "怎樣用記錄而不是感覺檢視自己的選擇？", "summary": "設定一項小目標，以模擬或不涉及私隱的記錄完成計劃、觀察與復盤。", "outcome": "我的一週選擇計劃"}
+        {
+          "number": 1,
+          "title": "最平，一定最適合？",
+          "question": "價錢之外，一個選擇還有哪些成本？",
+          "summary": "在課堂模擬情境中分辨需要和想要，比較價格、運費、耐用度與使用條件。",
+          "outcome": "總成本比較卡"
+        },
+        {
+          "number": 2,
+          "title": "預算是限制還是計劃？",
+          "question": "當金錢不夠滿足所有想要，怎樣排優先次序？",
+          "summary": "先留出必要支出，再對選擇作取捨，並說明每個決定的理由。",
+          "outcome": "預算優先次序表"
+        },
+        {
+          "number": 3,
+          "title": "「限時」為何令人心急？",
+          "question": "哪些行銷訊號會讓我們來不及比較？",
+          "summary": "識別倒數、稀缺、原價錨定與同輩訊號，用停一停清單恢復判斷。",
+          "outcome": "行銷線索識別卡"
+        },
+        {
+          "number": 4,
+          "title": "先等一天會改變甚麼？",
+          "question": "延遲決定怎樣幫助我們看見取捨？",
+          "summary": "用等待期重新檢視需要、替代方案與放棄的其他機會。",
+          "outcome": "24 小時決定日誌"
+        },
+        {
+          "number": 5,
+          "title": "我的一週選擇實驗",
+          "question": "怎樣用記錄而不是感覺檢視自己的選擇？",
+          "summary": "設定一項小目標，以模擬或不涉及私隱的記錄完成計劃、觀察與復盤。",
+          "outcome": "我的一週選擇計劃"
+        }
+      ]
+    },
+    {
+      "slug": "nobel-curiosity-lab",
+      "title": "諾獎好奇心實驗室",
+      "question": "一個小小的科學問題，怎樣改變人類的可能？",
+      "summary": "從分子的左右手、南極冰中的宇宙線索，到藻類帶來的腦科學工具，跟隨科學家的故事，看懂諾獎為甚麼重要。",
+      "audience": "小五至中三",
+      "language": "繁體中文（香港） · 粵語講解",
+      "languages": [
+        "廣東話（香港粵語）"
+      ],
+      "ageBands": [
+        "upper-primary",
+        "junior-secondary"
+      ],
+      "topics": [
+        "interests"
+      ],
+      "capabilities": [
+        "科學概念理解",
+        "圖表閱讀",
+        "分辨證據與推論",
+        "好奇心提問"
+      ],
+      "lessonCount": 6,
+      "minutesPerLesson": "每課約 20–30 分鐘",
+      "finalArtifact": "看懂研究發現，連結日常生活",
+      "status": "open",
+      "sourceIds": [
+        "nobel-kva-2026-chem",
+        "iupac-chirality",
+        "kagan-1986-nonlinear",
+        "soai-nobel-2026",
+        "soai-1995",
+        "soai-2003",
+        "soai-2022",
+        "nobel-physics-2026",
+        "kva-physics-2026",
+        "icecube-detector",
+        "icecube-detect",
+        "icecube-2013",
+        "icecube-alerts",
+        "halzen-bio",
+        "icecube-amanda-history",
+        "icecube-2018-followup",
+        "nobel-medicine-2026",
+        "assembly-medicine-2026",
+        "deisseroth-bio",
+        "boyden-2005",
+        "tye-2011",
+        "sahel-2021",
+        "halzen-neutrino-motivation",
+        "deisseroth-interview",
+        "deisseroth-ki-interview",
+        "ki-research",
+        "nagel-2002",
+        "nagel-2003",
+        "hegemann-bio",
+        "nagel-bio-wuerzburg",
+        "nagel-profile-wuerzburg",
+        "hegemann-nagel-history-2013",
+        "nobel-prize-conversations"
+      ],
+      "liveCourseIds": [
+        "hk-nobel-01-kagan-lecture-v5",
+        "hk-nobel-02-soai-lecture-v5",
+        "hk-nobel-03-halzen-lecture-v4",
+        "hk-nobel-04-deisseroth-lecture-v3",
+        "hk-nobel-05-hegemann-lecture-v2",
+        "hk-nobel-06-nagel-lecture-v2"
+      ],
+      "signal": "科學 / Nobel",
+      "heroImage": "/learner/runtime/nobel-curiosity-molecules-cosmos-20261023.svg",
+      "promoHeadline": "分子也有左右手？南極的冰也能當望遠鏡？",
+      "introduction": "分子怎會有左右手？南極深冰怎能接收宇宙線索？藻類的感光本領，又怎樣幫助研究大腦？透過人物故事、生活類比與資料圖片，認識科學家與研究團隊的發現，理解已做到的事、可能的價值與證據的界線。",
+      "highlights": [
+        "同樣的原子，為甚麼能帶來不同氣味？",
+        "細小的分子偏向，怎樣越變越明顯？",
+        "深冰中的微光，怎樣帶來宇宙線索？",
+        "藻類的感光本領，怎樣變成研究神經細胞的工具？",
+        "光照怎樣讓細胞裏的小門打開？"
       ]
     }
   ],
   "originalContentPolicy": {
     "title": "參考事實，重新創作",
-    "summary": "官方資料只用來核對事實、能力目標與公共資訊。我們不直接複製官方文字、圖片、截圖、圖表或版式；表達形式重新創作，但來源中的事實、數字、範圍與原意不得改動。",
+    "summary": "課程以原創教學敘事、例子與活動呈現。資料圖片可在符合授權條件的情況下使用，並標明作者、來源與適用授權；引用時保留事實、數字、範圍與原意。",
     "rules": [
       "先記錄資料來源、發布日期、適用範圍與可核查事實，再開始教學轉化。",
       "不用改幾個字的方式仿寫原文；課程必須重新組織問題、敘事、例子與活動。",
-      "不下載或改造官方圖片；視覺以原創構圖、AI 生成或自行製作的圖表呈現。",
+      "採用資料照片或圖表前，核實作者、來源與使用授權，按條件標示出處；不把示意圖或生成畫面當作現場照片。",
       "AI 生成內容必須經人工核對，不把想像畫面當作歷史照片或事實證據。",
       "以 R 標示可核實事實、M 標示課堂模擬記錄、S 標示原創敘事情境；模擬記錄不得代表香港現況。",
       "健康、安全、法律、金融、政策與科學結論必須回到合適的一手來源，現實執行所缺的資料要標示為待查證。",
       "万里 AI 課堂為獨立教育項目，與所列機構不存在合作、認可或隸屬關係；頁面只描述「依據哪些資料研發」，不暗示任何政府部門或公共機構認可、推薦或背書課程。",
-      "外部資料僅用於事實核對和課程研究；課程文字、圖像及教學活動由本項目重新編寫與製作。外部資料可能隨時間更新，請以原機構最新公布為準。"
+      "課程文字與教學活動由本項目編寫；資料圖片按各自授權使用並標明出處。外部資料可能更新，請以原機構最新公布為準。"
     ]
   },
   "standardsAlignment": [

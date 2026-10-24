@@ -1,0 +1,85 @@
+{
+  "voice": "Sinji (macOS zh_HK)",
+  "rate": "175 wpm",
+  "actions": {
+    "nobel02-story-v4-speech-meet": {
+      "fingerprint": "a88538da731fc41d4f8504a2c0a5a151db78b83b99f91e1ae407ec4e5b7deac8",
+      "filename": "tts-sinji-nobel02-story-v4-speech-meet.mp3",
+      "audioSha256": "d4a373aea4edc315743c51c12ff239026aa25faa665c3a71f43bb41e41786f13",
+      "durationSeconds": 49.397551
+    },
+    "nobel02-story-v4-speech-path": {
+      "fingerprint": "90b26bf6abe921e6f88ceb77fa43274b7df7d230073e57a3c108d11e01d071fa",
+      "filename": "tts-sinji-nobel02-story-v4-speech-path.mp3",
+      "audioSha256": "ee4cacd8f0b41c170f9e7f957f1dfb92f3600aa4db0372ab652a0d2529a3b76e",
+      "durationSeconds": 43.833469
+    },
+    "nobel02-story-v4-speech-mirror": {
+      "fingerprint": "a00951cdfa2a677dda70da6882163297416ed7478da043a7465cc19f6eecb9c4",
+      "filename": "tts-sinji-nobel02-story-v4-speech-mirror.mp3",
+      "audioSha256": "fba19d8daa4765af7ea2e683612f1cb25a1a5da3195a2771a0c64f46df14beab",
+      "durationSeconds": 37.198367
+    },
+    "nobel02-story-v4-speech-question": {
+      "fingerprint": "75001e0e4285ce3f66ab0ff33ffd44be540208395d8428d39e204f542d71a425",
+      "filename": "tts-sinji-nobel02-story-v4-speech-question.mp3",
+      "audioSha256": "9cfefaf0a301ab1f4ce687356fb41e2bfb1317593ee36426028f8880aeac38e6",
+      "durationSeconds": 42.840816
+    },
+    "nobel02-story-v4-speech-analogy": {
+      "fingerprint": "4968f4214aa9fc8984104e8264bde3523cbd6571feabc81361272711b1e86771",
+      "filename": "tts-sinji-nobel02-story-v4-speech-analogy.mp3",
+      "audioSha256": "467d8224ac8d74ed404addb73cc809fe8b35f878268b4aefbfbda03bf451f71b",
+      "durationSeconds": 35.761633
+    },
+    "nobel02-story-v4-speech-lab": {
+      "fingerprint": "166e786234a99af4e290712015ee1a436a649361e9690512166fcb518370e534",
+      "filename": "tts-sinji-nobel02-story-v4-speech-lab.mp3",
+      "audioSha256": "e72501165f8152f88c2bd3de360e50dad7da02497ffa9501e65d7212d98980f8",
+      "durationSeconds": 40.96
+    },
+    "nobel02-story-v4-speech-first": {
+      "fingerprint": "626d98fe4c121034bc2f4e6123cfc85de195ac0ad93ae158066a86a8b3fd6f1c",
+      "filename": "tts-sinji-nobel02-story-v4-speech-first.mp3",
+      "audioSha256": "c203cca8eb256a652cc06a0c68883b50552d41ee349b0b4aa4aed0a4bf433b35",
+      "durationSeconds": 41.769796
+    },
+    "nobel02-story-v4-speech-number": {
+      "fingerprint": "41104d976329562bf572e74ee7d90471d1bb6660baf057f677df267ea0804d16",
+      "filename": "tts-sinji-nobel02-story-v4-speech-number.mp3",
+      "audioSha256": "dacafa12b5b652206260ac923cc57d16b943a9cc628cf63f5692254eb744f158",
+      "durationSeconds": 50.050612
+    },
+    "nobel02-story-v4-speech-award": {
+      "fingerprint": "12f3d8e2f3ceeff79d45efa991efddb9e841ae1969b33e2b07640c04af815a25",
+      "filename": "tts-sinji-nobel02-story-v4-speech-award.mp3",
+      "audioSha256": "01987220207d25b5f286d8a3fff98de932708b3d11a55410414e4a9b284fd65b",
+      "durationSeconds": 37.355102
+    },
+    "nobel02-story-v4-speech-ordinary": {
+      "fingerprint": "36c119619ba5b50e2d9f0b2cbca35c71ff36504ba0bad7b21d91a2252ec3b4b9",
+      "filename": "tts-sinji-nobel02-story-v4-speech-ordinary.mp3",
+      "audioSha256": "b83b92ff72087a55ea3ec739c3a571e0e15cb1e69e2d3cb713ca3278edf54b86",
+      "durationSeconds": 39.000816
+    },
+    "nobel02-story-v4-speech-origin": {
+      "fingerprint": "8e1dddb6d80db5cde18c2342689071469bfdd86984e0b12cd318102a2768d6e3",
+      "filename": "tts-sinji-nobel02-story-v4-speech-origin.mp3",
+      "audioSha256": "0f62f5798b6da8c67efb53e8455a7122bbef8f9c797a97c76359e398d3dafff5",
+      "durationSeconds": 39.053061
+    },
+    "nobel02-story-v4-speech-quiz": {
+      "fingerprint": "65c361ccc05c820c25c68aca5beda2c6afabbfa16505910772927cabc18540bf",
+      "filename": "tts-sinji-nobel02-story-v4-speech-quiz.mp3",
+      "audioSha256": "508ee3c5e6b41b3f28a456039eaf2da7679675e0759eccce7fe8c295dcb4ddc0",
+      "durationSeconds": 27.297959
+    },
+    "nobel02-story-v4-speech-ending": {
+      "fingerprint": "a90eff39a568a1aac4d4561717c0acfefe689945c0f4a7d13a1ab1ba41de50fa",
+      "filename": "tts-sinji-nobel02-story-v4-speech-ending.mp3",
+      "audioSha256": "ceb118b269abce6c3c7dde08b36086ff99eab512beb2324a6f8daafd5c2c1105",
+      "durationSeconds": 39.706122
+    }
+  },
+  "totalDurationSeconds": 524.225
+}

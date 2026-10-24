@@ -1,0 +1,79 @@
+{
+  "provider": "macOS say",
+  "voice": "Sinji (macOS zh_HK)",
+  "rate": "175 wpm",
+  "actions": {
+    "nobel03-story-v3-speech-meet": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-meet.mp3",
+      "audioSha256": "e3560502376728d164c9b84372f9922ebc57984aa2877f2e810fbe5c3da29b69",
+      "fingerprint": "5163acfad96fe4505db7250c67e339d15240d2e08e58b1e47549c3affbd02941",
+      "durationSeconds": 59.324082
+    },
+    "nobel03-story-v3-speech-mystery": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-mystery.mp3",
+      "audioSha256": "660052e9e6bd0dc049b43afcd8ba32b6224bc90d2297e80363be8485214c54ee",
+      "fingerprint": "328468f62034536b5acc32f5a4e0e39d476c46b41ee03df435bae0ee219f5b35",
+      "durationSeconds": 53.289796
+    },
+    "nobel03-story-v3-speech-elusive": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-elusive.mp3",
+      "audioSha256": "94e9839b43174baa13bb60192d62f91d7ba431fdc7d6b467650df62571c34c6d",
+      "fingerprint": "4769cd282494a906b1920788c911e82705f9946533d2c246a8bb4e887a8cd0fc",
+      "durationSeconds": 63.268571
+    },
+    "nobel03-story-v3-speech-idea": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-idea.mp3",
+      "audioSha256": "584385d33fd6e60786b722ad9abc829380974c901f34e3495ccbab14a7d64dcf",
+      "fingerprint": "eea0f24dbd08929aaf3b65a1109e88cbcbff80a14948ba349e2a76aef50ecaab",
+      "durationSeconds": 55.954286
+    },
+    "nobel03-story-v3-speech-setback": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-setback.mp3",
+      "audioSha256": "34b8fb7b31020237a277f9778d96149ee81c4e7fc8dfe5d37dc3ed3fad7884d4",
+      "fingerprint": "3e4ad6b6efe782b47dfb52e827a1a5991ed499af754eaf2a350bb5ee6c323770",
+      "durationSeconds": 65.724082
+    },
+    "nobel03-story-v3-speech-team": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-team.mp3",
+      "audioSha256": "f720a0beb698c538e24b282a57185402835e71bfef9b359a4018d10cef22122c",
+      "fingerprint": "80fc05793d0fe45085c853194647d0c9d266aa38667c7fb8bc1174b7e0889a2e",
+      "durationSeconds": 70.896327
+    },
+    "nobel03-story-v3-speech-clue": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-clue.mp3",
+      "audioSha256": "a1070a9fca438d8ac5306b66f2d780dd345d278f69c0b68368422bfb8ec0c3ff",
+      "fingerprint": "92248ce4581f2415058f3d3d797b0f12387a7973408a1c731a770ff4c8b5fdb1",
+      "durationSeconds": 55.170612
+    },
+    "nobel03-story-v3-speech-discovery": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-discovery.mp3",
+      "audioSha256": "515e1f98308e42980c082c0da11f8ec312b0c95796dbc8cae75802af14e89065",
+      "fingerprint": "a2570965720c56e5b9fab7207a7d1a80ab1f1dae9b28b1c492473b47388075ab",
+      "durationSeconds": 77.139592
+    },
+    "nobel03-story-v3-speech-followup": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-followup.mp3",
+      "audioSha256": "595396aa1d6cfc524243d941067c17824ff5840ae001b01323442c2505125e20",
+      "fingerprint": "1a07f7680deb8f7f71a155cee4bef42f7c6ae3bd61ae8b8056497e1455043d0f",
+      "durationSeconds": 54.334694
+    },
+    "nobel03-story-v3-speech-nobel": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-nobel.mp3",
+      "audioSha256": "2ace143a51850c01e39a0c2aa46d25dee0afc25fae3f0a6c9dbd93af377dd907",
+      "fingerprint": "cabba17e85d403ad2bf6e7796af0a742ba66cf2940c9d67c7951f5d51ac60ca8",
+      "durationSeconds": 66.089796
+    },
+    "nobel03-story-v3-speech-check": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-check.mp3",
+      "audioSha256": "1d42827630d953bc98667dce37d3a21a03c47d359c015a05e8a76162426f1af3",
+      "fingerprint": "7c484557269e826442d8bba6e7484e8334da81e5c14f171cf9f5a4b5788fecb6",
+      "durationSeconds": 55.092245
+    },
+    "nobel03-story-v3-speech-ending": {
+      "filename": "tts-sinji-nobel03-story-v3-speech-ending.mp3",
+      "audioSha256": "8c886462058511c7e0119cf072f7d3faa853fd31408326c05d4484929f6c3998",
+      "fingerprint": "2aa34d3b69185c97ebcac697de58d0736d04bbb99d4394f689c75f207dd44f5a",
+      "durationSeconds": 58.958367
+    }
+  }
+}

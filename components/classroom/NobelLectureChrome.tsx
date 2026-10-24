@@ -23,13 +23,25 @@ export function NobelLectureHeader({ title }: { title: string }) {
   </header>;
 }
 
-export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, playing, speech, muted, volume, interactionOpen, onInteractionToggle, onMute, onVolume, onSelect, onPrevious, onNext, onPlayPause, onFullscreen }: {
+export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, playing, speech, muted, volume, interactionOpen, onInteractionToggle, onHeightChange, onMute, onVolume, onSelect, onPrevious, onNext, onPlayPause, onFullscreen }: {
   muted: boolean; volume: number; onMute: () => void; onVolume: (volume: number) => void;
   scenes: Scene[]; currentSceneId: string | null; currentIndex: number; playing: boolean; speech: string;
   interactionOpen: boolean; onInteractionToggle: () => void;
+  onHeightChange?: (height: number) => void;
   onSelect: (id: string) => void | Promise<boolean>; onPrevious: () => void; onNext: () => void; onPlayPause: () => void; onFullscreen: () => void;
 }) {
   const l = useLabels();
+  const toolbarRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const toolbar = toolbarRef.current;
+    if (!toolbar || !onHeightChange) return;
+    const measure = () => onHeightChange(Math.ceil(toolbar.getBoundingClientRect().height));
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    observer?.observe(toolbar);
+    window.addEventListener('resize', measure);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', measure); };
+  }, [onHeightChange]);
   const [panel, setPanel] = useState<'contents' | 'script' | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const contentsRef = useRef<HTMLButtonElement>(null);
@@ -70,7 +82,7 @@ export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, play
         </div>
       </div>
     </div>}
-    <footer data-testid="lecture-toolbar" className="relative z-50 shrink-0 border-t border-slate-200 bg-white px-2 pb-[env(safe-area-inset-bottom)] dark:border-slate-700 dark:bg-slate-950">
+    <footer ref={toolbarRef} data-testid="lecture-toolbar" className="relative z-50 shrink-0 border-t border-slate-200 bg-white px-2 pb-[env(safe-area-inset-bottom)] dark:border-slate-700 dark:bg-slate-950">
       <div className="h-0.5 bg-slate-100 dark:bg-slate-800"><div className="h-full bg-teal-600 transition-[width]" style={{ width: `${((displayIndex + 1) / Math.max(scenes.length, 1)) * 100}%` }} /></div>
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-1 py-1 sm:py-2">
         <div className="flex items-center"><button ref={contentsRef} className={button} aria-haspopup="dialog" aria-expanded={panel === 'contents'} onClick={() => toggle('contents')}><List size={18} /><span>{l.contents}</span></button><span className="px-2 text-xs tabular-nums text-slate-500" aria-live="polite">{displayIndex + 1} / {scenes.length}</span></div>
