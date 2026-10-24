@@ -16,9 +16,20 @@ later build layer. This is not a code-compile failure and did not reach
 candidate smoke tests. The integration branch now has
 `Dockerfile.learner-vfs`, which puts install, package compilation and Next.js
 build in one filesystem-changing instruction while retaining the existing
-runtime image stage. Run `40109464296` at `a4717952` has passed workspace
-compilation, focused regressions and TypeScript, and is building that image;
-the result and speech checks are pending. No production resources changed.
+runtime image stage. Run `40109464296` at `a4717952` passed workspace
+compilation, focused regressions and TypeScript; its build and smoke result
+is recorded below. No production resources changed.
+
+Run `40109464296` at `a4717952` subsequently built the `linux/amd64` image
+`sha256:d40b3eb5…` without inode exhaustion. It froze 12 public lessons and
+282 media files; exact course/catalog/document SHA checks and 36/36 sampled
+narration Range responses passed in the temporary PostgreSQL-backed
+candidate. The next direct Edge TTS probe timed out while connecting from
+the candidate's custom Docker bridge, before the three-role HTTP speech check
+could run. The earlier independent 7.3.1 probe succeeded on the same runner's
+default bridge, so run `40111475982` at `3113af9b` tests a default-bridge,
+run-scoped PostgreSQL link without changing production networking. It is
+pending; no browser or production acceptance is inferred from the prior run.
 
 Run `40097123328` at `30e8b9d0` built and started the isolated PostgreSQL-backed
 candidate with the current 11 published lessons. Exact catalog/classroom
