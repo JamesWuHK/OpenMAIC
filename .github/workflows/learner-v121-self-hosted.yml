@@ -49,9 +49,11 @@ jobs:
           total_kib=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
           printf 'Available disk: %s KiB; available memory: %s KiB\n' "$available_kib" "$memory_kib"
           printf 'Total memory: %s KiB\n' "$total_kib"
-          if [ "${{ github.event_name }}" = workflow_dispatch ] && [ "${{ inputs.build }}" = true ]; then
-            test "$available_kib" -ge 20971520
+          if [ "${{ github.event_name }}" = workflow_dispatch ]; then
             test "$memory_kib" -ge 5242880
+            if [ "${{ inputs.build }}" = true ]; then
+              test "$available_kib" -ge 20971520
+            fi
           else
             test "$available_kib" -ge 2097152
           fi
@@ -72,10 +74,14 @@ jobs:
         run: |
           node --test tests/learner/release-media.test.mjs tests/learner/live-source-parity.test.mjs tests/learner/upgrade-parity.test.mjs
           pnpm exec vitest run tests/learner tests/api/classroom-media-range.test.ts tests/security/learner-boundary.test.ts
-          NODE_OPTIONS=--max-old-space-size=2048 pnpm exec tsc --noEmit
+          memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
+          test "$memory_kib" -ge 5242880
+          NODE_OPTIONS=--max-old-space-size=4096 pnpm exec tsc --noEmit
       - name: Build exact linux/amd64 learner image
         if: github.event_name == 'workflow_dispatch' && inputs.build
         run: |
+          memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
+          test "$memory_kib" -ge 5242880
           docker build --platform linux/amd64 --tag "$IMAGE_TAG" \
             --label "org.opencontainers.image.revision=$GITHUB_SHA" \
             --build-arg NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072 \
