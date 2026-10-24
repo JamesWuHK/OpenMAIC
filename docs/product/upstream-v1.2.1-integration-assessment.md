@@ -2,8 +2,32 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: upstream v1.2.1 merged into an isolated integration candidate at
-`5df42c13`; no candidate image build or production change.
+Status: upstream v1.2.1 merged into the isolated integration branch. Current
+candidate source is `b9bc5898f5579a75363d213a5cd0061d20d14229`; the
+cloud build has reached Docker image construction, but its final result is not
+yet verified. No candidate deployment or production Web-image change.
+
+## Cloud candidate verification (2026-10-24)
+
+The self-hosted `openmaic-cloud-linux` runner is available for an isolated
+`linux/amd64` build; it does not use a GitHub-hosted paid runner or AWS/model
+secrets. The workflow is `.github/workflows/learner-v121-self-hosted.yml` on
+`codex/upstream-v121-integration`. Run `40077092864` at the exact source above
+passed workspace-package compilation, 11 Node regression tests, 109 Vitest
+checks (one additional check skipped), and full TypeScript checking, then
+started Docker construction. GitHub's shared API returned HTTP 403 rate limit
+before the final Docker and isolated HTTP-smoke result could be read. **Do not
+infer a successful image from the started build.** The workflow's cleanup also
+removes its run-specific image, so even a successful run is build evidence, not
+a staged deployable artifact.
+
+The workflow mounts the repository's smaller sample learner catalog for its
+HTTP smoke. That smoke cannot establish preservation of the ten published
+classrooms or real lesson playback. On 2026-10-24 the read-only
+`qa-learner-live-source-parity.mjs` check was repeated against the current
+public site and the frozen `output/nobel-series-20261024-release/candidate`
+package: all 10 classroom JSON files, catalog IDs/order and site content still
+match. This protects the current baseline but is not a v1.2.1 acceptance test.
 
 ## Current learner release preservation gate (2026-10-24)
 
@@ -61,10 +85,11 @@ re-freeze the source first. Do not infer that this document authorizes
 production deployment. The Git checkout itself has only six metadata entries
 and no packaged classrooms; its content-publish preflight correctly fails.
 
-Current execution gaps: no usable online build runner was identified in this
-check (the connected remote device is offline, GitHub API queries are rate-limited,
-and local Docker is offline). A complete candidate build, browser checks, and release decision
-remain outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
+Current execution gaps: the cloud Docker build's final result is not yet
+verified because GitHub API queries are rate-limited. Candidate testing with
+the exact ten-classroom content mounts, real-browser playback/discussion,
+desktop/mobile checks, a durable image transfer, and a release decision remain
+outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
 the image's pinned 7.3.1 produced decodable Cantonese clips for all three
 classroom roles in isolated testing, not on the live site.
 The configured `wanli-lightsail-ops` identity is valid. Its single-instance
