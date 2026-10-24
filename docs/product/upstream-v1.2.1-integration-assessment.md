@@ -19,11 +19,12 @@ Status: assessment only; no merge or production change.
 3. **Local customizations:** conflicts cover `Dockerfile`, Compose, classroom and roundtable surfaces, PBL, TTS, settings, middleware and i18n. Resolving text conflicts alone cannot establish compatibility.
 4. **Published lessons:** classroom JSON, audio, media, learner catalog and teacher-submission queue require regression checks on actual public lesson routes; a successful build or HTTP 200 is insufficient.
 5. **Release candidate:** v1.3.0-rc.1 knowledge-base migrations prohibit mixed old/new instances and rollback below its material-pool boundary. Exclude it from this integration target.
+6. **Security priority:** upstream's model-authorization fix (`90b2d90b`, included in v1.2.1) spans server-managed provider resolution and many generation APIs. In this fork, `resolveModel` accepts a client model for an unrouted stage while reusing a server-managed provider key; `getServerProviders()` exposes a configured model list, but `resolveModel` does not enforce it. Treat this as a security review item for the learner API before any broader feature upgrade. Do not assume a direct cherry-pick is safe because the upstream fix depends on the new server-side model-configuration system.
 
 ## Integration sequence
 
 1. Keep the existing learner branch and dirty checkout untouched. Work only in this separate integration worktree.
-2. Prepare a compatibility layer for learner chat and deployment configuration before attempting an upstream merge. Identify which upstream security fixes are already covered locally and which need a focused backport.
+2. Review the model-authorization gap and prepare a focused, tested backport for the current learner API if it is exposed in the deployed configuration. Prepare a compatibility layer for learner chat and deployment configuration before attempting an upstream merge.
 3. Merge `v1.2.1` into this branch, resolve by subsystem, and run targeted checks before full build. Do not alter content or D01's paused status as a side effect.
 4. Build and test on an approved cloud runner, then validate public desktop/mobile playback, narration, discussion and teacher submissions in a non-production candidate.
 5. Production deployment requires a separate release decision, backup and rollback plan, and explicit approval.
