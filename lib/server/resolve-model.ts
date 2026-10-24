@@ -9,6 +9,7 @@ import type { NextRequest } from 'next/server';
 import { getModel, getProvider, parseModelString, type ModelWithInfo } from '@/lib/ai/providers';
 import type { ProviderType, ThinkingConfig } from '@/lib/types/provider';
 import {
+  getServerProviders,
   isServerConfiguredProvider,
   resolveApiKey,
   resolveBaseUrl,
@@ -30,6 +31,27 @@ export interface ResolvedModel extends ModelWithInfo {
   baseUrl?: string;
   /** Optional per-request thinking configuration from the client. */
   thinkingConfig?: ThinkingConfig;
+}
+
+/** Do not disclose a deployment's model catalogue in an authorization error. */
+export class ServerManagedModelNotAllowedError extends Error {
+  readonly code = 'PROVIDER_DISABLED';
+  readonly httpStatus = 403;
+
+  constructor() {
+    super('This model is not authorized for server-managed credentials');
+    this.name = 'ServerManagedModelNotAllowedError';
+  }
+}
+
+function isOperatorModelReference(
+  reference: string | undefined,
+  providerId: string,
+  modelId: string,
+): boolean {
+  if (!reference) return false;
+  const parsed = parseModelString(reference);
+  return parsed.providerId === providerId && parsed.modelId === modelId;
 }
 
 /**
@@ -84,6 +106,14 @@ export async function resolveModel(params: {
   // therefore applies only to unmanaged providers, where the base URL really is
   // client-supplied. (Server-configured URLs are trusted by the operator.)
   const managed = isServerConfiguredProvider('providers', providerId);
+  if (managed) {
+    const listedModels = getServerProviders()[providerId]?.models ?? [];
+    const authorized =
+      listedModels.includes(modelId) ||
+      isOperatorModelReference(stageModel, providerId, modelId) ||
+      isOperatorModelReference(process.env.DEFAULT_MODEL, providerId, modelId);
+    if (!authorized) throw new ServerManagedModelNotAllowedError();
+  }
   const registeredProviderType = getProvider(providerId)?.type;
   if (
     clientProviderType &&

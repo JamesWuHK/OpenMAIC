@@ -126,6 +126,20 @@ describe('POST /api/chat/pi model and thinking resolution', () => {
     expect(mocks.runPiDirectorLoop).not.toHaveBeenCalled();
   });
 
+  it('returns 403 before starting discussion when the managed model is not authorized', async () => {
+    mocks.resolveModel.mockRejectedValue(
+      Object.assign(new Error('This model is not authorized for server-managed credentials'), {
+        code: 'PROVIDER_DISABLED',
+      }),
+    );
+
+    const { POST } = await import('@/app/api/chat/pi/route');
+    const res = await POST(makeRequest(makeBody()));
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ errorCode: 'PROVIDER_DISABLED' });
+    expect(mocks.runPiDirectorLoop).not.toHaveBeenCalled();
+  });
+
   it('returns 400 for a malformed agentIds value before resolving a model', async () => {
     const body = makeBody();
     body.config.agentIds = 'default-1' as never;

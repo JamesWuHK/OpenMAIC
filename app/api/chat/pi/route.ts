@@ -292,6 +292,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'PROVIDER_DISABLED') {
+      return apiError('PROVIDER_DISABLED', 403, error.message);
+    }
     log.error(
       `Pi chat request failed [model=${chatModel ?? 'unknown'}, messages=${chatMessageCount ?? 0}]:`,
       error,

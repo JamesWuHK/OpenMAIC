@@ -55,6 +55,19 @@ describe('POST /api/verify-model', () => {
     expect(mocks.callLLM).not.toHaveBeenCalled();
   });
 
+  it('returns 403 before a provider call for a server-managed model denial', async () => {
+    mocks.resolveModel.mockRejectedValue(
+      Object.assign(new Error('This model is not authorized for server-managed credentials'), {
+        code: 'PROVIDER_DISABLED',
+      }),
+    );
+
+    const res = await postVerifyModel({ model: 'openai:unlisted-model' });
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ errorCode: 'PROVIDER_DISABLED' });
+    expect(mocks.callLLM).not.toHaveBeenCalled();
+  });
+
   it('uses the unified LLM wrapper with thinking disabled for connection checks', async () => {
     const res = await postVerifyModel({
       model: 'xiaomi:mimo-v2.5-pro',

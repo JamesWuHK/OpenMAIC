@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
       });
       languageModel = result.model;
     } catch (error) {
+      if (error instanceof Error && 'code' in error && error.code === 'PROVIDER_DISABLED') {
+        return apiError('PROVIDER_DISABLED', 403, error.message);
+      }
       return apiError(
         'INVALID_REQUEST',
         401,

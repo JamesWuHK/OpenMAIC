@@ -2,7 +2,13 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: assessment only; no merge or production change.
+Status: isolated integration candidate; no upstream merge or production change.
+
+## Candidate progress (2026-10-24)
+
+- A focused authorization guard now exists on this integration branch for `resolveModel`: a server-managed provider accepts only its operator-listed models, its operator-configured default, or the selected operator stage route. Unlisted client-selected models fail before the provider client is created.
+- Legacy classroom chat, Pi classroom chat and model verification translate that denial to HTTP 403. Targeted unit/route checks passed (152 tests across six files), as did changed-file ESLint and Prettier checks.
+- This is not the full upstream security advisory backport: media, speech and other provider paths have not been audited or changed here. It has not been built, deployed or browser-tested. The original checkout and live site remain untouched.
 
 ## Verified inputs
 

@@ -12,6 +12,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
   getModelCalls: [] as Array<Record<string, unknown>>,
   serverManaged: false,
+  allowedModels: [] as string[],
 }));
 
 vi.mock('@/lib/ai/providers', async (importOriginal) => {
@@ -26,6 +27,10 @@ vi.mock('@/lib/ai/providers', async (importOriginal) => {
 });
 
 vi.mock('@/lib/server/provider-config', () => ({
+  getServerProviders: () => ({
+    openai: { models: mocks.allowedModels },
+    bedrock: { models: mocks.allowedModels },
+  }),
   isServerConfiguredProvider: () => mocks.serverManaged,
   resolveApiKey: (_id: string, clientKey: string) => clientKey || 'server-key',
   resolveBaseUrl: (_id: string, clientBaseUrl?: string) => clientBaseUrl,
@@ -41,6 +46,7 @@ describe('resolveModel — per-stage resolution order', () => {
     vi.resetModules();
     mocks.getModelCalls.length = 0;
     mocks.serverManaged = false;
+    mocks.allowedModels = [];
     delete process.env.MODEL_ROUTES;
     delete process.env.DEFAULT_MODEL;
   });
@@ -156,6 +162,7 @@ describe('resolveModel — per-stage resolution order', () => {
 
   it('allows Bedrock after the server operator explicitly enables it', async () => {
     mocks.serverManaged = true;
+    mocks.allowedModels = ['us.anthropic.claude-sonnet-5'];
     const { resolveModel } = await import('@/lib/server/resolve-model');
     const result = await resolveModel({
       modelString: 'bedrock:us.anthropic.claude-sonnet-5',
@@ -166,6 +173,48 @@ describe('resolveModel — per-stage resolution order', () => {
       providerId: 'bedrock',
       modelId: 'us.anthropic.claude-sonnet-5',
     });
+  });
+
+  it('rejects an arbitrary client-selected model with a server-managed key', async () => {
+    mocks.serverManaged = true;
+    mocks.allowedModels = ['gpt-5.4-mini'];
+    const { resolveModel, ServerManagedModelNotAllowedError } =
+      await import('@/lib/server/resolve-model');
+
+    await expect(resolveModel({ modelString: 'openai:gpt-5.4' })).rejects.toBeInstanceOf(
+      ServerManagedModelNotAllowedError,
+    );
+    expect(mocks.getModelCalls).toHaveLength(0);
+  });
+
+  it('allows a client-selected model explicitly listed by the operator', async () => {
+    mocks.serverManaged = true;
+    mocks.allowedModels = ['gpt-5.4-mini'];
+    const { resolveModel } = await import('@/lib/server/resolve-model');
+
+    const resolved = await resolveModel({ modelString: 'openai:gpt-5.4-mini' });
+    expect(resolved.modelId).toBe('gpt-5.4-mini');
+  });
+
+  it('allows the configured default even without a model list', async () => {
+    mocks.serverManaged = true;
+    process.env.DEFAULT_MODEL = 'openai:gpt-5.4-mini';
+    const { resolveModel } = await import('@/lib/server/resolve-model');
+
+    const resolved = await resolveModel({ modelString: 'openai:gpt-5.4-mini' });
+    expect(resolved.modelId).toBe('gpt-5.4-mini');
+  });
+
+  it('allows the operator stage route but not the overridden client model', async () => {
+    mocks.serverManaged = true;
+    process.env.MODEL_ROUTES = JSON.stringify({ 'chat-adapter': 'openai:gpt-5.4-mini' });
+    const { resolveModel } = await import('@/lib/server/resolve-model');
+
+    const resolved = await resolveModel({
+      stage: 'chat-adapter',
+      modelString: 'openai:gpt-5.4',
+    });
+    expect(resolved.modelId).toBe('gpt-5.4-mini');
   });
 
   it('uses a scene-content:<type> route over the base route and x-model', async () => {
