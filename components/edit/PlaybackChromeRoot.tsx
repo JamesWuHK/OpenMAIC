@@ -1791,7 +1791,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           className={cn(
             lectureLayout
               ? classroomInteractionOpen
-                ? 'fixed inset-x-2 bottom-[calc(var(--nobel-toolbar-height)+12rem)] top-20 z-40 flex flex-col overflow-hidden sm:top-20 sm:left-auto sm:right-3 sm:bottom-[calc(var(--nobel-toolbar-height)+1rem)] sm:w-[min(360px,calc(100vw-1.5rem))]'
+                ? 'fixed inset-x-2 bottom-[calc(var(--nobel-toolbar-height)+12rem)] top-20 z-40 flex flex-col overflow-hidden sm:top-20 sm:left-auto sm:right-3 sm:w-[min(360px,calc(100vw-1.5rem))]'
                 : 'hidden'
               : 'flex shrink-0',
           )}
