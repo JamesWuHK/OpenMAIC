@@ -137,7 +137,7 @@ jobs:
         run: |
           memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
           test "$memory_kib" -ge 5242880
-          docker build --platform linux/amd64 --tag "$IMAGE_TAG" \
+          docker build --file Dockerfile.learner-vfs --platform linux/amd64 --tag "$IMAGE_TAG" \
             --label "org.opencontainers.image.revision=$GITHUB_SHA" \
             --build-arg NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072 \
             --build-arg OPENMAIC_BUILD_CPUS=1 \

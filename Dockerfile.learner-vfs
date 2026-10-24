@@ -1,0 +1,96 @@
+# syntax=docker/dockerfile:1
+
+# The self-hosted runner uses Docker's vfs driver. Keep dependency installation
+# and both builds in one filesystem-changing instruction: a new vfs layer after
+# pnpm install copies hundreds of thousands of small files and exhausts inodes.
+ARG NODE_IMAGE=node:22-alpine
+
+FROM ${NODE_IMAGE} AS builder
+
+ARG ALPINE_MIRROR=""
+ARG NPM_REGISTRY=""
+ARG ALLOWED_FRAME_ANCESTORS
+ARG NEXT_PUBLIC_PRO_WORKBENCH_ENABLED
+ARG NEXT_PUBLIC_MAIC_EDITOR_ENABLED
+ARG NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED
+ARG NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED
+ARG NEXT_PUBLIC_PI_CHAT_ENABLED
+ARG NEXT_PUBLIC_COURSEWARE_REFERENCE_ENABLED
+ARG NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI
+ARG NEXT_PUBLIC_ENABLE_VIDEO_EXPORT
+ARG NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION
+ARG NEXT_PUBLIC_ENABLE_PPTX_IMPORT
+ARG NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE
+ARG NEXT_BUILD_NODE_OPTIONS="--max-old-space-size=4096"
+ARG OPENMAIC_BUILD_CPUS=""
+
+ENV ALLOWED_FRAME_ANCESTORS=$ALLOWED_FRAME_ANCESTORS \
+    NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=$NEXT_PUBLIC_PRO_WORKBENCH_ENABLED \
+    NEXT_PUBLIC_MAIC_EDITOR_ENABLED=$NEXT_PUBLIC_MAIC_EDITOR_ENABLED \
+    NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=$NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED \
+    NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED=$NEXT_PUBLIC_MAIC_PLAYBACK_RENDERER_ENABLED \
+    NEXT_PUBLIC_COURSEWARE_REFERENCE_ENABLED=$NEXT_PUBLIC_COURSEWARE_REFERENCE_ENABLED \
+    NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=$NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI \
+    NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=$NEXT_PUBLIC_ENABLE_VIDEO_EXPORT \
+    NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION=$NEXT_PUBLIC_VIDEO_EXPORT_CTA_DESTINATION \
+    NEXT_PUBLIC_ENABLE_PPTX_IMPORT=$NEXT_PUBLIC_ENABLE_PPTX_IMPORT \
+    NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=$NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE \
+    OPENMAIC_BUILD_CPUS=$OPENMAIC_BUILD_CPUS
+
+WORKDIR /app
+
+RUN if [ -n "$ALPINE_MIRROR" ]; then \
+      sed -i "s|dl-cdn.alpinelinux.org|$ALPINE_MIRROR|g" /etc/apk/repositories; \
+    fi && \
+    apk add --no-cache libc6-compat python3 build-base g++ \
+      cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev && \
+    if [ -n "$NPM_REGISTRY" ]; then \
+      export COREPACK_NPM_REGISTRY="${NPM_REGISTRY%/}"; \
+    fi && \
+    corepack enable && corepack prepare pnpm@10.28.0 --activate
+
+COPY . .
+
+RUN if [ -n "$NPM_REGISTRY" ]; then \
+      pnpm config set registry "${NPM_REGISTRY%/}"; \
+    fi && \
+    pnpm install --frozen-lockfile --ignore-scripts && \
+    NODE_OPTIONS=--max-old-space-size=1024 pnpm run build:packages && \
+    rm -rf .next && \
+    NODE_OPTIONS="$NEXT_BUILD_NODE_OPTIONS" pnpm build
+
+FROM ${NODE_IMAGE} AS runner
+
+ARG ALPINE_MIRROR=""
+WORKDIR /app
+ENV NODE_ENV=production \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000
+
+RUN if [ -n "$ALPINE_MIRROR" ]; then \
+      cp /etc/apk/repositories /tmp/apk.repositories; \
+      sed -i "s|dl-cdn.alpinelinux.org|$ALPINE_MIRROR|g" /etc/apk/repositories; \
+    fi && \
+    apk add --no-cache libc6-compat cairo pango jpeg giflib librsvg && \
+    if [ -n "$ALPINE_MIRROR" ]; then \
+      mv /tmp/apk.repositories /etc/apk/repositories; \
+    fi
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+RUN apk add --no-cache python3 py3-pip && \
+    python3 -m venv /opt/edge-tts && \
+    /opt/edge-tts/bin/pip install --no-cache-dir edge-tts==7.3.1
+ENV TTS_EDGE_BIN=/opt/edge-tts/bin/edge-tts
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/content ./content
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+
+USER nextjs
+EXPOSE 3000
+CMD ["node", "server.js"]
