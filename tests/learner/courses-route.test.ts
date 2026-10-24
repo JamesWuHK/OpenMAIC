@@ -3,21 +3,13 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
   learner: true,
   listFilesystemPublishedCourses: vi.fn(),
-  listPublishedCourses: vi.fn(),
-  pool: { query: vi.fn() },
 }));
 
 vi.mock('@/lib/config/deployment-mode', () => ({
   isLearnerDeployment: () => mocks.learner,
 }));
-vi.mock('@/lib/persistence/server-provider', () => ({
-  getServerPersistenceProvider: async () => ({ pool: mocks.pool }),
-}));
 vi.mock('@/lib/learner/filesystem-public-courses', () => ({
   listFilesystemPublishedCourses: mocks.listFilesystemPublishedCourses,
-}));
-vi.mock('@/lib/learner/public-courses', () => ({
-  listPublishedCourses: mocks.listPublishedCourses,
 }));
 
 import { GET } from '@/app/api/learner/courses/route';
@@ -28,20 +20,13 @@ beforeEach(() => {
   vi.clearAllMocks();
   mocks.learner = true;
   process.env.DATABASE_URL = 'postgres://learner';
-  mocks.listPublishedCourses.mockResolvedValue([
-    {
-      id: 'course-1',
-      name: 'Hong Kong Stories',
-      createdAt: 1,
-      updatedAt: 2,
-      sceneCount: 8,
-      publishedAt: 3,
-    },
-  ]);
   mocks.listFilesystemPublishedCourses.mockResolvedValue([
     {
       id: 'filesystem-course',
       name: 'Filesystem Course',
+      language: 'zh-hk',
+      gradeRange: '小四至中一',
+      series: '香港 AI 素養',
       createdAt: 4,
       updatedAt: 5,
       sceneCount: 10,
@@ -51,7 +36,7 @@ beforeEach(() => {
 });
 
 describe('GET /api/learner/courses', () => {
-  it('returns the published course catalog without caching it', async () => {
+  it('preserves the explicit learner catalog and its labels with PostgreSQL configured', async () => {
     const response = await GET();
 
     expect(response.status).toBe(200);
@@ -59,24 +44,25 @@ describe('GET /api/learner/courses', () => {
     await expect(response.json()).resolves.toEqual({
       courses: [
         {
-          id: 'course-1',
-          name: 'Hong Kong Stories',
-          createdAt: 1,
-          updatedAt: 2,
-          sceneCount: 8,
-          publishedAt: 3,
+          id: 'filesystem-course',
+          name: 'Filesystem Course',
+          language: 'zh-hk',
+          gradeRange: '小四至中一',
+          series: '香港 AI 素養',
+          createdAt: 4,
+          updatedAt: 5,
+          sceneCount: 10,
+          publishedAt: 6,
         },
       ],
     });
-    expect(mocks.listPublishedCourses).toHaveBeenCalledExactlyOnceWith(mocks.pool);
-    expect(mocks.listFilesystemPublishedCourses).not.toHaveBeenCalled();
+    expect(mocks.listFilesystemPublishedCourses).toHaveBeenCalledOnce();
   });
 
   it('is absent from full authoring deployments', async () => {
     mocks.learner = false;
     const response = await GET();
     expect(response.status).toBe(404);
-    expect(mocks.listPublishedCourses).not.toHaveBeenCalled();
     expect(mocks.listFilesystemPublishedCourses).not.toHaveBeenCalled();
   });
 
@@ -89,6 +75,9 @@ describe('GET /api/learner/courses', () => {
         {
           id: 'filesystem-course',
           name: 'Filesystem Course',
+          language: 'zh-hk',
+          gradeRange: '小四至中一',
+          series: '香港 AI 素養',
           createdAt: 4,
           updatedAt: 5,
           sceneCount: 10,
@@ -96,7 +85,6 @@ describe('GET /api/learner/courses', () => {
         },
       ],
     });
-    expect(mocks.listPublishedCourses).not.toHaveBeenCalled();
     expect(mocks.listFilesystemPublishedCourses).toHaveBeenCalledOnce();
   });
 });

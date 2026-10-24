@@ -1,7 +1,5 @@
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
-import { listPublishedCourses } from '@/lib/learner/public-courses';
-import { getServerPersistenceProvider } from '@/lib/persistence/server-provider';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -11,12 +9,13 @@ export async function GET(): Promise<Response> {
     return new Response('Not found', { status: 404 });
   }
 
-  const connectionString = process.env.DATABASE_URL?.trim();
-  const courses = connectionString
-    ? await getServerPersistenceProvider(connectionString).then(({ pool }) =>
-        listPublishedCourses(pool),
-      )
-    : await listFilesystemPublishedCourses();
+  // The runtime catalog is the learner site's publication allowlist and the
+  // source of its reviewed language, age and series labels. PostgreSQL backs
+  // classroom playback after v1.2.1, but switching the catalog to stage_meta
+  // would hide file-imported lessons (private by default) and discard those
+  // labels. This preserves catalog publication only; classroom file updates
+  // still require a separate database import path before content-only release.
+  const courses = await listFilesystemPublishedCourses();
   return Response.json(
     { courses },
     {

@@ -60,9 +60,16 @@ describe('learner container configuration', () => {
 
   it('validates runtime course metadata before content-only publishing', async () => {
     const script = await readFile(`${root}/scripts/publish-learner-content.sh`, 'utf8');
+    const packageJson = JSON.parse(await readFile(`${root}/package.json`, 'utf8'));
     expect(script).toContain('pnpm validate:learner-content');
     expect(script.indexOf('pnpm validate:learner-content')).toBeLessThan(script.indexOf('rsync'));
     expect(script).not.toMatch(/docker\s+(?:build|compose|restart)/);
+    expect(packageJson.scripts['validate:learner-content']).toBe(
+      'tsx scripts/validate-learner-site-content.ts',
+    );
+    expect(packageJson.scripts['validate:learner-content:portable']).toBe(
+      'node scripts/validate-learner-content-contract.mjs',
+    );
   });
 
   it('documents the deployment mode without containing credentials', async () => {
