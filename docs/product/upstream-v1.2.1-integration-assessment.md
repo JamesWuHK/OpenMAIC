@@ -2,15 +2,33 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: upstream v1.2.1 merged into the isolated integration branch. The
-PostgreSQL-backed cloud candidate passed exact-content, narration Range and
-synthetic three-role speech HTTP checks with 12 published lessons. Desktop
-and 390px browser narration advanced, but the browser console gate found
-authoring-only requests and forbidden document writes. An isolated learner
-bootstrap fix is pending its own rebuild; discussion and production acceptance
-remain open. No candidate promotion or production service change.
+Status: upstream v1.2.1 merged into the isolated integration branch. Its
+PostgreSQL-backed cloud candidate passed exact-content, narration Range,
+synthetic three-role speech HTTP checks and desktop/390px Chromium narration
+playback with 12 published lessons and a clean browser console. A real
+model-backed discussion, whole-course interaction regression and production
+cutover acceptance remain open. No candidate promotion or production service
+change.
 
 ## Latest candidate status (2026-10-25 HKT)
+
+Run `40116098373` at `972086b1` completed successfully. Its focused Node
+checks passed 23/23, Vitest passed 111 checks (one skipped), TypeScript and
+the `linux/amd64` build passed. The image was
+`sha256:ef338df8269841bebc7c9d16e3f7bd0ba8c00c879d6c4cf45f10f7863da33e46`.
+The temporary candidate froze 12 public lessons and 282 media files; exact
+catalog/document hashes, 36/36 sampled narration Range responses, and
+site/catalog/classroom parity with live production all passed. Direct Edge
+TTS produced a 20,160-byte Cantonese MP3; synthetic teacher, assistant and
+student HTTP speech checks returned 20,160, 19,728 and 23,472 bytes in
+approximately 1.38, 1.30 and 1.13 seconds. In real Chromium, the desktop
+classroom narration advanced to 2.54 seconds, with HTTP 206 `audio/mpeg` and
+no horizontal overflow. At 390x844, narration also advanced and document
+scroll width was 375px. Browser console reported zero errors and zero
+warnings. This proves the candidate's representative browser playback and
+clean startup, **not** actual human listening, full discussion with a real
+model, every lesson interaction, or production readiness. The workflow
+removed its run-specific image, containers and frozen snapshot afterward.
 
 Run `40114723793` at `9a163d0c` built and passed the same isolated content,
 Range, direct Edge TTS and three-role speech HTTP gates. Its real Chromium
