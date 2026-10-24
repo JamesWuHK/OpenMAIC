@@ -30,7 +30,9 @@ function fixture(
           ? target.hostname === 'baseline.test'
             ? baselineSite
             : candidateSite
-          : documents[target.pathname];
+          : target.pathname === '/api/classroom'
+            ? documents[target.pathname]?.[target.searchParams.get('id')]
+            : documents[target.pathname];
     return value === undefined ? { ok: false, status: 404 } : { ok: true, json: async () => value };
   };
 }
@@ -43,6 +45,21 @@ test('accepts the same published catalog only when its classroom is loaded', asy
       '/api/persistence/documents/hk-lesson-1': {
         stage: { id: course.id },
         scenes: [{ id: 'one' }, { id: 'two' }],
+      },
+    }),
+  });
+  assert.deepEqual(result.errors, []);
+});
+
+test('accepts a candidate serving allowlisted lessons through the legacy classroom route', async () => {
+  const result = await checkLearnerUpgradeParity({
+    baselineUrl: 'https://baseline.test',
+    candidateUrl: 'https://candidate.test',
+    fetchImpl: fixture([course], {
+      '/api/classroom': {
+        [course.id]: {
+          classroom: { stage: { id: course.id }, scenes: [{ id: 'one' }, { id: 'two' }] },
+        },
       },
     }),
   });

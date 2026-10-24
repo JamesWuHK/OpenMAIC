@@ -21,7 +21,7 @@ infer a successful image from the started build.** The workflow's cleanup also
 removes its run-specific image, so even a successful run is build evidence, not
 a staged deployable artifact.
 
-The workflow mounts the repository's smaller sample learner catalog for its
+The original workflow run mounted the repository's smaller sample learner catalog for its
 HTTP smoke. That smoke cannot establish preservation of the ten published
 classrooms or real lesson playback. On 2026-10-24 the read-only
 `qa-learner-live-source-parity.mjs` check was repeated against the current
@@ -34,6 +34,17 @@ site it passed 30/30 audio clips across all 10 lessons. Its three unit tests
 also pass, including the legacy `/api/classroom` fallback. It must be run
 again against an exact-content v1.2.1 candidate; this public-baseline result
 does not establish candidate playback or audible browser output.
+The next isolated cloud-build workflow revision closes the sample-catalog gap:
+`freeze-public-learner-runtime.mjs` copies only the current public catalog,
+site content, ten allowlisted classroom documents and their referenced media
+into a run-specific temporary directory. It mounts those files read-only into
+the candidate container, keeps the candidate teacher-submission directory
+separate and writable, then runs catalog/series/document parity and the
+30-clip Range check. The first Docker run `40077092864` predates this revision
+and cannot be counted as exact-content QA. The new snapshot script and parity
+fallback passed 16 focused Node checks locally; no new cloud build has yet
+validated them. The workflow removes only its own run-specific container,
+image and snapshot, and does not alter the production mounts.
 
 ## Current learner release preservation gate (2026-10-24)
 

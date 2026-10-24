@@ -34,6 +34,7 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       IMAGE_TAG: wanli-learner-v121:${{ github.run_id }}-${{ github.sha }}
       CONTAINER_NAME: learner-v121-${{ github.run_id }}
+      CANDIDATE_ROOT: ${{ runner.temp }}/learner-v121-${{ github.run_id }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -72,7 +73,7 @@ jobs:
       - name: Learner regressions and TypeScript
         if: github.event_name == 'workflow_dispatch' && (inputs.checks || inputs.build)
         run: |
-          node --test tests/learner/release-media.test.mjs tests/learner/live-source-parity.test.mjs tests/learner/upgrade-parity.test.mjs tests/learner/candidate-audio.test.mjs
+          node --test tests/learner/release-media.test.mjs tests/learner/live-source-parity.test.mjs tests/learner/upgrade-parity.test.mjs tests/learner/candidate-audio.test.mjs tests/learner/freeze-public-runtime.test.mjs
           pnpm exec vitest run tests/learner tests/api/classroom-media-range.test.ts tests/security/learner-boundary.test.ts
           memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
           test "$memory_kib" -ge 5242880
@@ -94,6 +95,14 @@ jobs:
             --build-arg NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false \
             --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
           docker image inspect "$IMAGE_TAG" --format 'Image ID {{.Id}}; architecture {{.Architecture}}; source {{index .Config.Labels "org.opencontainers.image.revision"}}'
+      - name: Freeze current public classrooms for isolated candidate
+        if: github.event_name == 'workflow_dispatch' && inputs.build
+        run: |
+          mkdir "$CANDIDATE_ROOT"
+          LEARNER_QA_BASELINE_URL=https://class.wanli.ai \
+            node scripts/freeze-public-learner-runtime.mjs "$CANDIDATE_ROOT"
+          mkdir -p "$CANDIDATE_ROOT/data/teacher-submissions"
+          chmod 0777 "$CANDIDATE_ROOT/data/teacher-submissions"
       - name: Isolated HTTP smoke test
         if: github.event_name == 'workflow_dispatch' && inputs.build
         run: |
@@ -102,8 +111,12 @@ jobs:
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
             -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
             -e DEFAULT_MODEL=openai:gpt-4o-mini \
-            -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
-            -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
+            -e LEARNER_SITE_CONTENT_PATH=/app/content/learner/site-content.json \
+            -e LEARNER_PUBLISHED_COURSES_PATH=/app/content/learner/published-courses.json \
+            -v "$CANDIDATE_ROOT/data/classrooms:/app/data/classrooms:ro" \
+            -v "$CANDIDATE_ROOT/data/teacher-submissions:/app/data/teacher-submissions" \
+            -v "$CANDIDATE_ROOT/content/learner:/app/content/learner:ro" \
+            -v "$CANDIDATE_ROOT/content/learner/media:/app/public/learner/runtime:ro" \
             "$IMAGE_TAG"
           port=$(docker port "$CONTAINER_NAME" 3000/tcp | sed 's/.*://')
           for attempt in {1..30}; do
@@ -113,6 +126,11 @@ jobs:
           curl -fsS "http://127.0.0.1:$port/api/health" >/dev/null
           curl -fsS "http://127.0.0.1:$port/api/learner/courses" >/dev/null
           curl -fsS "http://127.0.0.1:$port/courses" >/dev/null
+          LEARNER_QA_BASELINE_URL=https://class.wanli.ai \
+            LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
+            node scripts/qa-learner-upgrade-parity.mjs
+          LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
+            node scripts/qa-learner-candidate-audio.mjs
       - name: Clean up only this run's candidate
         if: always() && github.event_name == 'workflow_dispatch' && inputs.build
         run: |
@@ -123,3 +141,9 @@ jobs:
           if docker image inspect "$IMAGE_TAG" >/dev/null 2>&1; then
             docker image rm "$IMAGE_TAG"
           fi
+          case "$CANDIDATE_ROOT" in
+            "$RUNNER_TEMP"/learner-v121-"$GITHUB_RUN_ID")
+              if [ -d "$CANDIDATE_ROOT" ]; then rm -r -- "$CANDIDATE_ROOT"; fi
+              ;;
+            *) echo 'Refusing unexpected candidate cleanup path' >&2; exit 1 ;;
+          esac

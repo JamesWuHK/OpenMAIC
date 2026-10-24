@@ -22,6 +22,17 @@ async function jsonAt(baseUrl, pathname, fetchImpl) {
   return response.json();
 }
 
+async function candidateClassroom(baseUrl, id, fetchImpl) {
+  const documentPath = `/api/persistence/documents/${encodeURIComponent(id)}`;
+  const response = await fetchImpl(new URL(documentPath, baseUrl), { cache: 'no-store' });
+  if (response.status === 404) {
+    const legacy = await jsonAt(baseUrl, `/api/classroom?id=${encodeURIComponent(id)}`, fetchImpl);
+    return legacy.classroom;
+  }
+  if (!response.ok) throw new Error(`${documentPath}: HTTP ${response.status}`);
+  return response.json();
+}
+
 /** Read-only parity check before replacing a learner deployment. */
 export async function checkLearnerUpgradeParity({ baselineUrl, candidateUrl, fetchImpl = fetch }) {
   const [baseline, candidate, baselineSite, candidateSite] = await Promise.all([
@@ -73,11 +84,7 @@ export async function checkLearnerUpgradeParity({ baselineUrl, candidateUrl, fet
       }
     }
     try {
-      const document = await jsonAt(
-        candidateUrl,
-        `/api/persistence/documents/${encodeURIComponent(course.id)}`,
-        fetchImpl,
-      );
+      const document = await candidateClassroom(candidateUrl, course.id, fetchImpl);
       if (document?.stage?.id !== course.id || !Array.isArray(document.scenes)) {
         errors.push(`${course.id}: candidate classroom document is malformed`);
       } else if (document.scenes.length !== course.sceneCount) {
