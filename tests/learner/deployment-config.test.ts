@@ -28,7 +28,7 @@ describe('learner container configuration', () => {
     expect(compose).not.toContain('render-service');
   });
 
-  it('provides a learner deployment with PostgreSQL and read-only classroom media', async () => {
+  it('keeps the student deployment database-free with read-only classroom media', async () => {
     const compose = await readFile(`${root}/docker-compose.learner-static.yml`, 'utf8');
     const caddyfile = await readFile(`${root}/deploy/Caddyfile`, 'utf8');
     expect(compose).toContain('NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: learner');
@@ -46,8 +46,8 @@ describe('learner container configuration', () => {
     expect(compose).toContain("'80:80'");
     expect(compose).toContain("'443:443'");
     expect(compose).not.toContain("'80:3000'");
-    expect(compose).toContain('postgres:');
-    expect(compose).toContain('learner_postgres:/var/lib/postgresql/data');
+    expect(compose).not.toContain('postgres:');
+    expect(compose).not.toContain('learner_postgres:');
     expect(compose).toContain('required: true');
     expect(compose).not.toContain('server-providers.yml');
     expect(caddyfile).toContain('class.wanli.ai');
@@ -90,8 +90,8 @@ describe('learner container configuration', () => {
 
   it('documents the deployment mode without containing credentials', async () => {
     const example = await readFile(`${root}/learner.env.example`, 'utf8');
-    expect(example).toContain('DATABASE_URL=');
-    expect(example).toContain('POSTGRES_PASSWORD=');
+    expect(example).not.toMatch(/^DATABASE_URL=/m);
+    expect(example).not.toMatch(/^POSTGRES_PASSWORD=/m);
     expect(example).not.toContain('PERSISTENCE_DEV_TOKEN=');
     expect(example).not.toMatch(/sk-[A-Za-z0-9]/);
   });

@@ -13,4 +13,4 @@ services:
         - NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false
     environment:
       - OPENMAIC_DEPLOYMENT_MODE=learner
-      # DATABASE_URL is provided by the private learner.env file.
+      # The public learner host reads its allowlisted courses from read-only mounts.

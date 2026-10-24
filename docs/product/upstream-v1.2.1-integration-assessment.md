@@ -46,6 +46,20 @@ fallback passed 16 focused Node checks locally; no new cloud build has yet
 validated them. The workflow removes only its own run-specific container,
 image and snapshot, and does not alter the production mounts.
 
+Read-only production inspection on 2026-10-24 found the running Lightsail
+student host has exactly `openmaic` and `caddy` services, with no
+`DATABASE_URL` or agent-runtime flag in `learner.env`. Its classroom and learner
+content mounts are read-only; teacher submissions use a separate writable
+mount. The Web container remains image `sha256:7e18dd23…`, restart count zero,
+with 8.6 GiB disk available and about 742 MiB memory available on a 1.9 GiB
+host. The integration branch's learner Compose had inadvertently acquired a
+PostgreSQL service; this is incompatible with the intended Web-only release
+lane and unnecessary for the mounted, student-only catalog. The learner
+Compose and example environment were restored to a database-free two-service
+shape; the authoring/agent-runtime stack is not changed. Compose resolves to
+`openmaic` and `caddy`, and the focused deployment-config tests pass 7/7.
+Production Compose, environment, services and mounts were not modified.
+
 ## Current learner release preservation gate (2026-10-24)
 
 The live `class.wanli.ai` site is the release baseline, not the six-course
