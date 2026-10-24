@@ -40,7 +40,7 @@ import {
 import type { LearnerCourseSummary, LearnerCourseTopic } from '@/lib/learner/public-courses';
 import type { LearnerSiteContent } from '@/lib/learner/site-content';
 import { cn } from '@/lib/utils';
-import { getFirstSlideByStages, revokeThumbnailSlideMediaUrls } from '@/lib/utils/stage-storage';
+import { getFirstSlideForStage, revokeThumbnailSlideMediaUrls } from '@/lib/utils/stage-storage';
 
 interface LearningRouteDefinition {
   readonly id: LearnerCourseTopic;
@@ -62,6 +62,10 @@ function routeForCourse(course: LearnerCourseSummary): LearningRouteDefinition {
   return LEARNING_ROUTES.find((route) => course.topics?.includes(route.id)) ?? LEARNING_ROUTES[0];
 }
 
+function revokeThumbnails(thumbnails: Record<string, Slide>) {
+  for (const slide of Object.values(thumbnails)) revokeThumbnailSlideMediaUrls(slide);
+}
+
 export function LearnerHome() {
   const router = useRouter();
   const { locale } = useI18n();
@@ -78,7 +82,7 @@ export function LearnerHome() {
     const previous = thumbnailRef.current;
     thumbnailRef.current = next;
     setThumbnails(next);
-    window.setTimeout(() => revokeThumbnailSlideMediaUrls(previous), 0);
+    window.setTimeout(() => revokeThumbnails(previous), 0);
   }, []);
 
   const loadCourses = useCallback(async () => {
@@ -98,7 +102,16 @@ export function LearnerHome() {
       const nextCourses = parseLearnerCourseResponse(await courseResponse.json());
       setSiteContent((await contentResponse.json()) as LearnerSiteContent);
       setCourses(nextCourses);
-      replaceThumbnails(await getFirstSlideByStages(nextCourses.map((course) => course.id)));
+      const results = await Promise.allSettled(
+        nextCourses.map((course) => getFirstSlideForStage(course.id)),
+      );
+      const nextThumbnails: Record<string, Slide> = {};
+      results.forEach((result, index) => {
+        if (result.status === 'fulfilled' && result.value) {
+          nextThumbnails[nextCourses[index]!.id] = result.value;
+        }
+      });
+      replaceThumbnails(nextThumbnails);
     } catch (error) {
       console.error('[LearnerHome] Failed to load courses', error);
       setFailed(true);
@@ -113,7 +126,7 @@ export function LearnerHome() {
   useEffect(() => {
     void loadCourses();
     return () => {
-      revokeThumbnailSlideMediaUrls(thumbnailRef.current);
+      revokeThumbnails(thumbnailRef.current);
       thumbnailRef.current = {};
     };
   }, [loadCourses]);

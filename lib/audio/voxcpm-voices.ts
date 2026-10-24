@@ -9,6 +9,7 @@ import {
   VOXCPM_TTS_PROVIDER_ID,
   getVoxCPMProfileIdFromVoiceId,
   getVoxCPMProfileVoiceId,
+  buildAutoVoxCPMVoicePrompt,
   voxCPMBackendSupportsVoiceRegistration,
   voxCPMPromptProviderOptions,
   type VoxCPMProviderOptions,
