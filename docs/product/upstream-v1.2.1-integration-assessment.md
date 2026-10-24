@@ -23,6 +23,7 @@ Recommended resolution order: server-managed model security and Pi chat; learner
 - Legacy classroom chat, Pi classroom chat and model verification translate that denial to HTTP 403. Targeted unit/route checks passed (152 tests across six files), as did changed-file ESLint and Prettier checks.
 - This is not the full upstream security advisory backport: authoring-mode media and speech provider paths remain unaddressed. It has not been built, deployed or browser-tested. The original checkout and live site remain untouched.
 - Both learner Compose variants now compile the existing Pi classroom chat path into the student bundle. This is an isolated configuration candidate only: the free OpenRouter model's tool-calling behavior, discussion audio latency, production browser flow and the upstream merge still require separate validation. The authoring Compose remains unchanged.
+- Pi model resolution now explicitly requires tool calling for the classroom discussion call site. A catalogue model marked `tools: false` fails before the agent loop with HTTP 400 `MODEL_CONFIG_INVALID`; other call sites are unchanged. Unknown capability, including a dynamic free-model router, is not treated as a denial. This mirrors the upstream fail-fast principle but does **not** establish that `openrouter/free` actually supplies a tool-capable model on a live request. Focused resolver, Pi-route and learner-config tests passed (41 checks); changed-file ESLint and Prettier checks passed.
 
 ### Learner-reachable provider audit
 

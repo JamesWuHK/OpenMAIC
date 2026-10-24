@@ -13,6 +13,7 @@ const mocks = vi.hoisted(() => ({
   getModelCalls: [] as Array<Record<string, unknown>>,
   serverManaged: false,
   allowedModels: [] as string[],
+  modelInfo: undefined as { capabilities?: { tools?: boolean } } | undefined,
 }));
 
 vi.mock('@/lib/ai/providers', async (importOriginal) => {
@@ -21,7 +22,7 @@ vi.mock('@/lib/ai/providers', async (importOriginal) => {
     ...actual,
     getModel: (args: Record<string, unknown>) => {
       mocks.getModelCalls.push(args);
-      return { model: { id: args.modelId }, modelInfo: undefined };
+      return { model: { id: args.modelId }, modelInfo: mocks.modelInfo };
     },
   };
 });
@@ -47,6 +48,7 @@ describe('resolveModel — per-stage resolution order', () => {
     mocks.getModelCalls.length = 0;
     mocks.serverManaged = false;
     mocks.allowedModels = [];
+    mocks.modelInfo = undefined;
     delete process.env.MODEL_ROUTES;
     delete process.env.DEFAULT_MODEL;
   });
@@ -215,6 +217,29 @@ describe('resolveModel — per-stage resolution order', () => {
       modelString: 'openai:gpt-5.4',
     });
     expect(resolved.modelId).toBe('gpt-5.4-mini');
+  });
+
+  it('rejects a catalogue model known not to support tools only when the caller requires them', async () => {
+    mocks.modelInfo = { capabilities: { tools: false } };
+    process.env.DEFAULT_MODEL = 'openai:gpt-5.4-mini';
+    const { resolveModel, ModelToolCallingRequiredError } =
+      await import('@/lib/server/resolve-model');
+
+    await expect(
+      resolveModel({ stage: 'chat-adapter', requireToolCalling: true }),
+    ).rejects.toBeInstanceOf(ModelToolCallingRequiredError);
+    await expect(resolveModel({ stage: 'quiz-grade' })).resolves.toMatchObject({
+      modelId: 'gpt-5.4-mini',
+    });
+  });
+
+  it('allows unknown tool capability for a dynamic classroom model router', async () => {
+    process.env.DEFAULT_MODEL = 'openrouter:openrouter/free';
+    const { resolveModel } = await import('@/lib/server/resolve-model');
+
+    await expect(
+      resolveModel({ stage: 'chat-adapter', requireToolCalling: true }),
+    ).resolves.toMatchObject({ modelId: 'openrouter/free' });
   });
 
   it('uses a scene-content:<type> route over the base route and x-model', async () => {

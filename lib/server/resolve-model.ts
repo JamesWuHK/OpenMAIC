@@ -44,6 +44,14 @@ export class ServerManagedModelNotAllowedError extends Error {
   }
 }
 
+/** A call site requires tools, but the configured model catalogue explicitly denies them. */
+export class ModelToolCallingRequiredError extends Error {
+  constructor() {
+    super('The classroom discussion model does not support tool calling');
+    this.name = 'ModelToolCallingRequiredError';
+  }
+}
+
 function isOperatorModelReference(
   reference: string | undefined,
   providerId: string,
@@ -69,6 +77,8 @@ export async function resolveModel(params: {
    * lib/server/model-routes.ts.
    */
   stage?: LlmStage;
+  /** Pi classroom discussion requires a tool-capable model. */
+  requireToolCalling?: boolean;
   apiKey?: string;
   baseUrl?: string;
   providerType?: string;
@@ -149,6 +159,11 @@ export async function resolveModel(params: {
     proxy,
     providerType: clientProviderType as ProviderType | undefined,
   });
+  // Unknown capability is not a denial: dynamic routers such as openrouter/free
+  // choose a concrete model per request and cannot be classified from this catalogue.
+  if (params.requireToolCalling && modelInfo?.capabilities?.tools === false) {
+    throw new ModelToolCallingRequiredError();
+  }
 
   // Thinking arbitration mirrors model routing — the route carries a full
   // ThinkingConfig (mode/effort/level/enabled/budgetTokens/…) which callLLM

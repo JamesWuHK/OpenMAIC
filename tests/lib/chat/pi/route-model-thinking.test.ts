@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock('@/lib/server/resolve-model', () => ({
   resolveModel: mocks.resolveModel,
+  ModelToolCallingRequiredError: class ModelToolCallingRequiredError extends Error {},
 }));
 
 vi.mock('@/lib/ai/providers', async (importOriginal) => {
@@ -140,6 +141,17 @@ describe('POST /api/chat/pi model and thinking resolution', () => {
     expect(mocks.runPiDirectorLoop).not.toHaveBeenCalled();
   });
 
+  it('returns a configuration error before starting discussion for a known non-tool model', async () => {
+    const { ModelToolCallingRequiredError } = await import('@/lib/server/resolve-model');
+    mocks.resolveModel.mockRejectedValue(new ModelToolCallingRequiredError());
+
+    const { POST } = await import('@/app/api/chat/pi/route');
+    const res = await POST(makeRequest(makeBody()));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toMatchObject({ errorCode: 'MODEL_CONFIG_INVALID' });
+    expect(mocks.runPiDirectorLoop).not.toHaveBeenCalled();
+  });
+
   it('returns 400 for a malformed agentIds value before resolving a model', async () => {
     const body = makeBody();
     body.config.agentIds = 'default-1' as never;
@@ -181,6 +193,7 @@ describe('POST /api/chat/pi model and thinking resolution', () => {
       expect.objectContaining({
         modelString: 'client:model',
         stage: 'chat-adapter',
+        requireToolCalling: true,
         apiKey: 'client-key',
         thinkingConfig: { enabled: true, level: 'high' },
       }),

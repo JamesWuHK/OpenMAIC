@@ -20,7 +20,7 @@ import {
 } from '@/lib/chat/pi/config';
 import { runPiDirectorLoop } from '@/lib/chat/pi/director-loop';
 import type { SendEvent } from '@/lib/chat/pi/types';
-import { resolveModel } from '@/lib/server/resolve-model';
+import { ModelToolCallingRequiredError, resolveModel } from '@/lib/server/resolve-model';
 import { apiError } from '@/lib/server/api-response';
 import type { ThinkingConfig } from '@/lib/types/provider';
 import type { StatelessChatRequest } from '@/lib/types/chat';
@@ -98,6 +98,7 @@ export async function POST(req: NextRequest) {
     } = await resolveModel({
       modelString: body.model,
       stage: 'chat-adapter',
+      requireToolCalling: true,
       apiKey: body.apiKey,
       baseUrl: body.baseUrl,
       providerType: body.providerType,
@@ -292,6 +293,13 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof ModelToolCallingRequiredError) {
+      return apiError(
+        'MODEL_CONFIG_INVALID',
+        400,
+        'Classroom discussion requires a model that supports tool calling.',
+      );
+    }
     if (error instanceof Error && 'code' in error && error.code === 'PROVIDER_DISABLED') {
       return apiError('PROVIDER_DISABLED', 403, error.message);
     }
