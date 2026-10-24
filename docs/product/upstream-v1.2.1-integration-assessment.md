@@ -8,7 +8,46 @@ synthetic three-role speech HTTP checks and desktop/390px Chromium narration
 playback with 12 published lessons and a clean browser console. A real
 model-backed discussion, whole-course interaction regression and production
 cutover acceptance remain open. No candidate promotion or production service
-change.
+image change; a separate production model-route repair is recorded below.
+
+## Production discussion repair, separate from the v1.2.1 cutover (2026-10-25 HKT)
+
+The existing production image remained `sha256:3cb7e1618906851847e12a4602611b233cb54915f7f9cba040d1f29067ab9181`.
+In a fresh public-browser session, the scene-7 discussion invitation appeared
+after narration, then auto-skipped after its existing five-second countdown.
+Joining within that window reproduced the reported immediate failure: `/api/chat`
+returned HTTP 200 but its SSE carried the classroom-unavailable error, and the
+UI ended discussion. Read-only container logs identified the cause: the configured
+`minimax/minimax-m3.1-flash:free` endpoint returned OpenRouter 404 because that
+free launch variant retired on 2026-10-22. A synthetic, non-student probe using
+the already configured server key confirmed that `openrouter/free` returned HTTP
+200 in 1.96 seconds. [OpenRouter documents](https://openrouter.ai/openrouter/free/providers)
+the free router as a random eligible free-model selector; this is availability
+recovery, not a fixed-model quality guarantee.
+
+A preflight asserted the precise old default, model list and both route names,
+then backed up only `/opt/openmaic-learner/learner.env` to the server's restricted
+`.rollback-model-config/learner-before-free-router-20261024T175732Z.env`.
+`DEFAULT_MODEL`, `OPENROUTER_MODELS`, `chat-adapter` and `pbl-v2-runtime` now
+resolve to `openrouter/free`; no key or other environment field was changed.
+Compose validation and a no-build, Web-only recreate passed, with the same
+image ID. The public health and course-list routes returned 200 and the list
+still contained 12 lessons. No course JSON, media, catalog, Caddy or database
+was changed. The repair is reversible using the server-only backup; rollback
+would restore the known-retired model, so it is only for a regression emergency.
+
+With synthetic student text on the existing production lesson, a new classroom
+turn stayed in discussion, `/api/chat` returned 200, the server produced a
+visible teacher reply, and seven `/api/learner/speech` responses returned 200.
+Browser media `playing` and `currentTime > 0.1` were observed for all seven;
+the explicit End Discussion button then closed the session. The first observed
+audio began about 16.9 seconds after sending: functional but high latency.
+The old failed discussion's error remained in the same browser's chat history;
+no new console error appeared after the route repair. This is one real-browser
+production smoke with synthetic text, not child-user testing, a full mobile
+discussion check, or validation of every free-routed model. The v1.2.1
+candidate remains unpromoted, and its own real-model discussion gate is still
+open.
 
 ## Latest candidate status (2026-10-25 HKT)
 
