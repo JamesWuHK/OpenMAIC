@@ -20,6 +20,17 @@ export function getEffectiveActions(allowedActions: string[], sceneType?: string
   );
 }
 
+/** Keep ordinary Nobel questions on the lecture page; drawing remains opt-in. */
+export function getConversationActions(
+  allowedActions: string[], sceneType?: string, stageId?: string, latestUserText = '',
+): string[] {
+  const actions = getEffectiveActions(allowedActions, sceneType);
+  const isNobelLecture = /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(stageId ?? '');
+  const drawingDeclined = /(?:不要|不用|別|别|唔好|毋須|毋须|不必|無需|无需)[^。！？.!?]{0,16}(?:白板|畫|画|繪|绘)|\b(?:do not|don't|no|without)\s+(?:use\s+)?(?:draw\w*|sketch\w*|(?:the\s+)?whiteboard)\b/i.test(latestUserText);
+  const requestsDrawing = !drawingDeclined && /(?:請|请|幫|帮|可以|能否|可否|麻煩|麻烦)[^。！？.!?]{0,12}(?:畫(?!面)|画(?!面)|繪|绘)|^\s*(?:畫(?!面)|画(?!面)|繪製|绘制)|(?:用|開|开|在)白板|\b(?:draw|sketch)\b|\bdrawing,?\s+please\b|\buse\s+(?:the\s+)?whiteboard\b/i.test(latestUserText);
+  return isNobelLecture && !requestsDrawing ? [] : actions;
+}
+
 // ==================== Text Descriptions ====================
 
 /**

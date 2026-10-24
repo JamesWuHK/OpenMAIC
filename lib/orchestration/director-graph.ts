@@ -36,7 +36,7 @@ import { buildStructuredPrompt } from './prompt-builder';
 import { summarizeConversation } from './summarizers/conversation-summary';
 import { convertMessagesToOpenAI } from './summarizers/message-converter';
 import { buildDirectorPrompt, parseDirectorDecision } from './director-prompt';
-import { getEffectiveActions } from './tool-schemas';
+import { getConversationActions } from './tool-schemas';
 import type { AgentTurnSummary, WhiteboardActionRecord } from './types';
 import { parseStructuredChunk, createParserState, finalizeParser } from './stateless-generate';
 import { createLogger } from '@/lib/logger';
@@ -275,7 +275,14 @@ async function runAgentGeneration(
     ? state.storeState.scenes.find((s) => s.id === state.storeState.currentSceneId)
     : undefined;
   const sceneType = currentScene?.type;
-  const effectiveActions = getEffectiveActions(agentConfig.allowedActions, sceneType);
+  const lastUserMessage = [...state.messages].reverse().find((message) => message.role === 'user');
+  const latestUserText = (lastUserMessage?.parts ?? [])
+    .filter((part) => part.type === 'text')
+    .map((part) => 'text' in part ? String(part.text) : '')
+    .join(' ');
+  const effectiveActions = getConversationActions(
+    agentConfig.allowedActions, sceneType, state.storeState.stage?.id, latestUserText,
+  );
 
   const discussionContext = state.discussionContext || undefined;
   const systemPrompt = buildStructuredPrompt(
@@ -285,6 +292,7 @@ async function runAgentGeneration(
     state.whiteboardLedger,
     state.userProfile || undefined,
     state.agentResponses,
+    effectiveActions,
   );
   const openaiMessages = convertMessagesToOpenAI(state.messages, agentId);
   const adapter = new AISdkLangGraphAdapter(state.languageModel, state.thinkingConfig ?? undefined);

@@ -130,13 +130,14 @@ export function buildStructuredPrompt(
   whiteboardLedger?: WhiteboardActionRecord[],
   userProfile?: { nickname?: string; bio?: string },
   agentResponses?: AgentTurnSummary[],
+  effectiveActionsOverride?: string[],
 ): string {
   // Determine current scene type for action filtering
   const currentScene = storeState.currentSceneId
     ? storeState.scenes.find((s) => s.id === storeState.currentSceneId)
     : undefined;
   const sceneType = currentScene?.type;
-  const effectiveActions = getEffectiveActions(agentConfig.allowedActions, sceneType);
+  const effectiveActions = effectiveActionsOverride ?? getEffectiveActions(agentConfig.allowedActions, sceneType);
   const hasSlideActions =
     effectiveActions.includes('spotlight') || effectiveActions.includes('laser');
 
@@ -147,8 +148,8 @@ export function buildStructuredPrompt(
     studentProfileSection: buildStudentProfileSection(userProfile),
     peerContext: buildPeerContextSection(agentResponses, agentConfig.name),
     languageConstraint: buildLanguageConstraint(storeState.stage?.languageDirective),
-    formatExample: hasSlideActions ? FORMAT_EXAMPLE_SLIDE : FORMAT_EXAMPLE_WB,
-    orderingPrinciples: hasSlideActions ? ORDERING_SLIDE : ORDERING_WB,
+    formatExample: effectiveActions.length === 0 ? '[{"type":"text","content":"Your natural speech to students"}]' : hasSlideActions ? FORMAT_EXAMPLE_SLIDE : FORMAT_EXAMPLE_WB,
+    orderingPrinciples: effectiveActions.length === 0 ? '- Reply using text objects only.' : hasSlideActions ? ORDERING_SLIDE : ORDERING_WB,
     spotlightExamples: hasSlideActions ? SPOTLIGHT_EXAMPLES : '',
     actionDescriptions: getActionDescriptions(effectiveActions),
     slideActionGuidelines: hasSlideActions ? SLIDE_ACTION_GUIDELINES : '',
@@ -156,7 +157,7 @@ export function buildStructuredPrompt(
     stateContext: buildStateContext(storeState),
     virtualWhiteboardContext: buildVirtualWhiteboardContext(storeState, whiteboardLedger),
     lengthGuidelines: buildLengthGuidelines(agentConfig.role),
-    whiteboardGuidelines: buildWhiteboardGuidelines(agentConfig.role),
+    whiteboardGuidelines: effectiveActions.some((action) => action.startsWith('wb_')) ? buildWhiteboardGuidelines(agentConfig.role) : '',
     discussionContextSection: buildDiscussionContextSection(discussionContext, agentResponses),
   };
 
@@ -164,10 +165,29 @@ export function buildStructuredPrompt(
   if (!prompt) {
     throw new Error('agent-system template not found');
   }
-  return prompt.system.replace(
+  let system = prompt.system.replace(
     BAD_EXAMPLES_HEADING,
     `${BAD_EXAMPLES_HEADING}\n${RAW_LATEX_BAD_EXAMPLE}`,
   );
+  if (!/^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(storeState.stage?.id ?? '')) return system;
+  if (effectiveActions.length === 0) {
+    // The shared template contains fixed whiteboard examples in addition to
+    // interpolated role guidance. Do not show unavailable tools as examples.
+    system = system
+      .replace(/### Good Examples\n[\s\S]*?(?=### Bad Examples)/,
+        '### Good Examples\n[{"type":"text","content":"這是一個幫助理解的比喻；實際研究仍有自己的條件和限制。"}]\n\n')
+      .replace(/## Whiteboard Guidelines\n[\s\S]*?(?=# Available Actions)/, '')
+      .replace(/## Action Usage Guidelines\n[\s\S]*?(?=# Responding to the User)/,
+        '## Action Usage Guidelines\nNo actions are available. Give a spoken explanation using text objects.\n\n');
+  }
+  return system + '\n\n# Ordinary Nobel lecture conversation\n' +
+    'Answer the learner directly with brief, natural Hong Kong traditional Chinese speech. ' +
+    'Use the course teaching notes; preserve scientist attribution and application limits. ' +
+    'An analogy request is a request for an explanation, not permission to replace the lesson with a whiteboard. ' +
+    (effectiveActions.length ? 'The learner requested drawing: available actions may support your spoken explanation. ' : 'No drawing actions are available this turn. Reply using text objects only; keep the lecture visible. ') +
+    'Return exactly a JSON array of text/action objects in the specified schema. ' +
+    'Never output native tool_call, arg_key or arg_value markup, tool instructions, or internal planning as speech. ' +
+    'Always give a meaningful spoken explanation; tools alone are not an answer.';
 }
 
 // ==================== Length Guidelines ====================

@@ -77,6 +77,24 @@ export interface ParseResult {
   ordered: Array<{ type: 'text'; index: number } | { type: 'action'; index: number }>;
 }
 
+/** Stop protocol residue before display, including a tag split across stream chunks.
+ * Keep an ambiguous trailing tag prefix buffered until it becomes ordinary prose
+ * or a control tag. Once control syntax starts, the rest is not spoken content.
+ */
+function visibleSpeechPrefix(content: string): string {
+  const tags = ['<tool_call', '</tool_call', '<function_call', '</function_call',
+    '<function_calls', '</function_calls', '<arg_key', '</arg_key', '<arg_value', '</arg_value'];
+  const lower = content.toLowerCase();
+  for (let index = lower.indexOf('<'); index !== -1; index = lower.indexOf('<', index + 1)) {
+    const tail = lower.slice(index);
+    if (tags.some((tag) => tag.startsWith(tail) ||
+      (tail.startsWith(tag) && /^[>\s=]/.test(tail.slice(tag.length))))) {
+      return content.slice(0, index);
+    }
+  }
+  return content;
+}
+
 /**
  * Emit a single parsed item into the result, returning updated segment indices.
  */
@@ -87,7 +105,7 @@ function emitItem(
   actionSegmentIndex: number,
 ): { textSegmentIndex: number; actionSegmentIndex: number } {
   if (item.type === 'text') {
-    const content = (item.content as string) || '';
+    const content = visibleSpeechPrefix(typeof item.content === 'string' ? item.content : '');
     if (content) {
       result.textChunks.push(content);
       // Use per-call array index (not cumulative segment index) so that
@@ -210,7 +228,7 @@ export function parseStructuredChunk(chunk: string, state: ParserState): ParseRe
       state.lastPartialTextLength > 0 &&
       item.type === 'text'
     ) {
-      const content = item.content || '';
+      const content = visibleSpeechPrefix(typeof item.content === 'string' ? item.content : '');
       const remaining = content.slice(state.lastPartialTextLength);
       if (remaining) {
         result.textChunks.push(remaining);
@@ -236,7 +254,7 @@ export function parseStructuredChunk(chunk: string, state: ParserState): ParseRe
   if (!isArrayClosed && parsed.length > completeUpTo) {
     const lastItem = parsed[parsed.length - 1];
     if (lastItem && typeof lastItem === 'object' && lastItem.type === 'text') {
-      const content = lastItem.content || '';
+      const content = visibleSpeechPrefix(typeof lastItem.content === 'string' ? lastItem.content : '');
       if (content.length > state.lastPartialTextLength) {
         result.textChunks.push(content.slice(state.lastPartialTextLength));
         state.lastPartialTextLength = content.length;
@@ -271,6 +289,11 @@ export function looksLikeStructuredFragment(raw: string): boolean {
   // brace-less truncated tails like `type":"text","content":"...`, but does NOT
   // fire on natural speech that merely mentions a JSON example mid-sentence,
   // e.g. `我们用对象 {"name":"树"} 表示一棵树。` — which must stay visible.
+  // Some compatible models return native tool syntax instead of the agreed
+  // JSON array. This is control data, never a student's plain-text answer.
+  if (/^<\/?(?:tool_call|function_calls?|arg_key|arg_value)(?:[>\s=])/i.test(trimmed)) {
+    return true;
+  }
   const hasSchemaKey =
     /^"?type"?\s*:\s*"(text|action)"/.test(trimmed) ||
     /^"(content|name|params|action_id)"\s*:/.test(trimmed);
@@ -344,6 +367,7 @@ export function finalizeParser(state: ParserState): ParseResult {
   }
 
   const pushText = (value: string) => {
+    value = visibleSpeechPrefix(value);
     if (!value) return;
     result.textChunks.push(value);
     result.ordered.push({ type: 'text', index: result.textChunks.length - 1 });
