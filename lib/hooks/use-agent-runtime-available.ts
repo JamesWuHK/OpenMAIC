@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 let availableCache: boolean | null = null;
 let availableProbe: Promise<boolean> | null = null;
@@ -43,6 +44,7 @@ function probeAgentRuntimeAvailable(): Promise<boolean> {
 export function useAgentRuntimeAvailable(): boolean {
   const [available, setAvailable] = useState(availableCache === true);
   useEffect(() => {
+    if (isLearnerDeployment()) return;
     let cancelled = false;
     void probeAgentRuntimeAvailable().then((value) => {
       if (!cancelled) setAvailable(value);
@@ -51,5 +53,5 @@ export function useAgentRuntimeAvailable(): boolean {
       cancelled = true;
     };
   }, []);
-  return available;
+  return isLearnerDeployment() ? false : available;
 }

@@ -5,6 +5,7 @@ import { AccessCodeModal } from '@/components/access-code-modal';
 import { importLegacyModelSettings } from '@/components/model-settings-init';
 import { modelSettingsClient } from '@/lib/model-settings/client';
 import { reloadAgentRegistry } from '@/lib/orchestration/registry/store';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 export function AccessCodeGuard({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<{
@@ -51,6 +52,7 @@ export function AccessCodeGuard({ children }: { children: ReactNode }) {
           onSuccess={() => {
             setStatus((s) => ({ ...s, authenticated: true }));
             setGrantedCount((n) => n + 1);
+            if (isLearnerDeployment()) return;
             // Model settings are read on mount, which on an ACCESS_CODE-gated
             // deployment is before any access cookie exists: the middleware
             // answers 401 and nothing is known about the workspace's models

@@ -7,6 +7,7 @@
  * what to ask for (browser speech runs in the browser, for instance).
  */
 import { MODEL_SLOTS, type SlotId } from '@/lib/config/model-slots';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 import {
   findSlot,
@@ -172,6 +173,9 @@ export function currentModelCapabilities(
 export async function loadModelCapabilities(
   client: ModelSettingsClient = modelSettingsClient,
 ): Promise<ModelCapabilities> {
+  // The learner host deliberately hides workspace model settings and keys.
+  // Let the server-side classroom route validate its own configured model.
+  if (isLearnerDeployment()) return modelCapabilities(null);
   const state = client.getState();
   if (
     state.phase === 'idle' ||
@@ -198,6 +202,7 @@ const retries = new WeakMap<
  * view that was read is kept through later failures.
  */
 export function ensureModelSettings(client: ModelSettingsClient = modelSettingsClient): void {
+  if (isLearnerDeployment()) return;
   const state = client.getState();
   if (state.phase === 'idle') {
     void client.load();

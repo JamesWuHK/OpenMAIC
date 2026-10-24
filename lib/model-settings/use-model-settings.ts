@@ -4,6 +4,7 @@ import { useEffect, useMemo, useSyncExternalStore } from 'react';
 
 import { ensureModelSettings, modelCapabilities, type ModelCapabilities } from './capabilities';
 import { modelSettingsClient, type ModelSettingsClient, type ModelSettingsView } from './client';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 /**
  * The workspace model settings, read from the server when the component
@@ -12,6 +13,7 @@ import { modelSettingsClient, type ModelSettingsClient, type ModelSettingsView }
 export function useModelSettings(client: ModelSettingsClient = modelSettingsClient) {
   const state = useSyncExternalStore(client.subscribe, client.getState, client.getState);
   useEffect(() => {
+    if (isLearnerDeployment()) return;
     void client.load();
   }, [client]);
   return { state, apply: client.apply, reload: client.load };

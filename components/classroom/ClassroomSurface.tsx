@@ -123,7 +123,11 @@ export function ClassroomSurface({
           applyGeneratedAgents: defaultClassroomLoadDeps.applyGeneratedAgents,
           getSettings: () => useSettingsStore.getState(),
           getAgent: (id) => useAgentRegistry.getState().getAgent(id),
-          agentsReady: defaultClassroomLoadDeps.agentsReady,
+          // Published learner courses use built-in and document-embedded
+          // agents. The owner-custom-agent API is intentionally absent here.
+          agentsReady: classroomPolicy.forceReadOnly
+            ? async () => true
+            : defaultClassroomLoadDeps.agentsReady,
           restoreAgentSelection: defaultClassroomLoadDeps.restoreAgentSelection,
           setError,
           setLoading: (nextLoading) => {

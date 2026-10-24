@@ -4,11 +4,28 @@ Date: 2026-10-24 (Asia/Hong_Kong)
 
 Status: upstream v1.2.1 merged into the isolated integration branch. The
 PostgreSQL-backed cloud candidate passed exact-content, narration Range and
-synthetic three-role speech HTTP checks with 12 published lessons. Real-browser
-playback/discussion and production acceptance remain open. No candidate
-promotion or production service change.
+synthetic three-role speech HTTP checks with 12 published lessons. Desktop
+and 390px browser narration advanced, but the browser console gate found
+authoring-only requests and forbidden document writes. An isolated learner
+bootstrap fix is pending its own rebuild; discussion and production acceptance
+remain open. No candidate promotion or production service change.
 
 ## Latest candidate status (2026-10-25 HKT)
+
+Run `40114723793` at `9a163d0c` built and passed the same isolated content,
+Range, direct Edge TTS and three-role speech HTTP gates. Its real Chromium
+check loaded `hk-a01-02-leaf-classifier`: desktop narration advanced to 3.06s,
+the selected MP3 returned HTTP 206 `audio/mpeg`, and there was no desktop
+overflow. At 390x844, narration also advanced and document scroll width was
+375px. **The browser gate failed**, correctly, because the learner UI still
+requested authoring-only `/api/model-config`, `/api/agents` and
+`/api/agent/runtime` (middleware returned intentional 404s), and queued
+course-document writes to `/api/persistence/documents/.../stage` (also blocked
+on the read-only learner host). These are integration defects, not a media
+decoding failure. The candidate was cleaned up. The next branch revision skips
+authoring initialization and course-document writes in learner mode while
+keeping the authoring endpoints blocked and learner runtime persistence
+available; it requires focused tests and a fresh candidate browser run.
 
 Run `40113064471` at `c2925542` completed successfully on the isolated
 self-hosted runner. The `linux/amd64` image was

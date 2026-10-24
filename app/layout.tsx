@@ -83,9 +83,9 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <I18nProvider initialLocale={locale} initialResources={resources}>
-            <ModelSettingsInit />
-            <AgentRegistryInit />
-            <ProSwapWatcher />
+            {!learnerDeployment && <ModelSettingsInit />}
+            {!learnerDeployment && <AgentRegistryInit />}
+            {!learnerDeployment && <ProSwapWatcher />}
             <AccessCodeGuard>{children}</AccessCodeGuard>
             <Toaster position="top-center" />
             {/* After the Toaster: this one raises a toast on mount when

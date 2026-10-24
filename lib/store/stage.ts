@@ -34,6 +34,7 @@ import {
   stageDeletionSettled,
 } from '@/lib/utils/deleted-stages';
 import { isBrowserStorageUnavailable } from '@/lib/utils/browser-storage-health';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 const log = createLogger('StageStore');
 
@@ -176,6 +177,15 @@ const DOCUMENT_CHANGE_KINDS = new Set<PendingChange['kind']>([
 
 function markPendingChanges(stageId: string | undefined, ...changes: PendingChange[]): void {
   if (!stageId || isStageDeleted(stageId)) return;
+  if (isLearnerDeployment()) {
+    // The published document is immutable on the learner host. PBL progress
+    // belongs to the separate learner runtime; no course-document save may
+    // be queued from playback or navigation.
+    for (const change of changes) {
+      if (change.kind === 'scene') syncLearnerRuntime(stageId, change.sceneId);
+    }
+    return;
+  }
   if (isServerGeneratingStage(stageId)) {
     for (const change of changes) {
       if (change.kind !== 'scene') continue;
@@ -884,6 +894,7 @@ const useStageStoreBase = create<StageState>()((set, get) => ({
   // durability (e.g. setGenerationComplete) can avoid recording state that
   // outruns the scene data.
   saveToStorage: async () => {
+    if (isLearnerDeployment()) return false;
     if (isBrowserStorageUnavailable()) return false;
     const { stage, scenes, currentSceneId, chats, chatSnapshot, outlines, generationComplete } =
       get();
