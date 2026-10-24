@@ -21,6 +21,7 @@ import {
   isSeriesLessonOpen,
 } from '@/lib/learner/series-experience';
 import { readLearnerSiteContent } from '@/lib/learner/site-content.server';
+import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
 
 interface SeriesPageProps {
   readonly params: Promise<{ readonly slug: string }>;
@@ -64,6 +65,12 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     .map((sourceId) => content.sources.find((source) => source.id === sourceId))
     .filter((source) => source !== undefined);
   const experienceHref = getSeriesExperienceHref(series);
+  const isNobelLecture = series.slug === 'nobel-curiosity-lab';
+  const publishedLessons = isNobelLecture
+    ? (await listFilesystemPublishedCourses())
+        .filter((course) => series.liveCourseIds?.includes(course.id))
+        .sort((a, b) => (a.lessonNumber ?? 0) - (b.lessonNumber ?? 0))
+    : [];
 
   return (
     <LearnerPageShell>
@@ -130,7 +137,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             {[
               [Clock3, `${series.lessonCount} 課`, series.minutesPerLesson],
               [Target, '適合年級', series.audience],
-              [BookOpenCheck, '最後作品', series.finalArtifact],
+              [BookOpenCheck, isNobelLecture ? '學習收穫' : '最後作品', series.finalArtifact],
               [Languages, '授課語言', series.languages.join(' · ')],
             ].map(([Icon, label, value]) => (
               <div key={label as string} className="min-h-36 bg-[#0b2340]/90 p-5">
@@ -168,7 +175,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             <div className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#e65f43] dark:text-[#ff9c83]">
               Why this course
             </div>
-            <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">課程設計重點</h2>
+            <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">{isNobelLecture ? '你會發現甚麼？' : '課程設計重點'}</h2>
             <div className="mt-6 space-y-4">
               {series.highlights?.map((highlight) => (
                 <div
@@ -204,15 +211,47 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
         </div>
         <div className="rounded-[1.75rem] border border-[#174b80]/10 bg-[#f7fbff] p-7 dark:border-white/10 dark:bg-[#0d1d31]">
           <div className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#1847d6] dark:text-[#71dce5]">
-            Make something
+            {isNobelLecture ? 'Understand the discovery' : 'Make something'}
           </div>
-          <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">不是看完，是做出來</h2>
+          <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">
+            {isNobelLecture ? '聽懂發現，看見科學的意義' : '不是看完，是做出來'}
+          </h2>
           <p className="mt-5 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
-            系列以「{series.finalArtifact}」收束。AI 老師負責講清楚，AI 助教提供分級提示，AI
-            同學帶來不同觀點；最後的判斷與作品由學生完成。
+            {isNobelLecture ? (
+              <>從熟悉的生活現象出發，跟隨科學家的探索，聽懂研究背後的想法。你可以隨時暫停、重聽，或用理解題看看自己掌握了甚麼。</>
+            ) : (
+              <>系列以「{series.finalArtifact}」收束。AI 老師負責講清楚，AI 助教提供分級提示，AI 同學帶來不同觀點；最後的判斷與作品由學生完成。</>
+            )}
           </p>
         </div>
       </section>
+
+      {isNobelLecture && publishedLessons.length > 0 ? (
+        <section className="pt-16" aria-labelledby="published-lessons-title">
+          <h2 id="published-lessons-title" className="text-3xl font-black tracking-[-0.05em]">
+            開始探索
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
+            選擇你最想了解的發現，開始今天的科學旅程。
+          </p>
+          <ol className="mt-6 grid gap-5 md:grid-cols-2">
+            {publishedLessons.map((course) => (
+              <li key={course.id} className="rounded-2xl border border-[#174b80]/15 bg-white p-6 dark:border-white/15 dark:bg-[#0d1d31]">
+                <p className="text-sm font-bold text-[#1847d6] dark:text-[#71dce5]">
+                  第 {course.lessonNumber} 課
+                </p>
+                <h3 className="mt-2 text-xl font-black">{course.name}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#607994] dark:text-[#91a9c0]">
+                  {course.description}
+                </p>
+                <Link href={`/classroom/${course.id}`} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1847d6] px-5 py-3 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35d7e1]">
+                  進入第 {course.lessonNumber} 課 <ArrowRight className="size-4" />
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
 
       {series.lessons?.length ? (
         <section className="pt-16" aria-labelledby="lesson-outline-title">
@@ -286,7 +325,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             這個系列依據什麼？
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[#607994] dark:text-[#91a9c0]">
-            下列資料只作事實核對與課程設計依據。課程文字、例子、角色、圖像與互動均重新創作，不代表相關機構參與製作或認可本課程。
+            {isNobelLecture ? '想進一步了解這些發現，可以閱讀以下資料。課內的資料圖片另標作者、來源及授權；引用不代表原機構認可本課程。' : '下列資料只作事實核對與課程設計依據。課程文字、例子、角色、圖像與互動均重新創作，不代表相關機構參與製作或認可本課程。'}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

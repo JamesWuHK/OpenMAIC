@@ -19,6 +19,7 @@ import { useElementRefsStore } from '@/lib/store/element-refs';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { portfolioReply } from '@/lib/learner/c02-portfolio-bridge.mjs';
 import { d01PortfolioReply } from '@/lib/learner/d01-portfolio-bridge.mjs';
+import { nobelPortfolioReply } from '@/lib/learner/nobel-portfolio-bridge.mjs';
 import {
   ELEMENT_REF_SELECTOR_MAX,
   ELEMENT_SNAPSHOT_MAX,
@@ -184,7 +185,8 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
         sceneId, window.location.pathname, {
           getItem: storage.getItem,
           setItem: storage.setItem,
-        }) ?? d01PortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage);
+        }) ?? d01PortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage)
+        ?? nobelPortfolioReply(event, frameWindow, sceneId, window.location.pathname, storage);
       if (reply) frameWindow?.postMessage(reply, '*');
     };
     window.addEventListener('message', receive);
@@ -254,7 +256,12 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
 
   const rect = entry.rect;
   const clip = entry.clip ?? rect;
-  const viewport = rect ? fitGenUiViewport(rect) : null;
+  // Nobel components are authored as responsive documents with their own
+  // scrolling, rather than fixed 16:9 canvases. Preserve legacy course sizing.
+  const responsiveDocument = sceneId.startsWith('nobel01-');
+  const viewport = rect
+    ? responsiveDocument ? { box: rect, scale: 1 } : fitGenUiViewport(rect)
+    : null;
   const visibleViewport = viewport && clip ? intersectClientBoxes(viewport.box, clip) : null;
   // Require a real measured box before showing — a null or zero-size rect means
   // the slot hasn't laid out yet; showing then would flash a 0x0 iframe pinned
@@ -285,8 +292,8 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
     position: 'absolute',
     left: viewport && visibleViewport ? viewport.box.left - visibleViewport.left : 0,
     top: viewport && visibleViewport ? viewport.box.top - visibleViewport.top : 0,
-    width: GENUI_LOGICAL_WIDTH,
-    height: GENUI_LOGICAL_HEIGHT,
+    width: responsiveDocument ? rect?.width ?? 0 : GENUI_LOGICAL_WIDTH,
+    height: responsiveDocument ? rect?.height ?? 0 : GENUI_LOGICAL_HEIGHT,
     border: 0,
     transform: `scale(${viewport?.scale ?? 0})`,
     transformOrigin: 'top left',

@@ -43,6 +43,7 @@ export interface DiscussionRequest {
 }
 
 interface RoundtableProps {
+  readonly startInputOpen?: boolean;
   readonly mode?: 'playback' | 'autonomous';
   readonly initialParticipants?: Participant[];
   readonly playbackView?: PlaybackView; // Centralised derived state from Stage
@@ -152,6 +153,7 @@ function VoiceWaveformBars({ barClassName }: { readonly barClassName: string }) 
 
 export function Roundtable({
   mode: _mode = 'autonomous',
+  startInputOpen = false,
   initialParticipants = [],
   playbackView,
   currentSpeech,
@@ -227,6 +229,10 @@ export function Roundtable({
   const nonPresentationInputRef = useRef<HTMLTextAreaElement>(null);
   const agentScrollRef = useRef<HTMLDivElement>(null);
   const bubbleScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (startInputOpen) setIsInputOpen(true);
+  }, [startInputOpen]);
   const teacherAvatarRef = useRef<HTMLDivElement>(null);
   const studentAvatarRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const userMessageClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1159,7 +1165,7 @@ export function Roundtable({
         {/* Left: Teacher identity */}
         <div
           className={cn(
-            'w-[90px] shrink-0 flex flex-col border-r border-gray-100/50 dark:border-gray-700/50 bg-white/40 dark:bg-gray-900/40 overflow-visible relative transition-opacity duration-300',
+            'w-[56px] sm:w-[90px] shrink-0 flex flex-col border-r border-gray-100/50 dark:border-gray-700/50 bg-white/40 dark:bg-gray-900/40 overflow-visible relative transition-opacity duration-300',
             isPresenting && !controlsVisible && 'opacity-0 pointer-events-none',
           )}
         >
@@ -1212,7 +1218,7 @@ export function Roundtable({
 
                     <span
                       className={cn(
-                        'max-w-[80px] truncate px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90',
+                        'max-w-[52px] sm:max-w-[80px] truncate px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90',
                         activeRole === 'teacher' && !speakingStudent
                           ? 'text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-700'
                           : 'text-gray-400 dark:text-gray-500 border-gray-100 dark:border-gray-700 group-hover:text-purple-500 dark:group-hover:text-purple-400 group-hover:border-purple-200 dark:group-hover:border-purple-600',
@@ -1284,7 +1290,7 @@ export function Roundtable({
         </div>
 
         {/* Center: Interaction stage */}
-        <div className="flex-1 relative mx-3 mb-2">
+        <div className="flex-1 min-w-0 relative mx-1 sm:mx-3 mb-2">
           {/* End flash banner (Issue 3) */}
           <AnimatePresence>
             {endFlashVisible && (
@@ -1319,7 +1325,7 @@ export function Roundtable({
                 if (isRecording || isProcessing) cancelRecording();
               }
             }}
-            className="relative w-full h-full rounded-[2.5rem] bg-gradient-to-b from-white/40 to-white/80 dark:from-gray-800/40 dark:to-gray-800/80 backdrop-blur-xl border border-white/50 dark:border-gray-700/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05),inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col justify-center px-6 overflow-hidden group transition-all duration-700 cursor-default"
+            className="relative w-full h-full rounded-[2.5rem] bg-gradient-to-b from-white/40 to-white/80 dark:from-gray-800/40 dark:to-gray-800/80 backdrop-blur-xl border border-white/50 dark:border-gray-700/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05),inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col justify-center px-2 sm:px-6 overflow-hidden group transition-all duration-700 cursor-default"
           >
             {elementReferencePill && (
               <div className="absolute left-1/2 top-2 z-30 -translate-x-1/2">{referencePill}</div>
@@ -1660,7 +1666,7 @@ export function Roundtable({
                         onPlayPause?.();
                       }}
                       className={cn(
-                        'relative px-4 pt-2 pb-3 rounded-2xl text-[15px] leading-relaxed transition-all border w-[min(420px,calc(100%-3rem))] group/bubble flex flex-col max-h-[110px]',
+                        'relative px-4 pt-2 pb-3 rounded-2xl text-[15px] leading-relaxed transition-all border w-full sm:w-[min(420px,calc(100%-3rem))] group/bubble flex flex-col max-h-[110px]',
                         bubbleRole === 'teacher' ? 'pl-4 pr-10' : 'pl-4 pr-10',
                         bubbleRole === 'user'
                           ? 'bg-purple-600/95 dark:bg-purple-500/95 backdrop-blur-sm border-purple-400/40 dark:border-purple-300/40 text-white rounded-br-sm shadow-md shadow-purple-300/30 dark:shadow-purple-800/30'
@@ -1863,7 +1869,7 @@ export function Roundtable({
         {/* Right: Participants area */}
         <div
           className={cn(
-            'w-[140px] shrink-0 flex flex-col py-3 border-l border-gray-100/50 dark:border-gray-700/50 bg-gray-50/30 dark:bg-gray-900/30 overflow-visible transition-opacity duration-300',
+            'w-[72px] sm:w-[140px] shrink-0 flex flex-col py-3 border-l border-gray-100/50 dark:border-gray-700/50 bg-gray-50/30 dark:bg-gray-900/30 overflow-visible transition-opacity duration-300',
             isPresenting && !controlsVisible && 'opacity-0 pointer-events-none',
           )}
         >

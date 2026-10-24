@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { expect, test } from '@playwright/test';
@@ -129,4 +129,52 @@ test('teacher submission explains the review gate before generation', async ({ p
   await expect(page.getByRole('heading', { name: '把你的教案，變成一節會互動的課' })).toBeVisible();
   await expect(page.getByText(/每一份投稿都先由人審核/)).toBeVisible();
   await expect(page.getByRole('button', { name: '提交審核' })).toBeVisible();
+});
+
+test('Nobel lecture question control opens a private, age-appropriate Q&A panel', async ({ page }) => {
+  const courses = [
+    'hk-nobel-01-kagan-lecture-v4',
+    'hk-nobel-02-soai-lecture-v4',
+    'hk-nobel-03-halzen-lecture-v3',
+    'hk-nobel-04-deisseroth-lecture-v2',
+    'hk-nobel-05-hegemann-lecture-v1',
+  ];
+
+  await page.route('**/api/classroom?id=*', async (route) => {
+    const id = new URL(route.request().url()).searchParams.get('id');
+    if (!id || !courses.includes(id)) {
+      await route.continue();
+      return;
+    }
+    const fixture = await readFile(
+      path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', `${id}.json`),
+      'utf8',
+    );
+    await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
+  });
+
+  for (const id of courses) {
+    await page.goto(`/classroom/${id}`);
+    const questionButton = page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ });
+    await expect(questionButton).toBeVisible();
+    await questionButton.click();
+    await expect(questionButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(questionButton).toHaveAttribute('aria-controls', 'nobel-classroom-interaction');
+
+    const interactionPanel = page.locator('#nobel-classroom-interaction');
+    await expect(interactionPanel).toBeVisible();
+    await expect(interactionPanel.getByRole('note')).toContainText(/AI/);
+    await expect(interactionPanel.getByRole('note')).toContainText(/this lesson|本课|本課/i);
+    await expect(interactionPanel.getByRole('note')).toContainText(/health|健康/i);
+
+    const questionInput = page
+      .getByTestId('roundtable-non-presentation-input-stage')
+      .getByRole('textbox');
+    await expect(questionInput).toBeVisible();
+    await expectNoDocumentOverflow(page);
+
+    await questionButton.click();
+    await expect(questionButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(questionInput).toBeHidden();
+  }
 });

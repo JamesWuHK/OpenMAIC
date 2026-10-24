@@ -19,6 +19,7 @@ import { SceneSidebar } from '@/components/stage/scene-sidebar';
 import { Header } from '@/components/header';
 import { CanvasArea } from '@/components/canvas/canvas-area';
 import { Roundtable } from '@/components/roundtable';
+import { NobelLectureHeader, NobelLectureToolbar } from '@/components/classroom/NobelLectureChrome';
 import { PlaybackEngine, computePlaybackView, shouldAutoResumeLecture } from '@/lib/playback';
 import type { EngineMode, TriggerEvent, Effect } from '@/lib/playback';
 import {
@@ -127,7 +128,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     },
     ref,
   ) {
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const {
       mode,
       stage,
@@ -142,6 +143,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     const generationComplete = useStageStore.use.generationComplete();
 
     const currentScene = getCurrentScene();
+    const lectureLayout = isLearnerDeployment() && /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(stage?.id ?? '');
     const piChatEnabled = isPiChatEnabled();
     const [elementPickActive, setElementPickActive] = useState(false);
     const [draftElementReference, setDraftElementReferenceState] =
@@ -214,6 +216,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     const [isPresenting, setIsPresenting] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
     const [isPresentationInteractionActive, setIsPresentationInteractionActive] = useState(false);
+    const [classroomInteractionOpen, setClassroomInteractionOpen] = useState(false);
 
     // Whiteboard state (from canvas store so AI tools can open it)
     const whiteboardOpen = useCanvasStore.use.whiteboardOpen();
@@ -1208,16 +1211,23 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
       const currentIndex = scenes.findIndex((s) => s.id === currentSceneId);
       if (currentIndex < scenes.length - 1) {
         void gatedSceneSwitch(scenes[currentIndex + 1].id);
-      } else if (canAdvanceToPendingSlot) {
+      } else if (canAdvanceToPendingSlot && !lectureLayout) {
         // On last real scene → advance to pending slot (generating or completion page)
         void gatedSceneSwitch(PENDING_SCENE_ID);
       }
-    }, [currentSceneId, gatedSceneSwitch, canAdvanceToPendingSlot, isPendingScene, scenes]);
+    }, [currentSceneId, gatedSceneSwitch, canAdvanceToPendingSlot, isPendingScene, scenes, lectureLayout]);
 
     const currentSceneIndex = isPendingScene
       ? scenes.length
       : scenes.findIndex((s) => s.id === currentSceneId);
     const totalScenesCount = scenes.length + (canAdvanceToPendingSlot ? 1 : 0);
+    useEffect(() => {
+      // A lecture ends on its final courseware page. Recover old completion
+      // cursors rather than exposing the general classroom completion tools.
+      if (lectureLayout && isPendingScene && scenes.length) {
+        void gatedSceneSwitch(scenes[scenes.length - 1].id);
+      }
+    }, [lectureLayout, isPendingScene, scenes, gatedSceneSwitch]);
     const showElementReference = piChatEnabled && mode === 'playback';
     const canPickSlideElement = Boolean(
       showElementReference &&
@@ -1318,6 +1328,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     useEffect(() => {
       const onKeyDown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) return;
+        if (lectureLayout && event.key !== 'Escape' && event.target instanceof Element && event.target.closest('button, a, [role="dialog"]')) return;
         // Let modifier-key combos (Ctrl+C, Ctrl+S, etc.) pass through to the browser
         if (event.ctrlKey || event.metaKey || event.altKey) return;
         if (
@@ -1390,6 +1401,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     }, [
       chatSessionType,
       chatAreaCollapsed,
+      lectureLayout,
       handleNextScene,
       handlePlayPause,
       handlePreviousScene,
@@ -1451,7 +1463,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     // when entering Pro mode.
     const sceneViewerHeight = (() => {
       const headerHeight = isPresenting || hideHeader ? 0 : 80;
-      const roundtableHeight = mode === 'playback' && !isPresenting ? 192 : 0;
+      const roundtableHeight = mode === 'playback' && !isPresenting && !lectureLayout ? 192 : 0;
       return `calc(100% - ${headerHeight + roundtableHeight}px)`;
     })();
 
@@ -1463,20 +1475,21 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           isPresenting && !controlsVisible && 'cursor-none',
         )}
       >
-        <SceneSidebar
+        {!lectureLayout && <SceneSidebar
           collapsed={sidebarCollapsed}
           onCollapseChange={setSidebarCollapsed}
           onSceneSelect={gatedSceneSwitch}
           onRetryOutline={onRetryOutline}
           isCourseComplete={isCourseComplete}
-        />
+        />}
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0 relative">
           {/* Header — playback only. The Pro Switch fires `onEnterProMode`
             (passed by the parent Stage) which awaits our `teardown()`
             before the parent flips mode to 'edit'. */}
-          {!isPresenting && !hideHeader && (
+          {lectureLayout && !isPresenting && <NobelLectureHeader title={stage?.name ?? ''} />}
+          {!lectureLayout && !isPresenting && !hideHeader && (
             <Header
               currentSceneTitle={
                 currentScene?.title ||
@@ -1542,7 +1555,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
               onToggleElementPick={handleToggleElementPick}
               onPickElement={handlePickElement}
               onCancelElementPick={() => setElementPickActive(false)}
-              hideToolbar={mode === 'playback' || (isPresenting && !controlsVisible)}
+              hideToolbar={lectureLayout || mode === 'playback' || (isPresenting && !controlsVisible)}
               isPendingScene={isPendingScene}
               isCourseComplete={isCourseComplete}
               isGenerationFailed={
@@ -1556,17 +1569,44 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             />
           </div>
 
+          {lectureLayout && (
+            <NobelLectureToolbar
+              scenes={scenes}
+              currentSceneId={currentSceneId}
+              currentIndex={currentSceneIndex}
+              playing={canvasEngineState === 'playing'}
+              speech={currentScene?.actions?.filter((a): a is SpeechAction => a.type === 'speech').map((a) => a.text).join('\n\n') || ''}
+              muted={ttsMuted}
+              volume={ttsVolume}
+              onMute={() => setTTSMuted(!ttsMuted)}
+              onVolume={setTTSVolume}
+              onSelect={gatedSceneSwitch}
+              onPrevious={handlePreviousScene}
+              onNext={handleNextScene}
+              onPlayPause={handlePlayPause}
+              onFullscreen={togglePresentation}
+              interactionOpen={classroomInteractionOpen}
+              onInteractionToggle={() => {
+                const nextOpen = !classroomInteractionOpen;
+                setClassroomInteractionOpen(nextOpen);
+                if (nextOpen) chatAreaRef.current?.switchToTab('chat');
+              }}
+            />
+          )}
           {/* Roundtable Area */}
-          {mode === 'playback' && (
+          {mode === 'playback' && (!lectureLayout || classroomInteractionOpen) && (
             <div
               className={cn(
                 'transition-opacity duration-300',
                 !isPresenting && 'shrink-0',
                 isPresenting && 'absolute inset-x-0 bottom-0 z-20',
+                lectureLayout && 'absolute inset-x-0 bottom-16 z-30',
               )}
+              data-testid={lectureLayout ? 'nobel-classroom-interaction' : undefined}
             >
               <Roundtable
                 mode={mode}
+                startInputOpen={lectureLayout && classroomInteractionOpen}
                 initialParticipants={participants}
                 playbackView={playbackView}
                 currentSpeech={liveSpeech}
@@ -1701,7 +1741,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                 scenesCount={totalScenesCount}
                 whiteboardOpen={whiteboardOpen}
                 sidebarCollapsed={sidebarCollapsed}
-                chatCollapsed={chatAreaCollapsed}
+                chatCollapsed={lectureLayout ? true : chatAreaCollapsed}
                 onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
                 onToggleChat={() => setChatAreaCollapsed(!chatAreaCollapsed)}
                 onPrevSlide={handlePreviousScene}
@@ -1736,13 +1776,36 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
         {/* Chat Area — playback / autonomous always renders it here; Pro
           (edit) mode unmounts this whole PlaybackChromeRoot, so the
           edit branch has no chat. */}
-        <div className="flex shrink-0">
+        <div
+          id={lectureLayout ? 'nobel-classroom-interaction' : undefined}
+          className={cn(
+            lectureLayout
+              ? classroomInteractionOpen
+                ? 'fixed inset-x-2 bottom-[calc(16rem+env(safe-area-inset-bottom))] top-20 z-40 flex flex-col overflow-hidden sm:inset-y-20 sm:left-auto sm:right-3 sm:bottom-20 sm:w-[min(360px,calc(100vw-1.5rem))]'
+                : 'hidden'
+              : 'flex shrink-0',
+          )}
+          aria-hidden={lectureLayout && !classroomInteractionOpen || undefined}
+        >
+          {lectureLayout && classroomInteractionOpen && (
+            <div className="shrink-0 border-b border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100" role="note">
+              {locale === 'en-US'
+                ? 'Ask about this lesson only. AI tutor replies are AI-generated and can be wrong. Do not share your or someone else’s name, school, phone, health information, or other personal information. For health or personal concerns, tell a teacher, parent, or another trusted adult.'
+                : locale === 'zh-CN'
+                  ? '请围绕本课提问。AI 助教的回答由人工智能生成，可能不准确。请勿输入你或他人的姓名、学校、电话、健康相关信息或其他个人信息。如有健康或个人困扰，请告诉老师、家长或其他可信任的大人。'
+                  : '請圍繞本課提問。AI 助教的回答由人工智能生成，可能不準確。請勿輸入你或他人的姓名、學校、電話、健康相關資訊或其他個人資料。如有健康或個人困擾，請告訴老師、家長或其他你信任的大人。'}
+            </div>
+          )}
           <ChatArea
             ref={chatAreaRef}
+            className={lectureLayout ? 'h-full min-h-0 flex-1 !w-full' : undefined}
             width={chatAreaWidth}
             onWidthChange={setChatAreaWidth}
-            collapsed={chatAreaCollapsed}
-            onCollapseChange={setChatAreaCollapsed}
+            collapsed={lectureLayout ? !classroomInteractionOpen : chatAreaCollapsed}
+            onCollapseChange={(collapsed) => {
+              if (lectureLayout) setClassroomInteractionOpen(!collapsed);
+              else setChatAreaCollapsed(collapsed);
+            }}
             activeBubbleId={activeBubbleId}
             onActiveBubble={(id) => setActiveBubbleId(id)}
             currentSceneId={currentSceneId}
