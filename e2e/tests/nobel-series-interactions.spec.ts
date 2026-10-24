@@ -85,7 +85,11 @@ async function selectScene(page: Page, scene: Scene) {
 const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 async function openCourse(page: Page, course: Course) {
-  await page.addInitScript(() => localStorage.setItem('locale', 'zh-TW'));
+  await page.addInitScript(() => {
+    // Init scripts also run in sandboxed course iframes, whose opaque origins
+    // must not access storage. Set only the top-level learner preference.
+    if (window.top === window) localStorage.setItem('locale', 'zh-TW');
+  });
   // This is the classroom loader's actual network response, not a separate
   // request that could pass while the UI renders stale browser storage.
   const loadedCourse = page.waitForResponse((response) => {
@@ -112,12 +116,19 @@ async function languageMenu(page: Page) {
   await header.getByRole('button', { name: '繁', exact: true }).click();
   await expect(page.getByRole('menuitem')).toHaveText(['繁體中文', '简体中文', 'English']);
   await page.getByRole('menuitem', { name: 'English', exact: true }).click();
+  // Radix retains its closing content for the exit animation. Wait for actual
+  // unmount before reopening, so the next trigger click cannot race the close.
+  await expect(page.locator('[role="menu"]')).toHaveCount(0);
   await expect(toolbar(page).getByRole('button', { name: 'Contents', exact: true })).toBeVisible();
   await header.getByRole('button', { name: 'EN', exact: true }).click();
+  await expect(page.getByRole('menu')).toBeVisible();
   await page.getByRole('menuitem', { name: '简体中文', exact: true }).click();
+  await expect(page.locator('[role="menu"]')).toHaveCount(0);
   await expect(toolbar(page).getByRole('button', { name: '目录', exact: true })).toBeVisible();
   await header.getByRole('button', { name: '简', exact: true }).click();
+  await expect(page.getByRole('menu')).toBeVisible();
   await page.getByRole('menuitem', { name: '繁體中文', exact: true }).click();
+  await expect(page.locator('[role="menu"]')).toHaveCount(0);
   await expect(toolbar(page).getByRole('button', { name: '目錄', exact: true })).toBeVisible();
 }
 
@@ -128,11 +139,56 @@ async function playRealNarration(page: Page, scene: Scene) {
   await toolbar(page).getByRole('button', { name: '播放講解', exact: true }).click();
   const response = await responsePromise;
   expect(response.headers()['content-type']).toMatch(/audio|octet-stream/);
-  // Observe standard media properties only; do not drive the playback engine or
-  // synthesize ended events. Advancing currentTime proves actual browser decode.
-  await expect.poll(() => page.evaluate((expectedPath) => window.__nobelQAMedia.some((audio) => {
-    return new URL(audio.currentSrc || audio.src, location.href).pathname === expectedPath && audio.readyState >= 2 && audio.currentTime > 0.15 && !audio.paused;
-  }), audioPath!), { timeout: 20_000 }).toBe(true);
+  const transportBytes = await response.body();
+  expect(transportBytes.byteLength, 'Real mounted narration HTTP body must contain audio bytes').toBeGreaterThan(0);
+  let completeBytes = transportBytes;
+  if (response.status() === 206) {
+    // Direct media elements may make range requests. Obtain a real full HTTP
+    // body and also prove the observed range equals its declared byte slice.
+    const fullResponse = await page.request.get(audioPath!, { headers: { Range: '' } });
+    expect(fullResponse.status()).toBe(200);
+    completeBytes = await fullResponse.body();
+    const range = response.headers()['content-range']?.match(/^bytes (\d+)-(\d+)\/(\d+)$/);
+    expect(range, 'Observed narration range must identify its bytes').toBeTruthy();
+    expect(completeBytes.byteLength).toBe(Number(range![3]));
+    expect(transportBytes.equals(completeBytes.subarray(Number(range![1]), Number(range![2]) + 1))).toBe(true);
+  } else {
+    expect(response.status()).toBe(200);
+  }
+  const expectedAudioHash = createHash('sha256').update(completeBytes).digest('hex');
+  let playbackEvidence: Record<string, unknown> | null = null;
+  // AudioPlayer can fetch the MP3 and play a detached blob URL. Read the actual
+  // playing element's standard media URL, hash its bytes using browser APIs,
+  // and correlate them to the real HTTP bytes above. Do not seek, synthesize
+  // ended events, inspect app state, or replace/mock any audio bytes.
+  await expect.poll(async () => {
+    playbackEvidence = await page.evaluate(async ({ expectedPath, expectedHash }) => {
+      for (const audio of window.__nobelQAMedia) {
+        if (audio.readyState < 2 || audio.currentTime <= 0.15 || audio.paused || audio.muted || audio.volume <= 0) continue;
+        const source = audio.currentSrc || audio.src;
+        const url = new URL(source, location.href);
+        if (url.protocol !== 'blob:' && url.pathname !== expectedPath) continue;
+        try {
+          const actual = await fetch(source);
+          if (!actual.ok) continue;
+          const bytes = await actual.arrayBuffer();
+          const digest = await crypto.subtle.digest('SHA-256', bytes);
+          const sha256 = Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+          if (sha256 !== expectedHash) continue;
+          const before = audio.currentTime;
+          await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+          if (audio.paused || audio.muted || audio.volume <= 0 || audio.currentTime <= before) continue;
+          return { sourceKind: url.protocol === 'blob:' ? 'blob' : 'direct-http', sha256, bytes: bytes.byteLength, readyState: audio.readyState, beforeTime: before, currentTime: audio.currentTime, paused: audio.paused, muted: audio.muted, volume: audio.volume };
+        } catch {
+          // A naturally ended/revoked old media URL is not playing evidence.
+          // Retry only currently playing elements; pageerror capture stays on.
+        }
+      }
+      return null;
+    }, { expectedPath: audioPath!, expectedHash: expectedAudioHash });
+    return playbackEvidence !== null;
+  }, { timeout: 20_000 }).toBe(true);
+  await test.info().attach('real-narration-http-and-playback-identity', { body: JSON.stringify({ scene: scene.id, responseURL: response.url(), status: response.status(), transportSHA256: createHash('sha256').update(transportBytes).digest('hex'), fullAudioSHA256: expectedAudioHash, playback: playbackEvidence }, null, 2), contentType: 'application/json' });
 }
 
 async function exerciseQuestions(page: Page, scene: Scene, widget: FrameLocator) {
