@@ -18,6 +18,11 @@ on:
         type: boolean
         required: true
         default: false
+      speech_probe:
+        description: Probe synthetic Cantonese Edge TTS from an isolated runner container without building the learner image
+        type: boolean
+        required: true
+        default: false
 
 # Build/test only: no AWS/model credentials, image upload, or deployment.
 permissions:
@@ -91,6 +96,19 @@ jobs:
           else
             test "$available_kib" -ge 2097152
           fi
+      - name: Probe free Cantonese speech from runner network
+        if: github.event_name == 'workflow_dispatch' && inputs.speech_probe
+        run: |
+          set -euo pipefail
+          docker run --rm --network bridge python:3.12-alpine sh -ec '
+            python -m pip install --no-cache-dir edge-tts==7.3.1 >/dev/null
+            start=$(date +%s)
+            timeout 35 edge-tts --text "呢個想法幾有趣，我哋一齊試下。" \
+              --voice zh-HK-WanLungNeural --rate +20% --write-media /tmp/speech.mp3
+            test "$(wc -c </tmp/speech.mp3)" -gt 1000
+            echo "Synthetic Edge TTS MP3 bytes: $(wc -c </tmp/speech.mp3)"
+            echo "Elapsed seconds: $(($(date +%s) - start))"
+          '
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         if: github.event_name == 'workflow_dispatch' && (inputs.checks || inputs.build)
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
