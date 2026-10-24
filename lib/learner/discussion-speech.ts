@@ -94,8 +94,15 @@ export function createLearnerSpeechHandler(deps: SpeechDependencies) {
       }, text.trim());
       if (!result.audio.byteLength) throw new Error('Empty speech');
       return json({ base64: Buffer.from(result.audio).toString('base64'), format: result.format });
-    } catch {
-      // Never expose provider output or student text in error responses/logs.
+    } catch (error) {
+      // Log only a bounded failure class; provider output and student text are sensitive.
+      const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
+      const failureClass = code === 'ENOENT' || code === 'EACCES' ? code
+        : code === 'ABORT_ERR' ? 'aborted'
+        : error instanceof Error && error.name === 'TTSRequestTimeoutError' ? 'timeout'
+        : typeof code === 'number' ? 'provider-exit'
+        : 'provider-failure';
+      console.error('Learner speech synthesis failed', { failureClass });
       return json({ error: '暫時無法播放語音，請稍後再試。' }, 502);
     } finally { active--; }
   };

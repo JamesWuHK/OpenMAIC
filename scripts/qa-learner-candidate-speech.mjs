@@ -81,7 +81,7 @@ export async function checkLearnerCandidateSpeech({
       if (bytes.byteLength < 1000 || !isMp3(bytes)) throw new Error('Speech is not a nonempty MP3');
       results.push({ role, bytes: bytes.byteLength, latencyMs: Math.round(now() - started) });
     } catch (error) {
-      errors.push(`${role}: ${error.message}`);
+      errors.push(`${role}: ${error.message} after ${Math.round(now() - started)} ms`);
     }
   }
   return { courseId: selected.id, results, errors };

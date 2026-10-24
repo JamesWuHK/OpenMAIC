@@ -197,6 +197,12 @@ jobs:
           )
           LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
             node scripts/qa-learner-candidate-audio.mjs
+          docker exec --user 1001 "$CONTAINER_NAME" sh -ec '
+            timeout 35 "$TTS_EDGE_BIN" --text "呢個想法幾有趣，我哋一齊試下。" \
+              --voice zh-HK-WanLungNeural --rate +20% --write-media /tmp/learner-speech-probe.mp3
+            test "$(wc -c </tmp/learner-speech-probe.mp3)" -gt 1000
+            echo "Candidate direct Edge TTS MP3 bytes: $(wc -c </tmp/learner-speech-probe.mp3)"
+          '
           LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
             node scripts/qa-learner-candidate-speech.mjs
           LEARNER_QA_BASELINE_URL=https://class.wanli.ai \
