@@ -56,6 +56,9 @@ export async function POST(req: NextRequest) {
   try {
     resolved = await resolveModelFromRequest(req, body, 'pbl-v2-runtime:open-task');
   } catch (err) {
+    if (err instanceof Error && 'code' in err && err.code === 'PROVIDER_DISABLED') {
+      return apiError('PROVIDER_DISABLED', 403, err.message);
+    }
     log.error('Model resolution failed:', err);
     return apiError('INVALID_REQUEST', 400, err instanceof Error ? err.message : String(err));
   }

@@ -95,4 +95,38 @@ describe('PBL v2 runtime routes forward MODEL_ROUTES stages', () => {
       'pbl-v2-runtime:simulator',
     );
   });
+
+  it.each([
+    [
+      'instructor',
+      () => import('@/app/api/pbl/v2/instructor/route'),
+      { project: { id: 'p' }, userMessage: 'hi' },
+    ],
+    [
+      'evaluate',
+      () => import('@/app/api/pbl/v2/evaluate/route'),
+      { project: { id: 'p' }, kind: 'final' },
+    ],
+    [
+      'open-task',
+      () => import('@/app/api/pbl/v2/open-task/route'),
+      { project: { id: 'p' }, phase: 'greeting' },
+    ],
+    [
+      'simulator',
+      () => import('@/app/api/pbl/v2/simulator/route'),
+      { project: { id: 'p' }, userMessage: 'hi' },
+    ],
+  ])('%s returns 403 for a server-managed model denial', async (_name, load, body) => {
+    mocks.resolveModelFromRequest.mockRejectedValue(
+      Object.assign(new Error('This model is not authorized for server-managed credentials'), {
+        code: 'PROVIDER_DISABLED',
+      }),
+    );
+    const { POST } = await load();
+    const res = await POST(makeRequest(body));
+
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ errorCode: 'PROVIDER_DISABLED' });
+  });
 });

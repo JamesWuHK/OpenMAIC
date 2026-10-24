@@ -16,13 +16,14 @@ The current learner boundary allows classroom chat, PBL, quiz grading, transcrip
 
 | Path | Learner boundary | Result in this candidate |
 | --- | --- | --- |
-| `/api/chat`, `/api/chat/pi`, PBL and quiz grading | Allowed | LLM resolution now rejects client-selected models outside server-managed authorization. Chat routes return 403; PBL/quiz error-status behavior still needs review. |
+| `/api/chat`, `/api/chat/pi`, PBL and quiz grading | Allowed | LLM resolution now rejects client-selected models outside server-managed authorization. All these routes return 403 for the denial. |
 | `/api/transcription` | Allowed | Managed ASR without an explicit model list now uses its adapter default, not the client's model. |
 | `/api/web-search` | Allowed | Managed Claude web search without a model list now uses the adapter default. Its optional LLM query rewrite uses the central LLM guard. |
 | `/api/learner/speech` | Allowed | Existing route accepts no provider credentials and fixes Edge TTS, voice and speed server-side. No change needed for this model-selection issue. |
 | `/api/generate/image`, `/api/generate/video`, `/api/generate/tts` | Hidden | Not reachable through the learner boundary; authoring-mode security still requires a separate audit. |
 
 The ASR and Claude web-search changes passed provider-config, learner-boundary and API-level route tests (177 Vitest checks across four files). Learner speech passed eight Node tests, with its external synthesis check skipped. An isolated build and deployment check are still required before any release.
+PBL and quiz denial responses passed nine focused route tests across two files.
 
 ## Verified inputs
 

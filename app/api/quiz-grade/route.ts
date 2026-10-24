@@ -104,6 +104,9 @@ ${commentPrompt ? `Grading guidance: ${commentPrompt}\n` : ''}Student answer: ${
 
     return apiSuccess({ ...gradeResult });
   } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'PROVIDER_DISABLED') {
+      return apiError('PROVIDER_DISABLED', 403, error.message);
+    }
     log.error(
       `Quiz grading failed [question="${questionSnippet ?? 'unknown'}...", points=${resolvedPoints ?? 'unknown'}]:`,
       error,
