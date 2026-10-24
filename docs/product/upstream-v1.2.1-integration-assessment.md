@@ -32,8 +32,10 @@ then backed up only `/opt/openmaic-learner/learner.env` to the server's restrict
 resolve to `openrouter/free`; no key or other environment field was changed.
 Compose validation and a no-build, Web-only recreate passed, with the same
 image ID. The public health and course-list routes returned 200 and the list
-still contained 12 lessons. No course JSON, media, catalog, Caddy or database
-was changed. The repair is reversible using the server-only backup; rollback
+still contained 12 lessons; a follow-up read retrieved all 12 classroom APIs
+with HTTP 200. The running container had restart count zero. No course JSON,
+media, catalog, Caddy or database was changed. The repair is reversible using
+the server-only backup; rollback
 would restore the known-retired model, so it is only for a regression emergency.
 
 With synthetic student text on the existing production lesson, a new classroom
