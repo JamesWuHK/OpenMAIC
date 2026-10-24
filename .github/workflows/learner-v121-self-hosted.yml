@@ -48,7 +48,13 @@ jobs:
           test "$(uname -m)" = x86_64
           docker info --format 'Docker server {{.ServerVersion}}; storage {{.Driver}}; root {{.DockerRootDir}}'
           docker system df
+          docker image ls --all --format 'Image {{.ID}} {{.Repository}}:{{.Tag}} {{.Size}}'
+          docker ps --all --format 'Container {{.ID}} {{.Image}} {{.Status}}'
           df -h "$GITHUB_WORKSPACE" /var/lib/docker
+          df -i /var/lib/docker
+          if sudo -n true 2>/dev/null; then
+            sudo -n du -h -d1 /var/lib/docker 2>/dev/null || true
+          fi
           if docker buildx version >/dev/null 2>&1; then docker buildx version; else echo 'Docker buildx unavailable'; fi
           available_kib=$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')
           memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
