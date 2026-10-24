@@ -4,6 +4,19 @@ Date: 2026-10-24 (Asia/Hong_Kong)
 
 Status: isolated integration candidate; no upstream merge or production change.
 
+## Merge preflight on the integration branch
+
+An actual `git merge --no-commit --no-ff v1.2.1` on `d28e68c3` stopped at **40 unresolved paths**. The attempt was aborted, and the branch returned to a clean worktree at `d28e68c3`; there is no merge commit. The earlier 28-conflict `merge-tree` estimate was against `main`, before the integration branch's focused security and learner-chat commits, and must not be used as the current conflict count.
+
+The conflicts are behavioral, not just textual:
+
+- `lib/server/resolve-model.ts`, `lib/server/provider-config.ts` and chat/PBL/quiz routes overlap the fork's server-managed model authorization with upstream's new slot-based provider resolution. Preserve the authorization boundary while adopting the new configuration contract.
+- `app/api/chat/pi/route.ts` overlaps upstream's tool-calling requirement and typed authorization response with the fork's learner 403 handling. Validate the free classroom model's tool support before any learner cutover.
+- `app/api/chat/route.ts`, `lib/chat/agent-loop.ts` and related files are deleted upstream but modified in the fork. Their learner-facing callers and tests must be migrated before accepting deletion.
+- `Dockerfile`, Compose, middleware, classroom loading, TTS and stage/UI files combine the fork's student deployment and course playback behavior with upstream's server-first layout. They need a separate build and live playback check, not a blanket “ours” or “theirs” resolution.
+
+Recommended resolution order: server-managed model security and Pi chat; learner routing and classroom loading; PBL, quiz and speech; build/deployment; then UI/i18n and tests. A full merge is not yet safe to commit, push or release.
+
 ## Candidate progress (2026-10-24)
 
 - A focused authorization guard now exists on this integration branch for `resolveModel`: a server-managed provider accepts only its operator-listed models, its operator-configured default, or the selected operator stage route. Unlisted client-selected models fail before the provider client is created.
