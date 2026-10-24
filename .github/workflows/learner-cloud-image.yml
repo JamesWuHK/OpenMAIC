@@ -1,27 +1,26 @@
-name: Learner cloud image candidate
+name: Nobel series real production acceptance
 
 on:
-  push:
-    branches: [codex/learner-cloud-build]
   workflow_dispatch:
 
-# Build/test only: no production credentials, package push, or deployment.
+# This separate branch performs authorized post-release browser QA only.
 permissions:
   contents: read
 
 concurrency:
-  group: learner-cloud-image-${{ github.ref }}
+  group: nobel-series-real-qa-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  candidate:
-    if: github.repository == 'JamesWuHK/OpenMAIC'
+  real-production-discussion:
+    if: github.repository == 'JamesWuHK/OpenMAIC' && github.ref == 'refs/heads/codex/nobel-series-real-qa'
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       CI: 'true'
-      LEARNER_QA_BASE_URL: http://127.0.0.1:3100
+      NOBEL_QA_BASE_URL: https://class.wanli.ai
       NOBEL_QA_CLASSROOMS_DIR: ci/nobel-acceptance/classrooms
+      NOBEL_QA_OUTPUT_DIR: artifacts/nobel-series-real-discussion-${{ github.run_id }}
       NEXT_TELEMETRY_DISABLED: '1'
       PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
@@ -33,88 +32,17 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Relevant regression tests
-        run: >-
-          pnpm exec vitest run tests/pbl/v2/evaluator.test.ts
-          tests/pbl/v2/learner-state.test.ts tests/learner
-          tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
-          tests/server/install-process-shutdown-handlers.test.ts
-          tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
-      - name: TypeScript
-        run: pnpm exec tsc --noEmit
-      - name: Build exact learner image on hosted Linux
-        run: |
-          docker build --platform linux/amd64 \
-            --tag "wanli-learner-ci:$GITHUB_SHA" \
-            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
-            --build-arg NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072 \
-            --build-arg OPENMAIC_BUILD_CPUS=1 \
-            --build-arg NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner \
-            --build-arg NEXT_PUBLIC_PERSISTENCE= \
-            --build-arg NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=false \
-            --build-arg NEXT_PUBLIC_MAIC_EDITOR_ENABLED=false \
-            --build-arg NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=false \
-            --build-arg NEXT_PUBLIC_PI_CHAT_ENABLED=false \
-            --build-arg NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false \
-            --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
-      - name: Start isolated exact-image candidate
-        run: |
-          mkdir -p ci/nobel-acceptance/teacher-submissions
-          sudo chown 1001:1001 ci/nobel-acceptance/teacher-submissions
-          docker run -d --name learner-candidate -p 127.0.0.1:3100:3000 \
-            -e OPENMAIC_DEPLOYMENT_MODE=learner \
-            -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
-            -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
-            -e DEFAULT_MODEL=openai:gpt-4o-mini \
-            -v "$GITHUB_WORKSPACE/ci/nobel-acceptance/classrooms:/app/data/classrooms:ro" \
-            -v "$GITHUB_WORKSPACE/ci/nobel-acceptance/teacher-submissions:/app/data/teacher-submissions" \
-            -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
-            -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
-            "wanli-learner-ci:$GITHUB_SHA"
-          for attempt in {1..30}; do
-            if curl -fsS http://127.0.0.1:3100/api/health >/dev/null; then exit 0; fi
-            sleep 2
-          done
-          exit 1
-      - name: Image API readiness boundary
-        run: node scripts/qa-learner-image-boundary.mjs
-      - name: Install CI Chromium
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install Chromium on the Actions runner
         run: pnpm exec playwright install --with-deps chromium
-      - name: Existing learner desktop and mobile browser regression
-        run: pnpm exec playwright test --config playwright.learner.config.ts
-      - name: Nobel six-course desktop and mobile acceptance
-        run: pnpm exec playwright test --config playwright.nobel.config.ts
-      - name: Export tested candidate (not deployment approval)
-        run: |
-          mkdir -p artifacts/learner-image
-          docker image inspect "wanli-learner-ci:$GITHUB_SHA" --format '{{json .Id}}' > artifacts/learner-image/image-id.json
-          git rev-parse HEAD > artifacts/learner-image/source-sha.txt
-          docker save "wanli-learner-ci:$GITHUB_SHA" | gzip -1 > artifacts/learner-image/image.tar.gz
-          cd artifacts/learner-image
-          sha256sum image.tar.gz > image.tar.gz.sha256
-      - name: Save tested image for manual review
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: learner-image-${{ github.sha }}
-          path: artifacts/learner-image/
-          retention-days: 1
-          compression-level: 0
-      - name: Collect candidate diagnostics
-        if: always()
-        run: |
-          mkdir -p artifacts/learner-image-qa
-          if docker inspect learner-candidate >/dev/null 2>&1; then
-            docker logs learner-candidate > artifacts/learner-image-qa/container.log 2>&1
-            docker inspect learner-candidate --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
-            docker rm -f learner-candidate
-          fi
-      - name: Save evidence (not full course acceptance)
+      - name: Real production six-course two-turn discussion acceptance
+        run: node scripts/qa-nobel-series-real-discussion.mjs
+      - name: Upload actual replies, playback evidence and screenshots
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: learner-image-qa-${{ github.sha }}
-          path: |
-            artifacts/learner-image-qa/
-            artifacts/learner-site-qa/
+          name: nobel-series-real-discussion-${{ github.run_id }}
+          path: artifacts/nobel-series-real-discussion-${{ github.run_id }}/
           retention-days: 7
+          if-no-files-found: warn
