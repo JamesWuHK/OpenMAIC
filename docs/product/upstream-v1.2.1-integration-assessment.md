@@ -9,6 +9,17 @@ No candidate promotion or production service change.
 
 ## Latest candidate status (2026-10-24 14:50 UTC)
 
+Update, 2026-10-25 HKT: run `40104195344` ultimately failed during Docker
+build after the guarded cleanup left 1,053,059 free inodes. The `vfs` driver
+again reported `no space left on device` while copying `node_modules` into a
+later build layer. This is not a code-compile failure and did not reach
+candidate smoke tests. The integration branch now has
+`Dockerfile.learner-vfs`, which puts install, package compilation and Next.js
+build in one filesystem-changing instruction while retaining the existing
+runtime image stage. Run `40109464296` at `a4717952` has passed workspace
+compilation, focused regressions and TypeScript, and is building that image;
+the result and speech checks are pending. No production resources changed.
+
 Run `40097123328` at `30e8b9d0` built and started the isolated PostgreSQL-backed
 candidate with the current 11 published lessons. Exact catalog/classroom
 content and SHA-256 checks passed, as did 33/33 sampled narration Range
