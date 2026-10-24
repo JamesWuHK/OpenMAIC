@@ -21,6 +21,19 @@ not a successful image release.** The workflow's cleanup also
 removes its run-specific image, so even a successful run is build evidence, not
 a staged deployable artifact.
 
+The PostgreSQL-backed run `40080524928` at `245b1318` passed package
+compilation, regressions and TypeScript, then failed during Docker build with
+`no space left on device` under Docker's `vfs` storage driver. A read-only
+runner audit found 69 GiB free by byte count but only about 40,733 free inodes
+(98% used), many dangling OpenMAIC build layers, and no running containers.
+This is a runner-storage failure, not a passing database smoke. The scoped
+reclamation run `40081101844` did not reach its cleanup step because its
+preceding preflight failed; the exact preflight subcommand remains unconfirmed
+while GitHub's API rate limit is exhausted. The following workflow revision
+places guarded reclamation before preflight, and manual dispatch replaces
+automatic push runs to avoid further queue contention. No production cleanup
+or PostgreSQL installation has occurred.
+
 The original workflow run mounted the repository's smaller sample learner catalog for its
 HTTP smoke. That smoke cannot establish preservation of the ten published
 classrooms or real lesson playback. On 2026-10-24 the read-only
@@ -42,8 +55,8 @@ the candidate container, keeps the candidate teacher-submission directory
 separate and writable, then runs catalog/series/document parity and the
 30-clip Range check. The first Docker run `40077092864` predates this revision
 and cannot be counted as exact-content QA. The new snapshot script and parity
-fallback passed 16 focused Node checks locally; no new cloud build has yet
-validated them. The workflow removes only its own run-specific container,
+fallback passed 16 focused Node checks locally; the exact-content cloud smoke
+has not yet run. The workflow removes only its own run-specific container,
 image and snapshot, and does not alter the production mounts.
 
 Read-only production inspection on 2026-10-24 found the running Lightsail
@@ -60,6 +73,10 @@ volume, health dependency and 384 MiB database memory cap. The ten published
 classrooms and media remain on read-only filesystem mounts; the new DB does
 not import or replace them. Production Compose, environment, services and
 mounts remain unchanged until isolated candidate and host-headroom checks pass.
+An updated read-only host check later the same day showed 34 GiB disk and
+789 MiB available memory, with the current Web container using about 119 MiB;
+the reason for the disk difference was not investigated. Current live-source
+parity was repeated and again passed all ten classroom documents.
 
 ## Current learner release preservation gate (2026-10-24)
 
@@ -118,7 +135,9 @@ production deployment. The Git checkout itself has only six metadata entries
 and no packaged classrooms; its content-publish preflight correctly fails.
 
 Current execution gaps: the first cloud Docker build failed its startup smoke
-because PostgreSQL was absent. A new PostgreSQL-backed build/test is required.
+because PostgreSQL was absent; the second build ran out of Docker `vfs`
+inodes, and the guarded cleanup/retry has not completed. A successful
+PostgreSQL-backed exact-content build/test is still required.
 Candidate testing with
 the exact ten-classroom content mounts, real-browser playback/discussion,
 desktop/mobile checks, a durable image transfer, and a release decision remain
