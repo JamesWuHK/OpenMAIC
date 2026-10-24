@@ -59,6 +59,14 @@ fallback passed 16 focused Node checks locally; the exact-content cloud smoke
 has not yet run. The workflow removes only its own run-specific container,
 image and snapshot, and does not alter the production mounts.
 
+After the first PostgreSQL-backed retry was dispatched, the candidate workflow
+gained an additional exact-file check at `9b8ab99a`: from the frozen snapshot
+directory it runs `qa-learner-published-content.mjs` against the candidate's
+document endpoint and compares every classroom source SHA-256. Its three
+focused tests passed locally, including a stale document with unchanged scene
+IDs and count. The already-running retry at `8d2b1511` does **not** include
+this gate; a subsequent exact-source candidate must execute it before release.
+
 Read-only production inspection on 2026-10-24 found the running Lightsail
 student host has exactly `openmaic` and `caddy` services, with no
 `DATABASE_URL` or agent-runtime flag in `learner.env`. Its classroom and learner
@@ -77,6 +85,12 @@ An updated read-only host check later the same day showed 34 GiB disk and
 789 MiB available memory, with the current Web container using about 119 MiB;
 the reason for the disk difference was not investigated. Current live-source
 parity was repeated and again passed all ten classroom documents.
+At 2026-10-24 12:29 UTC, another read-only SSH check found 34 GiB disk and
+about 736 MiB memory available, 1.8 GiB of 4 GiB swap used, and no inode
+pressure. The Web container still had image `sha256:7e18dd23…` and zero
+restarts; Caddy likewise had zero restarts. The 384 MiB PostgreSQL cap leaves
+limited memory headroom, so production cutover requires live memory and
+classroom-response observation, not merely a healthy database container.
 
 ## Current learner release preservation gate (2026-10-24)
 
