@@ -160,8 +160,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.build
         run: |
           # This self-hosted runner's custom Docker bridges cannot reach Edge TTS.
-          # The default bridge passed an external synthetic speech probe; link
-          # only these two run-scoped containers for the isolated DB smoke.
+          # The default bridge passed an external synthetic speech probe. Map
+          # only this run's temporary PostgreSQL IP into the candidate; this
+          # runner rejects legacy --link on its default bridge.
           docker run -d --name "$POSTGRES_CONTAINER_NAME" --network bridge \
             --tmpfs /var/lib/postgresql/data:rw,size=256m \
             -e POSTGRES_DB=openmaic -e POSTGRES_USER=openmaic \
@@ -172,8 +173,10 @@ jobs:
             sleep 2
           done
           docker exec "$POSTGRES_CONTAINER_NAME" pg_isready -U openmaic -d openmaic
+          postgres_ip=$(docker container inspect "$POSTGRES_CONTAINER_NAME" --format '{{.NetworkSettings.IPAddress}}')
+          case "$postgres_ip" in ''|*[!0-9.]*) echo 'Invalid temporary PostgreSQL IP' >&2; exit 1 ;; esac
           docker run -d --name "$CONTAINER_NAME" -p 127.0.0.1::3000 \
-            --network bridge --link "$POSTGRES_CONTAINER_NAME:$POSTGRES_CONTAINER_NAME" \
+            --network bridge --add-host "$POSTGRES_CONTAINER_NAME:$postgres_ip" \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e DATABASE_URL="postgres://openmaic:synthetic-ci-postgres-not-a-secret@$POSTGRES_CONTAINER_NAME:5432/openmaic" \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
