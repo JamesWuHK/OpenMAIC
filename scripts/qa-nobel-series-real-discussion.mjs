@@ -51,11 +51,11 @@ function generatedReplies(bytes) {
   // model configuration, headers, hidden reasoning or complete SSE bodies.
   const messages = new Map();
   let currentId = null;
-  const protocol = { done: false, errors: [] };
+  const protocol = { done: false, errors: [], parseErrors: 0 };
   for (const block of bytes.toString('utf8').split(/\r?\n\r?\n/)) {
     const data = block.split(/\r?\n/).filter((line) => line.startsWith('data:')).map((line) => line.slice(5).trimStart()).join('\n');
     if (!data || data === '[DONE]') continue;
-    let event; try { event = JSON.parse(data); } catch { continue; }
+    let event; try { event = JSON.parse(data); } catch { protocol.parseErrors++; continue; }
     if (event.type === 'done') protocol.done = true;
     if (event.type === 'error') protocol.errors.push(safeText(event.data?.message || 'stream error'));
     if (event.type === 'agent_start') {
@@ -213,7 +213,7 @@ async function runCase(item, viewport) {
     if (isChat(response.url())) {
       const row = { endpoint: endpoint(response.url()), status: response.status(), at: Date.now(), completed: false };
       record.chatResponses.push(row);
-      const read = response.body().then((bytes) => { const parsed = generatedReplies(bytes); row.completeGeneratedReplies = parsed.replies; row.protocolDone = parsed.done; row.protocolErrors = parsed.errors; row.completed = true; }).catch((error) => { row.readError = safeText(error.message); });
+      const read = response.body().then((bytes) => { const parsed = generatedReplies(bytes); row.completeGeneratedReplies = parsed.replies; row.protocolDone = parsed.done; row.protocolErrors = parsed.errors; row.protocolParseErrors = parsed.parseErrors; row.completed = true; }).catch((error) => { row.readError = safeText(error.message); });
       pendingReads.add(read); void read.finally(() => pendingReads.delete(read));
     }
     if (isSpeech(response.url())) {
@@ -291,7 +291,7 @@ async function runCase(item, viewport) {
       turn.completeVisibleReplies = (await readReplies(page)).filter((reply) => !reply.isUser && reply.text !== prompt && !beforeReplies.has(reply.ordinal)).map((reply) => ({ ...reply, roleByVisibleName: roster.find((agent) => agent.name === reply.sender)?.role || null }));
       turn.completeGeneratedReplies = turn.chatResponses.flatMap((response) => response.completeGeneratedReplies || []).map((reply) => ({ ...reply, roleByAgentId: byId.get(reply.agentId)?.role || null }));
       assert.ok(settled, `Turn ${number}: response/real speech did not completely settle within ${turnTimeoutMs}ms`);
-      assert.ok(turn.chatResponses.length && turn.chatResponses.every((response) => response.status === 200 && response.completed && response.protocolDone && response.protocolErrors.length === 0), `Turn ${number}: every real chat request must finish with 200 and a clean done event`);
+      assert.ok(turn.chatResponses.length && turn.chatResponses.every((response) => response.status === 200 && response.completed && response.protocolDone && response.protocolErrors.length === 0 && response.protocolParseErrors === 0), `Turn ${number}: every real chat request must finish with 200 and a clean done event`);
       assert.ok(turn.speechResponses.some((response) => response.status === 200), `Turn ${number}: no real speech 200`);
       assert.ok(turn.speechResponses.every((response) => response.status === 200), `Turn ${number}: failed speech response`);
       assert.ok(turn.audio.some((entry) => entry.kind === 'discussion' && entry.audibleStarted && entry.advanced && entry.ended && entry.volume > 0 && !entry.muted), `Turn ${number}: no completed audible real speech with progress`);
