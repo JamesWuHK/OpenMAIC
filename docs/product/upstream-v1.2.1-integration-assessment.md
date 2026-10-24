@@ -27,6 +27,16 @@ repeatedly returned HTTP 502 on 2026-10-24; the other 52 of 53 sampled live
 media requests succeeded. A permission/read-stream failure is plausible but
 unconfirmed without server logs. Do not label media or browser QA passed, and
 do not silently copy these files with their current mode into a new release.
+The two local files have SHA-256
+`62958b02b51879324aa4f91caabc9f6a606bc820c0f86bb84d1179d3eec40696`
+and `22b38b6bfaeddcc19d35914e9323ddece3a06c39c187d525e17f8a9f65210cef`,
+respectively. Both are JPEG-encoded data despite their `.png` names. This
+format mismatch needs browser verification, but their bytes and classroom
+references must not be changed without a separate content review. The
+content publisher now normalizes public media permissions on transfer, so a
+future `rsync -a` cannot propagate owner-only source modes unchanged. This
+does not repair the currently deployed files; inspect their server-side modes
+and logs before a narrowly scoped repair.
 
 The ten current classroom files also loaded through the candidate's v1.2.1
 HTTP document client and structural validators. Candidate code now reads only

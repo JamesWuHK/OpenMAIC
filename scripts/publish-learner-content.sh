@@ -22,7 +22,9 @@ ssh "${ssh_options[@]}" "$LEARNER_SSH_HOST" \
 
 # Media and classroom files must exist before the public catalog names them.
 # No --delete: older URLs and rollback media remain available.
-rsync -az -e "ssh ${ssh_options[*]}" \
+# Public media is read by the learner container under a different UID. The
+# publisher may own 0600 files, and rsync -a would otherwise preserve that mode.
+rsync -az --chmod=Fgo+r -e "ssh ${ssh_options[*]}" \
   content/learner/media/ \
   "$LEARNER_SSH_HOST:$learner_remote_root/content/learner/media/"
 
@@ -35,7 +37,7 @@ while IFS= read -r course_id; do
        cp -a '$learner_remote_root/data/classrooms/$course_id' '$backup_dir/data/classrooms/'; \
      fi"
   if [[ -d "data/classrooms/$course_id" ]]; then
-    rsync -az -e "ssh ${ssh_options[*]}" \
+    rsync -az --chmod=Fgo+r -e "ssh ${ssh_options[*]}" \
       "data/classrooms/$course_id/" \
       "$LEARNER_SSH_HOST:$learner_remote_root/data/classrooms/$course_id/"
   fi
