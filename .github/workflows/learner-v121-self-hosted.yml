@@ -46,7 +46,10 @@ jobs:
           git rev-parse HEAD
           printf 'CANDIDATE_ROOT=%s/learner-v121-%s\n' "$RUNNER_TEMP" "$GITHUB_RUN_ID" >> "$GITHUB_ENV"
           test "$(uname -m)" = x86_64
-          docker info --format 'Docker server {{.ServerVersion}}'
+          docker info --format 'Docker server {{.ServerVersion}}; storage {{.Driver}}; root {{.DockerRootDir}}'
+          docker system df
+          df -h "$GITHUB_WORKSPACE" /var/lib/docker
+          if docker buildx version >/dev/null 2>&1; then docker buildx version; else echo 'Docker buildx unavailable'; fi
           available_kib=$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')
           memory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
           total_kib=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
