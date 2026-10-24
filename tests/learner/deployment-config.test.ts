@@ -22,6 +22,7 @@ describe('learner container configuration', () => {
     expect(compose).toContain('NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner');
     expect(compose).toContain('OPENMAIC_DEPLOYMENT_MODE=learner');
     expect(compose).toContain('OPENMAIC_LEARNER_ENV_FILE:-learner.env');
+    expect(compose).toContain('NEXT_PUBLIC_PI_CHAT_ENABLED=true');
     expect(compose).not.toContain('render-service');
   });
 
@@ -29,6 +30,7 @@ describe('learner container configuration', () => {
     const compose = await readFile(`${root}/docker-compose.learner-static.yml`, 'utf8');
     const caddyfile = await readFile(`${root}/deploy/Caddyfile`, 'utf8');
     expect(compose).toContain('NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: learner');
+    expect(compose).toContain("NEXT_PUBLIC_PI_CHAT_ENABLED: 'true'");
     expect(compose).not.toContain('OPENMAIC_SKIP_BUILD_TYPECHECK');
     expect(compose).toContain("OPENMAIC_BUILD_CPUS: '1'");
     expect(compose).toContain('OPENMAIC_DEPLOYMENT_MODE: learner');

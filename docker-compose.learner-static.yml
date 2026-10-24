@@ -14,7 +14,7 @@ services:
         NEXT_PUBLIC_PRO_WORKBENCH_ENABLED: 'false'
         NEXT_PUBLIC_MAIC_EDITOR_ENABLED: 'false'
         NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED: 'false'
-        NEXT_PUBLIC_PI_CHAT_ENABLED: 'false'
+        NEXT_PUBLIC_PI_CHAT_ENABLED: 'true'
         NEXT_PUBLIC_ENABLE_VIDEO_EXPORT: 'false'
         NEXT_PUBLIC_ENABLE_PPTX_IMPORT: 'false'
     environment:

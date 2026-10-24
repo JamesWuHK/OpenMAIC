@@ -9,6 +9,7 @@ Status: isolated integration candidate; no upstream merge or production change.
 - A focused authorization guard now exists on this integration branch for `resolveModel`: a server-managed provider accepts only its operator-listed models, its operator-configured default, or the selected operator stage route. Unlisted client-selected models fail before the provider client is created.
 - Legacy classroom chat, Pi classroom chat and model verification translate that denial to HTTP 403. Targeted unit/route checks passed (152 tests across six files), as did changed-file ESLint and Prettier checks.
 - This is not the full upstream security advisory backport: authoring-mode media and speech provider paths remain unaddressed. It has not been built, deployed or browser-tested. The original checkout and live site remain untouched.
+- Both learner Compose variants now compile the existing Pi classroom chat path into the student bundle. This is an isolated configuration candidate only: the free OpenRouter model's tool-calling behavior, discussion audio latency, production browser flow and the upstream merge still require separate validation. The authoring Compose remains unchanged.
 
 ### Learner-reachable provider audit
 
@@ -35,7 +36,7 @@ PBL and quiz denial responses passed nine focused route tests across two files.
 
 ## Compatibility gates
 
-1. **Classroom chat:** v1.2.1 removes `POST /api/chat`; the fork still exposes and tests it. The learner UI and discussion smoke tests must move to the Pi path. The chosen classroom model must support tool calling. `NEXT_PUBLIC_PI_CHAT_ENABLED=false` in `docker-compose.learner-static.yml` must not reach the new production build.
+1. **Classroom chat:** v1.2.1 removes `POST /api/chat`; the fork still exposes and tests it. Both learner Compose variants now select the existing Pi path, but a successful live discussion smoke test is still required. The chosen classroom model must support tool calling. The old route must not be removed until that flow is verified.
 2. **Persistence/deployment:** v1.2.0+ uses server-first generation and a mandatory PostgreSQL service. The fork's student endpoint uses a lightweight, content-mounted learner image. Do not adopt upstream Compose defaults without a data, owner, access-control, backup and rollback design for this deployment.
 3. **Local customizations:** conflicts cover `Dockerfile`, Compose, classroom and roundtable surfaces, PBL, TTS, settings, middleware and i18n. Resolving text conflicts alone cannot establish compatibility.
 4. **Published lessons:** classroom JSON, audio, media, learner catalog and teacher-submission queue require regression checks on actual public lesson routes; a successful build or HTTP 200 is insufficient.
