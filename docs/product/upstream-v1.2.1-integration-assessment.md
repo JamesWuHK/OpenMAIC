@@ -51,6 +51,13 @@ discussion check, or validation of every free-routed model. The v1.2.1
 candidate remains unpromoted, and its own real-model discussion gate is still
 open.
 
+The integration branch then added focused playback-discussion, Pi route/cue and
+discussion-TTS regressions to the self-hosted check workflow. Checks-only run
+`40118893805` at `f55c7fd0` passed 23 Node checks, 160 Vitest checks (one
+skipped) and TypeScript. It deliberately did **not** build an image, start a
+candidate, use a model key or perform a browser discussion. These tests add
+code-path coverage but do not close the candidate's end-to-end discussion gate.
+
 ## Latest candidate status (2026-10-25 HKT)
 
 Run `40116098373` at `972086b1` completed successfully. Its focused Node
