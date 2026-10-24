@@ -92,6 +92,9 @@ jobs:
             test "$memory_kib" -ge 5242880
             if [ "${{ inputs.build }}" = true ]; then
               test "$available_kib" -ge 20971520
+              free_inodes=$(df -Pi /var/lib/docker | awk 'NR==2 {print $4}')
+              printf 'Available Docker inodes: %s\n' "$free_inodes"
+              test "$free_inodes" -ge 1000000
             fi
           else
             test "$available_kib" -ge 2097152
