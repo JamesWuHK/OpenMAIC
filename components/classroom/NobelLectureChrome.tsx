@@ -74,7 +74,7 @@ export function NobelLectureToolbar({ scenes, currentSceneId, currentIndex, play
   const displayIndex = Math.min(Math.max(currentIndex, 0), Math.max(scenes.length - 1, 0));
   const button = 'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-medium hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-35 dark:hover:bg-slate-800';
   return <>
-    {panel && <div className="absolute inset-0 z-40 flex items-end justify-center bg-slate-950/35 p-3 sm:items-center" onClick={close}>
+    {panel && <div className="absolute inset-0 z-[60] flex items-end justify-center bg-slate-950/35 p-3 sm:items-center" onClick={close}>
       <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="lecture-panel-title" className="flex max-h-[80%] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-900" onClick={(e) => e.stopPropagation()}>
         <div className="flex shrink-0 items-center justify-between border-b px-5 py-2"><h2 id="lecture-panel-title" className="font-semibold">{panel === 'contents' ? l.contents : l.script}</h2><button ref={closeRef} aria-label={l.close} className={button} onClick={close}><X size={20} /></button></div>
         <div className="overflow-y-auto overscroll-contain p-4">
