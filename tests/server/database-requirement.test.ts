@@ -8,11 +8,15 @@ import {
 // register() is exercised for its database requirement only.
 // register() starts the background workers. Real ones keep polling the
 // database after the file's tests end and log into a closing worker.
+const authoringWorkers = vi.hoisted(() => ({
+  generation: vi.fn(() => ({ workerId: 'test', wake: () => {}, stop: async () => {} })),
+  extraction: vi.fn(() => ({ workerId: 'test', wake: () => {}, stop: async () => {} })),
+}));
 vi.mock('@/lib/server/generation/run/runner', () => ({
-  startGenerationRunner: () => ({ workerId: 'test', wake: () => {}, stop: async () => {} }),
+  startGenerationRunner: authoringWorkers.generation,
 }));
 vi.mock('@/lib/server/materials/extraction', () => ({
-  startOwnerMaterialExtractor: () => ({ workerId: 'test', wake: () => {}, stop: async () => {} }),
+  startOwnerMaterialExtractor: authoringWorkers.extraction,
 }));
 vi.mock('@/lib/server/legacy-classroom-import', () => ({
   startLegacyClassroomImport: () => ({ stop: async () => {} }),
@@ -24,7 +28,10 @@ const startAssetCollectorSchedule = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/persistence/schema-boot-check', () => ({ startSchemaBootCheck: vi.fn() }));
 vi.mock('@/lib/persistence/asset-collector-schedule', () => ({ startAssetCollectorSchedule }));
 vi.mock('@/lib/server/config-validation', () => ({ validateServerConfig: vi.fn() }));
-vi.mock('@/lib/config/feature-flags', () => ({ isAgentRuntimeConfigured: () => false }));
+vi.mock('@/lib/config/feature-flags', () => ({
+  isAgentRuntimeConfigured: () => false,
+  isServerPersistenceConfigured: () => true,
+}));
 
 let exit: ReturnType<typeof vi.spyOn>;
 let stderr: string[];
@@ -32,6 +39,8 @@ let stderr: string[];
 beforeEach(() => {
   stderr = [];
   startAssetCollectorSchedule.mockReset();
+  authoringWorkers.generation.mockClear();
+  authoringWorkers.extraction.mockClear();
   exit = vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never);
   vi.spyOn(process.stderr, 'write').mockImplementation(((
     chunk: string | Uint8Array,
@@ -93,5 +102,17 @@ describe('the database requirement', () => {
 
     expect(exit).not.toHaveBeenCalled();
     expect(startAssetCollectorSchedule).toHaveBeenCalledOnce();
+  });
+
+  it('does not start authoring workers on the learner host', async () => {
+    vi.stubEnv('DATABASE_URL', 'postgres://boot/openmaic');
+    vi.stubEnv('OPENMAIC_DEPLOYMENT_MODE', 'learner');
+    const { register } = await import('@/instrumentation');
+
+    await expect(register()).resolves.toBeUndefined();
+
+    expect(startAssetCollectorSchedule).toHaveBeenCalledOnce();
+    expect(authoringWorkers.generation).not.toHaveBeenCalled();
+    expect(authoringWorkers.extraction).not.toHaveBeenCalled();
   });
 });

@@ -80,6 +80,8 @@ export async function register(): Promise<void> {
   const { startTeacherGenerationSchedule } =
     await import('@/lib/learner/teacher-generation-worker');
   const teacherGenerationSchedule = startTeacherGenerationSchedule();
+  const { isLearnerDeployment } = await import('@/lib/config/deployment-mode');
+  const authoringWorkersEnabled = !isLearnerDeployment();
 
   let runner: import('@/lib/server/agent-runtime/runner').AgentRunnerHandle | undefined;
   let extractionRunner:
@@ -92,30 +94,30 @@ export async function register(): Promise<void> {
   let materialExtractor:
     | import('@/lib/server/materials/extractor-wake').OwnerMaterialExtractorHandle
     | undefined;
-  try {
-    // Course generation runs on the server in every deployment (classic
-    // generation is the default product), so its worker does not depend on
-    // the agent runtime being enabled. It only installs a timer; its tables
-    // are provisioned by the first scan.
-    const { startGenerationRunner } = await import('@/lib/server/generation/run/runner');
-    generationRunner = startGenerationRunner();
-  } catch (error) {
-    console.error('[instrumentation] Generation runner startup failed', error);
-  }
-  try {
-    // Uploaded materials are extracted in the background from their upload
-    // on (lib/server/materials/extraction.ts), wherever uploads are served.
-    const { isServerPersistenceConfigured } = await import('@/lib/config/feature-flags');
-    if (isServerPersistenceConfigured()) {
-      const { startOwnerMaterialExtractor } = await import('@/lib/server/materials/extraction');
-      materialExtractor = startOwnerMaterialExtractor();
+  if (authoringWorkersEnabled) {
+    try {
+      // Classic course generation is available in the full deployment even
+      // without the agent runtime. A learner host must never claim authoring
+      // jobs from a database it happens to share with the producer.
+      const { startGenerationRunner } = await import('@/lib/server/generation/run/runner');
+      generationRunner = startGenerationRunner();
+    } catch (error) {
+      console.error('[instrumentation] Generation runner startup failed', error);
     }
-  } catch (error) {
-    console.error('[instrumentation] Material extractor startup failed', error);
+    try {
+      // Uploaded authoring materials are extracted in the background.
+      const { isServerPersistenceConfigured } = await import('@/lib/config/feature-flags');
+      if (isServerPersistenceConfigured()) {
+        const { startOwnerMaterialExtractor } = await import('@/lib/server/materials/extraction');
+        materialExtractor = startOwnerMaterialExtractor();
+      }
+    } catch (error) {
+      console.error('[instrumentation] Material extractor startup failed', error);
+    }
   }
   try {
     const { isAgentRuntimeConfigured } = await import('@/lib/config/feature-flags');
-    if (isAgentRuntimeConfigured()) {
+    if (authoringWorkersEnabled && isAgentRuntimeConfigured()) {
       // One dedicated LISTEN connection per application instance. The HTTP
       // SSE routes and the runner share its in-process fanout registry; it is
       // not a pool client and never scales with the number of streams.
@@ -199,9 +201,8 @@ export async function register(): Promise<void> {
     return shutdownPromise;
   };
 
-  const { installProcessShutdownHandlers } =
-    await import('@/lib/server/install-process-shutdown-handlers');
-  installProcessShutdownHandlers(shutdown);
+  process.once('SIGTERM', () => void shutdown());
+  process.once('SIGINT', () => void shutdown());
 }
 
 /**

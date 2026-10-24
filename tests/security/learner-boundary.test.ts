@@ -16,6 +16,11 @@ describe('learner deployment boundary', () => {
     ['POST', '/api/quiz-grade'],
     ['POST', '/api/transcription'],
     ['POST', '/api/pbl/v2/task/update'],
+    ['GET', '/api/stage-meta/course-1'],
+    ['GET', '/api/persistence/learner-key'],
+    ['GET', '/api/persistence/assets/audio-1/content'],
+    ['POST', '/api/persistence/runtime/sessions'],
+    ['PATCH', '/api/persistence/runtime/sessions/session-1'],
   ])('allows %s %s', (method, pathname) => {
     expect(learnerBoundaryDecision({ method, pathname })).toBe('allow');
   });
@@ -42,6 +47,17 @@ describe('learner deployment boundary', () => {
     ['POST', '/api/stages/course-1/publish'],
     ['DELETE', '/api/folders/folder-1'],
     ['PUT', '/api/persistence/documents/course-1'],
+    ['POST', '/api/persistence/assets'],
+    ['PUT', '/api/persistence/assets/audio-1/content'],
+    ['POST', '/api/persistence/runtime/learners/merge'],
+    ['PUT', '/api/persistence/kv/settings'],
+    ['POST', '/api/agents'],
+    ['POST', '/api/generation-runs'],
+    ['PUT', '/api/model-config'],
+    ['POST', '/api/model-config/import'],
+    ['POST', '/api/proxy-media'],
+    ['POST', '/api/identity/legacy-import-binding'],
+    ['POST', '/api/stage-meta/course-1'],
   ])('hides %s %s', (method, pathname) => {
     expect(learnerBoundaryDecision({ method, pathname })).toBe('not-found');
   });
