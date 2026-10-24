@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { access, readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -10,19 +10,25 @@ function references(text, pattern) {
   return [...new Set([...text.matchAll(pattern)].map((match) => match[0]))];
 }
 
-async function existsInRoots(relativeFile, roots) {
+async function mediaFileState(relativeFile, roots) {
+  let foundUnreadable = false;
   for (const root of roots) {
     const resolvedRoot = path.resolve(root);
     const candidate = path.resolve(resolvedRoot, relativeFile);
     if (!candidate.startsWith(`${resolvedRoot}${path.sep}`)) continue;
     try {
-      await access(candidate);
-      return true;
+      const info = await stat(candidate);
+      if (!info.isFile()) continue;
+      // Media is mounted read-only in a container whose UID need not match
+      // the publisher. A 0600 source can pass local access() but fail only
+      // after the HTTP stream begins, producing a blank proxy 502.
+      if (info.mode & 0o004) return 'ok';
+      foundUnreadable = true;
     } catch {
       // This source root does not contain the file; try the next one.
     }
   }
-  return false;
+  return foundUnreadable ? 'unreadable' : 'missing';
 }
 
 /** Verify every local classroom and series-media URL in a complete release. */
@@ -49,7 +55,9 @@ export async function checkLearnerReleaseMedia({ releaseRoot, mediaRoots }) {
           'data/classrooms',
           decodeURIComponent(url.slice('/api/classroom-media/'.length)),
         );
-        if (!(await existsInRoots(relative, mediaRoots))) errors.push(`Missing ${url}`);
+        const state = await mediaFileState(relative, mediaRoots);
+        if (state !== 'ok')
+          errors.push(`${state === 'unreadable' ? 'Unreadable' : 'Missing'} ${url}`);
       } catch {
         errors.push(`Invalid media URL ${url}`);
       }
@@ -64,7 +72,9 @@ export async function checkLearnerReleaseMedia({ releaseRoot, mediaRoots }) {
         'content/learner/media',
         decodeURIComponent(url.slice('/learner/runtime/'.length)),
       );
-      if (!(await existsInRoots(relative, mediaRoots))) errors.push(`Missing ${url}`);
+      const state = await mediaFileState(relative, mediaRoots);
+      if (state !== 'ok')
+        errors.push(`${state === 'unreadable' ? 'Unreadable' : 'Missing'} ${url}`);
     } catch {
       errors.push(`Invalid media URL ${url}`);
     }

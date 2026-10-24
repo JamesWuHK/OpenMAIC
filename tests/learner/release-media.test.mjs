@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -55,4 +55,15 @@ test('blocks a release with missing narration or cover', () =>
     assert.equal(result.errors.length, 2);
     assert.match(result.errors.join('\n'), /voice\.mp3/);
     assert.match(result.errors.join('\n'), /cover\.svg/);
+  }));
+
+test('blocks owner-only media that a separate container UID cannot read', () =>
+  fixture(async ({ releaseRoot, mediaRoot }) => {
+    const cover = path.join(mediaRoot, 'content/learner/media/cover.svg');
+    const voice = path.join(mediaRoot, 'data/classrooms/lesson-1/media/voice.mp3');
+    await writeFile(cover, '<svg/>');
+    await writeFile(voice, 'audio');
+    await chmod(voice, 0o600);
+    const result = await checkLearnerReleaseMedia({ releaseRoot, mediaRoots: [mediaRoot] });
+    assert.deepEqual(result.errors, ['Unreadable /api/classroom-media/lesson-1/media/voice.mp3']);
   }));

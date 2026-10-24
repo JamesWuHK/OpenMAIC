@@ -18,9 +18,15 @@ site on 2026-10-24: site content, catalog IDs/order, and all ten complete
 classroom JSON files matched. The older `nobel03-story-v3-release` package
 failed that comparison because it contains older lesson IDs and site content.
 The current release references 237 classroom media URLs and 14 site media URLs;
-all 251 had a local source across the canonical checkout, the new Nobel payload,
-and the separate Nobel 03 v3 release. `qa-learner-release-media.mjs` makes this
-check repeatable; it proves local source presence, not production HTTP playback.
+all 251 have a local source across the canonical checkout, the new Nobel
+payload, and the separate Nobel 03 v3 release. **Two leaf-classifier image
+sources are owner-only mode 0600**, so the stricter
+`qa-learner-release-media.mjs` now fails the container-readability gate for
+`gen_img_0B49IQj9.png` and `gen_img_Uyovku9U.png`. Both public URLs
+repeatedly returned HTTP 502 on 2026-10-24; the other 52 of 53 sampled live
+media requests succeeded. A permission/read-stream failure is plausible but
+unconfirmed without server logs. Do not label media or browser QA passed, and
+do not silently copy these files with their current mode into a new release.
 
 The ten current classroom files also loaded through the candidate's v1.2.1
 HTTP document client and structural validators. Candidate code now reads only
@@ -47,6 +53,9 @@ and local Docker is offline). A complete candidate build, browser checks, and re
 remain outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
 the image's pinned 7.3.1 produced decodable Cantonese clips for all three
 classroom roles in isolated testing, not on the live site.
+The configured `wanli-lightsail-ops` identity is valid, but a read-only
+`lightsail:GetInstance` call for `openmaic-learner-hk` was denied by IAM. No
+server login, permission change, media upload, or container restart was made.
 
 ## Historical merge preflight on the integration branch
 
