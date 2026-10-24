@@ -28,6 +28,12 @@ classrooms or real lesson playback. On 2026-10-24 the read-only
 public site and the frozen `output/nobel-series-20261024-release/candidate`
 package: all 10 classroom JSON files, catalog IDs/order and site content still
 match. This protects the current baseline but is not a v1.2.1 acceptance test.
+The new `qa-learner-candidate-audio.mjs` check samples first, middle and last
+narration Range requests per published classroom. Against the current public
+site it passed 30/30 audio clips across all 10 lessons. Its three unit tests
+also pass, including the legacy `/api/classroom` fallback. It must be run
+again against an exact-content v1.2.1 candidate; this public-baseline result
+does not establish candidate playback or audible browser output.
 
 ## Current learner release preservation gate (2026-10-24)
 
