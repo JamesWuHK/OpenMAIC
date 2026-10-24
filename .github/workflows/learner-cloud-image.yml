@@ -41,6 +41,7 @@ jobs:
           tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
           tests/server/install-process-shutdown-handlers.test.ts
           tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
+          tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts
       - name: TypeScript
         run: pnpm exec tsc --noEmit
       - name: Build exact learner image on hosted Linux

@@ -153,6 +153,29 @@ export function buildStateContext(storeState: StatelessChatRequest['storeState']
     );
   }
 
+  // Nobel lectures use reviewed HTML pages, rather than slide elements. Supply
+  // their authored narration so discussion agents can ground new award facts
+  // and preserve each scientist's contribution instead of guessing from titles.
+  if (stage?.id && /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(stage.id)) {
+    const teachingNotes = scenes.flatMap((scene) => {
+      const narration = (scene.actions ?? [])
+        .filter((action) => action.type === 'speech')
+        .map((action) => action.text ?? '')
+        .filter(Boolean)
+        .join('\n');
+      return narration ? [`${scene.title}\n${narration}`] : [];
+    }).join('\n\n');
+    if (teachingNotes) {
+      lines.push(
+        'Course teaching notes: use these authored notes as the factual basis for answers. ' +
+        'Preserve the attribution of each discovery to its scientist and collaborators. ' +
+        'Distinguish research tools, possible applications, and proven products or treatments. ' +
+        'If the notes do not support a claim, say that it is uncertain rather than inventing it.\n' +
+        teachingNotes.slice(0, 24_000),
+      );
+    }
+  }
+
   // Scenes summary
   lines.push(`Total scenes: ${scenes.length}`);
 
