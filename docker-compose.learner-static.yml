@@ -24,11 +24,34 @@ services:
       NODE_ENV: production
     expose:
       - '3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
     volumes:
       - ./data/classrooms:/app/data/classrooms:ro
       - ./data/teacher-submissions:/app/data/teacher-submissions
       - ./content/learner:/app/content/learner:ro
       - ./content/learner/media:/app/public/learner/runtime:ro
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    env_file:
+      - path: ${OPENMAIC_LEARNER_POSTGRES_ENV_FILE:-learner.postgres.env}
+        required: true
+    environment:
+      POSTGRES_DB: openmaic
+      POSTGRES_USER: openmaic
+    command: ['postgres', '-c', 'shared_buffers=64MB', '-c', 'max_connections=30']
+    shm_size: 64mb
+    mem_limit: 384m
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U openmaic -d openmaic']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - learner_postgres:/var/lib/postgresql/data
     restart: unless-stopped
 
   caddy:
@@ -48,3 +71,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  learner_postgres:

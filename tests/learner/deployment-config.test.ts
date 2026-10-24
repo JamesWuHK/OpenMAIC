@@ -28,7 +28,7 @@ describe('learner container configuration', () => {
     expect(compose).not.toContain('render-service');
   });
 
-  it('keeps the student deployment database-free with read-only classroom media', async () => {
+  it('uses isolated PostgreSQL while preserving read-only published classroom media', async () => {
     const compose = await readFile(`${root}/docker-compose.learner-static.yml`, 'utf8');
     const caddyfile = await readFile(`${root}/deploy/Caddyfile`, 'utf8');
     expect(compose).toContain('NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE: learner');
@@ -46,8 +46,11 @@ describe('learner container configuration', () => {
     expect(compose).toContain("'80:80'");
     expect(compose).toContain("'443:443'");
     expect(compose).not.toContain("'80:3000'");
-    expect(compose).not.toContain('postgres:');
-    expect(compose).not.toContain('learner_postgres:');
+    expect(compose).toContain('postgres:');
+    expect(compose).toContain('condition: service_healthy');
+    expect(compose).toContain('learner_postgres:/var/lib/postgresql/data');
+    expect(compose).toContain('OPENMAIC_LEARNER_POSTGRES_ENV_FILE:-learner.postgres.env');
+    expect(compose).not.toMatch(/'5432:5432'/);
     expect(compose).toContain('required: true');
     expect(compose).not.toContain('server-providers.yml');
     expect(caddyfile).toContain('class.wanli.ai');
@@ -90,8 +93,9 @@ describe('learner container configuration', () => {
 
   it('documents the deployment mode without containing credentials', async () => {
     const example = await readFile(`${root}/learner.env.example`, 'utf8');
-    expect(example).not.toMatch(/^DATABASE_URL=/m);
-    expect(example).not.toMatch(/^POSTGRES_PASSWORD=/m);
+    const postgresExample = await readFile(`${root}/learner.postgres.env.example`, 'utf8');
+    expect(example).toMatch(/^DATABASE_URL=postgres:\/\/openmaic:/m);
+    expect(postgresExample).toMatch(/^POSTGRES_PASSWORD=REPLACE_WITH_LONG_RANDOM_PASSWORD$/m);
     expect(example).not.toContain('PERSISTENCE_DEV_TOKEN=');
     expect(example).not.toMatch(/sk-[A-Za-z0-9]/);
   });

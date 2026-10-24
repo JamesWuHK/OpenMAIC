@@ -2,10 +2,10 @@
 
 Date: 2026-10-24 (Asia/Hong_Kong)
 
-Status: upstream v1.2.1 merged into the isolated integration branch. Current
-candidate source is `b9bc5898f5579a75363d213a5cd0061d20d14229`; the
-cloud build has reached Docker image construction, but its final result is not
-yet verified. No candidate deployment or production Web-image change.
+Status: upstream v1.2.1 merged into the isolated integration branch. The first
+cloud candidate at `b9bc5898f5579a75363d213a5cd0061d20d14229` built but
+failed startup; a PostgreSQL-backed candidate is being prepared. No candidate
+promotion or production service change.
 
 ## Cloud candidate verification (2026-10-24)
 
@@ -14,10 +14,10 @@ The self-hosted `openmaic-cloud-linux` runner is available for an isolated
 secrets. The workflow is `.github/workflows/learner-v121-self-hosted.yml` on
 `codex/upstream-v121-integration`. Run `40077092864` at the exact source above
 passed workspace-package compilation, 11 Node regression tests, 109 Vitest
-checks (one additional check skipped), and full TypeScript checking, then
-started Docker construction. GitHub's shared API returned HTTP 403 rate limit
-before the final Docker and isolated HTTP-smoke result could be read. **Do not
-infer a successful image from the started build.** The workflow's cleanup also
+checks (one additional check skipped), full TypeScript checking, and Docker
+image construction. Its isolated HTTP smoke failed: the container exited at
+boot because v1.2.1 requires `DATABASE_URL`. **This run is a failed candidate,
+not a successful image release.** The workflow's cleanup also
 removes its run-specific image, so even a successful run is build evidence, not
 a staged deployable artifact.
 
@@ -52,13 +52,14 @@ student host has exactly `openmaic` and `caddy` services, with no
 content mounts are read-only; teacher submissions use a separate writable
 mount. The Web container remains image `sha256:7e18dd23…`, restart count zero,
 with 8.6 GiB disk available and about 742 MiB memory available on a 1.9 GiB
-host. The integration branch's learner Compose had inadvertently acquired a
-PostgreSQL service; this is incompatible with the intended Web-only release
-lane and unnecessary for the mounted, student-only catalog. The learner
-Compose and example environment were restored to a database-free two-service
-shape; the authoring/agent-runtime stack is not changed. Compose resolves to
-`openmaic` and `caddy`, and the focused deployment-config tests pass 7/7.
-Production Compose, environment, services and mounts were not modified.
+host. The initial attempt to retain a two-service deployment failed because
+this upstream version requires a database even in learner mode. The user
+authorized adding PostgreSQL. The revised candidate Compose has `openmaic`,
+`postgres` and `caddy`, with a separate PostgreSQL credential file, persistent
+volume, health dependency and 384 MiB database memory cap. The ten published
+classrooms and media remain on read-only filesystem mounts; the new DB does
+not import or replace them. Production Compose, environment, services and
+mounts remain unchanged until isolated candidate and host-headroom checks pass.
 
 ## Current learner release preservation gate (2026-10-24)
 
@@ -116,8 +117,9 @@ re-freeze the source first. Do not infer that this document authorizes
 production deployment. The Git checkout itself has only six metadata entries
 and no packaged classrooms; its content-publish preflight correctly fails.
 
-Current execution gaps: the cloud Docker build's final result is not yet
-verified because GitHub API queries are rate-limited. Candidate testing with
+Current execution gaps: the first cloud Docker build failed its startup smoke
+because PostgreSQL was absent. A new PostgreSQL-backed build/test is required.
+Candidate testing with
 the exact ten-classroom content mounts, real-browser playback/discussion,
 desktop/mobile checks, a durable image transfer, and a release decision remain
 outstanding. The older local `edge-tts` 7.2.8 returns WebSocket 403;
