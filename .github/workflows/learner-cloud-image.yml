@@ -40,6 +40,8 @@ jobs:
           tests/pbl/v2/learner-state.test.ts tests/learner
           tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
           tests/server/install-process-shutdown-handlers.test.ts
+          tests/audio/discussion-speech-drain.test.ts tests/lib/buffer/stream-buffer.test.ts
+          tests/lib/chat/use-chat-sessions.test.ts
           tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
           tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts
           tests/playback/nobel-discussion-protocol.test.ts tests/orchestration/tool-schemas-latex-guardrail.test.ts
