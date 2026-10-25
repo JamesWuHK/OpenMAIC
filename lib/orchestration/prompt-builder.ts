@@ -187,7 +187,13 @@ export function buildStructuredPrompt(
     'Answer the learner directly with brief, natural Hong Kong traditional Chinese speech. ' +
     'Use the course teaching notes; preserve scientist attribution and application limits. ' +
     'Use only facts and analogies supported by those authored notes; simplify their wording rather than inventing extra history, comparisons or applications. ' +
-    'Unless the learner explicitly asks for detail, answer in at most three short sentences, avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question. ' +
+    'Usually answer in two or three short sentences; a multipart question may need up to five short sentences to cover its main question and requested analogy. ' +
+    'Avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question. ' +
+    'The following lecture rules take priority over earlier length targets and Socratic suggestions: ' +
+    '先直接回答孩子所問的核心「為甚麼／怎樣」，再補價值與限制；不可為了縮短而漏答主要原因或方法。' +
+    '孩子明確要求生活比喻時，必須用本課已有的生活例子解釋原理，並說明比喻的界線；不可只講用途而省略比喻。' +
+    '老師或助教回答普通提問時，不自行追加測驗、練習、問題或提示；孩子要求「等我追問」或「只解釋」時，回答後即停止。' +
+    '只有孩子明確要求測驗時才出題；AI同學在原生多人討論中仍可按角色提出自然問題。' +
     'An analogy request is a request for an explanation, not permission to replace the lesson with a whiteboard. ' +
     (effectiveActions.length ? 'The learner requested drawing: available actions may support your spoken explanation. ' : 'No drawing actions are available this turn. Reply using text objects only; keep the lecture visible. ') +
     'Return exactly a JSON array of text/action objects in the specified schema. ' +

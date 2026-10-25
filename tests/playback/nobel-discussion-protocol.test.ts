@@ -122,11 +122,15 @@ describe('Nobel answers stay within authored facts and necessary depth', () => {
     'hk-nobel-01-kagan-lecture-v5', 'hk-nobel-02-soai-lecture-v5',
     'hk-nobel-03-halzen-lecture-v4', 'hk-nobel-04-deisseroth-lecture-v3',
     'hk-nobel-05-hegemann-lecture-v2', 'hk-nobel-06-nagel-lecture-v2',
-  ])('requires supported facts/analogies and at most three short sentences for %s', (id) => {
+  ])('requires supported facts, answers the main question and avoids unsolicited quizzes for %s', (id) => {
     const prompt = promptFor(id, '請解釋本課的價值與限制。');
     expect(prompt).toContain('Use only facts and analogies supported by those authored notes; simplify their wording rather than inventing extra history, comparisons or applications.');
-    expect(prompt).toContain('Unless the learner explicitly asks for detail, answer in at most three short sentences');
-    expect(prompt).toContain('avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question.');
+    expect(prompt).toContain('Usually answer in two or three short sentences; a multipart question may need up to five short sentences');
+    expect(prompt).toContain('Avoid unexplained abbreviations and unnecessary numerical precision, then wait for their next question.');
+    expect(prompt).toContain('先直接回答孩子所問的核心「為甚麼／怎樣」');
+    expect(prompt).toContain('必須用本課已有的生活例子解釋原理');
+    expect(prompt).toContain('不自行追加測驗、練習、問題或提示');
+    expect(prompt).toContain('AI同學在原生多人討論中仍可按角色提出自然問題');
   });
 
   it.each(['teacher', 'assistant', 'student'])('applies the lesson-03 factual boundaries to the %s role', (role) => {
