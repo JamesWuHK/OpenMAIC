@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next';
 import { nobelCourseRedirects } from './lib/config/nobel-course-redirects';
 
+const configuredTurbopackMemoryMb = Number.parseInt(process.env.OPENMAIC_BUILD_MEMORY_MB ?? '', 10);
+
 const configuredBuildCpus = Number.parseInt(process.env.OPENMAIC_BUILD_CPUS ?? '', 10);
 
 const nextConfig: NextConfig = {
@@ -49,6 +51,9 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     proxyClientMaxBodySize: '200mb',
+    ...(Number.isFinite(configuredTurbopackMemoryMb) && configuredTurbopackMemoryMb >= 128 && configuredTurbopackMemoryMb <= 1024
+      ? { turbopackMemoryLimit: configuredTurbopackMemoryMb * 1024 * 1024 }
+      : {}),
     ...(Number.isFinite(configuredBuildCpus) && configuredBuildCpus > 0
       ? {
           cpus: configuredBuildCpus,
