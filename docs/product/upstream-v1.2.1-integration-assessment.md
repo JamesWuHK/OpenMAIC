@@ -10,6 +10,16 @@ model-backed discussion, whole-course interaction regression and production
 cutover acceptance remain open. No candidate promotion or production service
 image change; a separate production model-route repair is recorded below.
 
+## Synthetic discussion gate prepared (2026-10-26 HKT)
+
+The isolated cloud workflow now starts a local OpenAI-compatible fixture on
+the runner's Docker bridge and points only the temporary candidate at it. A
+synthetic learner question must produce a visible teacher text delta, a
+`cue_user` handoff and a normal `done` event without an SSE error. The fixture
+uses no provider or AWS credential and does not change production. This gate
+has **not yet run** at the new revision; even if it passes, it cannot replace
+a real-provider, real-browser discussion and audio-latency acceptance.
+
 ## Production discussion repair, separate from the v1.2.1 cutover (2026-10-25 HKT)
 
 The existing production image remained `sha256:3cb7e1618906851847e12a4602611b233cb54915f7f9cba040d1f29067ab9181`.
