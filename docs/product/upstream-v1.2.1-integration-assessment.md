@@ -17,7 +17,11 @@ the runner's Docker bridge and points only the temporary candidate at it. A
 synthetic learner question must produce a visible teacher text delta, a
 `cue_user` handoff and a normal `done` event without an SSE error. The fixture
 uses no provider or AWS credential and does not change production. This gate
-has **not yet run** at the new revision; even if it passes, it cannot replace
+has **not yet run** at the new revision. Dispatch at `63e0f267` returned
+GitHub HTTP 422, `Actions has been disabled for this repository`, even though
+the repository Actions permission reports `enabled: true` and the workflow
+itself reports `active`. This is an external execution blocker, not a test
+pass or a candidate defect. Even if the gate later passes, it cannot replace
 a real-provider, real-browser discussion and audio-latency acceptance.
 
 ## Production discussion repair, separate from the v1.2.1 cutover (2026-10-25 HKT)
