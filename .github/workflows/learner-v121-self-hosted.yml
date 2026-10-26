@@ -159,6 +159,20 @@ jobs:
       - name: Isolated HTTP smoke test
         if: github.event_name == 'workflow_dispatch' && inputs.build
         run: |
+          set -euo pipefail
+          # The model fixture listens only on Docker's local bridge gateway.
+          # No provider key or student text leaves this isolated candidate.
+          bridge_gateway=$(docker network inspect bridge --format '{{(index .IPAM.Config 0).Gateway}}')
+          case "$bridge_gateway" in ''|*[!0-9.]*) echo 'Invalid Docker bridge gateway' >&2; exit 1 ;; esac
+          mock_port=$((30000 + GITHUB_RUN_ID % 10000))
+          HOST="$bridge_gateway" PORT="$mock_port" node scripts/qa-learner-synthetic-model-server.mjs &
+          mock_pid=$!
+          trap 'kill "$mock_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl -fsS "http://$bridge_gateway:$mock_port/health" >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS "http://$bridge_gateway:$mock_port/health" >/dev/null
           # This self-hosted runner's custom Docker bridges cannot reach Edge TTS.
           # The default bridge passed an external synthetic speech probe. Map
           # only this run's temporary PostgreSQL IP into the candidate; this
@@ -177,10 +191,11 @@ jobs:
           case "$postgres_ip" in ''|*[!0-9.]*) echo 'Invalid temporary PostgreSQL IP' >&2; exit 1 ;; esac
           docker run -d --name "$CONTAINER_NAME" -p 127.0.0.1::3000 \
             --network bridge --add-host "$POSTGRES_CONTAINER_NAME:$postgres_ip" \
+            --add-host "synthetic-model:$bridge_gateway" \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e DATABASE_URL="postgres://openmaic:synthetic-ci-postgres-not-a-secret@$POSTGRES_CONTAINER_NAME:5432/openmaic" \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
-            -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
+            -e OPENAI_BASE_URL="http://synthetic-model:$mock_port/v1" \
             -e DEFAULT_MODEL=openai:gpt-4o-mini \
             -e LEARNER_SITE_CONTENT_PATH=/app/content/learner/site-content.json \
             -e LEARNER_PUBLISHED_COURSES_PATH=/app/content/learner/published-courses.json \
@@ -212,6 +227,8 @@ jobs:
           '
           LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
             node scripts/qa-learner-candidate-speech.mjs
+          LEARNER_QA_CANDIDATE_URL="http://127.0.0.1:$port" \
+            node scripts/qa-learner-candidate-discussion.mjs
           LEARNER_QA_BASELINE_URL=https://class.wanli.ai \
             LEARNER_QA_SITE_CONTENT_PATH="$CANDIDATE_ROOT/content/learner/site-content.json" \
             LEARNER_QA_CATALOG_PATH="$CANDIDATE_ROOT/content/learner/published-courses.json" \
