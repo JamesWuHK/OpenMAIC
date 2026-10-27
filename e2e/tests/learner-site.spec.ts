@@ -195,6 +195,7 @@ test('switching from a Nobel lecture through discovery loads the selected uncach
       targetRequests++;
       const copy = JSON.parse(fixture.replaceAll(nobelId, targetId).replaceAll('nobel01-', 'switch-ci-'));
       copy.classroom.stage.name = '切課驗收：中文課';
+      copy.classroom.scenes[0].title = '切課驗收：中文課';
       body = JSON.stringify(copy);
     }
     await route.fulfill({ status: 200, contentType: 'application/json', body });
