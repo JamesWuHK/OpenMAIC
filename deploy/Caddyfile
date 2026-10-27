@@ -12,6 +12,13 @@ class.wanli.ai {
   @retired_audience_pages path /parents /parents/* /schools /schools/*
   respond @retired_audience_pages 404
 
+  # Start a new document on classroom entry so client-side navigation cannot
+  # keep rendering the previous course when the target is absent from IndexedDB.
+  @classroom_entry path /classroom/*
+  reverse_proxy @classroom_entry openmaic:3000 {
+    header_up -RSC
+  }
+
   reverse_proxy openmaic:3000
 
   header {
