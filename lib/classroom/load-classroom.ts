@@ -209,7 +209,7 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     ) {
       // In particular, never unmount the loading shell onto another course's
       // warm stage if the requested server document is missing or failed.
-      setError(`Classroom ${classroomId} is unavailable`);
+      setError('暫時無法載入這節課，請稍後重試。');
       return;
     }
     // Metadata-only on the critical path: the default loader defers object-URL

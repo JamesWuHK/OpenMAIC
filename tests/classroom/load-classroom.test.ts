@@ -198,7 +198,7 @@ describe('runClassroomLoad', () => {
     await runClassroomLoad(deps);
 
     expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
-    expect(deps.setError).toHaveBeenCalledWith('Classroom stage-a is unavailable');
+    expect(deps.setError).toHaveBeenCalledWith('暫時無法載入這節課，請稍後重試。');
     expect(deps.applyGeneratedAgents).not.toHaveBeenCalled();
     expect(deps.setLoading).toHaveBeenCalledWith(false);
   });
