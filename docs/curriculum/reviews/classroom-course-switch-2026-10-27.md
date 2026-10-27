@@ -16,6 +16,7 @@
 - 配置校驗成功後，2026-10-27 11:52 HKT 平滑 reload 既有 Caddy。Web 與 Caddy 的 ID、鏡像、StartedAt、RestartCount 均與基線相同，沒有重啟應用。
 - 數學站原有配置完整保留，公開數學站及 learner health HTTP 200。
 - 現役配置 SHA256：`5be0df89df16433f09c8f3b9168bcede6dae3621a925fca05546626da235c988`。
+- 上述為 reload 當時的整份配置指紋。終檢發現其他維護已移除數學站的臨時手動 TLS 行，現整份配置為 `0835ade6b799292809e92a86ddd6c80b9e3c36d00ee8730db5b882c863b4d433`；`class.wanli.ai` 區塊仍與本輪驗收候選完全一致。保留該數學站變更，未覆蓋或恢復它。
 - 正式域名 12 門課 × 桌面／手機兩種尺寸，**24/24 通過**。每次均由課程／系列入口點入，核對 URL、API 中的 stage ID 和實際可見課件標記；六門非諾獎課持續同一 context 切換。諾獎課逐課以獨立 context 從卡甘課開始導航，避免長鏈測試保留的資源影響驗收。最終結果見 `output/classroom-switch-20261027/public-browser-proof.json` 和服務器 `browser-proof/final.json`。
 - 初次驗收有兩類測試假設不適用：一般課程的 stage name 不顯示為可見標題，應核對實際可見課件文字；重訪已緩存課程不一定再次請求課堂 API。修正判據後，一次長鏈測試在第五課等待可見標題超時；該課直接打開及第四課→第五課獨立重測均成功，最後 24 格驗收完成。保留這些失敗邊界，不把它們改寫為首次即全部通過。
 
@@ -29,6 +30,6 @@ GitHub workflow dispatch 返回 `Actions has been disabled for this repository`�
 
 ## 回退與證據
 
-服務器目錄 `/opt/openmaic-learner/releases/classroom-switch-20261027` 保存 `Caddyfile.before`、`Caddyfile.candidate`、`baseline.json`、`applied.json` 和瀏覽器驗收。回退前核對現役配置仍匹配上述 SHA256，再把原文件內容寫回原 Caddyfile inode 並平滑 reload；不要盲目覆蓋後續其他人的代理更新。
+服務器目錄 `/opt/openmaic-learner/releases/classroom-switch-20261027` 保存 `Caddyfile.before`、`Caddyfile.candidate`、`baseline.json`、`applied.json` 和瀏覽器驗收。現役配置已有後續數學站維護，**不得整份恢復 Caddyfile.before**。若需撤回本修復，只移除 `@classroom_entry` matcher 和與其對應、含 `header_up -RSC` 的 reverse_proxy 段；保留其他配置，先校驗再平滑 reload，並核對服務身份和公開入口。
 
 本輪未更改課件 JSON、媒體、公開白名單、模型配置或題目內容，故沒有用工程導航驗收替代課程獨立內容審核。
