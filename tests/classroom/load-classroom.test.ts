@@ -168,6 +168,41 @@ beforeEach(() => {
 });
 
 describe('runClassroomLoad', () => {
+  it('loads the requested course instead of reusing a warm course from a previous route', async () => {
+    const requestedStage = makeStage('stage-a');
+    const requestedScene = makeScene('scene-a', 'stage-a');
+    const { deps, setStage } = makeDeps({
+      fetchClassroom: vi.fn().mockResolvedValue({
+        stage: requestedStage,
+        scenes: [requestedScene],
+      }),
+      applyFallbackScenes: vi.fn().mockImplementation(async ({ stage }) => {
+        setStage(stage);
+        return true;
+      }),
+    });
+    setStage(makeStage('previous-nobel-course'));
+
+    await runClassroomLoad(deps);
+
+    expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
+    expect(deps.applyFallbackScenes).toHaveBeenCalledOnce();
+    expect(deps.setError).not.toHaveBeenCalled();
+    expect(deps.applyGeneratedAgents).toHaveBeenCalledWith('stage-a', expect.any(Array));
+  });
+
+  it('shows an error rather than the previous course when the requested course is unavailable', async () => {
+    const { deps, setStage } = makeDeps();
+    setStage(makeStage('previous-nobel-course'));
+
+    await runClassroomLoad(deps);
+
+    expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
+    expect(deps.setError).toHaveBeenCalledWith('Classroom stage-a is unavailable');
+    expect(deps.applyGeneratedAgents).not.toHaveBeenCalled();
+    expect(deps.setLoading).toHaveBeenCalledWith(false);
+  });
+
   it('keeps the current load token valid when fallback scenes are committed', () => {
     useStageStore.getState().clearStore();
     const loadToken = claimStageSceneLoadToken();

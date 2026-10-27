@@ -168,8 +168,12 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
     if (!isCurrent()) return;
 
-    if (storageUnavailable || !getCurrentStage()) {
-      log.info('No IndexedDB data, trying server-side storage for:', classroomId);
+    const retainedStageId = getCurrentStage()?.id;
+    // A client-side route change can leave the previous classroom in the
+    // singleton store when the requested classroom has no IndexedDB copy.
+    // Only the requested stage counts as a successful local load.
+    if (storageUnavailable || retainedStageId !== classroomId) {
+      log.info('Requested classroom not in IndexedDB, trying server-side storage for:', classroomId);
       // The fetch path converts and commits under the per-stage document lock.
       // Once it returns, the document owns every allocation; a later
       // navigation may discard only this in-memory apply, never the durable
@@ -198,6 +202,16 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
 
     if (!isCurrent()) return;
+    if (
+      retainedStageId &&
+      retainedStageId !== classroomId &&
+      getCurrentStage()?.id !== classroomId
+    ) {
+      // In particular, never unmount the loading shell onto another course's
+      // warm stage if the requested server document is missing or failed.
+      setError(`Classroom ${classroomId} is unavailable`);
+      return;
+    }
     // Metadata-only on the critical path: the default loader defers object-URL
     // creation for non-priority blobs, so this await is a table read, not a
     // full media hydration (the rest hydrates in the background after apply).
