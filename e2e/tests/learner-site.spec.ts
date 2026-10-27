@@ -178,3 +178,35 @@ test('Nobel lecture question control opens a private, age-appropriate Q&A panel'
     await expect(questionInput).toBeHidden();
   }
 });
+
+test('switching from a Nobel lecture through discovery loads the selected uncached course', async ({ page }) => {
+  const nobelId = 'hk-nobel-01-kagan-lecture-v4';
+  const targetId = 'hk-c01-01-debatable-claim';
+  const fixture = await readFile(
+    path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', `${nobelId}.json`),
+    'utf8',
+  );
+  let targetRequests = 0;
+  await page.route('**/api/classroom?id=*', async (route) => {
+    const id = new URL(route.request().url()).searchParams.get('id');
+    if (id !== nobelId && id !== targetId) return route.continue();
+    let body = fixture;
+    if (id === targetId) {
+      targetRequests++;
+      const copy = JSON.parse(fixture.replaceAll(nobelId, targetId).replaceAll('nobel01-', 'switch-ci-'));
+      copy.classroom.stage.name = '切課驗收：中文課';
+      body = JSON.stringify(copy);
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body });
+  });
+  await page.goto(`/classroom/${nobelId}`);
+  await page.locator('a[href="/series/nobel-curiosity-lab"]').first().click();
+  await expect(page).toHaveURL(/\/series\/nobel-curiosity-lab$/);
+  await page.locator('a[href="/courses#series"]').first().click();
+  await expect(page).toHaveURL(/\/courses#series$/);
+  await page.locator(`a[href="/classroom/${targetId}"]`).first().click();
+  await expect(page).toHaveURL(new RegExp(`/classroom/${targetId}$`));
+  await expect(page.getByText('切課驗收：中文課', { exact: true }).first()).toBeVisible();
+  expect(targetRequests).toBe(1);
+  await expect(page.getByText('諾獎人物故事', { exact: true })).toHaveCount(0);
+});

@@ -168,8 +168,10 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
     if (!isCurrent()) return;
 
-    if (storageUnavailable || !getCurrentStage()) {
-      log.info('No IndexedDB data, trying server-side storage for:', classroomId);
+    // A missing local document leaves the previous classroom in the shared
+    // store. Only a stage matching this route can satisfy the current load.
+    if (storageUnavailable || getCurrentStage()?.id !== classroomId) {
+      log.info('Requested classroom is not loaded, trying server-side storage for:', classroomId);
       // The fetch path converts and commits under the per-stage document lock.
       // Once it returns, the document owns every allocation; a later
       // navigation may discard only this in-memory apply, never the durable
@@ -179,6 +181,9 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
 
       if (classroom) {
         const { stage, scenes } = classroom;
+        if (stage.id !== classroomId) {
+          throw new Error('The loaded classroom does not match the requested course');
+        }
         const applied = await applyFallbackScenes({
           loadToken,
           stage,
@@ -198,6 +203,9 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
 
     if (!isCurrent()) return;
+    if (getCurrentStage()?.id !== classroomId) {
+      throw new Error('Classroom not found');
+    }
     // Metadata-only on the critical path: the default loader defers object-URL
     // creation for non-priority blobs, so this await is a table read, not a
     // full media hydration (the rest hydrates in the background after apply).

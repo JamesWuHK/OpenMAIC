@@ -168,6 +168,55 @@ beforeEach(() => {
 });
 
 describe('runClassroomLoad', () => {
+  it('fetches the requested course when a missing local document leaves the previous course in memory', async () => {
+    const target = makeStage('stage-a', []);
+    const { deps, setStage } = makeDeps({
+      fetchClassroom: vi.fn().mockResolvedValue({ stage: target, scenes: [] }),
+    });
+    setStage(makeStage('hk-nobel-01-kagan-lecture-v4', []));
+    deps.applyFallbackScenes = vi.fn().mockImplementation(async () => {
+      setStage(target);
+      return true;
+    });
+
+    await runClassroomLoad(deps);
+
+    expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
+    expect(deps.getCurrentStage()?.id).toBe('stage-a');
+    expect(deps.applyGeneratedAgents).toHaveBeenCalledWith('stage-a', []);
+    expect(deps.setError).not.toHaveBeenCalled();
+  });
+
+  it('keeps the matching cached course without fetching another server copy', async () => {
+    const { deps, setStage } = makeDeps();
+    setStage(makeStage('stage-a', []));
+    await runClassroomLoad(deps);
+    expect(deps.fetchClassroom).not.toHaveBeenCalled();
+    expect(deps.setError).not.toHaveBeenCalled();
+  });
+
+  it('shows a load error rather than rendering the previous course when the target is unavailable', async () => {
+    const { deps, setStage } = makeDeps();
+    setStage(makeStage('previous-course', []));
+    await runClassroomLoad(deps);
+    expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith('stage-a', deps.isCurrent);
+    expect(deps.setError).toHaveBeenCalledWith('Classroom not found');
+    expect(deps.applyRestoredMediaTasks).not.toHaveBeenCalled();
+    expect(deps.applyGeneratedAgents).not.toHaveBeenCalled();
+  });
+
+  it('rejects a server payload for a different course before applying it', async () => {
+    const { deps, setStage } = makeDeps({
+      fetchClassroom: vi.fn().mockResolvedValue({ stage: makeStage('wrong-course', []), scenes: [] }),
+    });
+    setStage(makeStage('previous-course', []));
+    await runClassroomLoad(deps);
+    expect(deps.applyFallbackScenes).not.toHaveBeenCalled();
+    expect(deps.setError).toHaveBeenCalledWith(
+      'The loaded classroom does not match the requested course',
+    );
+  });
+
   it('keeps the current load token valid when fallback scenes are committed', () => {
     useStageStore.getState().clearStore();
     const loadToken = claimStageSceneLoadToken();
