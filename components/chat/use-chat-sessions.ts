@@ -35,6 +35,7 @@ import { StreamBuffer } from '@/lib/buffer/stream-buffer';
 import { waitForDiscussionSpeechDrain } from '@/lib/audio/wait-for-discussion-speech';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
 import { runAgentLoop, type AgentLoopStoreState } from '@/lib/chat/agent-loop';
+import { selectNobelQuestionAgentIds } from '@/lib/chat/nobel-qa-routing';
 import { ActionEngine } from '@/lib/action/engine';
 import {
   buildQuizResultsForStoreState,
@@ -1838,7 +1839,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
       // Read all selected agent IDs from settings store
       const settingsState = useSettingsStore.getState();
-      const agentIds: string[] =
+      const selectedAgentIds: string[] =
         settingsState.selectedAgentIds?.length > 0 ? settingsState.selectedAgentIds : ['default-1'];
 
       const userMessage: UIMessage<ChatMessageMetadata> = {
@@ -1859,6 +1860,11 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         ? [...existingSession.messages, userMessage]
         : [userMessage];
       const sessionType: SessionType = existingSession?.type || 'qa';
+      const stage = useStageStore.getState().stage;
+      const agentIds = selectNobelQuestionAgentIds({
+        learnerDeployment, stageId: stage?.id, sessionType, question: content,
+        selectedAgentIds, agents: stage?.generatedAgentConfigs ?? [],
+      });
 
       // Pure updater — no side effects
       setSessions((prev) => {

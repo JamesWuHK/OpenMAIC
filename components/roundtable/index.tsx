@@ -1336,6 +1336,7 @@ export function Roundtable({
                 <motion.div
                   key="input-stage"
                   data-testid="roundtable-non-presentation-input-stage"
+                  aria-busy={Boolean(isStreaming)}
                   initial={{
                     opacity: 0,
                     scale: 0.95,
