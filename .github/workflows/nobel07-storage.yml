@@ -1,0 +1,51 @@
+{
+  "name": "Nobel07 cloud Docker storage diagnosis only",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/nobel07-storage-20261104"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "nobel07-native-app-existing-linux",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "diagnose": {
+      "runs-on": [
+        "self-hosted",
+        "Linux",
+        "X64",
+        "openmaic",
+        "cloud-ci"
+      ],
+      "timeout-minutes": 8,
+      "steps": [
+        {
+          "name": "Read host and Docker filesystem capacity without cleanup",
+          "shell": "bash",
+          "run": "set -eu\ntest \"$GITHUB_REPOSITORY\" = \"JamesWuHK/OpenMAIC\"\ntest \"$RUNNER_NAME\" = \"openmaic-cloud-linux\"\ntest \"$(id -u)\" -ne 0\nmkdir -p \"$RUNNER_TEMP/nobel07-storage-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT\"\nreport=\"$RUNNER_TEMP/nobel07-storage-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/report.txt\"\n{\n  date -u\n  printf 'Runner: %s\\n' \"$RUNNER_NAME\"\n  df -PT \"$GITHUB_WORKSPACE\"\n  df -Pi \"$GITHUB_WORKSPACE\"\n  docker info --format 'Driver={{.Driver}} Root={{.DockerRootDir}} DriverStatus={{json .DriverStatus}}'\n  root_dir=\"$(docker info --format '{{.DockerRootDir}}')\"\n  df -PT \"$root_dir\" || true\n  df -Pi \"$root_dir\" || true\n  docker system df\n  docker ps -a --no-trunc --format '{{.ID}} {{.Image}} {{.Status}} {{.Names}}'\n  docker inspect --format 'BuildFailureState={{json .State}} Image={{.Image}} Graph={{json .GraphDriver}}' 1156e88a5894 || true\n  image_id=\"$(docker image inspect node:22-alpine --format '{{.Id}}')\"\n  case \"$image_id\" in sha256:*) ;; *) exit 1 ;; esac\n  printf \"%s\" \"$image_id\" > \"$RUNNER_TEMP/nobel07-storage-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/image-id\"\n  docker run --rm --name \"nobel07-storage-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT\" --label wanli.qa.owner=nobel07-storage-diagnostic --label \"wanli.qa.run=$GITHUB_RUN_ID\" --memory 64m --cpus .25 --pids-limit 32 --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 --network none --read-only \"$image_id\" /bin/sh -c 'df -PT /; df -Pi /'\n} > \"$report\" 2>&1\ncat \"$report\"\n"
+        },
+        {
+          "name": "Remove only this diagnostic container if interrupted",
+          "if": "always()",
+          "run": "python3 - <<'CLEAN'\nimport os,json,subprocess\nfrom pathlib import Path\nassert os.environ[\"GITHUB_REPOSITORY\"]==\"JamesWuHK/OpenMAIC\" and os.environ[\"RUNNER_NAME\"]==\"openmaic-cloud-linux\" and os.getuid()!=0\nname=f\"nobel07-storage-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}\"\np=subprocess.run(['docker','inspect',name],capture_output=True,text=True,timeout=10)\nif p.returncode:\n assert 'no such' in p.stderr.lower()\nelse:\n c=json.loads(p.stdout)[0];labels=c['Config']['Labels'];proof=Path(os.environ['RUNNER_TEMP'])/name/'image-id'\n assert labels.get('wanli.qa.owner')=='nobel07-storage-diagnostic' and labels.get('wanli.qa.run')==os.environ['GITHUB_RUN_ID'] and c['Image']==proof.read_text()\n subprocess.run(['docker','rm','-f',c['Id']],check=True,timeout=15)\nCLEAN"
+        },
+        {
+          "name": "Save storage evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "nobel07-storage-${{ github.run_id }}",
+            "path": "${{ runner.temp }}/nobel07-storage-${{ github.run_id }}-${{ github.run_attempt }}/",
+            "retention-days": 7
+          }
+        }
+      ]
+    }
+  }
+}
