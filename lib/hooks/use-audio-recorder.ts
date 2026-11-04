@@ -402,9 +402,12 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
     }
   }, [isRecording]);
 
-  useEffect(() => () => {
-    if (stopWatchdogRef.current) clearTimeout(stopWatchdogRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (stopWatchdogRef.current) clearTimeout(stopWatchdogRef.current);
+    },
+    [],
+  );
 
   return {
     isRecording,

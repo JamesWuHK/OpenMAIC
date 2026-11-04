@@ -53,7 +53,9 @@ test('homepage communicates the Hong Kong series proposition and navigates to di
 }, testInfo) => {
   await page.goto('/');
   // The file-backed site headline may replace the built-in fallback during hydration.
-  await expect(page.getByRole('heading', { name: /把香港，變成你的 AI 課堂|把每個好奇心，變成一門課/ })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /把香港，變成你的 AI 課堂|把每個好奇心，變成一門課/ }),
+  ).toBeVisible();
   await expect(page.getByRole('heading', { name: '從香港真問題出發' })).toBeVisible();
   await expect(page.getByRole('link', { name: '探索學習路線' })).toBeVisible();
   await expectNoDocumentOverflow(page);
@@ -131,7 +133,9 @@ test('teacher submission explains the review gate before generation', async ({ p
   await expect(page.getByRole('button', { name: '提交審核' })).toBeVisible();
 });
 
-test('Nobel lecture question control opens a private, age-appropriate Q&A panel', async ({ page }) => {
+test('Nobel lecture question control opens a private, age-appropriate Q&A panel', async ({
+  page,
+}) => {
   const courses = [
     'hk-nobel-01-kagan-lecture-v4',
     'hk-nobel-02-soai-lecture-v4',
@@ -254,7 +258,9 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
   await expect(page.getByText(question).first()).toBeVisible();
 });
 
-test('manual stop submits Cantonese interim speech when Chrome aborts without end', async ({ page }) => {
+test('manual stop submits Cantonese interim speech when Chrome aborts without end', async ({
+  page,
+}) => {
   const question = '老師，雷達回波係咩？';
   await page.addInitScript((transcript) => {
     localStorage.setItem('locale', 'zh-TW');
@@ -293,7 +299,13 @@ test('manual stop submits Cantonese interim speech when Chrome aborts without en
 
   await page.route('**/api/classroom?id=*', async (route) => {
     const fixture = await readFile(
-      path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', 'hk-nobel-01-kagan-lecture-v4.json'),
+      path.join(
+        process.cwd(),
+        'e2e',
+        'fixtures',
+        'nobel-interaction',
+        'hk-nobel-01-kagan-lecture-v4.json',
+      ),
       'utf8',
     );
     await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
