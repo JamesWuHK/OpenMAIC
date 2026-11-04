@@ -1,7 +1,20 @@
 {
   "name": "Learner cloud image candidate",
   "on": {
-    "workflow_dispatch": {}
+    "workflow_dispatch": {
+      "inputs": {
+        "runner": {
+          "description": "Existing self-hosted or free standard Linux for this PUBLIC repository",
+          "required": true,
+          "type": "choice",
+          "default": "self-hosted",
+          "options": [
+            "self-hosted",
+            "public-standard"
+          ]
+        }
+      }
+    }
   },
   "permissions": {
     "contents": "read"
@@ -12,14 +25,8 @@
   },
   "jobs": {
     "candidate": {
-      "if": "github.repository == 'JamesWuHK/OpenMAIC'",
-      "runs-on": [
-        "self-hosted",
-        "Linux",
-        "X64",
-        "openmaic",
-        "cloud-ci"
-      ],
+      "if": "github.repository == 'JamesWuHK/OpenMAIC' && (inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false))",
+      "runs-on": "${{ fromJSON(inputs.runner == 'public-standard' && '[\"ubuntu-24.04\"]' || '[\"self-hosted\",\"Linux\",\"X64\",\"openmaic\",\"cloud-ci\"]') }}",
       "timeout-minutes": 90,
       "env": {
         "CI": "true",
@@ -56,7 +63,7 @@
         },
         {
           "name": "Ownership and packaging regression",
-          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nPYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/learner -p test_nobel_catalog_merge.py\nnode --test tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs\nnode --experimental-strip-types --test tests/learner/legacy-nobel-redirect.test.mjs"
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nPYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/learner -p test_nobel_catalog_merge.py\nnode --test tests/ci/free-qa-proxy.test.mjs tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs\nnode --experimental-strip-types --test tests/learner/legacy-nobel-redirect.test.mjs"
         },
         {
           "name": "Relevant regression tests",

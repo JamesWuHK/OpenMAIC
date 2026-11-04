@@ -4,10 +4,17 @@ import test from 'node:test';
 
 test('image workflow is bounded, manual on the recovery branch, and contains no deployment authority', () => {
   const workflow = JSON.parse(fs.readFileSync(new URL('../../.github/workflows/learner-cloud-image.yml', import.meta.url)));
-  assert.deepEqual(workflow.on, {workflow_dispatch: {}});
+  assert.deepEqual(Object.keys(workflow.on), ['workflow_dispatch']);
+  const runner = workflow.on.workflow_dispatch.inputs.runner;
+  assert.equal(runner.type, 'choice');
+  assert.equal(runner.default, 'self-hosted');
+  assert.deepEqual(runner.options, ['self-hosted', 'public-standard']);
   assert.deepEqual(workflow.permissions, {contents: 'read'});
   const job = workflow.jobs.candidate;
-  assert.deepEqual(job['runs-on'], ['self-hosted', 'Linux', 'X64', 'openmaic', 'cloud-ci']);
+  assert.match(job['runs-on'], /\["ubuntu-24.04"\]/);
+  assert.match(job['runs-on'], /\["self-hosted","Linux","X64","openmaic","cloud-ci"\]/);
+  assert(job.if.includes("inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false)"));
+  assert(!/large|windows|macos/.test(job['runs-on']));
   const builder = job.steps.find(step => step.id === 'builder');
   assert.match(builder.uses, /^docker\/setup-buildx-action@[0-9a-f]{40}$/);
   assert.equal(builder.with.use, false);

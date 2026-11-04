@@ -16,9 +16,13 @@ reserve resources for subsequent work.
 
 ## Manual image workflow
 
-`.github/workflows/learner-cloud-image.yml` runs only when manually dispatched,
-on labels `self-hosted, Linux, X64, openmaic, cloud-ci`. It has contents-read
-permission and no deployment, cloud, or model credentials.
+`.github/workflows/learner-cloud-image.yml` runs only when manually dispatched.
+Its default targets labels `self-hosted, Linux, X64, openmaic, cloud-ci`. An explicit
+`public-standard` choice targets only standard `ubuntu-24.04`, with both public
+visibility and `private == false` event checks before that job can run. GitHub's
+current official billing documentation lists standard hosted runners in public
+repositories as free. There is no automatic fallback or larger runner selection.
+It has contents-read permission and no deployment, cloud, or model credentials.
 
 - The capacity check requires 6 GiB available RAM, leaving at least 1 GiB beyond
   the builder's 5 GiB memory limit, and 20 GiB disk space. It requires one million
@@ -112,3 +116,20 @@ actions. No production writes were made. A read-only dependency inode measuremen
 was queued as run `41771991875`; subsequent preflights are manual-only to avoid
 unnecessary push-triggered checks. API core quota was exhausted again; the published
 reset is 2026-11-04T04:48:35Z. No alternate credentials or status paths were used.
+
+## Free model QA preparation
+
+The read-only official DeepSeek balance endpoint reported zero unexpired grant.
+No inference was made and no paid-model fallback is permitted for this QA.
+`scripts/qa/openrouter-free-proxy.mjs` is prepared, not deployed: it permits only
+`openrouter/free`, text messages and declared client functions, rejects model
+fallbacks and plugins, caps tokens/request budget/concurrency/lifetime, and
+terminates stalled bodies. The upstream key stays on its existing host; a future
+runner would receive only a revocable relay token. Nine loopback/TLS tests and
+independent source review passed. Real upstream/SSE acceptance is still pending.
+
+CLI use requires TLS. Explicitly trusting the ephemeral public CA was tested;
+certificate verification is not disabled. Quick Tunnels are not suitable because
+Cloudflare documents that they do not support SSE. No tunnel, relay, port rule,
+DNS record or production service was created for this preparation. Any transport
+setup still requires scoped resource checks, independent review and owned cleanup.
