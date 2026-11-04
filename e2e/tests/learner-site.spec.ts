@@ -69,7 +69,6 @@ test('homepage communicates the Hong Kong series proposition and navigates to di
 
   await page.screenshot({
     path: path.join(screenshotDirectory, `${testInfo.project.name}-courses.png`),
-    fullPage: true,
   });
 });
 
