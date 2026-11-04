@@ -35,6 +35,12 @@ permission and no deployment, cloud, or model credentials.
 - Container cleanup requires its CID receipt plus matching actual ID, image,
   name, source revision and ownership labels. A failed name collision gives no
   cleanup authority. No global Docker pruning or service restarts are permitted.
+- The official setup Action's automatic builder cleanup is disabled: its cleanup
+  errors are warnings, which cannot prove removal. The workflow records the
+  guarded, randomly named builder's actual CID/image, separately verifies hard
+  limits, and explicitly removes only that builder after receipt validation.
+  A failed removal or a surviving CID fails the cleanup step. A post-setup
+  `always()` step records even a partially created builder for this cleanup.
 - Five prompt asset directories are explicitly included in the Docker context
   and final image. Every source Markdown asset is SHA256-checked inside the
   actual running candidate, preventing an image with omitted runtime prompts.
@@ -48,11 +54,17 @@ No dependency cache is uploaded. GitHub's current [billing documentation](https:
 lists self-hosted runner use as free; no runner instance, paid provider, account
 upgrade or billing setting is created or changed by this workflow.
 
-Light checks: nine Python ownership/capacity tests and three Node packaging / CI
+Light checks: ten Python ownership/capacity tests and three Node packaging / CI
 contract tests passed. Independent technical review passed for one bounded CI
-attempt, conditional on verifying the pinned official setup-buildx action source
-and options before execution. Actual image build, TypeScript, runtime prompt
+attempt; the pinned official setup-buildx action source and supported inputs
+were verified through the official repository after the API rate reset. Actual image build, TypeScript, runtime prompt
 hashes and browser results are still pending cloud execution.
+
+Latest read-only preflight [41768378000](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41768378000)
+failed its capacity gate at 2026-11-04T03:47:17Z: 4,189,452 KiB available memory,
+64,392,208 KiB free Docker disk space and 294,210 free inodes. Other jobs now
+occupy the runner. Do not dispatch heavy work against this insufficient snapshot,
+relax the gate to force a build, or reclaim another task's resources.
 
 ## Remaining release gates
 

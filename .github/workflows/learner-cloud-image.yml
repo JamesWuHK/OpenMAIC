@@ -78,7 +78,8 @@
         },
         {
           "name": "Refuse existing builder container",
-          "run": "existing=$(docker container ls --all --filter \"name=^/buildx_buildkit_${BUILDER_NAME}0$\" --format '{{.ID}}')\ntest -z \"$existing\"\ntest \"$(find \"$DOCKER_CONFIG\" -mindepth 1 -maxdepth 1 | wc -l)\" -eq 0"
+          "run": "python3 scripts/ci/nobel-resources.py builder-guard",
+          "id": "builder_guard"
         },
         {
           "id": "builder",
@@ -89,12 +90,22 @@
             "driver": "docker-container",
             "use": false,
             "install": false,
-            "cleanup": true,
+            "cleanup": false,
             "keep-state": false,
             "driver-opts": "memory=5g\nmemory-swap=6g\ncpu-period=100000\ncpu-quota=150000\nrestart-policy=no",
             "buildkitd-flags": "--oci-worker-gc=true",
-            "buildkitd-config-inline": "[worker.oci]\n  max-parallelism = 1"
+            "buildkitd-config-inline": "[worker.oci]\n  max-parallelism = 1",
+            "cache-binary": false
           }
+        },
+        {
+          "name": "Record even partially created own builder",
+          "if": "always() && steps.builder_guard.outcome == 'success'",
+          "run": "python3 scripts/ci/nobel-resources.py builder-record"
+        },
+        {
+          "name": "Verify actual builder hard limits",
+          "run": "python3 scripts/ci/nobel-resources.py builder-caps"
         },
         {
           "name": "Build exact learner image",

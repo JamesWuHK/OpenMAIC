@@ -14,11 +14,14 @@ test('image workflow is bounded, manual on the recovery branch, and contains no 
   assert.equal(builder.with.install, false);
   assert.match(builder.with['driver-opts'], /memory=5g/);
   assert.match(builder.with['driver-opts'], /cpu-quota=150000/);
-  assert.equal(builder.with.cleanup, true);
+  assert.equal(builder.with.cleanup, false);
+  assert.equal(builder.with['cache-binary'], false);
   const scripts = job.steps.map(step => step.run || '').join('\n');
   assert.match(scripts, /nobel-resources.py capacity --after-install/);
   assert.match(scripts, /nobel-resources.py prompts/);
   assert.match(scripts, /nobel-resources.py cleanup/);
+  assert.match(scripts, /nobel-resources.py builder-record/);
+  assert.match(scripts, /nobel-resources.py builder-caps/);
   assert(!/secrets\.|docker\s+(prune|system\s+prune|push)|--with-deps|learner-candidate/.test(JSON.stringify(workflow)));
   assert(job.steps.some(step => step.if === 'always()' && step.run?.includes('nobel-resources.py cleanup')));
 });

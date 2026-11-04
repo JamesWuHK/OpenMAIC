@@ -24,6 +24,14 @@ class ResourceOwnership(unittest.TestCase):
     def test_owned_container_matches(self):
         self.assertTrue(resources.owned(self.actual, self.expected))
 
+    def test_builder_receipt_requires_exact_cid_image_and_container_name(self):
+        receipt = {'cid': 'a' * 64, 'image': 'sha256:' + 'b' * 64, 'name': 'nobel-123-1-random'}
+        actual = {'Id': receipt['cid'], 'Image': receipt['image'],
+                  'Name': '/buildx_buildkit_' + receipt['name'] + '0'}
+        self.assertTrue(resources.builder_owned(actual, receipt))
+        for key in actual:
+            self.assertFalse(resources.builder_owned(dict(actual, **{key: 'changed'}), receipt))
+
     def test_never_clean_by_name_or_reused_tag(self):
         for key in ['Id', 'Name', 'Image']:
             with self.subTest(key=key):
@@ -98,7 +106,7 @@ class ResourceOwnership(unittest.TestCase):
             (task / 'owner.json').write_text('{}')
             result = resources.subprocess.CompletedProcess([], 1, '', 'Cannot connect to Docker daemon')
             with patch.object(resources, 'context', return_value=('123-1', 'c' * 40, task)), \
-                    patch.object(resources, 'checked_task'), \
+                    patch.object(resources, 'checked_task', return_value=('123-1', 'c' * 40, task)), \
                     patch.object(resources, 'resource', return_value=None), \
                     patch.object(resources.subprocess, 'run', return_value=result):
                 with self.assertRaisesRegex(RuntimeError, 'Cannot connect'):

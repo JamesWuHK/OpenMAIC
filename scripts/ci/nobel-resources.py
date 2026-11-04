@@ -104,6 +104,77 @@ def resource(kind):
     return actual
 
 
+def builder_guard():
+    run, sha, task = checked_task()
+    name = os.environ['BUILDER_NAME']
+    if not re.fullmatch('nobel-' + re.escape(run) + r'-[0-9a-f]{32}', name):
+        raise RuntimeError('Invalid builder identity')
+    if pathlib.Path(os.environ['DOCKER_CONFIG']) != task / 'docker' or any((task / 'docker').iterdir()):
+        raise RuntimeError('Builder requires a fresh private Docker config')
+    existing = command('docker', 'container', 'ls', '--all', '--filter',
+                       'name=^/buildx_buildkit_' + name + '0$', '--format', '{{.ID}}')
+    if existing:
+        raise RuntimeError('Builder container already exists; do not adopt it')
+    (task / 'builder-intent.json').write_text(json.dumps({'name': name, 'run': run, 'sha': sha}))
+
+
+def builder_record():
+    run, sha, task = checked_task()
+    intent = json.loads((task / 'builder-intent.json').read_text())
+    if intent != {'name': os.environ['BUILDER_NAME'], 'run': run, 'sha': sha}:
+        raise RuntimeError('Builder intent mismatch')
+    actual = inspect('buildx_buildkit_' + intent['name'] + '0')
+    if actual is None:
+        return  # Setup failed before creating a container.
+    if actual['Name'] != '/buildx_buildkit_' + intent['name'] + '0':
+        raise RuntimeError('Unexpected builder container')
+    (task / 'builder-receipt.json').write_text(json.dumps({
+        'cid': actual['Id'], 'image': actual['Image'], **intent}))
+
+
+def builder_owned(actual, receipt):
+    return (actual.get('Id') == receipt['cid'] and actual.get('Image') == receipt['image']
+            and actual.get('Name') == '/buildx_buildkit_' + receipt['name'] + '0')
+
+
+def builder_caps():
+    _, _, task = checked_task()
+    receipt = json.loads((task / 'builder-receipt.json').read_text())
+    actual = inspect(receipt['cid'])
+    if actual is None or not builder_owned(actual, receipt):
+        raise RuntimeError('Builder identity mismatch before build')
+    host = actual['HostConfig']
+    expected = {'Memory': 5 * 1024**3, 'MemorySwap': 6 * 1024**3,
+                'CpuPeriod': 100000, 'CpuQuota': 150000}
+    if any(host.get(key) != value for key, value in expected.items()):
+        raise RuntimeError('Builder hard limits not applied')
+    pathlib.Path('artifacts/learner-image-qa/builder-limits.json').write_text(json.dumps(expected))
+
+
+def builder_cleanup():
+    run, sha, task = checked_task()
+    intent_path = task / 'builder-intent.json'
+    if not intent_path.exists():
+        return
+    intent = json.loads(intent_path.read_text())
+    if intent != {'name': os.environ['BUILDER_NAME'], 'run': run, 'sha': sha}:
+        raise RuntimeError('Builder cleanup intent mismatch')
+    receipt_path = task / 'builder-receipt.json'
+    if not receipt_path.exists():
+        if inspect('buildx_buildkit_' + intent['name'] + '0') is not None:
+            raise RuntimeError('Builder exists without receipt; unresolved resource: ' + intent['name'])
+        return
+    receipt = json.loads(receipt_path.read_text())
+    actual = inspect(receipt['cid'])
+    if actual is None:
+        return
+    if any(receipt[key] != intent[key] for key in ['name', 'run', 'sha']) or not builder_owned(actual, receipt):
+        raise RuntimeError('Builder cleanup identity mismatch; refusing removal')
+    subprocess.run(['docker', 'buildx', 'rm', intent['name']], check=True)
+    if inspect(receipt['cid']) is not None:
+        raise RuntimeError('Owned builder was not removed: ' + receipt['cid'])
+
+
 def start(kind, image, args, command_args=()):
     run, sha, task = checked_task()
     image_id = command('docker', 'image', 'inspect', image, '--format', '{{.Id}}')
@@ -206,6 +277,10 @@ def collect_cleanup():
             subprocess.run(['docker', 'rm', '-f', actual['Id']], check=True)
         except Exception as error:
             failures.append(str(error))
+    try:
+        builder_cleanup()
+    except Exception as error:
+        failures.append(str(error))
     if failures:
         raise RuntimeError('; '.join(failures))
     # Image tag is unique to this run. Remove only if both run and source labels match.
@@ -226,4 +301,6 @@ def collect_cleanup():
 
 if __name__ == '__main__':
     {'capacity': capacity, 'init': initialize, 'start': candidate,
-     'prompts': prompts, 'browser': browser, 'cleanup': collect_cleanup}[sys.argv[1]]()
+     'prompts': prompts, 'browser': browser, 'cleanup': collect_cleanup,
+     'builder-guard': builder_guard, 'builder-record': builder_record,
+     'builder-caps': builder_caps}[sys.argv[1]]()
