@@ -1,0 +1,14 @@
+{
+  "priorRun": 41777365819,
+  "priorSource": "f84ce4fefeb38c0a2442809dbe5e26db6cb72c65",
+  "priorVerdict": "failure",
+  "priorReportSHA256": "a4f5650cc529f535401c358f27a99761e41aadec35acef60a9c475ba7950c690",
+  "priorReceiptSHA256": "6ae48e857b0aacb3197afee0d355183df977b87e44d8e4bc2a672a3ebbf21e3a",
+  "priorInputManifestSHA256": "67befafd6aa452772246bc1492825dfe5d70a9048f64ce8f37cdae27bef923fd",
+  "courseZipSHA256": "66c3e92823b9d23a393cc96847179c2e54f7ce52a9a2905cf04c87381211a909",
+  "expectedJSONSHA256": "f4e996b19721d6c59f354e134545b6f100b1bef2bde4f1d3134eefcaa14bcda4",
+  "storeSHA256": "28f07bd7649806411ba68cd3a31111fbff4c7013cea9e4e00f6d366bb5a2ac39",
+  "priorBrowserImageId": "sha256:35524db2ea7f14c0c4a6a5639fb8b6996144e873b1b9ac0ccbba3577c382a40d",
+  "closedFailure": "Hidden old iframe lifecycle stop observation; original run remains failure",
+  "limits": "Combines unchanged-course prior matrix/audio evidence with a new targeted lifecycle/source-guard test. Not full React or AI QA."
+}

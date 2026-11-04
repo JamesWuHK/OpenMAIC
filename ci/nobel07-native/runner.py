@@ -48,7 +48,7 @@ try:
    path=Path(i.filename);assert not path.is_absolute() and '..' not in path.parts and (i.external_attr>>16)&0o170000!=0o120000
    raw=z.read(i);assert hashlib.sha256(raw).hexdigest()==expected['files'][i.filename];target=course/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
  resources(3145728);planned=True;save('planned-container.json',{'name':NAME,'imageId':proof['imageId'],'owner':OWNER,'run':LABEL})
- args=['docker','create','--name',NAME,'--label','wanli.qa.owner='+OWNER,'--label','wanli.qa.run='+LABEL,'--memory','768m','--memory-swap','1024m','--cpus','1','--pids-limit','256','--shm-size','256m','--user',f'{os.getuid()}:{os.getgid()}','--cap-drop','ALL','--security-opt','no-new-privileges','--security-opt','seccomp='+str(SRC/'seccomp_profile.json'),'--network','none','--init','--read-only','--tmpfs','/tmp:rw,nosuid,nodev,size=256m,mode=1777','-e','HOME=/tmp','-e','NOBEL07_CLOUD_QA=existing-linux-runner','-v',str(SRC)+':/qa:ro','-v',str(course)+':/course:ro','-v',str(REPORTS)+':/reports:rw','-w','/qa',proof['imageId'],'timeout','-k','10s','1500s','node','/qa/qa.mjs']
+ args=['docker','create','--name',NAME,'--label','wanli.qa.owner='+OWNER,'--label','wanli.qa.run='+LABEL,'--memory','768m','--memory-swap','1024m','--cpus','1','--pids-limit','256','--shm-size','256m','--user',f'{os.getuid()}:{os.getgid()}','--cap-drop','ALL','--security-opt','no-new-privileges','--security-opt','seccomp='+str(SRC/'seccomp_profile.json'),'--network','none','--init','--read-only','--tmpfs','/tmp:rw,nosuid,nodev,size=256m,mode=1777','-e','HOME=/tmp','-e','NOBEL07_CLOUD_QA=existing-linux-runner','-v',str(SRC)+':/qa:ro','-v',str(course)+':/course:ro','-v',str(REPORTS)+':/reports:rw','-w','/qa',proof['imageId'],'timeout','-k','10s','1500s','node','/qa/closure-qa.mjs']
  container_id=call(args).stdout.strip();c=owned(inspect(container_id));assert c['Config']['User']==f'{os.getuid()}:{os.getgid()}' and c['HostConfig']['Memory']==768*1024**2 and c['HostConfig']['NetworkMode']=='none'
  resources();call(['docker','start',container_id]);start=time.monotonic()
  while True:
@@ -60,6 +60,8 @@ try:
  assert c['State']['ExitCode']==0 and not c['State']['OOMKilled'],'Browser process failed'
  report=json.loads((REPORTS/'report.json').read_text());assert report['pass'] and report['uniqueAudioFilesObserved']==50 and sum(x.get('fullCompletionRequired',False) for x in report['audio'])==6
  assert len([x for x in report['cases'] if x['kind']=='page-language-voice'])==96
+ assert report['verdict']=='PASS_COMPOSITE_SAME_COURSE_HASH_WITH_TARGETED_RECHECK' and report['reusedEvidence']['courseZipSHA256']==expected['zipSHA256'] and report['reusedEvidence']['priorBrowserImageId']==proof['imageId']
+ assert len([x for x in report['cases'] if x['kind']=='targeted-hidden-iframe-stop' and x['pass']])==2 and len([x for x in report['cases'] if x['kind']=='targeted-wrong-source-rejected' and x['pass']])==2
  proof['reportSHA256']=hashlib.sha256((REPORTS/'report.json').read_bytes()).hexdigest();success=True
 except BaseException as error:
  failure={'type':type(error).__name__,'message':str(error)[:1000]};proof['error']=failure

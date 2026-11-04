@@ -1,12 +1,16 @@
 {
-  "runner.py": "91d7a21569b3b36b0f7d8a305c2ae1fadca9b39382f2a3a077af6a1fd4d33fe3",
+  "runner.py": "02f4469307db52f89b7cace0da5be7e1b9f86887c2904a723337739776c6225b",
   "qa.mjs": "89680666e8e78d2df6c3f4552a2baa958e32b2b0a7baa31484d2997cf4c7f29c",
+  "closure-proof.json": "1ef78a2f1ce65a5cc99bc758ca8ee35fe6a2de8ac60c75c0049ac93d9c4e2e11",
   "expected.json": "f4e996b19721d6c59f354e134545b6f100b1bef2bde4f1d3134eefcaa14bcda4",
   "course-package.zip": "66c3e92823b9d23a393cc96847179c2e54f7ce52a9a2905cf04c87381211a909",
+  "prior-run-receipt.json": "6ae48e857b0aacb3197afee0d355183df977b87e44d8e4bc2a672a3ebbf21e3a",
+  "prior-run-report.json": "a4f5650cc529f535401c358f27a99761e41aadec35acef60a9c475ba7950c690",
   "cleanup.py": "94f0f297868e0d6969873530851b33d9c8d0ee1be147645ce2a5ca64b904cf31",
   "seccomp_profile.json": "0c4b9e74b24ed79572cf0b1aaa9c92afc8a13019d8f794c13c73aa4174e9db5a",
   "package-lock.json": "6b56559d8dbc97efad275de3c453f163c54cbc95ce1156ced06f67a112260c32",
   "package.json": "c23d1de8c16738dce265e9b9635c4279529730aa081b9e3721043248823d8013",
   "nobel-narration.ts": "28f07bd7649806411ba68cd3a31111fbff4c7013cea9e4e00f6d366bb5a2ac39",
+  "closure-qa.mjs": "83a656ca7a014cad345c470588c84b04370d36e701e15f169be5caa957c215c6",
   "host-entry.js": "19e5d8a7f3dfdf153d862f5d2cd4ea57d245beeb5729d6ec97fbdcfe223805bd"
 }
