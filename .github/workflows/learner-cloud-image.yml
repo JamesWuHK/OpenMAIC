@@ -16,7 +16,7 @@ concurrency:
 jobs:
   candidate:
     if: github.repository == 'JamesWuHK/OpenMAIC'
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, cloud-ci]
     timeout-minutes: 90
     env:
       CI: 'true'
@@ -41,7 +41,7 @@ jobs:
           tests/server/install-process-shutdown-handlers.test.ts
       - name: TypeScript
         run: pnpm exec tsc --noEmit
-      - name: Build exact learner image on hosted Linux
+      - name: Build exact learner image on self-hosted cloud Linux
         run: |
           docker build --platform linux/amd64 \
             --tag "wanli-learner-ci:$GITHUB_SHA" \
