@@ -1,5 +1,5 @@
 {
-  "zipSHA256": "5993c8a729add7b3f9ccf1e69e07601c5b7baedd6d2e1872ba94b09c03366648",
+  "zipSHA256": "66c3e92823b9d23a393cc96847179c2e54f7ce52a9a2905cf04c87381211a909",
   "files": {
     "audio/yue-HK/page-01.mp3": "676c26900ee24cd510eb4783d81783d85e52b819e2e630113a8f3edbb0ae95af",
     "audio/yue-HK/page-02.mp3": "72edd013c3fdb2b6b911568ab45e13549158ad000bf40298e37a15be29f1d5c8",
@@ -51,7 +51,7 @@
     "audio/zh-CN/q-3.mp3": "1bb37541fdb0716be90d90749c8f63bdb221c2d7db1a2bf6d587fee874974d25",
     "audio/zh-CN/vote-a.mp3": "d4f1a09e993a0f3d41fd2be59a09f667fa234bc289da4dbeb85f754ff90e0ad7",
     "audio/zh-CN/vote-b.mp3": "a1a6e8c544b9d3094bc84f8c5d3a0098a03d3d072995d73f958a71236eac8362",
-    "classroom.json": "0f91041e877eaf1fef29d4d5fd300a4db667425f942cefae080782611206941a",
+    "classroom.json": "837d7c3f8ce5d7abfe61e1a4ae3ebc0a31fdc32e8ea8f315b5ba0ee1fb42b04b",
     "media/healthy-t-cell.jpg": "4cb929f4a215eca199389eddb38dd9dc018b0085aab6a807c364143bedbdf0f7",
     "media/sakaguchi-portrait.jpg": "03e28bd1e0e6fdc67096de733123b02ed560db58f7a8df4eb6aeaa9c2c9b9e63"
   },
