@@ -15,21 +15,27 @@ record.followupRequired=mode==='discussion'&&process.env.QA_FOLLOWUP==='1';
 record.pauseResumeRequired=mode==='discussion'&&process.env.QA_PAUSE_RESUME==='1';
 record.qaSHA256=crypto.createHash('sha256').update(fs.readFileSync('/task/qa.mjs')).digest('hex');
 const b=await chromium.launch({headless:true,args:['--disable-dev-shm-usage']});
-let p;
+let p,c;
 try{
- const c=await b.newContext({viewport:mobile?{width:390,height:844}:{width:1280,height:900},...(mobile?{isMobile:true,hasTouch:true}:{})});
+ c=await b.newContext({viewport:mobile?{width:390,height:844}:{width:1280,height:900},...(mobile?{isMobile:true,hasTouch:true}:{})});
  if(process.env.QA_MEDIA_ORIGIN){
   assert.equal(process.env.QA_MEDIA_ORIGIN,'https://class.wanli.ai');
   record.mediaProxyOrigin=process.env.QA_MEDIA_ORIGIN;
   record.mediaProxyRequests=0;
+  record.mediaProxyErrors=[];
   const classroomMediaPaths=frozenClassroomMediaPaths(data);
   record.frozenMediaPathCount=classroomMediaPaths.size;
   const proxyMedia=async(route,pathname)=>{
-   assert(pathname.startsWith('/learner/runtime/')||classroomMediaPaths.has(pathname),'Only frozen public media may use the proxy');
-   const response=await route.fetch({url:record.mediaProxyOrigin+pathname});
-   assert([200,206].includes(response.status()),'Public narration/media unavailable: '+pathname);
-   record.mediaProxyRequests++;
-   await route.fulfill({response});
+   try{
+    assert(pathname.startsWith('/learner/runtime/')||classroomMediaPaths.has(pathname),'Only frozen public media may use the proxy');
+    const response=await route.fetch({url:record.mediaProxyOrigin+pathname,timeout:20000});
+    assert([200,206].includes(response.status()),'Public narration/media unavailable: '+pathname);
+    record.mediaProxyRequests++;
+    await route.fulfill({response});
+   }catch(error){
+    record.mediaProxyErrors.push({path:pathname,error:String(error).slice(0,240)});
+    await route.abort('failed').catch(()=>{});
+   }
   };
   await c.route('**/learner/runtime/**',route=>proxyMedia(route,new URL(route.request().url()).pathname));
   await c.route('**/api/classroom-media/**',route=>proxyMedia(route,new URL(route.request().url()).pathname));
@@ -230,5 +236,16 @@ try{
  assert(!record.pageErrors.length,'Browser page error');
  record.pass=true;
 }catch(e){record.error=e.stack||String(e);if(p){record.failureText=(await p.locator('body').innerText().catch(()=>'' )).slice(-12000);const state=await p.evaluate(()=>window.__nativeQA||{}).catch(()=>({}));record.audio=state.audio||[];record.chat=state.chat||[];record.speech=state.speech||[];await p.screenshot({path:out+'/'+id+'-'+mode+'-failure.png'}).catch(()=>{});}}
-finally{record.finishedAt=new Date().toISOString();fs.writeFileSync(out+'/'+id+'-'+(mobile?'mobile':'desktop')+'-'+mode+'.json',JSON.stringify(record,null,2)+'\n');console.log(JSON.stringify({id,mode,mobile,pass:record.pass,error:record.error,generatedReplies:record.generatedReplies?.length,sourceSHA256:record.courseSHA256}));await b.close()}
+finally{
+ try{
+  // Let every already-started media route finish before disposing its request
+  // context. A failed upstream remains a failure, including during teardown.
+  if(c)await c.unrouteAll({behavior:'wait'});
+  assert.equal(record.mediaProxyErrors?.length||0,0,'Public frozen-media proxy failed');
+ }catch(error){record.pass=false;record.teardownError=String(error);}
+ try{await b.close();}catch(error){record.pass=false;record.browserCloseError=String(error);}
+ record.finishedAt=new Date().toISOString();
+ fs.writeFileSync(out+'/'+id+'-'+(mobile?'mobile':'desktop')+'-'+mode+'.json',JSON.stringify(record,null,2)+'\n');
+ console.log(JSON.stringify({id,mode,mobile,pass:record.pass,error:record.error,teardownError:record.teardownError,generatedReplies:record.generatedReplies?.length,sourceSHA256:record.courseSHA256}));
+}
 if(!record.pass)process.exitCode=1;
