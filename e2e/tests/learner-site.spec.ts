@@ -52,9 +52,10 @@ test('homepage communicates the Hong Kong series proposition and navigates to di
   page,
 }, testInfo) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: '把每個好奇心，變成一門課' })).toBeVisible();
+  // The file-backed site headline may replace the built-in fallback during hydration.
+  await expect(page.getByRole('heading', { name: /把香港，變成你的 AI 課堂|把每個好奇心，變成一門課/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: '從香港真問題出發' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /香港探索/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: '探索學習路線' })).toBeVisible();
   await expectNoDocumentOverflow(page);
 
   await page.screenshot({
