@@ -34,17 +34,26 @@ test('calibrate completed, reused, invalid and replaced real audio sources',asyn
   const replaced=new Audio(src);await replaced.play();
   const replacement=waitError(replaced);
   replaced.src='data:audio/wav;base64,bm90LWF1ZGlv';replaced.load();await replacement;
-  return {state,preserved,clearedError};
+  const cleanup=new Audio(src);let cleanupSnapshot;
+  // Install the application handler BEFORE play installs the observer. Its
+  // immediate cleanup must not run before capture-phase completion recording.
+  cleanup.onended=()=>{cleanupSnapshot=structuredClone(state.audio.at(-1));cleanup.src='';cleanup.load();};
+  const cleanupError=waitError(cleanup);await cleanup.play();const cleanupCode=await cleanupError;
+  const cleanupPreserved=JSON.stringify(cleanupSnapshot)===JSON.stringify(state.audio.at(-1));
+  return {state,preserved,clearedError,cleanupPreserved,cleanupCode,cleanupSnapshot};
   })();};
  },tone());
  await page.click('#run');
  const result=await page.evaluate(()=>globalThis.calibrationResult);
  expect(result.preserved).toBe(true);
  expect(result.clearedError).toBe(4);
- expect(result.state.audio).toHaveLength(4);
+ expect(result.state.audio).toHaveLength(5);
  for(const row of result.state.audio.slice(0,2)){
   expect(row.ended).toBe(true);expect(row.audible).toBe(true);expect(row.advanced).toBe(true);expect(row.error).toBeNull();
  }
  expect(result.state.audio[2].error).toBeTruthy();expect(result.state.audio[2].ended).toBe(false);
  expect(result.state.audio[3].error).toBe('source-replaced-before-completion');expect(result.state.audio[3].ended).toBe(false);
+ expect(result.cleanupCode).toBe(4);expect(result.cleanupPreserved).toBe(true);
+ expect(result.cleanupSnapshot.ended).toBe(true);expect(result.cleanupSnapshot.error).toBeNull();
+ expect(result.state.audio[4].advanced).toBe(true);
 });

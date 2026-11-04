@@ -40,8 +40,11 @@ export function installNativeAudioObserver(state, sources, Media = HTMLMediaElem
    };
    const listeners = [['playing',()=>{if(matches())resume();}],['timeupdate',sample],
     ['pause',()=>{if(matches()&&!this.ended)pausedAt??=now();}],['ended',()=>finish(false)],['error',()=>finish(true)]];
-   const detach = () => {for(const [event,listener] of listeners)this.removeEventListener(event,listener);};
-   for(const [event,listener] of listeners)this.addEventListener(event,listener);
+   // The app may clear src from its normal onended handler. Capture listeners
+   // must freeze the real terminal event before that handler (or its promise
+   // continuation) can mutate the element. Remove with the same capture flag.
+   const detach = () => {for(const [event,listener] of listeners)this.removeEventListener(event,listener,{capture:true});};
+   for(const [event,listener] of listeners)this.addEventListener(event,listener,{capture:true});
    observed.set(this,{src,row,detach});
   }
   return play.call(this);

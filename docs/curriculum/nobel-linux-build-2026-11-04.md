@@ -299,3 +299,25 @@ A narrow known-output regression tripwire does not replace scientific review.
 All native-run firewall rules and the old relay are closed. No production app,
 catalog, Caddy or published classroom was changed. Existing private staging of
 image72 and original data is historical preparation, not the final candidate.
+
+Build run [41794904358](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41794904358)
+at b6eaf2ae passed 152 regression tests, TypeScript, image build, prompt hashes,
+the synthetic API boundary and all 12 desktop/mobile page fixture tests. It
+FAILED both added observer calibrations. Actual traces show the first completed
+clip ended=true/error=null but last=0 after cleanup, whereas its replay ends at
+0.5 seconds. The independent normal ended listener can resolve its promise and
+clear the source before the later observer listener samples completion. The
+unaccepted image artifact must not be deployed.
+
+Observer media listeners now use capture phase (including removal), freezing
+completion before normal application onended handlers and their continuations.
+The ordering-sensitive calibration is retained, with an added preinstalled
+onended handler that immediately clears src and produces observed error 4.
+Six light observer tests pass; fresh actual Chromium calibration remains needed.
+
+Starting a freshly prepared HK relay was refused by the existing 384MiB host
+headroom guard. The exact task reconciled CLOSED without opening a firewall
+rule or changing a production container. Later read-only host samples showed
+roughly 383–387MiB available; do not lower the guard or stop other services to
+force testing. Its previous CA/token are now inert; prepare a fresh session only
+when safely usable capacity is available.
