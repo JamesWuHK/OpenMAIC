@@ -1,0 +1,24 @@
+{
+  "base": "7b1da522d071bfddf50f0526ac337fd2016f8d50",
+  "files": {
+    "lib/store/nobel-narration.ts": {
+      "baseSHA256": null,
+      "SHA256": "28f07bd7649806411ba68cd3a31111fbff4c7013cea9e4e00f6d366bb5a2ac39"
+    },
+    "components/classroom/NobelNarrationSession.tsx": {
+      "baseSHA256": null,
+      "SHA256": "fbcffead3a17c30fa277985f793ab7ecb9f0e8ecadd0bd00969ae520dee9b36d"
+    },
+    "components/scene-renderers/InteractiveIframeHost.tsx": {
+      "baseSHA256": "17a6c531fb555aaf0b2d2a8d111d1620563b93b6989898ecc21d532b46068215",
+      "SHA256": "e7a5e6669cef697d870ae287561d77716ae0f7711fe26df889e48b6cbdf27485"
+    },
+    "components/edit/PlaybackChromeRoot.tsx": {
+      "baseSHA256": "f6d1f106865eff2df8ada0abb2ebf86c1733dbc8b810d9c538344dcb0159e3e1",
+      "SHA256": "b1184cee59ca20a8311f9804b448fbd1f0095de6a9bf4dcf77aff29100ca4c1d"
+    }
+  },
+  "scope": "Four Nobel07 opt-in runtime files only; unrelated local work excluded",
+  "build": "NOT_RUN",
+  "published": false
+}

@@ -20,6 +20,7 @@ import { useI18n } from '@/lib/hooks/use-i18n';
 import { portfolioReply } from '@/lib/learner/c02-portfolio-bridge.mjs';
 import { d01PortfolioReply } from '@/lib/learner/d01-portfolio-bridge.mjs';
 import { nobelPortfolioReply } from '@/lib/learner/nobel-portfolio-bridge.mjs';
+import { bindNobelNarrationFrame, isNobelNarrationScene, receiveNobelNarrationMessage, setNobelNarrationFrameVisible } from '@/lib/store/nobel-narration';
 import {
   ELEMENT_REF_SELECTOR_MAX,
   ELEMENT_SNAPSHOT_MAX,
@@ -173,6 +174,20 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
   );
 
   useEffect(() => {
+    const frame = iframeRef.current?.contentWindow;
+    if (!frame || !isNobelNarrationScene(sceneId)) return;
+    const unbind = bindNobelNarrationFrame(sceneId, frame);
+    const receive = (event: MessageEvent) => receiveNobelNarrationMessage(sceneId, event);
+    window.addEventListener('message', receive);
+    return () => { window.removeEventListener('message', receive); unbind(); };
+  }, [sceneId, entry.srcDoc]);
+
+  useEffect(() => {
+    setNobelNarrationFrameVisible(sceneId, visible);
+    return () => setNobelNarrationFrameVisible(sceneId, false);
+  }, [visible, sceneId, entry.srcDoc]);
+
+  useEffect(() => {
     const receive = (event: MessageEvent) => {
       // Access can itself throw in private/storage-disabled contexts. The
       // bridge catches calls to this lazy adapter and reports unsaved state.
@@ -258,7 +273,7 @@ function PooledIframe({ sceneId, entry, visible }: PooledIframeProps) {
   const clip = entry.clip ?? rect;
   // Nobel components are authored as responsive documents with their own
   // scrolling, rather than fixed 16:9 canvases. Preserve legacy course sizing.
-  const responsiveDocument = sceneId.startsWith('nobel01-');
+  const responsiveDocument = sceneId.startsWith('nobel01-') || isNobelNarrationScene(sceneId);
   const viewport = rect
     ? responsiveDocument ? { box: rect, scale: 1 } : fitGenUiViewport(rect)
     : null;
