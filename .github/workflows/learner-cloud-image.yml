@@ -39,6 +39,7 @@ jobs:
           tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
           tests/server/install-process-shutdown-handlers.test.ts
           tests/audio/discussion-speech-drain.test.ts tests/lib/buffer/stream-buffer.test.ts
+          tests/api/classroom-media-range.test.ts
           tests/lib/chat/use-chat-sessions.test.ts
           tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
           tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts

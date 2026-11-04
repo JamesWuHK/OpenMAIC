@@ -39,12 +39,12 @@ function fakeReadStream(chunks: string[]) {
   return emitter;
 }
 
-function get(range?: string) {
-  const req = new Request('http://localhost/api/classroom-media/classroom-1/media/clip.mp4', {
+function get(range?: string, filename = 'clip.mp4') {
+  const req = new Request(`http://localhost/api/classroom-media/classroom-1/media/${filename}`, {
     headers: range ? { Range: range } : {},
   });
   return GET(req as unknown as NextRequest, {
-    params: Promise.resolve({ classroomId: CLASSROOM_ID, path: ['media', 'clip.mp4'] }),
+    params: Promise.resolve({ classroomId: CLASSROOM_ID, path: ['media', filename] }),
   });
 }
 
@@ -68,6 +68,20 @@ describe('GET /api/classroom-media range support', () => {
     expect(res.headers.get('Cache-Control')).toBe('public, max-age=86400, immutable');
     expect(mocks.createReadStream).toHaveBeenCalledWith(expect.any(String));
     expect(await res.text()).toBe('x'.repeat(FILE_SIZE));
+  });
+
+  it('serves classroom SVG artwork as an image without script execution', async () => {
+    mocks.realpath.mockResolvedValue(path.join(CLASSROOMS_DIR, CLASSROOM_ID, 'media', 'diagram.svg'));
+    const res = await get(undefined, 'diagram.svg');
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Content-Type')).toBe('image/svg+xml');
+    expect(res.headers.get('Content-Security-Policy')).toContain('sandbox');
+
+    const partial = await get('bytes=0-9', 'diagram.svg');
+    expect(partial.status).toBe(206);
+    expect(partial.headers.get('Content-Type')).toBe('image/svg+xml');
+    expect(partial.headers.get('Content-Security-Policy')).toContain('sandbox');
   });
 
   it('answers a byte range with 206, Content-Range, and a bounded read stream', async () => {

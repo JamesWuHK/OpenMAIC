@@ -13,6 +13,7 @@ const MIME_TYPES: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
   '.mp3': 'audio/mpeg',
@@ -77,6 +78,12 @@ export async function GET(
 
     const ext = path.extname(realPath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    // An SVG opened as a document must not execute uploaded script in the
+    // classroom origin. It remains renderable when embedded as an image.
+    const svgHeaders =
+      ext === '.svg'
+        ? { 'Content-Security-Policy': "sandbox; default-src 'none'; style-src 'unsafe-inline'" }
+        : {};
 
     // Range requests enable progressive playback and seeking for hosted media
     // (e.g. <video> streams the moov atom first, then fetches on seek).
@@ -100,6 +107,7 @@ export async function GET(
         status: 206,
         headers: {
           ...CACHE_HEADERS,
+          ...svgHeaders,
           'Content-Type': contentType,
           'Content-Length': String(range.end - range.start + 1),
           'Content-Range': `bytes ${range.start}-${range.end}/${stat.size}`,
@@ -113,6 +121,7 @@ export async function GET(
       status: 200,
       headers: {
         ...CACHE_HEADERS,
+        ...svgHeaders,
         'Content-Type': contentType,
         'Content-Length': String(stat.size),
         'Accept-Ranges': 'bytes',
