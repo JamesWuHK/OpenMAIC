@@ -80,7 +80,7 @@ export async function GET(
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
     // An SVG opened as a document must not execute uploaded script in the
     // classroom origin. It remains renderable when embedded as an image.
-    const svgHeaders =
+    const svgHeaders: Record<string, string> =
       ext === '.svg'
         ? { 'Content-Security-Policy': "sandbox; default-src 'none'; style-src 'unsafe-inline'" }
         : {};
