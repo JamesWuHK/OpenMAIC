@@ -13,12 +13,14 @@ const log = createLogger('AudioRecorder');
 export interface UseAudioRecorderOptions {
   onTranscription?: (text: string) => void;
   onError?: (error: string) => void;
+  /** Classroom language takes precedence over stale saved ASR preferences. */
+  recognitionLanguage?: string;
   /** When true and using browser-native ASR, recognition stays active until explicitly stopped. */
   continuous?: boolean;
 }
 
 export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
-  const { onTranscription, onError, continuous = false } = options;
+  const { onTranscription, onError, recognitionLanguage, continuous = false } = options;
 
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -128,13 +130,14 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API instance shape isn't in lib.dom
           const recognition: any = new SpeechRecognitionCtor();
 
-          // Existing learner profiles saved the old generic `zh` default.
-          // Treat that ambiguous value as Cantonese for the Hong Kong site;
-          // an explicit language selection still takes precedence.
+          // The classroom's language selection takes precedence over the
+          // persisted ASR value; old learner profiles may have zh-CN saved.
+          // Retain zh-HK as the fallback for the old generic `zh` value.
           recognition.lang =
-            isLearnerDeployment() && (!asrLanguage || asrLanguage === 'zh')
+            recognitionLanguage ||
+            (isLearnerDeployment() && (!asrLanguage || asrLanguage === 'zh')
               ? 'zh-HK'
-              : asrLanguage || 'zh-CN';
+              : asrLanguage || 'zh-CN');
           recognition.continuous = continuous;
           recognition.interimResults = false;
           let hasFinalTranscript = false;
@@ -286,7 +289,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
       log.error('Failed to start recording:', error);
       onError?.('无法访问麦克风，请检查权限设置');
     }
-  }, [onTranscription, onError, transcribeAudio, continuous]);
+  }, [onTranscription, onError, recognitionLanguage, transcribeAudio, continuous]);
 
   // Stop recording
   const stopRecording = useCallback(() => {

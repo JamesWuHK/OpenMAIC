@@ -210,7 +210,7 @@ export function Roundtable({
   elementReferencePill,
   onClearElementReference,
 }: RoundtableProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const ttsMuted = useSettingsStore((s) => s.ttsMuted);
   const setTTSMuted = useSettingsStore((s) => s.setTTSMuted);
   const ttsEnabled = useSettingsStore((state) => state.ttsEnabled) || isLearnerDeployment();
@@ -384,6 +384,14 @@ export function Roundtable({
   // Audio recording
   const { isRecording, isProcessing, startRecording, stopRecording, cancelRecording } =
     useAudioRecorder({
+      // The learner's reading-language control is the only visible language
+      // choice. Its Traditional/HK option must capture Cantonese even when an
+      // older profile persisted the browser ASR provider's zh-CN default.
+      recognitionLanguage: isLearnerDeployment()
+        ? locale === 'zh-TW'
+          ? 'zh-HK'
+          : locale
+        : undefined,
       onTranscription: (text) => {
         if (!text.trim()) {
           toast.info(t('roundtable.noSpeechDetected'));

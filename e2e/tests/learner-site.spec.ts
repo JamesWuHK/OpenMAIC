@@ -182,6 +182,13 @@ test('Nobel lecture question control opens a private, age-appropriate Q&A panel'
 test('spoken Cantonese question reaches the classroom agent', async ({ page }) => {
   const question = '老師，點解兩種氣味會唔同？';
   await page.addInitScript((transcript) => {
+    localStorage.setItem('locale', 'zh-TW');
+    // Reproduce an existing Chrome profile whose old ASR preference is
+    // Mandarin even though the learner selected the HK/Traditional UI.
+    localStorage.setItem(
+      'maic:account:settings-storage',
+      JSON.stringify({ state: { asrLanguage: 'zh-CN' }, version: 4 }),
+    );
     class FakeSpeechRecognition {
       lang = '';
       continuous = false;
