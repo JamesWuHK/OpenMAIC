@@ -2,6 +2,7 @@ import {chromium} from '/qa/node_modules/playwright/index.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
+import { frozenClassroomMediaPaths } from './frozen-media-paths.mjs';
 const base=process.env.QA_ORIGIN||'http://127.0.0.1:8127';
 const mode=process.argv[2]||'ui';
 const id=process.argv[3]||'hk-nobel-01-kagan-discussion-v1';
@@ -21,17 +22,20 @@ try{
   assert.equal(process.env.QA_MEDIA_ORIGIN,'https://class.wanli.ai');
   record.mediaProxyOrigin=process.env.QA_MEDIA_ORIGIN;
   record.mediaProxyRequests=0;
+  const classroomMediaPaths=frozenClassroomMediaPaths(data);
+  record.frozenMediaPathCount=classroomMediaPaths.size;
   const proxyMedia=async(route,pathname)=>{
-   assert(pathname.startsWith('/learner/runtime/'),'Only unchanged public media may use the proxy');
+   assert(pathname.startsWith('/learner/runtime/')||classroomMediaPaths.has(pathname),'Only frozen public media may use the proxy');
    const response=await route.fetch({url:record.mediaProxyOrigin+pathname});
    assert([200,206].includes(response.status()),'Public narration/media unavailable: '+pathname);
    record.mediaProxyRequests++;
    await route.fulfill({response});
   };
   await c.route('**/learner/runtime/**',route=>proxyMedia(route,new URL(route.request().url()).pathname));
+  await c.route('**/api/classroom-media/**',route=>proxyMedia(route,new URL(route.request().url()).pathname));
   await c.route('**/_next/image?**',async route=>{
    const source=new URL(route.request().url()).searchParams.get('url');
-   if(source?.startsWith('/learner/runtime/'))return proxyMedia(route,source);
+   if(source?.startsWith('/learner/runtime/')||classroomMediaPaths.has(source))return proxyMedia(route,source);
    return route.continue();
   });
  }
@@ -68,7 +72,7 @@ try{
   if(speech){window.__nativeQAMedia??=[];window.__nativeQAMedia[speech.index]=this;}
   if(!previous||previous.src!==src||previous.row.speechIndex!==(speech?.index??null)){
    if(previous)for(const [event,listener] of previous.listeners)this.removeEventListener(event,listener);
-   const row={agentId:speech?.agentId||null,speechIndex:speech?.index??null,source:src.startsWith('data:')?'generated':'narration',ended:false,error:null,advanced:false,audible:false,first:null,last:0,rate:this.playbackRate};
+   const row={agentId:speech?.agentId||null,speechIndex:speech?.index??null,source:src.startsWith('data:')?'generated':'narration',mediaPath:src.startsWith('data:')?null:new URL(src,location.href).pathname,ended:false,error:null,advanced:false,audible:false,first:null,last:0,rate:this.playbackRate};
    state.audio.push(row);
    const sample=()=>{
     row.last=this.currentTime;row.rate=this.playbackRate;
@@ -225,6 +229,6 @@ try{
  }
  assert(!record.pageErrors.length,'Browser page error');
  record.pass=true;
-}catch(e){record.error=e.stack||String(e);if(p){record.failureText=(await p.locator('body').innerText().catch(()=>'' )).slice(-12000);record.audio=await p.evaluate(()=>window.__nativeQA?.audio||[]).catch(()=>[]);await p.screenshot({path:out+'/'+id+'-'+mode+'-failure.png'}).catch(()=>{});}}
+}catch(e){record.error=e.stack||String(e);if(p){record.failureText=(await p.locator('body').innerText().catch(()=>'' )).slice(-12000);const state=await p.evaluate(()=>window.__nativeQA||{}).catch(()=>({}));record.audio=state.audio||[];record.chat=state.chat||[];record.speech=state.speech||[];await p.screenshot({path:out+'/'+id+'-'+mode+'-failure.png'}).catch(()=>{});}}
 finally{record.finishedAt=new Date().toISOString();fs.writeFileSync(out+'/'+id+'-'+(mobile?'mobile':'desktop')+'-'+mode+'.json',JSON.stringify(record,null,2)+'\n');console.log(JSON.stringify({id,mode,mobile,pass:record.pass,error:record.error,generatedReplies:record.generatedReplies?.length,sourceSHA256:record.courseSHA256}));await b.close()}
 if(!record.pass)process.exitCode=1;

@@ -23,6 +23,37 @@ spec.loader.exec_module(owned)
 BUNDLE_SHA = 'f08ef85e1e24ec006032c5d001a80b5039475d2c03fa1b592b640d3c2db2c88e'
 
 
+def git_request(path=ROOT / '.github/workflows/nobel-native-request.json'):
+    if os.environ.get('GITHUB_EVENT_NAME') != 'push':
+        return
+    if os.environ.get('GITHUB_REF') != 'refs/heads/codex/nobel-runner-recovery-20261104':
+        raise RuntimeError('Git QA requests are limited to the recovery branch')
+    changed = owned.command('git', 'diff-tree', '--no-commit-id', '--name-only', '-r', 'HEAD').splitlines()
+    if '.github/workflows/nobel-native-request.json' not in changed:
+        raise RuntimeError('No explicit new QA request in the current commit')
+    request = json.loads(path.read_text())
+    mapping = {'image_run_id': 'IMAGE_RUN_ID', 'image_source': 'CANDIDATE_SOURCE_SHA',
+               'relay_url': 'QA_RELAY_URL', 'relay_ca_base64': 'QA_RELAY_CA_BASE64',
+               'device': 'QA_DEVICE', 'courses': 'QA_COURSES', 'checks': 'QA_CHECKS'}
+    if set(request) != set(mapping) | {'nonce'} or not re.fullmatch('[a-f0-9]{32}', request['nonce']):
+        raise ValueError('Invalid explicit request schema')
+    if (not re.fullmatch(r'\d+', request['image_run_id']) or
+            not re.fullmatch('[a-f0-9]{40}', request['image_source']) or
+            request['device'] not in ['desktop', 'mobile'] or
+            request['checks'] not in ['full', 'core-matrix'] or
+            (request['courses'] != 'all' and not set(request['courses'].split(',')).issubset({'01', '02', '03', '04', '05', '06'}))):
+        raise ValueError('Invalid native QA request selection')
+    relay_url(request['relay_url'])
+    with open(os.environ['GITHUB_ENV'], 'a') as env:
+        for name, target in mapping.items():
+            value = request[name]
+            if not isinstance(value, str) or '\n' in value or '\r' in value:
+                raise ValueError('Invalid request environment value')
+            env.write(target + '=' + value + '\n')
+    print(json.dumps({'explicitGitRequest': request['nonce'], 'device': request['device'],
+                      'courses': request['courses'], 'checks': request['checks'], 'published': False}))
+
+
 def digest(path):
     result = hashlib.sha256()
     with open(path, 'rb') as file:
@@ -118,6 +149,7 @@ def prepare():
     (task / 'payload').mkdir()
     shutil.copy(candidate / 'manifest.json', task / 'payload/manifest.json')
     shutil.copy(ROOT / 'scripts/qa/nobel-native-browser.mjs', task / 'qa.mjs')
+    shutil.copy(ROOT / 'scripts/qa/frozen-media-paths.mjs', task / 'frozen-media-paths.mjs')
     cert = base64.b64decode(os.environ['QA_RELAY_CA_BASE64'], validate=True)
     (task / 'relay-ca.pem').write_bytes(cert)
     (task / 'relay-ca.pem').chmod(0o644)
@@ -257,4 +289,5 @@ def browser():
 
 
 if __name__ == '__main__':
-    {'prepare': prepare, 'start': start, 'browser': browser, 'cleanup': owned.collect_cleanup}[sys.argv[1]]()
+    {'git-request': git_request, 'prepare': prepare, 'start': start, 'browser': browser,
+     'cleanup': owned.collect_cleanup}[sys.argv[1]]()

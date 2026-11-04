@@ -214,3 +214,39 @@ mobile generated-discussion acceptance or Safari browser acceptance. Estimated
 model usage is not a guaranteed request allowance: actual usage must be tracked,
 and incomplete checks remain pending if the free limit is reached. No paid
 fallback, top-up or alternate-account quota evasion is permitted.
+
+## Successful build and first actual native attempt
+
+[Image run 41782044577](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41782044577)
+at `72cb41d8a5390036880db5cfb6e7d348aa4bc75d` passed all build/type/prompt/API
+checks, all twelve desktop/mobile fixture browser tests and owned cleanup.
+The accepted image is `sha256:4928fc5560727f55faf182aa72a9b7effa42bc5e9187a4532f5bbb3c61002225`.
+Native discussion acceptance and publication remain separate.
+
+The temporary relay initially inherited the application's `PORT=3000`, despite
+publishing port 8787. Its cleanup also missed Docker's lowercase missing-object
+message. Explicit port configuration and case-insensitive absence checks fixed
+these infrastructure errors; thirteen controller tests and independent review
+passed. The failed task's container, private TLS material and temporary port rule
+were cleaned up, with production container identity/start/restarts unchanged.
+
+[Native run 41784573611](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41784573611)
+passed exact-image/fixture provenance, TLS relay readiness and course 01 UI.
+Actual generated student speech played audibly and advanced, including a real
+one-second Pause/Resume hold. It failed because narration uses frozen
+`/api/classroom-media/...` URLs, which the preview's narrower media proxy missed.
+This produced a real 404; it is not relabeled as successful narration acceptance.
+Six public narration Range requests separately returned 206/audio successfully.
+
+The QA proxy now also permits only exact media paths extracted from that frozen
+classroom, under the same fixed public origin. It never proxies classroom JSON or
+inference. Two new path-boundary tests and independent review passed. Runtime
+image and instructional content are unchanged, so the existing image can be reused.
+
+The user selected the GitHub plugin, which can read run logs/artifacts but cannot
+dispatch a fresh workflow. An explicitly reviewed Git request is also supported:
+only a change to `.github/workflows/nobel-native-request.json` on this recovery
+branch can start native QA. Normal code pushes cannot start it, and image builds
+still require manual dispatch. The request accepts only mapped public QA inputs;
+provider credentials are not valid fields. Existing image provenance, free-only
+relay, standard public Ubuntu, resource limits and cleanup remain required.

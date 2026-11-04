@@ -3,6 +3,9 @@ from pathlib import Path
 import unittest
 import zipfile
 import json
+import os
+import tempfile
+from unittest.mock import patch
 
 path = Path(__file__).resolve().parents[2] / 'scripts/qa/native-nobel-qa.py'
 spec = importlib.util.spec_from_file_location('qa', path)
@@ -11,6 +14,28 @@ spec.loader.exec_module(qa)
 
 
 class NativeQAInputs(unittest.TestCase):
+    def test_git_request_is_explicit_and_cannot_supply_any_provider_secret(self):
+        request = {'nonce': 'c' * 32, 'image_run_id': '123', 'image_source': 'a' * 40,
+                   'relay_url': 'https://8.8.8.8:8787/v1', 'relay_ca_base64': 'public-CA-placeholder',
+                   'device': 'desktop', 'courses': '01', 'checks': 'core-matrix'}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'request.json'
+            env = Path(directory) / 'env'
+            path.write_text(json.dumps(request))
+            settings = {'GITHUB_EVENT_NAME': 'push', 'GITHUB_REF': 'refs/heads/codex/nobel-runner-recovery-20261104',
+                        'GITHUB_ENV': str(env)}
+            with patch.dict(os.environ, settings), patch.object(qa.owned, 'command', return_value='.github/workflows/nobel-native-request.json'):
+                qa.git_request(path)
+                self.assertIn('CANDIDATE_SOURCE_SHA=' + request['image_source'], env.read_text())
+                env.unlink()
+                path.write_text(json.dumps(dict(request, OPENROUTER_API_KEY='not-permitted')))
+                with self.assertRaisesRegex(ValueError, 'schema'):
+                    qa.git_request(path)
+                self.assertFalse(env.exists())
+            with patch.dict(os.environ, settings), patch.object(qa.owned, 'command', return_value='docs/unrelated.md'):
+                with self.assertRaisesRegex(RuntimeError, 'No explicit new QA request'):
+                    qa.git_request(path)
+
     def test_fixture_acceptance_is_required_and_is_not_native_or_publication_approval(self):
         proof = {'source': 'a' * 40, 'image': 'sha256:' + 'b' * 64,
                  'fixtureRegressionPassed': True, 'nativeDiscussionAccepted': False, 'published': False}

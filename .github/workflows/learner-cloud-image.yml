@@ -1,6 +1,10 @@
 {
   "name": "Learner cloud image candidate",
   "on": {
+    "push": {
+      "branches": ["codex/nobel-runner-recovery-20261104"],
+      "paths": [".github/workflows/nobel-native-request.json"]
+    },
     "workflow_dispatch": {
       "inputs": {
         "phase": {
@@ -79,7 +83,7 @@
   },
   "jobs": {
     "candidate": {
-      "if": "inputs.phase != 'native-qa' && github.repository == 'JamesWuHK/OpenMAIC' && (inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false))",
+      "if": "inputs.phase != 'native-qa' && github.event_name == 'workflow_dispatch' && github.repository == 'JamesWuHK/OpenMAIC' && (inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false))",
       "runs-on": "${{ fromJSON(inputs.runner == 'public-standard' && '[\"ubuntu-24.04\"]' || '[\"self-hosted\",\"Linux\",\"X64\",\"openmaic\",\"cloud-ci\"]') }}",
       "timeout-minutes": 90,
       "env": {
@@ -242,7 +246,7 @@
       ]
     },
     "native_qa": {
-      "if": "inputs.phase == 'native-qa' && github.repository == 'JamesWuHK/OpenMAIC' && github.event.repository.visibility == 'public' && github.event.repository.private == false",
+      "if": "(inputs.phase == 'native-qa' || github.event_name == 'push') && github.ref == 'refs/heads/codex/nobel-runner-recovery-20261104' && github.repository == 'JamesWuHK/OpenMAIC' && github.event.repository.visibility == 'public' && github.event.repository.private == false",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 90,
       "env": {
@@ -272,8 +276,12 @@
           }
         },
         {
+          "name": "Read explicit Git QA request when selected",
+          "run": "python3 scripts/qa/native-nobel-qa.py git-request"
+        },
+        {
           "name": "Validate native QA transport and frozen dataset",
-          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_native_nobel_qa.py"
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_native_nobel_qa.py\nnode --test tests/ci/frozen-media-paths.test.mjs"
         },
         {
           "name": "Verify previous build, source, image checksum and frozen content",
@@ -306,7 +314,7 @@
           "if": "always()",
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "with": {
-            "name": "nobel-native-${{ inputs.device }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "name": "nobel-native-${{ env.QA_DEVICE }}-${{ github.run_id }}-${{ github.run_attempt }}",
             "path": "${{ env.TASK_DIR }}/evidence/\nartifacts/learner-image-qa/",
             "retention-days": 7
           }

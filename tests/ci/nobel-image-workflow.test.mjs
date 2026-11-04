@@ -4,7 +4,8 @@ import test from 'node:test';
 
 test('image workflow is bounded, manual on the recovery branch, and contains no deployment authority', () => {
   const workflow = JSON.parse(fs.readFileSync(new URL('../../.github/workflows/learner-cloud-image.yml', import.meta.url)));
-  assert.deepEqual(Object.keys(workflow.on), ['workflow_dispatch']);
+  assert.deepEqual(Object.keys(workflow.on).sort(), ['push', 'workflow_dispatch']);
+  assert.deepEqual(workflow.on.push, {branches:['codex/nobel-runner-recovery-20261104'], paths:['.github/workflows/nobel-native-request.json']});
   const runner = workflow.on.workflow_dispatch.inputs.runner;
   assert.equal(runner.type, 'choice');
   assert.equal(runner.default, 'self-hosted');
@@ -38,4 +39,5 @@ test('image workflow is bounded, manual on the recovery branch, and contains no 
   assert.equal(qa.env.QA_RELAY_TOKEN, '${{ secrets.NOBEL_QA_RELAY_TOKEN }}');
   assert(!/DEEPSEEK_API_KEY|OPENROUTER_API_KEY|SSH_PRIVATE|AWS_SECRET/.test(JSON.stringify(qa)));
   assert(job.if.startsWith("inputs.phase != 'native-qa'"));
+  assert(job.if.includes("github.event_name == 'workflow_dispatch'"));
 });
