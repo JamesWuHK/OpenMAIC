@@ -32,6 +32,7 @@ import {
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { USER_AVATAR } from '@/lib/types/roundtable';
 import { StreamBuffer } from '@/lib/buffer/stream-buffer';
+import { waitForDiscussionSpeechDrain } from '@/lib/audio/wait-for-discussion-speech';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
 import { runAgentLoop, type AgentLoopStoreState } from '@/lib/chat/agent-loop';
 import { ActionEngine } from '@/lib/action/engine';
@@ -1169,7 +1170,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
             const targetId = event.data.messageId ?? currentMessageId;
             if (!targetId) break;
             onStreamingTextDeltaRef.current?.(targetId, event.data.content, currentAgentId);
-            currentBuffer.pushText(targetId, event.data.content);
+            currentBuffer.pushText(targetId, event.data.content, currentAgentId ?? undefined);
             break;
           }
           case 'action': {
@@ -1205,6 +1206,14 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
         try {
           await currentBuffer.waitUntilDrained();
+          // Text reveal can finish before the last synthesised audio clause.
+          // Let all queued speech finish before the next agent or natural END.
+          if (sessionType !== 'lecture') {
+            await waitForDiscussionSpeechDrain(
+              () => shouldHoldAfterRevealRef.current?.() ?? false,
+              controller.signal,
+            );
+          }
         } catch {
           currentBuffer = null;
           return null;

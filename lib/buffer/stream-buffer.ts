@@ -473,9 +473,10 @@ export class StreamBuffer {
       const item = this.items[i];
       if (item.kind === 'text' && !item.sealed) {
         item.sealed = true;
-        // Ordering invariant: sealLastText() is called BEFORE pushAgentEnd/pushAgentStart,
-        // so this.currentAgentId still refers to the agent whose text is being sealed.
-        this.cb.onSegmentSealed?.(item.messageId, item.partId, item.text, this.currentAgentId);
+        // Use the text owner captured from SSE; the reveal cursor can lag behind network events.
+        this.cb.onSegmentSealed?.(
+          item.messageId, item.partId, item.text, item.agentId || this.currentAgentId,
+        );
         break;
       }
       // Stop searching once we hit a non-text item
