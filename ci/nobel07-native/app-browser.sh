@@ -1,7 +1,5 @@
 set -euo pipefail
-test "$GITHUB_REPOSITORY" = JamesWuHK/OpenMAIC
-test "$RUNNER_NAME" = openmaic-cloud-linux
-test "$(id -u)" != 0
+python3 ci/nobel07-native/verify_cloud_lane.py
 mkdir -p artifacts/nobel07-native-app
 npm_config_cache="$RUNNER_TEMP/nobel07-app-npm-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm --prefix ci/nobel07-native ci --ignore-scripts --no-audit --no-fund > artifacts/nobel07-native-app/npm.log 2>&1
 qa_image='mcr.microsoft.com/playwright@sha256:65cefd09a5e943921ecd3a6e5414c603db2eb161e9eb48f2e2ccc63486dc7dc0'

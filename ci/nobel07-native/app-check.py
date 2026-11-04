@@ -1,6 +1,7 @@
 from pathlib import Path
 import os,json,hashlib,zipfile,subprocess,shutil,time
-assert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux' and os.getuid()!=0
+from verify_cloud_lane import verify_cloud_lane
+cloud_lane=verify_cloud_lane()
 w=Path.cwd();assert w==Path(os.environ['TASK_WORKSPACE']) and w.name==f"nobel07-app-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
 assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['GITHUB_SHA']
 q=w/'ci/nobel07-native'

@@ -1,6 +1,7 @@
 from pathlib import Path
 import subprocess,os,json,sys,re
-assert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux'
+from verify_cloud_lane import verify_cloud_lane
+verify_cloud_lane()
 q=Path('artifacts/learner-image-qa');q.mkdir(parents=True,exist_ok=True);p=q/'owned-images.json';mode=sys.argv[1];assert mode in ['app','browser']
 if mode=='app':
  ref='wanli-learner-ci:'+os.environ['GITHUB_SHA'];im=json.loads(subprocess.check_output(['docker','image','inspect',ref],text=True))[0]

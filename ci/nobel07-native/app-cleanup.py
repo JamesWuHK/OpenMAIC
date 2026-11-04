@@ -1,6 +1,7 @@
 from pathlib import Path
 import subprocess,os,json,shutil
-assert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux'
+from verify_cloud_lane import verify_cloud_lane
+verify_cloud_lane()
 w=Path.cwd();assert w==Path(os.environ['TASK_WORKSPACE']) and w.name==f"nobel07-app-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
 out=w/'artifacts/learner-image-qa';out.mkdir(parents=True,exist_ok=True);records=[]
 for name in [f"nobel07-app-browser-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}",f"learner-candidate-{os.environ['GITHUB_RUN_ID']}"]:
