@@ -131,6 +131,8 @@ def prepare():
         raise RuntimeError('Expected a public IPv4 QA runner address')
     handshake = {'runnerIPv4': public_ip, 'workflowSource': os.environ['GITHUB_SHA'],
                  'imageSource': source, 'image': image_id, 'buildRun': run_id,
+                 'qaRun': os.environ['GITHUB_RUN_ID'], 'qaAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                 'qaJob': os.environ['GITHUB_JOB'],
                  'ephemeralPublicRunner': True, 'published': False}
     (task / 'evidence/handshake.json').write_text(json.dumps(handshake, indent=2))
     with open(os.environ['GITHUB_ENV'], 'a') as env:
