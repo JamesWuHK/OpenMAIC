@@ -1,5 +1,5 @@
 {
-  "runId": 41894238936,
+  "runId": 41895650817,
   "status": "PARTIAL_PASS_WITH_LATER_HARNESS_FAILURE",
   "imageId": "sha256:c822ccb74b64823189ba3a0c60b98d514dfff5c770521ace2a1cd90b53f3109e",
   "source": "935320ee5d5e8fc4de35135ff6c0680b0b5c7936",
@@ -86,8 +86,38 @@
       "kind": "native-scene",
       "page": 12,
       "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "actual-voice-link-and-mandarin-audio",
+      "pass": true
+    },
+    {
+      "kind": "mobile-portrait-overflow-landscape-fullscreen",
+      "pass": true
     }
   ],
-  "originalFailure": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByText('切換至普通話講解 →', { exact: true }).first() to be visible\n",
-  "failureCause": "Same browser context correctly restored page 12; the test incorrectly expected page 1."
+  "originalFailure": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ has: locator('svg.lucide-message-square') }).last()\n    - locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" aria-selected=\"false\" data-state=\"inactive\" data-slot=\"tabs-trigger\" id=\"radix-_r_p_-trigger-chat\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" aria-controls=\"radix-_r_p_-content-chat\" class=\"rounded-md border border-transparent px-2 py-1 font-medium group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-vis…>…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    56 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+  "failureCause": "Hidden chat tab matched instead of visible roundtable input button; selector corrected.",
+  "layoutChangesProvenSeparate": [
+    {
+      "id": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "allActionsQuizAndMediaUnchanged": true,
+      "onlyFooterPositionFontSizeAndBackingShapeChanged": true,
+      "oldSHA256": "9f147c465945a48545b441aa04140b0753ed880c411a73f239eb83fae323d8df",
+      "newSHA256": "1cd40834b2874774d313912b2379bef1b6b1de9a316a4e5017d98664d698be05"
+    },
+    {
+      "id": "hk-nobel-07-sakaguchi-illustrated-v2-mandarin",
+      "allActionsQuizAndMediaUnchanged": true,
+      "onlyFooterPositionFontSizeAndBackingShapeChanged": true,
+      "oldSHA256": "0c32e3df2540d5ec283ec5a2f2b4fbb074a8850f7e412b800cd96af193c4bc29",
+      "newSHA256": "f69b5814e3c14043efdc6fff5d46b2bb925c65edd631359108c78ba9ae1de954"
+    }
+  ]
 }

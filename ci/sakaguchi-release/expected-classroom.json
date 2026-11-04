@@ -1,1 +1,1529 @@
-{"id": "hk-nobel-07-sakaguchi-illustrated-v2", "createdAt": "2026-11-04T00:00:00.000Z", "stage": {"id": "hk-nobel-07-sakaguchi-illustrated-v2", "name": "坂口志文：身體裏為甚麼需要「勸架員」？", "description": "從坂口志文追問的免疫謎題出發，認識身體怎樣減少免疫誤傷，理解2025年諾貝爾生理學或醫學獎的研究價值。", "languageDirective": "所有學生可見文字均使用香港繁體中文。用廣東話講解。不提供個人診療建議。", "createdAt": 1793793600000, "updatedAt": 1793793600000, "style": "slide", "generatedAgentConfigs": [{"id": "nobel07-teacher", "name": "科學故事老師", "role": "teacher", "persona": "用生活中的例子解釋免疫控制，區分基礎發現與仍在研究的治療。", "avatar": "/avatars/teacher.png", "color": "#24665f", "priority": 10}, {"id": "nobel07-assistant", "name": "科學小助手", "role": "assistant", "persona": "幫助理解證據和類比的邊界，不提供個人診療建議。", "avatar": "/avatars/assist.png", "color": "#2563eb", "priority": 7}, {"id": "nobel07-student", "name": "好奇同學", "role": "student", "persona": "這是一位AI同學，喜歡從熟悉的生活現象提問，並根據證據修正理解。", "avatar": "/avatars/curious.png", "color": "#bf9949", "priority": 5}]}, "scenes": [{"id": "nobel07-slide-01", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "先認識一位研究“別打錯人”的醫生", "order": 1, "outlineId": "nobel07-slide-01-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-01-focus", "type": "spotlight", "elementId": "nobel07-slide-01-key"}, {"id": "nobel07-slide-01-speech", "type": "speech", "text": "相入面呢位科學家叫坂口志文。佢係二零二五年諾貝爾生理學或醫學獎嘅共同得主。佢喺日本讀醫，之後研究免疫系統。你可以先將免疫系統理解成身體入面一套保護力量：唔同細胞一齊合作，幫手應付感染。佢關心一個幾特別嘅問題：保護身體嘅力量，如果將自己身體當成攻擊目標，邊個可以阻止佢？今日我哋就跟住佢，搵下身體入面嘅「勸架員」。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-01.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-01.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-01-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-01-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/01-zh-Hant.png", "name": "坂口志文；身體裏為甚麼需要「勸架員」？2025年諾貝爾生理學或醫學獎共同得主。"}, {"type": "shape", "id": "nobel07-slide-01-key", "left": 44, "top": 120, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "image", "id": "nobel07-slide-01-portrait", "left": 44, "top": 309, "width": 110, "height": 165, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/sakaguchi-portrait.jpg"}, {"type": "text", "id": "nobel07-slide-01-caption", "left": 44, "top": 501, "width": 415, "height": 36, "rotate": 0, "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">坂口志文資料照｜文部科學省・大臣官房人事課。<a href=\"https://commons.wikimedia.org/wiki/File:Shimon_Sakaguchi_201711.jpg\">來源</a>／<a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>。2017年資料，非領獎現場；原圖未修改。</p>", "defaultColor": "#47616c", "defaultFontName": "Microsoft JhengHei"}, {"type": "text", "id": "nobel07-slide-01-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">擬人化教學插畫，細胞沒有意識；獎章僅為裝飾。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}, {"type": "text", "id": "sakaguchi-narration-choice", "left": 44, "top": 276, "width": 240, "height": 25, "rotate": 0, "content": "<p style=\"margin:0;font-size:16px\"><a href=\"/classroom/hk-nobel-07-sakaguchi-illustrated-v2-mandarin\">切換至普通話講解 →</a></p>", "defaultColor": "#24665f", "defaultFontName": "Microsoft JhengHei", "link": {"type": "web", "target": "/classroom/hk-nobel-07-sakaguchi-illustrated-v2-mandarin"}}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "相入面呢位科學家叫坂口志文。佢係二零二五年諾貝爾生理學或醫學獎嘅共同得主。佢喺日本讀醫，之後研究免疫系統。你可以先將免疫系統理解成身體入面一套保護力量：唔同細胞一齊合作，幫手應付感染。佢關心一個幾特別嘅問題：保護身體嘅力量，如果將自己身體當成攻擊目標，邊個可以阻止佢？今日我哋就跟住佢，搵下身體入面嘅「勸架員」。"}}}, {"id": "nobel07-slide-02", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "商場保安，抓得越多越好嗎？", "order": 2, "outlineId": "nobel07-slide-02-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-02-focus", "type": "spotlight", "elementId": "nobel07-slide-02-key"}, {"id": "nobel07-slide-02-speech", "type": "speech", "text": "想像你同屋企人去商場。保安攔住真正有危險嘅人，大家會安全啲。但如果連正常買嘢嘅顧客都攔住，甚至整傷佢哋呢？咁就唔單止係保安夠唔夠多，仲要睇有冇認錯對象。記住，呢個只係幫我哋理解嘅比喻。細胞唔會認人面、睇證件，亦唔會好似人咁商量；佢哋係靠分子之間嘅相互作用，接收同傳遞訊號。你會揀邊一種保安？可以揀完再改。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-02.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-02.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-02-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-02-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/02-zh-Hant.png", "name": "商場保安，抓得越多越好嗎？；保護大家 ≠ 見人就攔。你會選哪種保安？"}, {"type": "shape", "id": "nobel07-slide-02-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-02-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">商場生活類比，細胞不靠人臉或證件辨認。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "想像你同屋企人去商場。保安攔住真正有危險嘅人，大家會安全啲。但如果連正常買嘢嘅顧客都攔住，甚至整傷佢哋呢？咁就唔單止係保安夠唔夠多，仲要睇有冇認錯對象。記住，呢個只係幫我哋理解嘅比喻。細胞唔會認人面、睇證件，亦唔會好似人咁商量；佢哋係靠分子之間嘅相互作用，接收同傳遞訊號。你會揀邊一種保安？可以揀完再改。"}}}, {"id": "nobel07-slide-03", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "一個反常結果，讓他想追下去", "order": 3, "outlineId": "nobel07-slide-03-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-03-focus", "type": "spotlight", "elementId": "nobel07-slide-03-key"}, {"id": "nobel07-slide-03-speech", "type": "speech", "text": "呢個唔係憑空諗出嚟嘅謎語。早期有啲小鼠研究發現，喺特定條件之下，免疫系統少咗某啲細胞，結果唔單止係防禦能力改變，仲出現攻擊自己組織嘅情況。呢個反常現象令坂口志文想追問：會唔會有啲細胞，工作唔係加強攻擊，而係約束其他細胞？呢度講緊特定嘅動物研究，唔係話人少咗少少免疫細胞，就一定會生病。我哋唔需要學動物實驗操作，只要捉住呢個值得追問嘅現象。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-03.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-03.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-03-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-03-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/03-zh-Hant.png", "name": "一個反常結果，讓他想追下去；少了一部分免疫細胞，為什麼反而出現攻擊自己的情況？"}, {"type": "shape", "id": "nobel07-slide-03-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-03-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">虛構研究者插畫，非坂口本人；細胞表情僅為擬人化。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "呢個唔係憑空諗出嚟嘅謎語。早期有啲小鼠研究發現，喺特定條件之下，免疫系統少咗某啲細胞，結果唔單止係防禦能力改變，仲出現攻擊自己組織嘅情況。呢個反常現象令坂口志文想追問：會唔會有啲細胞，工作唔係加強攻擊，而係約束其他細胞？呢度講緊特定嘅動物研究，唔係話人少咗少少免疫細胞，就一定會生病。我哋唔需要學動物實驗操作，只要捉住呢個值得追問嘅現象。"}}}, {"id": "nobel07-slide-04", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "身體不只有一種“保護隊員”", "order": 4, "outlineId": "nobel07-slide-04-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-04-focus", "type": "spotlight", "elementId": "nobel07-slide-04-key"}, {"id": "nobel07-slide-04-speech", "type": "speech", "text": "免疫細胞唔係一粒粒完全一樣嘅小球。好似T細胞，就係免疫細胞入面一大類，仲有唔同分工。個T字只係名稱一部分，今日唔使背。如果將所有免疫細胞當成一樣，就可能睇漏咗佢哋唔同嘅作用。好似學校入面有學生、老師同校工，唔可以因為大家都喺度活動，就話所有人做緊同一樣嘢。相入面係人工著色嘅T細胞電鏡圖，唔可以單靠張相，就認定佢係調節性T細胞。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-04.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-04.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-04-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-04-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/04-zh-Hant.png", "name": "身體不只有一種“保護隊員”；有些細胞參與攻擊；有些細胞幫助約束反應。"}, {"type": "shape", "id": "nobel07-slide-04-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "image", "id": "nobel07-slide-04-micrograph", "left": 44, "top": 307, "width": 180, "height": 180, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/healthy-t-cell.jpg"}, {"type": "text", "id": "nobel07-slide-04-caption", "left": 237, "top": 330, "width": 205, "height": 150, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">T細胞掃描電鏡圖，人工著色。NIAID/NIH · <a href=\"https://commons.wikimedia.org/wiki/File:Healthy_Human_T_Cell.jpg\">來源與公有領域標記</a>。不能憑照片鑒定為調節性T細胞；不是本課實驗圖。</p>", "defaultColor": "#47616c", "defaultFontName": "Microsoft JhengHei"}, {"type": "text", "id": "nobel07-slide-04-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">右側為細胞教學插畫，不是顯微圖或精確分類。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "免疫細胞唔係一粒粒完全一樣嘅小球。好似T細胞，就係免疫細胞入面一大類，仲有唔同分工。個T字只係名稱一部分，今日唔使背。如果將所有免疫細胞當成一樣，就可能睇漏咗佢哋唔同嘅作用。好似學校入面有學生、老師同校工，唔可以因為大家都喺度活動，就話所有人做緊同一樣嘢。相入面係人工著色嘅T細胞電鏡圖，唔可以單靠張相，就認定佢係調節性T細胞。"}}}, {"id": "nobel07-slide-05", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "不是給細胞起個名字，就算發現了", "order": 5, "outlineId": "nobel07-slide-05-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-05-focus", "type": "spotlight", "elementId": "nobel07-slide-05-key"}, {"id": "nobel07-slide-05-speech", "type": "speech", "text": "坂口志文同合作者要攞出證據，唔係改個名就算發現。佢哋用細胞表面一啲分子特徵，幫手分組。喺一九九五年嘅研究，團隊將唔同細胞組合，轉移畀特定嘅實驗小鼠作比較。由準備轉移嘅組合中，移走一組細胞之後，餘下嘅組合可能引起身體組織受攻擊；喺合適條件下補返嗰組細胞，就可以阻止呢個情況。呢啲證據支持：嗰組細胞有份維持控制。佢哋後來叫調節性T細胞。不過，分子特徵唔係萬能身份證，動物實驗亦唔等於人嘅治療已經成功。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-05.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-05.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-05-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-05-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/05-zh-Hant.png", "name": "不是給細胞起個名字，就算發現了；1995年：用實驗區分一群能約束免疫反應的T細胞。"}, {"type": "shape", "id": "nobel07-slide-05-key", "left": 44, "top": 120, "width": 900, "height": 130, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-05-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">特定動物研究的邏輯示意，非數據、非人體治療。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "坂口志文同合作者要攞出證據，唔係改個名就算發現。佢哋用細胞表面一啲分子特徵，幫手分組。喺一九九五年嘅研究，團隊將唔同細胞組合，轉移畀特定嘅實驗小鼠作比較。由準備轉移嘅組合中，移走一組細胞之後，餘下嘅組合可能引起身體組織受攻擊；喺合適條件下補返嗰組細胞，就可以阻止呢個情況。呢啲證據支持：嗰組細胞有份維持控制。佢哋後來叫調節性T細胞。不過，分子特徵唔係萬能身份證，動物實驗亦唔等於人嘅治療已經成功。"}}}, {"id": "nobel07-slide-06", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "“勸架員”到底做了什麼？", "order": 6, "outlineId": "nobel07-slide-06-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-06-focus", "type": "spotlight", "elementId": "nobel07-slide-06-key"}, {"id": "nobel07-slide-06-speech", "type": "speech", "text": "返去商場個比喻。調節性T細胞可以暫時比作幫手約束行動嘅「勸架員」。佢哋可以透過同其他細胞接觸、釋放訊號等方式，限制免疫反應，減少對自己組織嘅傷害。但唔係有個小人喺細胞入面叫停，佢哋亦唔係負責所有嘢嘅總司令。身體仲有其他保護機制。今日我哋只係認識其中好重要一種：保護自己，亦需要避免自己嘅保護力量失去控制。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-06.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-06.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-06-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-06-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/06-zh-Hant.png", "name": "“勸架員”到底做了什麼？；調節性T細胞：幫助限制其他免疫細胞的反應。"}, {"type": "shape", "id": "nobel07-slide-06-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-06-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">接觸與信號的示意，形狀、比例和分子結構未按實物繪製。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "返去商場個比喻。調節性T細胞可以暫時比作幫手約束行動嘅「勸架員」。佢哋可以透過同其他細胞接觸、釋放訊號等方式，限制免疫反應，減少對自己組織嘅傷害。但唔係有個小人喺細胞入面叫停，佢哋亦唔係負責所有嘢嘅總司令。身體仲有其他保護機制。今日我哋只係認識其中好重要一種：保護自己，亦需要避免自己嘅保護力量失去控制。"}}}, {"id": "nobel07-slide-07", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "為什麼是三個人共同獲獎？", "order": 7, "outlineId": "nobel07-slide-07-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-07-focus", "type": "spotlight", "elementId": "nobel07-slide-07-key"}, {"id": "nobel07-slide-07-speech", "type": "speech", "text": "坂口志文唔係一個人完成所有發現。瑪麗布倫科、弗雷德拉姆斯德爾同合作者，搵到一個同嚴重免疫失控有關嘅關鍵基因。之後，坂口團隊同其他研究者，將呢個基因同調節性T細胞嘅形成連繫起嚟。你可以咁理解：有人搵到重要細胞，有人搵到影響控制嘅關鍵線索，多條證據慢慢接埋一齊。呢個過程幫人類理解，免疫系統點樣避免攻擊自己嘅組織。二零二五年，佢哋三位共同獲得諾貝爾生理學或醫學獎。唔使背基因嘅字母名稱，記住共同發現嘅意思就得。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-07.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-07.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-07-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-07-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/07-zh-Hant.png", "name": "為什麼是三個人共同獲獎？；坂口志文／Mary E. Brunkow／Fred Ramsdell。共同研究主題：外周免疫耐受。"}, {"type": "shape", "id": "nobel07-slide-07-key", "left": 44, "top": 120, "width": 900, "height": 130, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-07-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">證據聯繫示意；不是三人在同一實驗現場。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "坂口志文唔係一個人完成所有發現。瑪麗布倫科、弗雷德拉姆斯德爾同合作者，搵到一個同嚴重免疫失控有關嘅關鍵基因。之後，坂口團隊同其他研究者，將呢個基因同調節性T細胞嘅形成連繫起嚟。你可以咁理解：有人搵到重要細胞，有人搵到影響控制嘅關鍵線索，多條證據慢慢接埋一齊。呢個過程幫人類理解，免疫系統點樣避免攻擊自己嘅組織。二零二五年，佢哋三位共同獲得諾貝爾生理學或醫學獎。唔使背基因嘅字母名稱，記住共同發現嘅意思就得。"}}}, {"id": "nobel07-slide-08", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "這對普通人有什麼用？", "order": 8, "outlineId": "nobel07-slide-08-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-08-focus", "type": "spotlight", "elementId": "nobel07-slide-08-key"}, {"id": "nobel07-slide-08-speech", "type": "speech", "text": "有啲疾病涉及免疫系統錯誤攻擊自己組織，叫自身免疫病。對病人嚟講，重要嘅唔單止係壓低所有免疫反應，而係可唔可以減少有害攻擊，同時盡量保留應付感染嘅能力。呢項發現，為搵更有針對性嘅方法提供咗方向。研究者曾經做過將調節性T細胞用喺一型糖尿病嘅早期人體試驗。不過，早期安全性研究唔等於證明可以治好病，更加唔可以講成打一針，就永遠唔會生病。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-08.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-08.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-08-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-08-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/08-zh-Hant.png", "name": "這對普通人有什麼用？；如果保護系統誤傷了身體，我們能更有針對性地幫助它恢復控制嗎？"}, {"type": "shape", "id": "nobel07-slide-08-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-08-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">普通生活插畫；治療研究仍需檢驗安全與效果。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "有啲疾病涉及免疫系統錯誤攻擊自己組織，叫自身免疫病。對病人嚟講，重要嘅唔單止係壓低所有免疫反應，而係可唔可以減少有害攻擊，同時盡量保留應付感染嘅能力。呢項發現，為搵更有針對性嘅方法提供咗方向。研究者曾經做過將調節性T細胞用喺一型糖尿病嘅早期人體試驗。不過，早期安全性研究唔等於證明可以治好病，更加唔可以講成打一針，就永遠唔會生病。"}}}, {"id": "nobel07-slide-09", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "有趣的轉折：為什麼不是越多越好？", "order": 9, "outlineId": "nobel07-slide-09-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-09-focus", "type": "spotlight", "elementId": "nobel07-slide-09-key"}, {"id": "nobel07-slide-09-speech", "type": "speech", "text": "假如有人破壞商場設施，但有人將想阻止佢嘅保安勸走，會點呢？喺某啲腫瘤周圍，調節性T細胞亦可能限制咗對抗腫瘤嘅免疫反應。所以，研究者會諗，點樣喺特定地方減輕呢種限制，而唔係幫全身加更多「勸架員」。我哋唔可以簡單話免疫越強越好，亦唔係越弱越好，而係要問：邊個地方、邊段時間，需要點樣調節？呢啲係研究方向，唔係叫大家自己調節細胞或者用藥。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-09.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-09.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-09-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-09-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/09-zh-Hant.png", "name": "有趣的轉折：為什麼不是越多越好？；同一種“勸架”作用，也可能在不合適的地方幫倒忙。"}, {"type": "shape", "id": "nobel07-slide-09-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-09-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">某些腫瘤中的情境示意；細胞沒有意識。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "假如有人破壞商場設施，但有人將想阻止佢嘅保安勸走，會點呢？喺某啲腫瘤周圍，調節性T細胞亦可能限制咗對抗腫瘤嘅免疫反應。所以，研究者會諗，點樣喺特定地方減輕呢種限制，而唔係幫全身加更多「勸架員」。我哋唔可以簡單話免疫越強越好，亦唔係越弱越好，而係要問：邊個地方、邊段時間，需要點樣調節？呢啲係研究方向，唔係叫大家自己調節細胞或者用藥。"}}}, {"id": "nobel07-slide-10", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "諾獎為什麼獎勵這樣的基礎發現？", "order": 10, "outlineId": "nobel07-slide-10-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-10-focus", "type": "spotlight", "elementId": "nobel07-slide-10-key"}, {"id": "nobel07-slide-10-speech", "type": "speech", "text": "呢項研究嘅重要，唔需要靠「已經醫好所有疾病」嚟證明。佢令科學家睇見，保護身體嘅系統入面，主動約束攻擊亦係重要工作。知道呢個控制環節，先可以更清楚咁研究邊度出問題、提出新嘅治療諗法，再用實驗同臨床研究檢驗。基礎發現，好似喺複雜嘅城市地圖上，搵到以前未睇清楚嘅交通樞紐。有咗佢，可以研究新路線，但每條路行唔行得通，仲要逐條驗證。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-10.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-10.mp3"}, {"id": "nobel07-slide-10-discussion", "type": "discussion", "topic": "為什麼保護身體也需要約束反應？", "prompt": "用商場保安的比方解釋，再說出這個比方與真實細胞的一處不同。", "agentId": "nobel07-student"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-10-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-10-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/10-zh-Hant.png", "name": "諾獎為什麼獎勵這樣的基礎發現？；它改變了一個大問題的答案：身體怎樣保護自己，又避免誤傷自己？"}, {"type": "shape", "id": "nobel07-slide-10-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "text", "id": "nobel07-slide-10-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">城市地圖只是類比；新路線能否走通仍需驗證。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "呢項研究嘅重要，唔需要靠「已經醫好所有疾病」嚟證明。佢令科學家睇見，保護身體嘅系統入面，主動約束攻擊亦係重要工作。知道呢個控制環節，先可以更清楚咁研究邊度出問題、提出新嘅治療諗法，再用實驗同臨床研究檢驗。基礎發現，好似喺複雜嘅城市地圖上，搵到以前未睇清楚嘅交通樞紐。有咗佢，可以研究新路線，但每條路行唔行得通，仲要逐條驗證。"}}}, {"id": "nobel07-slide-11", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "三次小判斷", "order": 11, "outlineId": "nobel07-slide-11-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "quiz", "actions": [{"id": "nobel07-slide-11-speech", "type": "speech", "text": "而家停一停，試下判斷三個問題。你可以先撳每道題嘅讀題掣，再揀答案。答錯都可以重新揀。最後，用自己嘅說話講下：點解保護身體，亦需要約束免疫反應？唔使背標準句子。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-11.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-11.mp3"}], "content": {"type": "quiz", "questions": [{"id": "nobel07-slide-11-q1", "type": "single", "question": "1. 今天的發現，最接近哪句話？", "options": [{"value": "A", "label": "免疫細胞越多越好"}, {"value": "B", "label": "有一類T細胞能幫助約束免疫反應"}, {"value": "C", "label": "人體只有一種免疫細胞"}], "answer": ["B"], "analysis": "A：把數量和保護效果混為一談，過度或錯誤的反應也能傷害身體。；B：抓住主線，調節性T細胞參與控制，但並非唯一機制。；C：不對，免疫系統有多種細胞和分工。", "points": 10, "hasAnswer": true}, {"id": "nobel07-slide-11-q2", "type": "single", "question": "2. 小鼠研究支持某組細胞有保護作用，下一步能直接宣佈人類治療成功嗎？", "options": [{"value": "A", "label": "能"}, {"value": "B", "label": "不能，還需針對人的安全性和有效性研究"}], "answer": ["B"], "analysis": "A：把動物實驗直接等同於人的療效。；B：正確，動物研究能提供線索，但不能代替臨床檢驗。", "points": 10, "hasAnswer": true}, {"id": "nobel07-slide-11-q3", "type": "single", "question": "3. 關於調節性T細胞，哪種說法更準確？", "options": [{"value": "A", "label": "給所有人增加越多越好"}, {"value": "B", "label": "它們毫無用途"}, {"value": "C", "label": "作用要結合疾病、部位和情境理解"}], "answer": ["C"], "analysis": "A：忽略了某些腫瘤中的控制問題。；B：忽略了維持免疫控制的重要作用。；C：正確，同一種作用是否有幫助，要看具體情境。", "points": 10, "hasAnswer": true}]}}, {"id": "nobel07-slide-12", "stageId": "hk-nobel-07-sakaguchi-illustrated-v2", "title": "帶走一個問題", "order": 12, "outlineId": "nobel07-slide-12-outline", "createdAt": 1793793600000, "updatedAt": 1793793600000, "type": "slide", "actions": [{"id": "nobel07-slide-12-focus", "type": "spotlight", "elementId": "nobel07-slide-12-key"}, {"id": "nobel07-slide-12-speech", "type": "speech", "text": "坂口志文經過醫學學習同長期研究，同合作者不斷搵證據，分清唔同細胞嘅作用。值得我哋學嘅，唔係話只要堅持，就一定攞到獎，而係認真對待反常現象，再用證據檢驗解釋。下次聽到「越多越好」或者「越強越好」，可以先問：喺咩情況下有用？幾時可能有害？下一課，我哋會認識一位用人工智能研究蛋白質嘅科學家，睇下另一個好難回答嘅問題，點樣出現新研究工具。", "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-12.mp3", "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-12.mp3"}], "content": {"type": "slide", "canvas": {"id": "nobel07-slide-12-canvas", "viewportSize": 1000, "viewportRatio": 0.5625, "theme": {"backgroundColor": "#f6f1e6", "themeColors": ["#24665f", "#bf9949", "#102b38"], "fontColor": "#102b38", "fontName": "Microsoft YaHei", "outline": {"color": "#102b38", "width": 1, "style": "solid"}, "shadow": {"h": 0, "v": 0, "blur": 0, "color": "#000000"}}, "elements": [{"type": "image", "id": "nobel07-slide-12-art", "left": 0, "top": 0, "width": 1000, "height": 562.5, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/12-zh-Hant.png", "name": "帶走一個問題；遇到和預想相反的結果，先問：是不是漏看了一種作用？"}, {"type": "shape", "id": "nobel07-slide-12-key", "left": 44, "top": 225, "width": 340, "height": 220, "rotate": 0, "fill": "transparent", "fixedRatio": false, "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z", "viewBox": [1, 1], "name": "重點講解區"}, {"type": "image", "id": "nobel07-slide-12-portrait", "left": 44, "top": 309, "width": 110, "height": 165, "rotate": 0, "fixedRatio": true, "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/sakaguchi-portrait.jpg"}, {"type": "text", "id": "nobel07-slide-12-caption", "left": 44, "top": 501, "width": 415, "height": 36, "rotate": 0, "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">坂口志文資料照｜文部科學省・大臣官房人事課。<a href=\"https://commons.wikimedia.org/wiki/File:Shimon_Sakaguchi_201711.jpg\">來源</a>／<a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>。2017年資料，非領獎現場；原圖未修改。</p>", "defaultColor": "#47616c", "defaultFontName": "Microsoft JhengHei"}, {"type": "text", "id": "nobel07-slide-12-boundary", "left": 44, "top": 540, "width": 910, "height": 20, "rotate": 0, "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">研究思路插畫，非歷史實驗記錄。</p>", "defaultColor": "#506773", "defaultFontName": "Microsoft JhengHei"}], "background": {"type": "solid", "color": "#f6f1e6"}, "script": "坂口志文經過醫學學習同長期研究，同合作者不斷搵證據，分清唔同細胞嘅作用。值得我哋學嘅，唔係話只要堅持，就一定攞到獎，而係認真對待反常現象，再用證據檢驗解釋。下次聽到「越多越好」或者「越強越好」，可以先問：喺咩情況下有用？幾時可能有害？下一課，我哋會認識一位用人工智能研究蛋白質嘅科學家，睇下另一個好難回答嘅問題，點樣出現新研究工具。"}}}]}
+{
+  "id": "hk-nobel-07-sakaguchi-illustrated-v2",
+  "createdAt": "2026-11-04T00:00:00.000Z",
+  "stage": {
+    "id": "hk-nobel-07-sakaguchi-illustrated-v2",
+    "name": "坂口志文：身體裏為甚麼需要「勸架員」？",
+    "description": "從坂口志文追問的免疫謎題出發，認識身體怎樣減少免疫誤傷，理解2025年諾貝爾生理學或醫學獎的研究價值。",
+    "languageDirective": "所有學生可見文字均使用香港繁體中文。用廣東話講解。不提供個人診療建議。",
+    "createdAt": 1793793600000,
+    "updatedAt": 1793793600000,
+    "style": "slide",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel07-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "用生活中的例子解釋免疫控制，區分基礎發現與仍在研究的治療。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel07-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "幫助理解證據和類比的邊界，不提供個人診療建議。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel07-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "這是一位AI同學，喜歡從熟悉的生活現象提問，並根據證據修正理解。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel07-slide-01",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "先認識一位研究“別打錯人”的醫生",
+      "order": 1,
+      "outlineId": "nobel07-slide-01-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-01-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-01-key"
+        },
+        {
+          "id": "nobel07-slide-01-speech",
+          "type": "speech",
+          "text": "相入面呢位科學家叫坂口志文。佢係二零二五年諾貝爾生理學或醫學獎嘅共同得主。佢喺日本讀醫，之後研究免疫系統。你可以先將免疫系統理解成身體入面一套保護力量：唔同細胞一齊合作，幫手應付感染。佢關心一個幾特別嘅問題：保護身體嘅力量，如果將自己身體當成攻擊目標，邊個可以阻止佢？今日我哋就跟住佢，搵下身體入面嘅「勸架員」。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/01-zh-Hant.png",
+              "name": "坂口志文；身體裏為甚麼需要「勸架員」？2025年諾貝爾生理學或醫學獎共同得主。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-01-key",
+              "left": 44,
+              "top": 120,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel07-slide-01-portrait",
+              "left": 44,
+              "top": 309,
+              "width": 110,
+              "height": 165,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/sakaguchi-portrait.jpg"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-01-caption",
+              "left": 44,
+              "top": 482,
+              "width": 415,
+              "height": 33,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">坂口志文資料照｜文部科學省・大臣官房人事課。<a href=\"https://commons.wikimedia.org/wiki/File:Shimon_Sakaguchi_201711.jpg\">來源</a>／<a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>。2017年資料，非領獎現場；原圖未修改。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-01-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">擬人化教學插畫，細胞沒有意識；獎章僅為裝飾。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "sakaguchi-narration-choice",
+              "left": 44,
+              "top": 276,
+              "width": 240,
+              "height": 25,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:16px\"><a href=\"/classroom/hk-nobel-07-sakaguchi-illustrated-v2-mandarin\">切換至普通話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-07-sakaguchi-illustrated-v2-mandarin"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "相入面呢位科學家叫坂口志文。佢係二零二五年諾貝爾生理學或醫學獎嘅共同得主。佢喺日本讀醫，之後研究免疫系統。你可以先將免疫系統理解成身體入面一套保護力量：唔同細胞一齊合作，幫手應付感染。佢關心一個幾特別嘅問題：保護身體嘅力量，如果將自己身體當成攻擊目標，邊個可以阻止佢？今日我哋就跟住佢，搵下身體入面嘅「勸架員」。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-02",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "商場保安，抓得越多越好嗎？",
+      "order": 2,
+      "outlineId": "nobel07-slide-02-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-02-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-02-key"
+        },
+        {
+          "id": "nobel07-slide-02-speech",
+          "type": "speech",
+          "text": "想像你同屋企人去商場。保安攔住真正有危險嘅人，大家會安全啲。但如果連正常買嘢嘅顧客都攔住，甚至整傷佢哋呢？咁就唔單止係保安夠唔夠多，仲要睇有冇認錯對象。記住，呢個只係幫我哋理解嘅比喻。細胞唔會認人面、睇證件，亦唔會好似人咁商量；佢哋係靠分子之間嘅相互作用，接收同傳遞訊號。你會揀邊一種保安？可以揀完再改。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/02-zh-Hant.png",
+              "name": "商場保安，抓得越多越好嗎？；保護大家 ≠ 見人就攔。你會選哪種保安？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-02-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-02-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">商場生活類比，細胞不靠人臉或證件辨認。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "想像你同屋企人去商場。保安攔住真正有危險嘅人，大家會安全啲。但如果連正常買嘢嘅顧客都攔住，甚至整傷佢哋呢？咁就唔單止係保安夠唔夠多，仲要睇有冇認錯對象。記住，呢個只係幫我哋理解嘅比喻。細胞唔會認人面、睇證件，亦唔會好似人咁商量；佢哋係靠分子之間嘅相互作用，接收同傳遞訊號。你會揀邊一種保安？可以揀完再改。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-03",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "一個反常結果，讓他想追下去",
+      "order": 3,
+      "outlineId": "nobel07-slide-03-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-03-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-03-key"
+        },
+        {
+          "id": "nobel07-slide-03-speech",
+          "type": "speech",
+          "text": "呢個唔係憑空諗出嚟嘅謎語。早期有啲小鼠研究發現，喺特定條件之下，免疫系統少咗某啲細胞，結果唔單止係防禦能力改變，仲出現攻擊自己組織嘅情況。呢個反常現象令坂口志文想追問：會唔會有啲細胞，工作唔係加強攻擊，而係約束其他細胞？呢度講緊特定嘅動物研究，唔係話人少咗少少免疫細胞，就一定會生病。我哋唔需要學動物實驗操作，只要捉住呢個值得追問嘅現象。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-03-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-03-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/03-zh-Hant.png",
+              "name": "一個反常結果，讓他想追下去；少了一部分免疫細胞，為什麼反而出現攻擊自己的情況？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-03-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-03-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-03-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">虛構研究者插畫，非坂口本人；細胞表情僅為擬人化。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "呢個唔係憑空諗出嚟嘅謎語。早期有啲小鼠研究發現，喺特定條件之下，免疫系統少咗某啲細胞，結果唔單止係防禦能力改變，仲出現攻擊自己組織嘅情況。呢個反常現象令坂口志文想追問：會唔會有啲細胞，工作唔係加強攻擊，而係約束其他細胞？呢度講緊特定嘅動物研究，唔係話人少咗少少免疫細胞，就一定會生病。我哋唔需要學動物實驗操作，只要捉住呢個值得追問嘅現象。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-04",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "身體不只有一種“保護隊員”",
+      "order": 4,
+      "outlineId": "nobel07-slide-04-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-04-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-04-key"
+        },
+        {
+          "id": "nobel07-slide-04-speech",
+          "type": "speech",
+          "text": "免疫細胞唔係一粒粒完全一樣嘅小球。好似T細胞，就係免疫細胞入面一大類，仲有唔同分工。個T字只係名稱一部分，今日唔使背。如果將所有免疫細胞當成一樣，就可能睇漏咗佢哋唔同嘅作用。好似學校入面有學生、老師同校工，唔可以因為大家都喺度活動，就話所有人做緊同一樣嘢。相入面係人工著色嘅T細胞電鏡圖，唔可以單靠張相，就認定佢係調節性T細胞。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/04-zh-Hant.png",
+              "name": "身體不只有一種“保護隊員”；有些細胞參與攻擊；有些細胞幫助約束反應。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-04-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel07-slide-04-micrograph",
+              "left": 44,
+              "top": 307,
+              "width": 180,
+              "height": 180,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/healthy-t-cell.jpg"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-04-caption",
+              "left": 237,
+              "top": 330,
+              "width": 205,
+              "height": 150,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:12px;line-height:1.35\">T細胞掃描電鏡圖，人工著色。NIAID/NIH · <a href=\"https://commons.wikimedia.org/wiki/File:Healthy_Human_T_Cell.jpg\">來源與公有領域標記</a>。不能憑照片鑒定為調節性T細胞；不是本課實驗圖。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-04-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">右側為細胞教學插畫，不是顯微圖或精確分類。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "免疫細胞唔係一粒粒完全一樣嘅小球。好似T細胞，就係免疫細胞入面一大類，仲有唔同分工。個T字只係名稱一部分，今日唔使背。如果將所有免疫細胞當成一樣，就可能睇漏咗佢哋唔同嘅作用。好似學校入面有學生、老師同校工，唔可以因為大家都喺度活動，就話所有人做緊同一樣嘢。相入面係人工著色嘅T細胞電鏡圖，唔可以單靠張相，就認定佢係調節性T細胞。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-05",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "不是給細胞起個名字，就算發現了",
+      "order": 5,
+      "outlineId": "nobel07-slide-05-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-05-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-05-key"
+        },
+        {
+          "id": "nobel07-slide-05-speech",
+          "type": "speech",
+          "text": "坂口志文同合作者要攞出證據，唔係改個名就算發現。佢哋用細胞表面一啲分子特徵，幫手分組。喺一九九五年嘅研究，團隊將唔同細胞組合，轉移畀特定嘅實驗小鼠作比較。由準備轉移嘅組合中，移走一組細胞之後，餘下嘅組合可能引起身體組織受攻擊；喺合適條件下補返嗰組細胞，就可以阻止呢個情況。呢啲證據支持：嗰組細胞有份維持控制。佢哋後來叫調節性T細胞。不過，分子特徵唔係萬能身份證，動物實驗亦唔等於人嘅治療已經成功。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/05-zh-Hant.png",
+              "name": "不是給細胞起個名字，就算發現了；1995年：用實驗區分一群能約束免疫反應的T細胞。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-05-key",
+              "left": 44,
+              "top": 120,
+              "width": 900,
+              "height": 130,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-05-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">特定動物研究的邏輯示意，非數據、非人體治療。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "坂口志文同合作者要攞出證據，唔係改個名就算發現。佢哋用細胞表面一啲分子特徵，幫手分組。喺一九九五年嘅研究，團隊將唔同細胞組合，轉移畀特定嘅實驗小鼠作比較。由準備轉移嘅組合中，移走一組細胞之後，餘下嘅組合可能引起身體組織受攻擊；喺合適條件下補返嗰組細胞，就可以阻止呢個情況。呢啲證據支持：嗰組細胞有份維持控制。佢哋後來叫調節性T細胞。不過，分子特徵唔係萬能身份證，動物實驗亦唔等於人嘅治療已經成功。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-06",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "“勸架員”到底做了什麼？",
+      "order": 6,
+      "outlineId": "nobel07-slide-06-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-06-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-06-key"
+        },
+        {
+          "id": "nobel07-slide-06-speech",
+          "type": "speech",
+          "text": "返去商場個比喻。調節性T細胞可以暫時比作幫手約束行動嘅「勸架員」。佢哋可以透過同其他細胞接觸、釋放訊號等方式，限制免疫反應，減少對自己組織嘅傷害。但唔係有個小人喺細胞入面叫停，佢哋亦唔係負責所有嘢嘅總司令。身體仲有其他保護機制。今日我哋只係認識其中好重要一種：保護自己，亦需要避免自己嘅保護力量失去控制。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/06-zh-Hant.png",
+              "name": "“勸架員”到底做了什麼？；調節性T細胞：幫助限制其他免疫細胞的反應。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-06-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-06-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">接觸與信號的示意，形狀、比例和分子結構未按實物繪製。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "返去商場個比喻。調節性T細胞可以暫時比作幫手約束行動嘅「勸架員」。佢哋可以透過同其他細胞接觸、釋放訊號等方式，限制免疫反應，減少對自己組織嘅傷害。但唔係有個小人喺細胞入面叫停，佢哋亦唔係負責所有嘢嘅總司令。身體仲有其他保護機制。今日我哋只係認識其中好重要一種：保護自己，亦需要避免自己嘅保護力量失去控制。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-07",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "為什麼是三個人共同獲獎？",
+      "order": 7,
+      "outlineId": "nobel07-slide-07-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-07-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-07-key"
+        },
+        {
+          "id": "nobel07-slide-07-speech",
+          "type": "speech",
+          "text": "坂口志文唔係一個人完成所有發現。瑪麗布倫科、弗雷德拉姆斯德爾同合作者，搵到一個同嚴重免疫失控有關嘅關鍵基因。之後，坂口團隊同其他研究者，將呢個基因同調節性T細胞嘅形成連繫起嚟。你可以咁理解：有人搵到重要細胞，有人搵到影響控制嘅關鍵線索，多條證據慢慢接埋一齊。呢個過程幫人類理解，免疫系統點樣避免攻擊自己嘅組織。二零二五年，佢哋三位共同獲得諾貝爾生理學或醫學獎。唔使背基因嘅字母名稱，記住共同發現嘅意思就得。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-07-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-07-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/07-zh-Hant.png",
+              "name": "為什麼是三個人共同獲獎？；坂口志文／Mary E. Brunkow／Fred Ramsdell。共同研究主題：外周免疫耐受。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-07-key",
+              "left": 44,
+              "top": 120,
+              "width": 900,
+              "height": 130,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-07-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-07-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">證據聯繫示意；不是三人在同一實驗現場。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "坂口志文唔係一個人完成所有發現。瑪麗布倫科、弗雷德拉姆斯德爾同合作者，搵到一個同嚴重免疫失控有關嘅關鍵基因。之後，坂口團隊同其他研究者，將呢個基因同調節性T細胞嘅形成連繫起嚟。你可以咁理解：有人搵到重要細胞，有人搵到影響控制嘅關鍵線索，多條證據慢慢接埋一齊。呢個過程幫人類理解，免疫系統點樣避免攻擊自己嘅組織。二零二五年，佢哋三位共同獲得諾貝爾生理學或醫學獎。唔使背基因嘅字母名稱，記住共同發現嘅意思就得。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-08",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "這對普通人有什麼用？",
+      "order": 8,
+      "outlineId": "nobel07-slide-08-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-08-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-08-key"
+        },
+        {
+          "id": "nobel07-slide-08-speech",
+          "type": "speech",
+          "text": "有啲疾病涉及免疫系統錯誤攻擊自己組織，叫自身免疫病。對病人嚟講，重要嘅唔單止係壓低所有免疫反應，而係可唔可以減少有害攻擊，同時盡量保留應付感染嘅能力。呢項發現，為搵更有針對性嘅方法提供咗方向。研究者曾經做過將調節性T細胞用喺一型糖尿病嘅早期人體試驗。不過，早期安全性研究唔等於證明可以治好病，更加唔可以講成打一針，就永遠唔會生病。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-08.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-08-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-08-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/08-zh-Hant.png",
+              "name": "這對普通人有什麼用？；如果保護系統誤傷了身體，我們能更有針對性地幫助它恢復控制嗎？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-08-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-08-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-08-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">普通生活插畫；治療研究仍需檢驗安全與效果。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "有啲疾病涉及免疫系統錯誤攻擊自己組織，叫自身免疫病。對病人嚟講，重要嘅唔單止係壓低所有免疫反應，而係可唔可以減少有害攻擊，同時盡量保留應付感染嘅能力。呢項發現，為搵更有針對性嘅方法提供咗方向。研究者曾經做過將調節性T細胞用喺一型糖尿病嘅早期人體試驗。不過，早期安全性研究唔等於證明可以治好病，更加唔可以講成打一針，就永遠唔會生病。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-09",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "有趣的轉折：為什麼不是越多越好？",
+      "order": 9,
+      "outlineId": "nobel07-slide-09-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-09-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-09-key"
+        },
+        {
+          "id": "nobel07-slide-09-speech",
+          "type": "speech",
+          "text": "假如有人破壞商場設施，但有人將想阻止佢嘅保安勸走，會點呢？喺某啲腫瘤周圍，調節性T細胞亦可能限制咗對抗腫瘤嘅免疫反應。所以，研究者會諗，點樣喺特定地方減輕呢種限制，而唔係幫全身加更多「勸架員」。我哋唔可以簡單話免疫越強越好，亦唔係越弱越好，而係要問：邊個地方、邊段時間，需要點樣調節？呢啲係研究方向，唔係叫大家自己調節細胞或者用藥。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-09.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/09-zh-Hant.png",
+              "name": "有趣的轉折：為什麼不是越多越好？；同一種“勸架”作用，也可能在不合適的地方幫倒忙。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-09-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-09-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">某些腫瘤中的情境示意；細胞沒有意識。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "假如有人破壞商場設施，但有人將想阻止佢嘅保安勸走，會點呢？喺某啲腫瘤周圍，調節性T細胞亦可能限制咗對抗腫瘤嘅免疫反應。所以，研究者會諗，點樣喺特定地方減輕呢種限制，而唔係幫全身加更多「勸架員」。我哋唔可以簡單話免疫越強越好，亦唔係越弱越好，而係要問：邊個地方、邊段時間，需要點樣調節？呢啲係研究方向，唔係叫大家自己調節細胞或者用藥。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-10",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "諾獎為什麼獎勵這樣的基礎發現？",
+      "order": 10,
+      "outlineId": "nobel07-slide-10-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-10-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-10-key"
+        },
+        {
+          "id": "nobel07-slide-10-speech",
+          "type": "speech",
+          "text": "呢項研究嘅重要，唔需要靠「已經醫好所有疾病」嚟證明。佢令科學家睇見，保護身體嘅系統入面，主動約束攻擊亦係重要工作。知道呢個控制環節，先可以更清楚咁研究邊度出問題、提出新嘅治療諗法，再用實驗同臨床研究檢驗。基礎發現，好似喺複雜嘅城市地圖上，搵到以前未睇清楚嘅交通樞紐。有咗佢，可以研究新路線，但每條路行唔行得通，仲要逐條驗證。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-10.mp3"
+        },
+        {
+          "id": "nobel07-slide-10-discussion",
+          "type": "discussion",
+          "topic": "為什麼保護身體也需要約束反應？",
+          "prompt": "用商場保安的比方解釋，再說出這個比方與真實細胞的一處不同。",
+          "agentId": "nobel07-student"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/10-zh-Hant.png",
+              "name": "諾獎為什麼獎勵這樣的基礎發現？；它改變了一個大問題的答案：身體怎樣保護自己，又避免誤傷自己？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-10-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-10-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">城市地圖只是類比；新路線能否走通仍需驗證。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "呢項研究嘅重要，唔需要靠「已經醫好所有疾病」嚟證明。佢令科學家睇見，保護身體嘅系統入面，主動約束攻擊亦係重要工作。知道呢個控制環節，先可以更清楚咁研究邊度出問題、提出新嘅治療諗法，再用實驗同臨床研究檢驗。基礎發現，好似喺複雜嘅城市地圖上，搵到以前未睇清楚嘅交通樞紐。有咗佢，可以研究新路線，但每條路行唔行得通，仲要逐條驗證。"
+        }
+      }
+    },
+    {
+      "id": "nobel07-slide-11",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "三次小判斷",
+      "order": 11,
+      "outlineId": "nobel07-slide-11-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel07-slide-11-speech",
+          "type": "speech",
+          "text": "而家停一停，試下判斷三個問題。你可以先撳每道題嘅讀題掣，再揀答案。答錯都可以重新揀。最後，用自己嘅說話講下：點解保護身體，亦需要約束免疫反應？唔使背標準句子。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel07-slide-11-q1",
+            "type": "single",
+            "question": "1. 今天的發現，最接近哪句話？",
+            "options": [
+              {
+                "value": "A",
+                "label": "免疫細胞越多越好"
+              },
+              {
+                "value": "B",
+                "label": "有一類T細胞能幫助約束免疫反應"
+              },
+              {
+                "value": "C",
+                "label": "人體只有一種免疫細胞"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：把數量和保護效果混為一談，過度或錯誤的反應也能傷害身體。；B：抓住主線，調節性T細胞參與控制，但並非唯一機制。；C：不對，免疫系統有多種細胞和分工。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel07-slide-11-q2",
+            "type": "single",
+            "question": "2. 小鼠研究支持某組細胞有保護作用，下一步能直接宣佈人類治療成功嗎？",
+            "options": [
+              {
+                "value": "A",
+                "label": "能"
+              },
+              {
+                "value": "B",
+                "label": "不能，還需針對人的安全性和有效性研究"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：把動物實驗直接等同於人的療效。；B：正確，動物研究能提供線索，但不能代替臨床檢驗。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel07-slide-11-q3",
+            "type": "single",
+            "question": "3. 關於調節性T細胞，哪種說法更準確？",
+            "options": [
+              {
+                "value": "A",
+                "label": "給所有人增加越多越好"
+              },
+              {
+                "value": "B",
+                "label": "它們毫無用途"
+              },
+              {
+                "value": "C",
+                "label": "作用要結合疾病、部位和情境理解"
+              }
+            ],
+            "answer": [
+              "C"
+            ],
+            "analysis": "A：忽略了某些腫瘤中的控制問題。；B：忽略了維持免疫控制的重要作用。；C：正確，同一種作用是否有幫助，要看具體情境。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "nobel07-slide-12",
+      "stageId": "hk-nobel-07-sakaguchi-illustrated-v2",
+      "title": "帶走一個問題",
+      "order": 12,
+      "outlineId": "nobel07-slide-12-outline",
+      "createdAt": 1793793600000,
+      "updatedAt": 1793793600000,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel07-slide-12-focus",
+          "type": "spotlight",
+          "elementId": "nobel07-slide-12-key"
+        },
+        {
+          "id": "nobel07-slide-12-speech",
+          "type": "speech",
+          "text": "坂口志文經過醫學學習同長期研究，同合作者不斷搵證據，分清唔同細胞嘅作用。值得我哋學嘅，唔係話只要堅持，就一定攞到獎，而係認真對待反常現象，再用證據檢驗解釋。下次聽到「越多越好」或者「越強越好」，可以先問：喺咩情況下有用？幾時可能有害？下一課，我哋會認識一位用人工智能研究蛋白質嘅科學家，睇下另一個好難回答嘅問題，點樣出現新研究工具。",
+          "audioId": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/audio/yue-HK/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel07-slide-12-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft YaHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel07-slide-12-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/12-zh-Hant.png",
+              "name": "帶走一個問題；遇到和預想相反的結果，先問：是不是漏看了一種作用？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-12-key",
+              "left": 44,
+              "top": 225,
+              "width": 340,
+              "height": 220,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "重點講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel07-slide-12-portrait",
+              "left": 44,
+              "top": 309,
+              "width": 110,
+              "height": 165,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-07-sakaguchi-illustrated-v2/media/sakaguchi-portrait.jpg"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-12-caption",
+              "left": 44,
+              "top": 482,
+              "width": 415,
+              "height": 33,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">坂口志文資料照｜文部科學省・大臣官房人事課。<a href=\"https://commons.wikimedia.org/wiki/File:Shimon_Sakaguchi_201711.jpg\">來源</a>／<a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>。2017年資料，非領獎現場；原圖未修改。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel07-slide-12-footer-paper",
+              "left": 44,
+              "top": 519,
+              "width": 912,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "圖說底色"
+            },
+            {
+              "type": "text",
+              "id": "nobel07-slide-12-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:11px;line-height:1.35\">研究思路插畫，非歷史實驗記錄。</p>",
+              "defaultColor": "#506773",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "坂口志文經過醫學學習同長期研究，同合作者不斷搵證據，分清唔同細胞嘅作用。值得我哋學嘅，唔係話只要堅持，就一定攞到獎，而係認真對待反常現象，再用證據檢驗解釋。下次聽到「越多越好」或者「越強越好」，可以先問：喺咩情況下有用？幾時可能有害？下一課，我哋會認識一位用人工智能研究蛋白質嘅科學家，睇下另一個好難回答嘅問題，點樣出現新研究工具。"
+        }
+      }
+    }
+  ]
+}
