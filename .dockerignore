@@ -24,6 +24,11 @@ server-providers*.yml
 # misc
 assets
 *.md
+!lib/prompts/templates/**/*.md
+!lib/prompts/snippets/**/*.md
+!packages/@openmaic/generation/templates/**/*.md
+!packages/@openmaic/generation/snippets/**/*.md
+!packages/@openmaic/generation/prompts-pbl/**/*.md
 *.pdf
 *.pem
 .DS_Store

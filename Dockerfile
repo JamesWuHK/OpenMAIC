@@ -120,6 +120,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/content ./content
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# These are runtime filesystem inputs, not optional documentation.
+COPY --from=builder --chown=nextjs:nodejs /app/lib/prompts/templates ./lib/prompts/templates
+COPY --from=builder --chown=nextjs:nodejs /app/lib/prompts/snippets ./lib/prompts/snippets
+COPY --from=builder --chown=nextjs:nodejs /app/packages/@openmaic/generation/templates ./packages/@openmaic/generation/templates
+COPY --from=builder --chown=nextjs:nodejs /app/packages/@openmaic/generation/snippets ./packages/@openmaic/generation/snippets
+COPY --from=builder --chown=nextjs:nodejs /app/packages/@openmaic/generation/prompts-pbl ./packages/@openmaic/generation/prompts-pbl
+
 USER nextjs
 
 EXPOSE 3000
