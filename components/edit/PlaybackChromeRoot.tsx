@@ -20,6 +20,8 @@ import { Header } from '@/components/header';
 import { CanvasArea } from '@/components/canvas/canvas-area';
 import { Roundtable } from '@/components/roundtable';
 import { NobelLectureHeader, NobelLectureToolbar } from '@/components/classroom/NobelLectureChrome';
+import { NobelNarrationSession } from '@/components/classroom/NobelNarrationSession';
+import { NOBEL_NARRATION_STAGE, toggleNobelNarration, useNobelNarration } from '@/lib/store/nobel-narration';
 import { PlaybackEngine, computePlaybackView, shouldAutoResumeLecture } from '@/lib/playback';
 import type { EngineMode, TriggerEvent, Effect } from '@/lib/playback';
 import {
@@ -144,6 +146,9 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
     const currentScene = getCurrentScene();
     const lectureLayout = isLearnerDeployment() && /^hk-nobel-\d{2}-.+-lecture(?:-v\d+)?$/.test(stage?.id ?? '');
+    const authoredNobelNarration = lectureLayout && stage?.id === NOBEL_NARRATION_STAGE;
+    const authoredNobelPlaying = useNobelNarration((s) => s.playing);
+    const authoredNobelTranscript = useNobelNarration((s) => s.transcript);
     const piChatEnabled = isPiChatEnabled();
     const [elementPickActive, setElementPickActive] = useState(false);
     const [draftElementReference, setDraftElementReferenceState] =
@@ -504,6 +509,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
         doSessionCleanup();
 
+        if (useStageStore.getState().stage?.id === NOBEL_NARRATION_STAGE) return;
         if (!engine) return;
         const eligible = shouldAutoResumeLecture({
           source: payload.source,
@@ -939,7 +945,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
         activeSceneIdRef.current = currentScene.id;
 
         // Auto-start if triggered by auto-play scene advance
-        if (autoStartRef.current) {
+        if (autoStartRef.current && useStageStore.getState().stage?.id !== NOBEL_NARRATION_STAGE) {
           autoStartRef.current = false;
           (async () => {
             if (currentScene && chatAreaRef.current) {
@@ -1138,6 +1144,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
     // play/pause toggle
     const handlePlayPause = useCallback(async () => {
+      if (authoredNobelNarration) { toggleNobelNarration(); return; }
       const engine = engineRef.current;
       if (!engine) return;
 
@@ -1172,7 +1179,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           engine.continuePlayback();
         }
       }
-    }, [playbackCompleted, currentScene, saveSceneResumePosition]);
+    }, [authoredNobelNarration, playbackCompleted, currentScene, saveSceneResumePosition]);
 
     // get scene information
     const isPendingScene = currentSceneId === PENDING_SCENE_ID;
@@ -1573,12 +1580,18 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           </div>
 
           {lectureLayout && (
+            <>
+            {authoredNobelNarration && <NobelNarrationSession
+              sceneId={currentSceneId}
+              blocked={classroomInteractionOpen || chatIsStreaming || chatIsSoftClosing || !!discussionRequest}
+              muted={ttsMuted} volume={ttsVolume}
+            />}
             <NobelLectureToolbar
               scenes={scenes}
               currentSceneId={currentSceneId}
               currentIndex={currentSceneIndex}
-              playing={canvasEngineState === 'playing'}
-              speech={currentScene?.actions?.filter((a): a is SpeechAction => a.type === 'speech').map((a) => a.text).join('\n\n') || ''}
+              playing={authoredNobelNarration ? authoredNobelPlaying : canvasEngineState === 'playing'}
+              speech={authoredNobelNarration ? authoredNobelTranscript : currentScene?.actions?.filter((a): a is SpeechAction => a.type === 'speech').map((a) => a.text).join('\n\n') || ''}
               muted={ttsMuted}
               volume={ttsVolume}
               onMute={() => setTTSMuted(!ttsMuted)}
@@ -1595,6 +1608,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                 if (nextOpen) chatAreaRef.current?.switchToTab('chat');
               }}
             />
+            </>
           )}
           {/* Roundtable Area */}
           {mode === 'playback' && (!lectureLayout || classroomInteractionOpen) && (

@@ -1,0 +1,153 @@
+{
+  "name": "Nobel07 exact learner application acceptance",
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "nobel07-native-app-existing-linux",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "candidate": {
+      "if": "github.repository == 'JamesWuHK/OpenMAIC'",
+      "runs-on": [
+        "self-hosted",
+        "Linux",
+        "X64",
+        "openmaic",
+        "cloud-ci"
+      ],
+      "timeout-minutes": 90,
+      "env": {
+        "CI": "true",
+        "NEXT_TELEMETRY_DISABLED": "1",
+        "PUPPETEER_SKIP_DOWNLOAD": "true",
+        "TASK_WORKSPACE": "${{ github.workspace }}/nobel07-app-${{ github.run_id }}-${{ github.run_attempt }}",
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "path": "nobel07-app-${{ github.run_id }}-${{ github.run_attempt }}",
+            "fetch-depth": 1,
+            "sparse-checkout": ".github\napp\ncommunity\ncomponents\nconfigs\ncontent\ndeploy\ne2e\neval\nlib\npackages\npublic\nrender-service\nscripts\nskills\ntests\ntypes\nci/nobel07-native"
+          },
+          "timeout-minutes": 8,
+          "env": {
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "http.version",
+            "GIT_CONFIG_VALUE_0": "HTTP/1.1",
+            "GIT_CONFIG_KEY_1": "http.lowSpeedLimit",
+            "GIT_CONFIG_VALUE_1": "1024",
+            "GIT_CONFIG_KEY_2": "http.lowSpeedTime",
+            "GIT_CONFIG_VALUE_2": "30"
+          }
+        },
+        {
+          "name": "Verify owned cloud resources, exact inputs and isolated classroom fixture",
+          "run": "python3 ci/nobel07-native/app-check.py"
+        },
+        {
+          "uses": "pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1",
+          "with": {
+            "package_json_file": "nobel07-app-${{ github.run_id }}-${{ github.run_attempt }}/package.json"
+          }
+        },
+        {
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "with": {
+            "node-version": 22
+          }
+        },
+        {
+          "run": "pnpm install --frozen-lockfile"
+        },
+        {
+          "name": "Relevant regression tests",
+          "run": "pnpm exec vitest run --maxWorkers=1 --no-file-parallelism tests/pbl/v2/evaluator.test.ts tests/pbl/v2/learner-state.test.ts tests/learner tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts tests/server/install-process-shutdown-handlers.test.ts tests/audio/discussion-speech-drain.test.ts tests/lib/buffer/stream-buffer.test.ts tests/lib/chat/use-chat-sessions.test.ts tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts tests/playback/nobel-discussion-protocol.test.ts tests/orchestration/tool-schemas-latex-guardrail.test.ts"
+        },
+        {
+          "name": "TypeScript",
+          "run": "pnpm exec tsc --noEmit"
+        },
+        {
+          "name": "Build exact learner image on self-hosted cloud Linux",
+          "run": "python3 - <<'BUILD'\nimport os,json,subprocess,time,signal,sys\nfrom pathlib import Path\nassert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux' and os.getuid()!=0\npaths=[Path.cwd(),Path(subprocess.check_output(['docker','info','--format','{{.DockerRootDir}}'],text=True).strip())]\nout=Path('artifacts/nobel07-docker-storage.json');out.parent.mkdir(exist_ok=True);samples=[]\ndef sample():\n result=[]\n for path in paths:\n  stat=os.statvfs(path);result.append({'path':str(path),'freeBytes':stat.f_bavail*stat.f_frsize,'freeInodes':stat.f_favail})\n samples.append({'at':time.time(),'filesystems':result});out.write_text(json.dumps({'samples':samples,'sharedCleanupPerformed':False,'productionTouched':False})+'\\n');return result\ninitial=sample()\nassert all(s['freeBytes']>=20*1024**3 and s['freeInodes']>=200000 for s in initial),initial\nargs=['docker', 'build', '--platform', 'linux/amd64', '--tag', 'wanli-learner-ci:__SHA__', '--label', 'org.opencontainers.image.revision=__SHA__', '--build-arg', 'NEXT_BUILD_NODE_OPTIONS=--max-old-space-size=3072', '--build-arg', 'OPENMAIC_BUILD_CPUS=1', '--build-arg', 'NEXT_PUBLIC_OPENMAIC_DEPLOYMENT_MODE=learner', '--build-arg', 'NEXT_PUBLIC_PERSISTENCE=', '--build-arg', 'NEXT_PUBLIC_PRO_WORKBENCH_ENABLED=false', '--build-arg', 'NEXT_PUBLIC_MAIC_EDITOR_ENABLED=false', '--build-arg', 'NEXT_PUBLIC_MAIC_EDITOR_RENDERER_ENABLED=false', '--build-arg', 'NEXT_PUBLIC_PI_CHAT_ENABLED=false', '--build-arg', 'NEXT_PUBLIC_ENABLE_VIDEO_EXPORT=false', '--build-arg', 'NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false', '.']\nargs=[a.replace('__SHA__',os.environ['GITHUB_SHA']) for a in args]\nprocess=subprocess.Popen(args)\ndef interrupted(signum,frame):\n raise SystemExit(128+signum)\nfor signum in [signal.SIGTERM,signal.SIGINT]:signal.signal(signum,interrupted)\ntry:\n while process.poll() is None:\n  time.sleep(5);sample()\n sample()\n result=process.returncode\nexcept BaseException as error:\n print('Build monitor failed or interrupted: '+type(error).__name__,file=sys.stderr)\n raise\nfinally:\n if process.poll() is None:\n  process.terminate()\n  try:process.wait(timeout=10)\n  except subprocess.TimeoutExpired:\n   process.kill();process.wait(timeout=5)\nraise SystemExit(result)\nBUILD\n"
+        },
+        {
+          "name": "Bind exact built application image ID",
+          "run": "python3 ci/nobel07-native/app-image-proof.py app"
+        },
+        {
+          "name": "Start isolated exact-image candidate",
+          "run": "candidate_name=\"learner-candidate-$GITHUB_RUN_ID\"\ndocker run -d --name \"$candidate_name\" --label wanli.qa.owner=nobel07-native-app-20261104 --label \"wanli.qa.run=$GITHUB_RUN_ID\" --memory 2048m --memory-swap 2560m --cpus 1 --pids-limit 256 --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1::3000 \\\n  -e OPENMAIC_DEPLOYMENT_MODE=learner \\\n  -e OPENAI_API_KEY=synthetic-ci-not-a-secret \\\n  -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \\\n  -e DEFAULT_MODEL=openai:gpt-4o-mini \\\n  -v \"$TASK_WORKSPACE/content/learner:/app/content/learner:ro\" \\\n  -v \"$TASK_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro\" \\\n  -v \"$TASK_WORKSPACE/data/classrooms:/app/data/classrooms:ro\" \\\n  \"$NOBEL07_APP_IMAGE_ID\"\ncandidate_port=\"$(docker port \"$candidate_name\" 3000/tcp | awk -F: 'NR==1 {print $NF}')\"\ntest -n \"$candidate_port\"\necho \"LEARNER_QA_BASE_URL=http://127.0.0.1:$candidate_port\" >> \"$GITHUB_ENV\"\nfor attempt in {1..30}; do\n  if curl -fsS \"http://127.0.0.1:$candidate_port/api/health\" >/dev/null; then exit 0; fi\n  sleep 2\ndone\nexit 1\n",
+          "id": "start_candidate"
+        },
+        {
+          "name": "Image API readiness boundary",
+          "run": "node scripts/qa-learner-image-boundary.mjs"
+        },
+        {
+          "name": "Install CI Chromium",
+          "run": "pnpm exec playwright install chromium"
+        },
+        {
+          "name": "Existing learner desktop and mobile browser regression",
+          "run": "pnpm exec playwright test --config playwright.learner.config.ts"
+        },
+        {
+          "name": "Actual Nobel07 React shell, media, transcript and interaction acceptance",
+          "timeout-minutes": 20,
+          "run": "bash ci/nobel07-native/app-browser.sh",
+          "if": "${{ !cancelled() && steps.start_candidate.outcome == 'success' }}"
+        },
+        {
+          "name": "Export tested candidate (not deployment approval)",
+          "run": "mkdir -p artifacts/learner-image\ndocker image inspect \"$NOBEL07_APP_IMAGE_ID\" --format '{{json .Id}}' > artifacts/learner-image/image-id.json\ngit rev-parse HEAD > artifacts/learner-image/source-sha.txt\ndocker save \"$NOBEL07_APP_IMAGE_ID\" | gzip -1 > artifacts/learner-image/image.tar.gz\ncd artifacts/learner-image\nsha256sum image.tar.gz > image.tar.gz.sha256\n"
+        },
+        {
+          "name": "Save tested image for manual review",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "learner-image-${{ github.sha }}",
+            "path": "${{ env.TASK_WORKSPACE }}/artifacts/learner-image/",
+            "retention-days": 1,
+            "compression-level": 0
+          }
+        },
+        {
+          "name": "Collect candidate diagnostics",
+          "if": "always()",
+          "run": "python3 ci/nobel07-native/app-cleanup.py",
+          "env": {
+            "NOBEL07_CLEAN_GENERATED_DEPENDENCIES": "${{ job.status != 'cancelled' }}"
+          }
+        },
+        {
+          "name": "Save evidence (not full course acceptance)",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "learner-image-qa-${{ github.sha }}",
+            "path": "${{ env.TASK_WORKSPACE }}/artifacts/learner-image-qa/\n${{ env.TASK_WORKSPACE }}/artifacts/learner-site-qa/\n${{ env.TASK_WORKSPACE }}/artifacts/nobel07-native-app/\n${{ env.TASK_WORKSPACE }}/artifacts/nobel07-build-resource.json\n${{ env.TASK_WORKSPACE }}/artifacts/nobel07-docker-storage.json",
+            "retention-days": 7
+          }
+        }
+      ],
+      "defaults": {
+        "run": {
+          "working-directory": "nobel07-app-${{ github.run_id }}-${{ github.run_attempt }}"
+        }
+      }
+    }
+  },
+  "on": {
+    "push": {
+      "branches": [
+        "codex/nobel07-livebase-20261104"
+      ]
+    }
+  }
+}

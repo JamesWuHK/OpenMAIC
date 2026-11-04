@@ -1,0 +1,14 @@
+{
+  "app-cleanup.py": "5bc5cc21a3dd72088aaafedd1e0db3d2a726d553bd7aa45d01d579ca73748d78",
+  "expected.json": "43b623dcc9dfb72571fdb1010be3b28eee267397dcef16156f67faaf315ae570",
+  "course-package.zip": "878513e959c8f8a2fba33597fffb552d63e7d885016c93f3daae14113fc48a57",
+  "app-browser.sh": "7e33803dd4f18d2a91be58a69835c50156c7526c0262c42a1ecc6760f89087d0",
+  "app-source-manifest.json": "02814cf7b0bff3af2ae2d4cbd890cb3a6bd9c609cffdc4d7fdfbd5314769a6d4",
+  "seccomp_profile.json": "0c4b9e74b24ed79572cf0b1aaa9c92afc8a13019d8f794c13c73aa4174e9db5a",
+  "qa-native-app.mjs": "9d64d154b0df8fdbf44f79a8515878060f277d148304094d32728ca74782fd28",
+  "package-lock.json": "6b56559d8dbc97efad275de3c453f163c54cbc95ce1156ced06f67a112260c32",
+  "package.json": "c23d1de8c16738dce265e9b9635c4279529730aa081b9e3721043248823d8013",
+  "app-check.py": "1d14e7eee09224b3c1fbc9d006a0278d7ae5cfdaa85ccf40b823bf2fc719d016",
+  "speech-scripts.json": "2ee67f17c243c1277b0f68ca847a0d0b30c4abb4ec7ccc54deab39d9d838c32d",
+  "app-image-proof.py": "8a9ca9c9d2b359c3a276314d769e8c81ec54e8ae6024a35216f2961371bb2746"
+}

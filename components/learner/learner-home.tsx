@@ -174,11 +174,11 @@ export function LearnerHome() {
               </div>
               <h1
                 aria-label={siteContent?.hero.title ?? copy.title}
-                className="max-w-[690px] text-[2.35rem] font-black leading-[0.9] tracking-[-0.075em] sm:text-[clamp(3.2rem,7vw,6.7rem)]"
+                className="max-w-[690px] text-[2.35rem] font-black leading-[1.12] tracking-[-0.075em] sm:text-[clamp(3.2rem,7vw,6.7rem)]"
               >
                 {(siteContent?.hero.title ? [siteContent.hero.title] : copy.titleLines).map(
                   (line) => (
-                    <span key={line} className="block whitespace-nowrap">
+                    <span key={line} className="block whitespace-normal [overflow-wrap:anywhere]">
                       {line}
                     </span>
                   ),

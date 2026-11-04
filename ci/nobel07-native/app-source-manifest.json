@@ -1,0 +1,39 @@
+{
+  "base": "34c3b5a8307e64f9a925d7d375950128cb35af37",
+  "files": {
+    "lib/store/nobel-narration.ts": {
+      "baseSHA256": null,
+      "SHA256": "28f07bd7649806411ba68cd3a31111fbff4c7013cea9e4e00f6d366bb5a2ac39"
+    },
+    "components/classroom/NobelNarrationSession.tsx": {
+      "baseSHA256": null,
+      "SHA256": "fbcffead3a17c30fa277985f793ab7ecb9f0e8ecadd0bd00969ae520dee9b36d"
+    },
+    "components/scene-renderers/InteractiveIframeHost.tsx": {
+      "baseSHA256": "17a6c531fb555aaf0b2d2a8d111d1620563b93b6989898ecc21d532b46068215",
+      "SHA256": "e7a5e6669cef697d870ae287561d77716ae0f7711fe26df889e48b6cbdf27485"
+    },
+    "components/edit/PlaybackChromeRoot.tsx": {
+      "baseSHA256": "b9d3b74dce39bcdbd965dd7893d37c28781572f73864ee77ba81a9ff2de856b1",
+      "SHA256": "af46b9111f5d6c2c751e87c0952a8ca5bdb48375bf4cb62edd7a0d573cca288d"
+    },
+    "components/learner/learner-home.tsx": {
+      "baseSHA256": "8773b65b398477566b60bc8ec470764435187f67b8f6fea43185dd842722f715",
+      "SHA256": "86e63e717a73841104758aa3a1152cd9def069025bf6c01ab1ceff7098dc414e"
+    },
+    "e2e/tests/learner-site.spec.ts": {
+      "baseSHA256": "83e9e38be2e779d90a4133e37d058dc0a28e22c3f0f9de96e5ff612c0deb4bd6",
+      "SHA256": "e381ecd447499eafacd24fd156b11e8adc4bb92b8454a347e21d054458f11dd8"
+    },
+    "components/roundtable/index.tsx": {
+      "baseSHA256": "63a5dc7816df18b2ce14fc9757af1c084b5fffec799a8f4757550f2c1ce5823a",
+      "SHA256": "7d7a766780daddab5f63b63166eee0c20119d38219eef56fb54cba6977c23f75"
+    }
+  },
+  "scope": "Seven files: four Nobel07 narration runtime files; home wrap and regression; student-only hiding of internal agent persona",
+  "build": "NEW_LIVE_BASE_NOT_BUILT",
+  "published": false,
+  "previousBase": "7b1da522d071bfddf50f0526ac337fd2016f8d50",
+  "threeWayMergeTree": "43122c430439aa301c536ec856a638927a34c61f",
+  "productionBaselineReadOnly": "production-readiness-latest.json"
+}
