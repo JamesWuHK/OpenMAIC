@@ -19,10 +19,13 @@ export function createFreeProxy({apiKey, token, fetchImpl = fetch,
     'reasoning', 'reasoning_details']);
   const functionCall = value => value?.type === 'function' &&
     typeof value.function?.name === 'string' && typeof value.function?.arguments === 'string';
+  const textContent = value => typeof value === 'string' || (Array.isArray(value) &&
+    value.every(part => part?.type === 'text' && typeof part.text === 'string' &&
+      Object.keys(part).every(key => key === 'type' || key === 'text')));
   const textMessage = value => value &&
     ['system', 'user', 'assistant', 'tool', 'developer', 'function'].includes(value.role) &&
     Object.keys(value).every(key => messageFields.has(key)) &&
-    (typeof value.content === 'string' || (value.content === null && value.tool_calls?.length > 0)) &&
+    (textContent(value.content) || (value.content === null && value.tool_calls?.length > 0)) &&
     (!value.tool_calls || (Array.isArray(value.tool_calls) && value.tool_calls.every(functionCall)));
   let used = 0;
   let active = 0;

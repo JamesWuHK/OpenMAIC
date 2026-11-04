@@ -24,6 +24,16 @@ class ResourceOwnership(unittest.TestCase):
     def test_owned_container_matches(self):
         self.assertTrue(resources.owned(self.actual, self.expected))
 
+    def test_artifact_source_is_explicit_and_does_not_replace_workflow_identity(self):
+        env = {'GITHUB_RUN_ID': '123', 'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_SHA': 'c' * 40,
+               'CANDIDATE_SOURCE_SHA': 'd' * 40, 'RUNNER_TEMP': '/tmp/nobel-context-test'}
+        with patch.dict(resources.os.environ, env):
+            self.assertEqual(resources.context()[1], 'd' * 40)
+            self.assertEqual(resources.os.environ['GITHUB_SHA'], 'c' * 40)
+        with patch.dict(resources.os.environ, dict(env, CANDIDATE_SOURCE_SHA='../untrusted')):
+            with self.assertRaisesRegex(RuntimeError, 'Invalid run identity'):
+                resources.context()
+
     def test_builder_receipt_requires_exact_cid_image_and_container_name(self):
         receipt = {'cid': 'a' * 64, 'image': 'sha256:' + 'b' * 64, 'name': 'nobel-123-1-random'}
         actual = {'Id': receipt['cid'], 'Image': receipt['image'],

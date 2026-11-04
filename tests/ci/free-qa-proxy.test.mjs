@@ -51,6 +51,12 @@ test('free SSE request uses only the server credential and limits generated toke
     assert.equal(JSON.parse(calls[0][1].body).max_tokens, 2048);
   });
 });
+test('standard text-only message parts are permitted without multimodal preprocessing', async () => {
+  await fixture({}, async (request, calls) => {
+    const response = await request({...payload, messages: [{role: 'user', content: [{type: 'text', text: 'Synthetic QA'}]}]});
+    assert.equal(response.status, 200); await response.text(); assert.equal(calls.length, 1);
+  });
+});
 test('session ends at its fixed request budget and lifetime', async () => {
   await fixture({maxRequests: 1}, async (request, calls) => {
     await (await request(payload)).text();

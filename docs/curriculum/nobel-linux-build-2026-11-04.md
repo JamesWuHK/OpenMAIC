@@ -133,3 +133,21 @@ certificate verification is not disabled. Quick Tunnels are not suitable because
 Cloudflare documents that they do not support SSE. No tunnel, relay, port rule,
 DNS record or production service was created for this preparation. Any transport
 setup still requires scoped resource checks, independent review and owned cleanup.
+
+## First standard runner result and infrastructure correction
+
+Public standard Linux [run 41775500579](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41775500579)
+at source `cc3cb0a4e1cdc05a61840f1575c7823d2a1a10a0` passed capacity, relevant
+regressions, TypeScript, the image build, actual runtime prompt hashes and the
+synthetic no-model API boundary. Browser execution failed before tests began:
+`EACCES` creating `/work/artifacts/learner-site-qa`. The capability-restricted root
+inside the browser image could not write the host-owned artifact directory.
+
+The browser now uses the host UID/GID, with writable XDG paths under container
+`/tmp`. No broad host permission change is made. This correction and source/relay
+changes passed independent review (Python 11; Node workflow/relay 11). Browser
+startup still needs cloud proof. The original failed run exported no image, so
+one rebuild is necessary. Later runs export before the browser step, upload normal
+image artifacts only after browser success, and preserve failed candidates under
+a distinct `learner-unaccepted-image-*` name for diagnosis. None implies native
+discussion acceptance or permission to deploy an unaccepted image.

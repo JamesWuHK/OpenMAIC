@@ -49,7 +49,9 @@ def capacity():
 
 def context():
     run = os.environ['GITHUB_RUN_ID'] + '-' + os.environ['GITHUB_RUN_ATTEMPT']
-    sha = os.environ['GITHUB_SHA']
+    # Native acceptance may test an already-built immutable image from an earlier
+    # source commit; GITHUB_SHA still identifies the separate QA workflow code.
+    sha = os.environ.get('CANDIDATE_SOURCE_SHA') or os.environ['GITHUB_SHA']
     if not re.fullmatch(r'\d+-\d+', run) or not re.fullmatch(r'[0-9a-f]{40}', sha):
         raise RuntimeError('Invalid run identity')
     task = pathlib.Path(os.environ['RUNNER_TEMP']) / ('nobel-ci-' + run)
@@ -248,6 +250,9 @@ def browser():
     # This isolated test image has its own browsers and OS libraries; no host apt changes.
     start('browser', image, ['--network=host', '--memory=768m', '--memory-swap=1g',
           '--cpus=0.75', '--shm-size=128m', '--workdir=/work',
+          '--user', f'{os.getuid()}:{os.getgid()}',
+          '-e', 'XDG_CACHE_HOME=/tmp/nobel-browser-cache',
+          '-e', 'XDG_CONFIG_HOME=/tmp/nobel-browser-config',
           '-e', 'CI=true', '-e', 'NODE_OPTIONS=--max-old-space-size=384',
           '-e', 'LEARNER_QA_BASE_URL=' + os.environ['LEARNER_QA_BASE_URL'],
           '-e', 'NO_PROXY=127.0.0.1,localhost', '-v', str(root) + ':/work:ro',

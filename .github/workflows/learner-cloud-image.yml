@@ -137,18 +137,34 @@
           "run": "node scripts/qa-learner-image-boundary.mjs"
         },
         {
+          "name": "Export immutable built image (acceptance pending)",
+          "run": "mkdir -p artifacts/learner-image\ndocker image inspect \"$IMAGE_TAG\" --format '{{json .Id}}' > artifacts/learner-image/image-id.json\ngit rev-parse HEAD > artifacts/learner-image/source-sha.txt\ndocker save \"$IMAGE_TAG\" | gzip -1 > artifacts/learner-image/image.tar.gz\ncd artifacts/learner-image\nsha256sum image.tar.gz > image.tar.gz.sha256",
+          "id": "export"
+        },
+        {
           "name": "Isolated desktop and mobile regression (fixtures, not full course acceptance)",
           "run": "python3 scripts/ci/nobel-resources.py browser"
         },
         {
-          "name": "Export tested image for review, not deployment",
-          "run": "mkdir -p artifacts/learner-image\ndocker image inspect \"$IMAGE_TAG\" --format '{{json .Id}}' > artifacts/learner-image/image-id.json\ngit rev-parse HEAD > artifacts/learner-image/source-sha.txt\ndocker save \"$IMAGE_TAG\" | gzip -1 > artifacts/learner-image/image.tar.gz\ncd artifacts/learner-image\nsha256sum image.tar.gz > image.tar.gz.sha256"
+          "name": "Record fixture acceptance only after browser success",
+          "run": "python3 - <<'PY'\nimport json,os,pathlib\nroot=pathlib.Path('artifacts/learner-image')\n(root/'acceptance.json').write_text(json.dumps({'source':os.environ['GITHUB_SHA'],'image':json.loads((root/'image-id.json').read_text()),'fixtureRegressionPassed':True,'nativeDiscussionAccepted':False,'published':False},indent=2))\nPY"
         },
         {
           "name": "Save tested image",
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "with": {
             "name": "learner-image-${{ github.sha }}-${{ github.run_attempt }}",
+            "path": "artifacts/learner-image/",
+            "retention-days": 1,
+            "compression-level": 0
+          }
+        },
+        {
+          "name": "Retain failed candidate for diagnosis, never deployment",
+          "if": "failure() && steps.export.outcome == 'success'",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "learner-unaccepted-image-${{ github.sha }}-${{ github.run_attempt }}",
             "path": "artifacts/learner-image/",
             "retention-days": 1,
             "compression-level": 0
