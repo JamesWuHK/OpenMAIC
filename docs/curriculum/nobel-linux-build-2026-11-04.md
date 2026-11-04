@@ -250,3 +250,52 @@ branch can start native QA. Normal code pushes cannot start it, and image builds
 still require manual dispatch. The request accepts only mapped public QA inputs;
 provider credentials are not valid fields. Existing image provenance, free-only
 relay, standard public Ubuntu, resource limits and cleanup remain required.
+
+## Fluency requirement and latest unaccepted native evidence
+
+The user additionally requires smooth discussion. Native run
+[41787619449](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41787619449)
+generated three initial roles and a fresh teacher follow-up. Thirteen speech
+clips were audible, advanced and ended, and text/same-role speech coverage was
+present. The run nevertheless FAILED: its observer retained listeners after
+`ended`, so later `src=''` cleanup contaminated completed rows with error 4 and
+reset time. Preserve that failed raw evidence unchanged (JSON SHA256
+`40814a0dde31937b91f2e2251c4362033862c65bcce2cccd143e237ece299cb8`).
+The corrected observer freezes terminal rows and treats pre-completion errors
+and source replacement as failures. Real Chromium calibration, including
+observed cleanup error 4, is now included in the existing cloud browser matrix.
+Synthetic calibration cannot replace native discussion acceptance.
+
+Logs also show about 122 seconds spent in model-based speaker scheduling alone
+for this short exchange. A new exact-six-ID learner policy keeps the authored
+student → teacher → assistant opening, then cues the learner. A fresh human
+follow-up goes directly to the teacher (or an explicitly selected role). Actual
+responses still use the model and authored prompts. An empty required response
+gets one retry, then fails explicitly. Other classrooms/configurations keep the
+existing director. This runtime change REQUIRES a new image; image 72cb41d8
+cannot establish acceptance for it.
+
+QA now records monotonic browser timestamps for actual join/Enter events,
+incrementally received SSE text, response completion, TTS response readiness,
+actual playing/end events, intentional pause intervals and segment/role gaps.
+Initial engineering targets are first received text ≤3 seconds, first browser
+sound ≤5 seconds, same-role segment gaps ≤1 second and role changes ≤2 seconds.
+Human think time before a follow-up is excluded from gaps. Missing or slow
+measurements fail fluency, even if discussion is functional. These targets are
+not a provider SLA; a few runs do not establish production p95 or human listening
+quality, and the free test provider does not represent paid production DeepSeek.
+
+Independent science review rejected course01's actual directional smell/drug
+claims (D01/D02). A new candidate appends a precise boundary to all three
+personas; SHA256 is
+`24a3bd667a2b1f22fd188769cc2e59887b29e0245aeb07db706bbddda02eecb0`.
+Removing only that addition restores original d24332a7 byte-for-byte; scenes,
+media and the other five classes remain unchanged. Independent static closure
+passed; fresh dynamic output remains CHANGES_REQUIRED until reviewed. The new
+QA bundle SHA256 is
+`970b5ad7d83dca07aa192916f5189396ee0836ebfefdd74b0bf8d79bfcfc157a`.
+A narrow known-output regression tripwire does not replace scientific review.
+
+All native-run firewall rules and the old relay are closed. No production app,
+catalog, Caddy or published classroom was changed. Existing private staging of
+image72 and original data is historical preparation, not the final candidate.

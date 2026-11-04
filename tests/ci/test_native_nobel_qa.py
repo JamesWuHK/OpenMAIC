@@ -70,6 +70,14 @@ class NativeQAInputs(unittest.TestCase):
                 self.assertEqual(sorted(a['role'] for a in classroom['stage']['generatedAgentConfigs']),
                                  ['assistant', 'student', 'teacher'])
                 self.assertEqual(sum(a['type'] == 'discussion' for s in classroom['scenes'] for a in s['actions']), 1)
+                if course['id'] == 'hk-nobel-01-kagan-discussion-v1':
+                    boundary = (qa.ROOT / 'docs/curriculum/nobel-handedness-boundary-2026-11-04.md').read_text().strip()
+                    for agent in classroom['stage']['generatedAgentConfigs']:
+                        self.assertTrue(agent['persona'].endswith('\n' + boundary))
+                        agent['persona'] = agent['persona'][:-len('\n' + boundary)]
+                    original = (json.dumps(classroom, ensure_ascii=False, indent=2) + '\n').encode()
+                    self.assertEqual(qa.hashlib.sha256(original).hexdigest(),
+                                     'd24332a7710b67c9cf01feb4d4dd907d55e302428b97854b8f409b6dfb1d4220')
 
 
 if __name__ == '__main__':

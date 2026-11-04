@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { frozenClassroomMediaPaths } from './frozen-media-paths.mjs';
+import { installNativeAudioObserver, summarizeNativeLatency, assessNativeLatency } from './native-audio-observer.mjs';
+import { knownNobelMisconceptions } from './nobel-known-misconception.mjs';
 const base=process.env.QA_ORIGIN||'http://127.0.0.1:8127';
 const mode=process.argv[2]||'ui';
 const id=process.argv[3]||'hk-nobel-01-kagan-discussion-v1';
@@ -45,55 +47,45 @@ try{
    return route.continue();
   });
  }
- await c.addInitScript(()=>{
-  const state={audio:[],speech:[],chat:[]};window.__nativeQA=state;
+ const installNativeQA=()=>{
+  const state={audio:[],speech:[],chat:[],actions:[]};window.__nativeQA=state;
+  const now=()=>performance.timeOrigin+performance.now();
+  document.addEventListener('click',event=>{
+   if(event.target.closest?.('button')?.textContent.trim()==='加入討論')state.actions.push({kind:'join',at:now()});
+  },true);
+  document.addEventListener('keydown',event=>{
+   if(event.key==='Enter'&&!event.shiftKey&&event.target.getAttribute?.('placeholder')==='輸入你的訊息...')state.actions.push({kind:'followup',at:now()});
+  },true);
   const sources=new Map(),fetchNative=window.fetch;
   window.fetch=async(...args)=>{
+   const requestedAt=now();
    const r=await fetchNative(...args);const url=String(args[0]?.url||args[0]);
    if(url.includes('/api/chat')){
-    const row={status:r.status,at:Date.now(),replies:[],errors:[],done:false,reading:true};state.chat.push(row);
+    const row={status:r.status,requestedAt,at:now(),firstTextAt:null,replies:[],errors:[],done:false,reading:true};state.chat.push(row);
     // Decode in the browser Fetch API. CDP misdecodes charset-less SSE as Latin-1.
-    r.clone().text().then(raw=>{const messages=new Map();
-     for(const line of raw.split('\n').filter(x=>x.startsWith('data: '))){try{const e=JSON.parse(line.slice(6));
-      if(e.type==='agent_start')messages.set(e.data.messageId,{messageId:e.data.messageId,agentId:e.data.agentId,name:e.data.agentName,text:''});
-      if(e.type==='text_delta'){const m=messages.get(e.data.messageId);if(m)m.text+=e.data.content||e.data.delta||'';}
+    (async()=>{const messages=new Map(),reader=r.clone().body.getReader(),decoder=new TextDecoder();let pending='';
+     const consume=line=>{if(!line.startsWith('data: '))return;try{const e=JSON.parse(line.slice(6));
+      if(e.type==='agent_start')messages.set(e.data.messageId,{messageId:e.data.messageId,agentId:e.data.agentId,name:e.data.agentName,text:'',firstTextAt:null});
+      if(e.type==='text_delta'){const m=messages.get(e.data.messageId),delta=e.data.content||e.data.delta||'';if(m&&delta){m.text+=delta;if(delta.trim()){m.firstTextAt??=now();row.firstTextAt??=m.firstTextAt;}}}
       if(e.type==='error')row.errors.push(e.data);if(e.type==='done')row.done=true;
-     }catch(e){row.errors.push(String(e));}}
+     }catch(e){row.errors.push(String(e));}};
+     while(true){const part=await reader.read();pending+=decoder.decode(part.value,{stream:!part.done});let cut;
+      while((cut=pending.indexOf('\n'))>=0){consume(pending.slice(0,cut).replace(/\r$/,''));pending=pending.slice(cut+1);}
+      row.replies=[...messages.values()].filter(m=>m.text.trim());if(part.done)break;
+     }if(pending)consume(pending);
      row.replies=[...messages.values()].filter(m=>m.text.trim());
-    }).catch(e=>row.errors.push(String(e))).finally(()=>row.reading=false);
+    })().catch(e=>row.errors.push(String(e))).finally(()=>{row.completedAt=now();row.reading=false;});
    }
    if(url.includes('/api/learner/speech')){
     let request={};try{request=JSON.parse(args[1]?.body||'{}')}catch{}
-    const row={agentId:request.agentId,text:request.text,status:r.status,index:state.speech.length};state.speech.push(row);
+    const row={agentId:request.agentId,text:request.text,status:r.status,index:state.speech.length,requestedAt,headersAt:now(),readyAt:null};state.speech.push(row);
     if(r.ok){const d=await r.clone().json();if(d.base64)sources.set(`data:audio/${d.format||'mp3'};base64,${d.base64}`,row);}
+    row.readyAt=now();
    }return r;
   };
-  (function installAudioObserver(state,sources){
- const observed=new WeakMap();
- const play=HTMLMediaElement.prototype.play;
- HTMLMediaElement.prototype.play=function(){
-  // currentSrc can still describe the previous clip until native play starts.
-  const src=this.src||this.currentSrc;
-  const speech=sources.get(src),previous=observed.get(this);
-  if(speech){window.__nativeQAMedia??=[];window.__nativeQAMedia[speech.index]=this;}
-  if(!previous||previous.src!==src||previous.row.speechIndex!==(speech?.index??null)){
-   if(previous)for(const [event,listener] of previous.listeners)this.removeEventListener(event,listener);
-   const row={agentId:speech?.agentId||null,speechIndex:speech?.index??null,source:src.startsWith('data:')?'generated':'narration',mediaPath:src.startsWith('data:')?null:new URL(src,location.href).pathname,ended:false,error:null,advanced:false,audible:false,first:null,last:0,rate:this.playbackRate};
-   state.audio.push(row);
-   const sample=()=>{
-    row.last=this.currentTime;row.rate=this.playbackRate;
-    if(!this.paused&&!this.muted&&this.volume>0&&this.readyState>=2){
-     row.audible=true;row.first??=this.currentTime;row.advanced||=this.currentTime>row.first+.15;
-    }
-   };
-   const listeners=[['playing',sample],['timeupdate',sample],['ended',()=>{sample();row.ended=true;}],['error',()=>{row.error=this.error?.code||true;}]];
-   for(const [event,listener] of listeners)this.addEventListener(event,listener);
-   observed.set(this,{src,row,listeners});
-  }
-  return play.call(this);
+  globalThis.__installNativeAudioObserver(state,sources);
  };
-})(state,sources);
- });
+ await c.addInitScript({content:`globalThis.__installNativeAudioObserver = ${installNativeAudioObserver.toString()}; (${installNativeQA.toString()})();`});
  p=await c.newPage();p.setDefaultTimeout(30000);
  const servedResponse=await p.request.get(base+'/api/classroom?id='+id);
  assert.equal(servedResponse.status(),200);
@@ -187,6 +179,8 @@ try{
   record.chat=await p.evaluate(()=>window.__nativeQA.chat);
   record.speech=await p.evaluate(()=>window.__nativeQA.speech);
   record.generatedReplies=record.chat.flatMap(x=>x.replies);
+  record.knownMisconceptions=knownNobelMisconceptions(id,record.generatedReplies);
+  assert.equal(record.knownMisconceptions.length,0,'Previously rejected scientific misconception recurred');
   const visible=record.transcript.replace(/\s/g,'');
   record.allGeneratedTextVisible=record.generatedReplies.every(r=>visible.includes(r.text.replace(/\s/g,'')));
   assert(record.generatedReplies.length>=2,'No multi-role reply');
@@ -220,6 +214,8 @@ try{
    const state=await p.evaluate(()=>window.__nativeQA);
    record.chat=state.chat;record.audio=state.audio;record.speech=state.speech;
    record.followupReplies=state.chat.slice(prior).flatMap(x=>x.replies);
+   record.knownMisconceptions.push(...knownNobelMisconceptions(id,record.followupReplies));
+   assert.equal(record.knownMisconceptions.length,0,'Previously rejected scientific misconception recurred in follow-up');
    record.followupSpeech=state.speech.slice(priorSpeech);
    record.transcript=await p.locator('body').innerText();
    assert(record.followupReplies.length>0,'Learner follow-up produced no reply');
@@ -237,6 +233,13 @@ try{
  record.pass=true;
 }catch(e){record.error=e.stack||String(e);if(p){record.failureText=(await p.locator('body').innerText().catch(()=>'' )).slice(-12000);const state=await p.evaluate(()=>window.__nativeQA||{}).catch(()=>({}));record.audio=state.audio||[];record.chat=state.chat||[];record.speech=state.speech||[];await p.screenshot({path:out+'/'+id+'-'+mode+'-failure.png'}).catch(()=>{});}}
 finally{
+ if(p){try{const state=await p.evaluate(()=>window.__nativeQA);if(state){
+  record.latency=summarizeNativeLatency(state);
+  if(mode==='discussion'){
+   record.fluency=assessNativeLatency(record.latency,record.followupRequired);
+   if(!record.fluency.passed){record.pass=false;record.fluencyError='Discussion functional/transport evidence does not meet fluency targets';}
+  }
+ }}catch(error){record.latencyError=String(error);if(mode==='discussion')record.pass=false;}}
  try{
   // Let every already-started media route finish before disposing its request
   // context. A failed upstream remains a failure, including during teardown.

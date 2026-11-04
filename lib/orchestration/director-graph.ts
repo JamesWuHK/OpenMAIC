@@ -40,6 +40,8 @@ import { getEffectiveActions } from './tool-schemas';
 import type { AgentTurnSummary, WhiteboardActionRecord } from './types';
 import { parseStructuredChunk, createParserState, finalizeParser } from './stateless-generate';
 import { createLogger } from '@/lib/logger';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { decideNobelTurn } from './nobel-turn-policy';
 
 const log = createLogger('DirectorGraph');
 
@@ -113,6 +115,29 @@ async function directorNode(
     }
   };
   const isSingleAgent = state.availableAgentIds.length <= 1;
+
+  const nobelTurn = decideNobelTurn({
+    learner: isLearnerDeployment(),
+    stageId: state.storeState.stage?.id,
+    agents: state.availableAgentIds.map(id => {
+      const agent = resolveAgent(state, id);
+      return { id, role: agent?.role || '' };
+    }),
+    triggerAgentId: state.triggerAgentId,
+    responses: state.agentResponses,
+  });
+  if (nobelTurn) {
+    log.info(`[Director] Authored Nobel round: ${nobelTurn.kind}`);
+    if (nobelTurn.kind === 'empty-response-error') {
+      throw new Error('Nobel discussion model returned two empty responses for a required speaker');
+    }
+    if (nobelTurn.kind === 'user') {
+      write({ type: 'cue_user', data: { fromAgentId: nobelTurn.fromAgentId } });
+      return { shouldEnd: true };
+    }
+    write({ type: 'thinking', data: { stage: 'agent_loading', agentId: nobelTurn.agentId } });
+    return { currentAgentId: nobelTurn.agentId, shouldEnd: false };
+  }
 
   // ── Single agent: code-only director ──
   if (isSingleAgent) {

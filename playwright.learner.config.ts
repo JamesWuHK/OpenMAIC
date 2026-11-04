@@ -11,7 +11,7 @@ if (externalBaseURL && !/^http:\/\/127\.0\.0\.1:\d+$/.test(externalBaseURL)) {
 
 export default defineConfig({
   testDir: './e2e/tests',
-  testMatch: /learner-site\.spec\.ts/,
+  testMatch: /(?:learner-site\.spec\.ts|native-audio-observer\.spec\.js)/,
   fullyParallel: false,
   workers: 1,
   reporter: 'list',

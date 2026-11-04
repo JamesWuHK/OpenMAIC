@@ -121,7 +121,7 @@
         },
         {
           "name": "Ownership and packaging regression",
-          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nPYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/learner -p test_nobel_catalog_merge.py\nnode --test tests/ci/free-qa-proxy.test.mjs tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs\nnode --experimental-strip-types --test tests/learner/legacy-nobel-redirect.test.mjs tests/audio/discussion-audio-segment.test.mjs"
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nPYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/learner -p test_nobel_catalog_merge.py\nnode --test tests/ci/free-qa-proxy.test.mjs tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs tests/ci/native-audio-observer.test.mjs tests/ci/nobel-known-misconception.test.mjs\nnode --experimental-strip-types --test tests/learner/legacy-nobel-redirect.test.mjs tests/learner/nobel-turn-policy.test.mjs tests/audio/discussion-audio-segment.test.mjs"
         },
         {
           "name": "Relevant regression tests",
@@ -281,7 +281,7 @@
         },
         {
           "name": "Validate native QA transport and frozen dataset",
-          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_native_nobel_qa.py\nnode --test tests/ci/frozen-media-paths.test.mjs"
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_native_nobel_qa.py\nnode --test tests/ci/frozen-media-paths.test.mjs tests/ci/native-audio-observer.test.mjs tests/ci/nobel-known-misconception.test.mjs"
         },
         {
           "name": "Verify previous build, source, image checksum and frozen content",

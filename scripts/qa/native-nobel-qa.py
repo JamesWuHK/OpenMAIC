@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location('owned', ROOT / 'scripts/ci/nobel-resources.py')
 owned = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(owned)
-BUNDLE_SHA = 'f08ef85e1e24ec006032c5d001a80b5039475d2c03fa1b592b640d3c2db2c88e'
+BUNDLE_SHA = '970b5ad7d83dca07aa192916f5189396ee0836ebfefdd74b0bf8d79bfcfc157a'
 
 
 def git_request(path=ROOT / '.github/workflows/nobel-native-request.json'):
@@ -150,6 +150,8 @@ def prepare():
     shutil.copy(candidate / 'manifest.json', task / 'payload/manifest.json')
     shutil.copy(ROOT / 'scripts/qa/nobel-native-browser.mjs', task / 'qa.mjs')
     shutil.copy(ROOT / 'scripts/qa/frozen-media-paths.mjs', task / 'frozen-media-paths.mjs')
+    shutil.copy(ROOT / 'scripts/qa/native-audio-observer.mjs', task / 'native-audio-observer.mjs')
+    shutil.copy(ROOT / 'scripts/qa/nobel-known-misconception.mjs', task / 'nobel-known-misconception.mjs')
     cert = base64.b64decode(os.environ['QA_RELAY_CA_BASE64'], validate=True)
     (task / 'relay-ca.pem').write_bytes(cert)
     (task / 'relay-ca.pem').chmod(0o644)
