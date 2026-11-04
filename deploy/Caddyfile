@@ -14,6 +14,11 @@ class.wanli.ai {
 
   reverse_proxy openmaic:3000
 
+  # SVG classroom artwork is renderable in slides, but direct navigation to
+  # uploaded classroom media must stay sandboxed on the shared site origin.
+  @classroom_media path /api/classroom-media/*
+  header @classroom_media >Content-Security-Policy "frame-ancestors 'self'; sandbox; default-src 'none'; style-src 'unsafe-inline'"
+
   header {
     Referrer-Policy "strict-origin-when-cross-origin"
     X-Content-Type-Options "nosniff"
