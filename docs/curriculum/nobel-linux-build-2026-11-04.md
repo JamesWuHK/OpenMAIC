@@ -321,3 +321,43 @@ rule or changing a production container. Later read-only host samples showed
 roughly 383–387MiB available; do not lower the guard or stop other services to
 force testing. Its previous CA/token are now inert; prepare a fresh session only
 when safely usable capacity is available.
+
+## Measured fluency result, 41798894289
+
+The capture repair was confirmed by build41797082497 at source b75ab716:
+152 regressions, TypeScript, actual image build, prompt hashes, API boundary,
+and all14 desktop/mobile browser tests (including both audio calibrations) passed.
+Accepted fixture image is
+`sha256:b70ae1eb8a977b6106019569e91fe758d9a1fbede39c37492dcbc33be2ba9a02`.
+
+Fresh native run41798894289 used QA source73cb0dca and class01 SHA24a3bd66.
+All three roles, complete same-role speech, fresh teacher follow-up,
+Pause/Resume and Stop completed. The overall run correctly FAILED fluency:
+
+| Observed metric | Join | Follow-up |
+| --- | ---: | ---: |
+| First received text | 13.00s | 12.03s |
+| First browser sound | 14.80s | 14.72s |
+
+Role-change silence was12.43s and7.92s. Same-role segment silence ranged
+1.68–3.90s and closely matched the next clip's TTS response time. The code
+currently fetches each clip only after the previous clip ends; model generation
+also waits for prior speech drain. These are measured serial pipeline stalls,
+not browser autoplay failures. The observed provider was the free test route;
+these timings do not establish paid production DeepSeek latency or p95.
+
+Raw evidence JSON SHA256:
+`182d629031790cfc74e0f16e801b6518eb013b0de54fce30afc3c7d835e78adc`.
+Original pass=false is preserved. The exact runner firewall rule and temporary
+relay were closed after the run. Four free model requests were used.
+
+Independent dynamic science review remains CHANGES_REQUIRED: D01/D02 did not
+recur, but new D03/D04 concern exclusive receptor recognition and absolute
+binding/effect claims. The new actual output must not be published.
+
+Another existing chat deployed production34c3b5a at08:28 UTC, image227766fd.
+Root did not deploy it; production metadata/course hashes remain unchanged.
+Do not deploy b75 over that newer microphone/interaction work. A standalone,
+unintegrated one-next-clip synthesis helper has five cancellation/cache tests
+and independent technical review PASS. Its integration must preserve the other
+chat's current TTS retry work and the existing reused-Audio/pause/stop behavior.
