@@ -139,9 +139,12 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
               ? 'zh-HK'
               : asrLanguage || 'zh-CN');
           recognition.continuous = continuous;
-          recognition.interimResults = false;
+          // In learner playback, preserve a partial transcript when Chrome
+          // ends a manually stopped recording without emitting a final result.
+          recognition.interimResults = isLearnerDeployment();
           let hasFinalTranscript = false;
           let hasRecognitionError = false;
+          let lastInterimTranscript = '';
 
           recognition.onstart = () => {
             setIsRecording(true);
@@ -164,15 +167,20 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
             };
           }) => {
             let transcript = '';
+            let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; i++) {
               const result = event.results[i];
               if (result.isFinal && result[0]?.transcript) {
                 transcript += result[0].transcript;
+              } else if (!result.isFinal && result[0]?.transcript) {
+                interimTranscript += result[0].transcript;
               }
             }
             if (transcript) {
               hasFinalTranscript = true;
               onTranscription?.(transcript);
+            } else if (interimTranscript) {
+              lastInterimTranscript = interimTranscript;
             }
           };
 
@@ -222,11 +230,15 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
 
           recognition.onend = () => {
             if (!hasFinalTranscript && !hasRecognitionError) {
-              onError?.(
-                isLearnerDeployment()
-                  ? '未聽到你的問題，請再說一次，或改用文字輸入。'
-                  : '未检测到语音问题，请重试或改用文字输入',
-              );
+              if (lastInterimTranscript.trim()) {
+                onTranscription?.(lastInterimTranscript.trim());
+              } else {
+                onError?.(
+                  isLearnerDeployment()
+                    ? '未聽到你的問題，請再說一次，或改用文字輸入。'
+                    : '未检测到语音问题，请重试或改用文字输入',
+                );
+              }
             }
             busyRef.current = false;
             setIsRecording(false);

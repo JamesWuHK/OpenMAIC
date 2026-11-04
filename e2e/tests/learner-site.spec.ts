@@ -253,3 +253,64 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
   await expect(page.locator('html')).toHaveAttribute('data-test-asr-language', 'zh-HK');
   await expect(page.getByText(question).first()).toBeVisible();
 });
+
+test('manual stop submits the last Cantonese interim transcript', async ({ page }) => {
+  const question = '老師，雷達回波係咩？';
+  await page.addInitScript((transcript) => {
+    localStorage.setItem('locale', 'zh-TW');
+    class InterimSpeechRecognition {
+      lang = '';
+      continuous = false;
+      interimResults = false;
+      onstart: (() => void) | null = null;
+      onresult: ((event: unknown) => void) | null = null;
+      onerror: ((event: unknown) => void) | null = null;
+      onend: (() => void) | null = null;
+
+      start() {
+        window.setTimeout(() => {
+          this.onstart?.();
+          document.documentElement.dataset.testInterimEnabled = String(this.interimResults);
+          this.onresult?.({
+            resultIndex: 0,
+            results: { 0: { 0: { transcript }, isFinal: false }, length: 1 },
+          });
+          document.documentElement.dataset.testInterimReady = 'true';
+        }, 50);
+      }
+
+      stop() {
+        this.onend?.();
+      }
+    }
+    for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) {
+      Object.defineProperty(window, name, {
+        configurable: true,
+        value: InterimSpeechRecognition,
+      });
+    }
+  }, question);
+
+  await page.route('**/api/classroom?id=*', async (route) => {
+    const fixture = await readFile(
+      path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', 'hk-nobel-01-kagan-lecture-v4.json'),
+      'utf8',
+    );
+    await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
+  });
+
+  await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
+  await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
+  const roundtable = page.getByTestId('nobel-classroom-interaction');
+  const mic = roundtable.locator('button:has(svg.lucide-mic):visible').last();
+  await mic.click();
+  await expect(page.locator('html')).toHaveAttribute('data-test-interim-enabled', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-test-interim-ready', 'true');
+  const request = page.waitForRequest(
+    (candidate) =>
+      candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
+  );
+  await mic.click();
+  await request;
+  await expect(page.getByText(question).first()).toBeVisible();
+});
