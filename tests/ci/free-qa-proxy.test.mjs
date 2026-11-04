@@ -39,6 +39,17 @@ test('relay rejects unauthorized and paid/fallback requests without upstream con
     assert.equal(calls.length, 0);
   });
 });
+test('authenticated health exposes only free-session identity and does not call the provider', async () => {
+  await fixture({}, async (_request, calls, {base}) => {
+    assert.equal((await fetch(base + '/health')).status, 401);
+    const response = await fetch(base + '/health', {headers: {Authorization: 'Bearer ' + token}});
+    const health = await response.json();
+    assert.equal(health.status, 'ok'); assert.equal(health.model, 'openrouter/free');
+    assert.match(health.sourceSHA256, /^[a-f0-9]{64}$/);
+    assert.equal(health.remainingRequests, 100); assert.equal(calls.length, 0);
+    assert(!JSON.stringify(health).includes('test-upstream-key'));
+  });
+});
 test('free SSE request uses only the server credential and limits generated tokens', async () => {
   await fixture({}, async (request, calls) => {
     const response = await request({...payload, max_tokens: 99999});

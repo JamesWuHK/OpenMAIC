@@ -9,7 +9,7 @@ test('image workflow is bounded, manual on the recovery branch, and contains no 
   assert.equal(runner.type, 'choice');
   assert.equal(runner.default, 'self-hosted');
   assert.deepEqual(runner.options, ['self-hosted', 'public-standard']);
-  assert.deepEqual(workflow.permissions, {contents: 'read'});
+  assert.deepEqual(workflow.permissions, {contents: 'read', actions: 'read'});
   const job = workflow.jobs.candidate;
   assert.match(job['runs-on'], /\["ubuntu-24.04"\]/);
   assert.match(job['runs-on'], /\["self-hosted","Linux","X64","openmaic","cloud-ci"\]/);
@@ -29,6 +29,13 @@ test('image workflow is bounded, manual on the recovery branch, and contains no 
   assert.match(scripts, /nobel-resources.py cleanup/);
   assert.match(scripts, /nobel-resources.py builder-record/);
   assert.match(scripts, /nobel-resources.py builder-caps/);
-  assert(!/secrets\.|docker\s+(prune|system\s+prune|push)|--with-deps|learner-candidate/.test(JSON.stringify(workflow)));
+  assert(!/secrets\.|docker\s+(prune|system\s+prune|push)|--with-deps|learner-candidate/.test(JSON.stringify(job)));
   assert(job.steps.some(step => step.if === 'always()' && step.run?.includes('nobel-resources.py cleanup')));
+  const qa = workflow.jobs.native_qa;
+  assert.equal(qa['runs-on'], 'ubuntu-24.04');
+  assert(qa.if.includes("github.event.repository.visibility == 'public'"));
+  assert(qa.if.includes('github.event.repository.private == false'));
+  assert.equal(qa.env.QA_RELAY_TOKEN, '${{ secrets.NOBEL_QA_RELAY_TOKEN }}');
+  assert(!/DEEPSEEK_API_KEY|OPENROUTER_API_KEY|SSH_PRIVATE|AWS_SECRET/.test(JSON.stringify(qa)));
+  assert(job.if.startsWith("inputs.phase != 'native-qa'"));
 });

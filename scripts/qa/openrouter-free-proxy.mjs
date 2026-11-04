@@ -1,8 +1,11 @@
 import http from 'node:http';
 import https from 'node:https';
-import {timingSafeEqual} from 'node:crypto';
+import {timingSafeEqual, createHash} from 'node:crypto';
+import fs from 'node:fs';
 import {Readable} from 'node:stream';
-import {pathToFileURL} from 'node:url';
+import {pathToFileURL, fileURLToPath} from 'node:url';
+
+const sourceSHA256 = createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex');
 
 // Ephemeral QA relay: the upstream credential stays on its existing host.
 // The runner receives only a revocable relay token with no paid-model access.
@@ -39,7 +42,10 @@ export function createFreeProxy({apiKey, token, fetchImpl = fetch,
       return reject(res, 401, 'Invalid relay token');
     }
     if (req.method === 'GET' && req.url === '/health') {
-      return reject(res, 200, 'Relay ready');
+      if (Date.now() >= expires || used >= maxRequests) return reject(res, 410, 'Relay session ended');
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      return res.end(JSON.stringify({status: 'ok', model: 'openrouter/free', sourceSHA256,
+        remainingRequests: maxRequests - used, expiresAt: expires}));
     }
     if (req.method !== 'POST' || !['/chat/completions', '/v1/chat/completions'].includes(req.url)) {
       return reject(res, 404, 'Unsupported relay operation');

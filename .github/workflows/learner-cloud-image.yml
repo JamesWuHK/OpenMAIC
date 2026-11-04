@@ -3,6 +3,16 @@
   "on": {
     "workflow_dispatch": {
       "inputs": {
+        "phase": {
+          "description": "Build an image, or accept a previously tested immutable image",
+          "required": true,
+          "type": "choice",
+          "default": "build",
+          "options": [
+            "build",
+            "native-qa"
+          ]
+        },
         "runner": {
           "description": "Existing self-hosted or free standard Linux for this PUBLIC repository",
           "required": true,
@@ -12,12 +22,49 @@
             "self-hosted",
             "public-standard"
           ]
+        },
+        "image_run_id": {
+          "description": "Successful image build run ID (native QA only)",
+          "required": false,
+          "type": "string"
+        },
+        "image_source": {
+          "description": "Exact 40-character tested image source (native QA only)",
+          "required": false,
+          "type": "string"
+        },
+        "relay_url": {
+          "description": "Dedicated HTTPS free-only relay URL ending :8787/v1",
+          "required": false,
+          "type": "string"
+        },
+        "relay_ca_base64": {
+          "description": "Ephemeral PUBLIC relay CA certificate, base64 (not its private key)",
+          "required": false,
+          "type": "string"
+        },
+        "device": {
+          "description": "One native QA device batch",
+          "required": true,
+          "type": "choice",
+          "default": "desktop",
+          "options": [
+            "desktop",
+            "mobile"
+          ]
+        },
+        "courses": {
+          "description": "Approved lesson numbers: all or a comma-separated unfinished subset",
+          "required": false,
+          "type": "string",
+          "default": "all"
         }
       }
     }
   },
   "permissions": {
-    "contents": "read"
+    "contents": "read",
+    "actions": "read"
   },
   "concurrency": {
     "group": "openmaic-linux-candidate",
@@ -25,7 +72,7 @@
   },
   "jobs": {
     "candidate": {
-      "if": "github.repository == 'JamesWuHK/OpenMAIC' && (inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false))",
+      "if": "inputs.phase != 'native-qa' && github.repository == 'JamesWuHK/OpenMAIC' && (inputs.runner != 'public-standard' || (github.event.repository.visibility == 'public' && github.event.repository.private == false))",
       "runs-on": "${{ fromJSON(inputs.runner == 'public-standard' && '[\"ubuntu-24.04\"]' || '[\"self-hosted\",\"Linux\",\"X64\",\"openmaic\",\"cloud-ci\"]') }}",
       "timeout-minutes": 90,
       "env": {
@@ -182,6 +229,77 @@
           "with": {
             "name": "learner-image-qa-${{ github.sha }}-${{ github.run_attempt }}",
             "path": "artifacts/learner-image-qa/\nartifacts/learner-site-qa/",
+            "retention-days": 7
+          }
+        }
+      ]
+    },
+    "native_qa": {
+      "if": "inputs.phase == 'native-qa' && github.repository == 'JamesWuHK/OpenMAIC' && github.event.repository.visibility == 'public' && github.event.repository.private == false",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 90,
+      "env": {
+        "GH_TOKEN": "${{ github.token }}",
+        "CI": "true",
+        "CANDIDATE_SOURCE_SHA": "${{ inputs.image_source }}",
+        "IMAGE_RUN_ID": "${{ inputs.image_run_id }}",
+        "QA_RELAY_URL": "${{ inputs.relay_url }}",
+        "QA_RELAY_CA_BASE64": "${{ inputs.relay_ca_base64 }}",
+        "QA_RELAY_TOKEN": "${{ secrets.NOBEL_QA_RELAY_TOKEN }}",
+        "QA_DEVICE": "${{ inputs.device }}",
+        "QA_COURSES": "${{ inputs.courses }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 20
+          }
+        },
+        {
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "with": {
+            "node-version": 22
+          }
+        },
+        {
+          "name": "Validate native QA transport and frozen dataset",
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_native_nobel_qa.py"
+        },
+        {
+          "name": "Verify previous build, source, image checksum and frozen content",
+          "run": "python3 scripts/qa/native-nobel-qa.py prepare"
+        },
+        {
+          "name": "Publish ephemeral runner handshake (no secrets)",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "nobel-qa-handshake-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ env.TASK_DIR }}/evidence/handshake.json",
+            "retention-days": 1
+          }
+        },
+        {
+          "name": "Wait for verified free relay and start private native candidate",
+          "run": "python3 scripts/qa/native-nobel-qa.py start"
+        },
+        {
+          "name": "Real native discussion, complete same-role speech, follow-up and legacy navigation",
+          "run": "python3 scripts/qa/native-nobel-qa.py browser"
+        },
+        {
+          "name": "Remove only owned QA containers",
+          "if": "always()",
+          "run": "python3 scripts/qa/native-nobel-qa.py cleanup"
+        },
+        {
+          "name": "Save actual native evidence (not publication approval)",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "nobel-native-${{ inputs.device }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ env.TASK_DIR }}/evidence/\nartifacts/learner-image-qa/",
             "retention-days": 7
           }
         }

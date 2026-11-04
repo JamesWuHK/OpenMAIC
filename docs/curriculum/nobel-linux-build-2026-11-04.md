@@ -151,3 +151,26 @@ one rebuild is necessary. Later runs export before the browser step, upload norm
 image artifacts only after browser success, and preserve failed candidates under
 a distinct `learner-unaccepted-image-*` name for diagnosis. None implies native
 discussion acceptance or permission to deploy an unaccepted image.
+
+## Native discussion acceptance preparation
+
+The manual `native-qa` phase reuses only a successful image from this workflow,
+verifies its source, image ID, checksum and explicit fixture acceptance, and
+rejects runtime changes since that image. It runs on the free public standard
+Linux worker, never the production host. The deterministic six-course fixture
+bundle retains the independently reviewed classroom hashes. Production media
+is read through a browser proxy without rewriting it; this does not establish
+that the candidate itself serves those media files.
+
+The browser checks actual legacy-link navigation, frozen classroom identity,
+real model replies and speech, same-role text coverage, queue drain, stop and
+follow-up input in separate desktop/mobile batches. It does not mock inference
+or generated speech. The temporary TLS relay accepts only `openrouter/free`;
+the runner receives a revocable relay token, while the provider credential stays
+on its existing host. Eleven relay tests, three artifact/fixture tests, the
+workflow contract test and independent review passed for this preparation.
+
+The host relay controller is a separate, still-unpublished operation. Its source
+review and owned cleanup must pass before starting it or opening its dedicated
+runner-only port. Nothing in the native QA workflow publishes content or changes
+production. Real six-course output and audio acceptance remain pending.
