@@ -28,10 +28,14 @@
     "components/roundtable/index.tsx": {
       "baseSHA256": "63a5dc7816df18b2ce14fc9757af1c084b5fffec799a8f4757550f2c1ce5823a",
       "SHA256": "7d7a766780daddab5f63b63166eee0c20119d38219eef56fb54cba6977c23f75"
+    },
+    "components/classroom/NobelLectureChrome.tsx": {
+      "baseSHA256": "f2f3f33b4fd700491ebae4d2c1316a7511e83fa1d19a398d2a40ed6714f1ec1a",
+      "SHA256": "7940adbd38c1648247d407e5e9bc5c30daa9f38a8affd9821eedc1b64d818f71"
     }
   },
-  "scope": "Seven files: four Nobel07 narration runtime files; home wrap and regression; student-only hiding of internal agent persona",
-  "build": "NEW_LIVE_BASE_NOT_BUILT",
+  "scope": "Eight files: prior seven source/test files plus Nobel lecture dialog stacking above toolbar",
+  "build": "MOBILE_MENU_FIX_NOT_BUILT",
   "published": false,
   "previousBase": "7b1da522d071bfddf50f0526ac337fd2016f8d50",
   "threeWayMergeTree": "43122c430439aa301c536ec856a638927a34c61f",
