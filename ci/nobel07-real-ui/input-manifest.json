@@ -2,11 +2,12 @@
   "prepare-real-catalog.py": "b4ded02ed5063d9750c6c04536b14258e28efa5aaa13cab6315205edb983ec98",
   "assert-chat-boundaries.mjs": "0d609e81c3b2b8861d2809234342215d67940922a3d8824f174f564d35f2dd74",
   "speech-text-equivalence.mjs": "4b607c23a25c05219da777e3a22126663d05c89b1a7effb0c291d617b2bd1829",
-  "real-chat-relay.mjs": "a3af555f9e72d31f334c3baf9d165f632c9e60d9c65f42146ecb3d2733f404f2",
+  "real-chat-relay.mjs": "3f52941a9a4b95ef27d5b20950503c634bf00d5d47d938e42f0dd0668684102c",
   "package-lock.json": "6b56559d8dbc97efad275de3c453f163c54cbc95ce1156ced06f67a112260c32",
   "package.json": "c23d1de8c16738dce265e9b9635c4279529730aa081b9e3721043248823d8013",
-  "qa-real-model-speech.mjs": "5e0f9707b7adb1cadf1dc5d6135737220d904db4f8aa2128aa4e37a5ffcb7c31",
+  "candidate-gateway.mjs": "6c5c23297a67e2af6afd31926f432ced8bcc256ff2ce232307534d22dec4a2ad",
+  "qa-real-model-speech.mjs": "dbb9be09eeeb060e661c1ec046e6e26c955eef478518da3871ab888039ebdeec",
   "verify_cloud_lane.py": "1eb9411d8310dd939be91a3b50e1131ea2ce2c431c37ee9b3fd77d8bb834528a",
   "publication-entry-candidate.json": "a4ae12438cbc605cd7b56e631d6021bd40aafbc3e1bb3dbccb1299f71e94bc6a",
-  "run-real-ui-cloud.py": "e9bc13f2fc908f0bf4bb560d0652315e74d75f457f4e77c54d69cd7ea4c8c28c"
+  "run-real-ui-cloud.py": "bb2dfc863097b3d1cbcfcc58bca95abb8be31415b472e5d9a5e241befb49ccb8"
 }

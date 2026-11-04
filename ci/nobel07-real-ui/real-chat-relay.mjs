@@ -80,7 +80,7 @@ export async function startRealChatRelay(){
   upstream.on('socket',socket=>{connectTimer=setTimeout(()=>{finish('TLS connect timeout');upstream.destroy();reply(504,entry.error)},15000);socket.once('secureConnect',()=>{clearTimeout(connectTimer);armIdle()})});
   upstream.on('error',error=>{finish('Upstream transport '+redact(error.code));if(!res.headersSent)reply(502,entry.error);else res.destroy()});
   totalTimer=setTimeout(()=>{finish('Upstream total timeout');upstream.destroy();if(!res.headersSent)reply(504,entry.error);else res.destroy()},Math.max(1,120000-(Date.now()-entry.startedAt)));
-  res.on('close',()=>{if(!finished)finish('Client disconnected');upstream.destroy()});
+  res.on('close',()=>{if(!res.writableFinished){if(!finished)finish('Client disconnected');upstream.destroy()}});
   upstream.end(raw);
  });
  server.on('connection',socket=>{sockets.add(socket);socket.on('close',()=>sockets.delete(socket))});

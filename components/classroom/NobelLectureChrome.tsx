@@ -17,7 +17,7 @@ function useLabels() {
 export function NobelLectureHeader({ title }: { title: string }) {
   const l = useLabels();
   return <header className="flex h-16 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-3 sm:px-6 dark:border-slate-700 dark:bg-slate-950" data-testid="lecture-header">
-    <Link href="/series/nobel-curiosity-lab" aria-label={l.series} title={l.series} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"><ArrowLeft size={20} /></Link>
+    <Link prefetch={false} href="/series/nobel-curiosity-lab" aria-label={l.series} title={l.series} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"><ArrowLeft size={20} /></Link>
     <div className="min-w-0 flex-1"><p className="text-xs text-slate-500">{l.course}</p><h1 className="truncate text-sm font-semibold sm:text-base" title={title}>{title}</h1></div>
     <LanguageSwitcher />
   </header>;

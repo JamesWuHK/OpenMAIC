@@ -23,7 +23,7 @@ assert w.name == f"nobel07-app-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB
 q = Path(__file__).resolve().parent
 out = w / 'artifacts' / 'nobel07-real-ui'
 assert out.is_dir() and not out.is_symlink() and out.resolve().is_relative_to(w)
-source = '9f4ebb3869d13a14d6ca02540e05bc90b7a24727'
+source = 'dc4e23a273a7933948bfd9236c9bdf411a6a4772'
 archive = w / 'artifacts' / 'tested-image'
 assert archive.resolve().is_relative_to(w) and not archive.is_symlink()
 assert (archive / 'source-sha.txt').read_text().strip() == source
@@ -63,8 +63,8 @@ for sig in (signal.SIGTERM, signal.SIGINT):
 try:
     common = ['--label', 'wanli.qa.owner=' + owner, '--label', 'wanli.qa.run=' + run,
               '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '256']
-    args = ['docker', 'create', '--name', candidate, *common, '--memory', '2048m', '--memory-swap', '2560m', '--cpus', '1', '-p', '127.0.0.1::3000']
-    for item in ('OPENMAIC_DEPLOYMENT_MODE=learner', 'OPENAI_API_KEY=synthetic-ci-not-a-secret', 'OPENAI_BASE_URL=http://127.0.0.1:9/v1', 'DEFAULT_MODEL=openai:gpt-4o-mini', 'LEARNER_PUBLISHED_COURSES_PATH=/qa-catalog/published-courses.json'):
+    args = ['docker', 'create', '--name', candidate, *common, '--memory', '2048m', '--memory-swap', '2560m', '--cpus', '1', '-p', '127.0.0.1::3002']
+    for item in ('PORT=3002', 'OPENMAIC_DEPLOYMENT_MODE=learner', 'OPENAI_API_KEY=synthetic-ci-not-a-secret', 'OPENAI_BASE_URL=http://127.0.0.1:9/v1', 'DEFAULT_MODEL=openai:gpt-4o-mini', 'LEARNER_PUBLISHED_COURSES_PATH=/qa-catalog/published-courses.json'):
         args += ['-e', item]
     for host, dest in ((w / 'content/learner', '/app/content/learner'), (w / 'content/learner/media', '/app/public/learner/runtime'), (w / 'data/classrooms', '/app/data/classrooms'), (out / 'catalog', '/qa-catalog')):
         assert host.is_dir() and host.resolve().is_relative_to(w)
@@ -72,7 +72,7 @@ try:
     owned.append((candidate, image_id))
     subprocess.run([*args, image_id], check=True, timeout=60)
     docker('start', candidate)
-    port = docker('port', candidate, '3000/tcp').splitlines()[0].rsplit(':', 1)[1]
+    port = docker('port', candidate, '3002/tcp').splitlines()[0].rsplit(':', 1)[1]
     assert port.isdigit()
     actual = None
     for _ in range(30):

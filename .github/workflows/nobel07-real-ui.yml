@@ -72,16 +72,16 @@
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           },
-          "run": "python3 - <<'PROVENANCE'\nimport urllib.request,json,os\nurl='https://api.github.com/repos/JamesWuHK/OpenMAIC/actions/runs/41818557352'\nrequest=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})\nwith urllib.request.urlopen(request,timeout=20) as response: result=json.load(response)\nassert result['head_sha']=='9f4ebb3869d13a14d6ca02540e05bc90b7a24727'\nassert result['status']=='completed' and result['conclusion']=='success'\nassert result['event']=='push' and result['head_branch']=='codex/nobel07-public-ci-20261104'\nassert result['path']=='.github/workflows/nobel07-native-app.yml' and result['repository']['full_name']=='JamesWuHK/OpenMAIC'\nprint('Exact source cloud build and native acceptance workflow succeeded; not a release approval.')\nPROVENANCE"
+          "run": "python3 - <<'PROVENANCE'\nimport urllib.request,json,os\nurl='https://api.github.com/repos/JamesWuHK/OpenMAIC/actions/runs/41824383883'\nrequest=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})\nwith urllib.request.urlopen(request,timeout=20) as response: result=json.load(response)\nassert result['head_sha']=='dc4e23a273a7933948bfd9236c9bdf411a6a4772'\nassert result['status']=='completed' and result['conclusion']=='success'\nassert result['event']=='push' and result['head_branch']=='codex/nobel07-public-ci-20261104'\nassert result['path']=='.github/workflows/nobel07-native-app.yml' and result['repository']['full_name']=='JamesWuHK/OpenMAIC'\nprint('Exact source cloud build and native acceptance workflow succeeded; not a release approval.')\nPROVENANCE"
         },
         {
           "name": "Download immutable accepted image archive",
           "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
           "with": {
             "github-token": "${{ github.token }}",
-            "run-id": 41818557352,
+            "run-id": 41824383883,
             "repository": "JamesWuHK/OpenMAIC",
-            "name": "learner-image-9f4ebb3869d13a14d6ca02540e05bc90b7a24727",
+            "name": "learner-image-dc4e23a273a7933948bfd9236c9bdf411a6a4772",
             "path": "${{ env.TASK_WORKSPACE }}/artifacts/tested-image"
           }
         },

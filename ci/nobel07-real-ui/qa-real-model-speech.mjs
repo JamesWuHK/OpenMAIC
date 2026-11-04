@@ -7,6 +7,7 @@ import {chromium} from 'playwright';
 import {startRealChatRelay} from './real-chat-relay.mjs';
 import {normalizeSpeechText as normalize} from './speech-text-equivalence.mjs';
 import {assertChatBoundaries} from './assert-chat-boundaries.mjs';
+import {startCandidateGateway} from './candidate-gateway.mjs';
 assert.equal(process.env.CI,'true');
 const base='http://127.0.0.1:3000',cid='hk-nobel-07-sakaguchi-lecture-v1';
 const out='artifacts/nobel07-real-ui';await fs.mkdir(out,{recursive:true});
@@ -18,14 +19,15 @@ const cases=[
  {id:'D-student',viewport:{width:1440,height:900},reading:'zh-Hans',voice:'yue-HK',page:9,role:'student',question:'请好奇同学用广东话提出一个关于本课的科学疑问，不扮演真实病人。'}
 ];
 const report={pass:false,cases:[],consoleErrors:[],pageErrors:[],limitations:['Only the three stated cases, not every viewport/language/role combination.','Actual candidate UI + production chat backend + candidate speech route.','Dynamic speech checked for Cantonese only; no Mandarin dynamic speech, human listening, Safari or physical-phone acceptance.']};
-let browser,relay,currentPage,aborted=false;
-const signalHandler=()=>{aborted=true;void relay?.close().catch(()=>{});void browser?.close().catch(()=>{})};
+let browser,relay,gateway,currentPage,aborted=false;
+const signalHandler=()=>{aborted=true;void relay?.close().catch(()=>{});void gateway?.close().catch(()=>{});void browser?.close().catch(()=>{})};
 process.on('SIGTERM',signalHandler);process.on('SIGINT',signalHandler);
 try{
- relay=await startRealChatRelay();browser=await chromium.launch({headless:true,chromiumSandbox:true});
+ relay=await startRealChatRelay();gateway=await startCandidateGateway(relay.url);browser=await chromium.launch({headless:true,chromiumSandbox:true});
  for(const spec of cases){
   if(aborted)throw Error('Acceptance cancelled');relay.beginCase(spec.id);
   const result={...spec,tts:[],requestFailures:[],intentionalStops:[],pass:false};report.cases.push(result);
+  const initialConsoleErrorCount=report.consoleErrors.length,initialPageErrorCount=report.pageErrors.length;
   const context=await browser.newContext({viewport:spec.viewport});
   await context.addInitScript(()=>{
    const NativeAudio=window.Audio;window.__qaDynamicAudio=[];window.__qaAudioHashes=[];const active=new Set();let serial=0;
@@ -54,7 +56,6 @@ try{
    const job=(async()=>{const body=response.request().postDataJSON();const record={classroomId:body.classroomId,agentId:body.agentId,text:body.text,status:response.status()};result.tts.push(record);
     try{const data=await response.json();if(!response.ok()||typeof data.base64!=='string'||!data.base64)throw Error('Speech response invalid');const url=`data:audio/${data.format||'mp3'};base64,${data.base64}`;record.sourceSHA256=createHash('sha256').update(url).digest('hex');record.audioSHA256=createHash('sha256').update(Buffer.from(data.base64,'base64')).digest('hex');record.bytes=Buffer.from(data.base64,'base64').length}catch(error){record.error=String(error.message)}finally{pendingSpeech--}})();speechJobs.push(job);
   });
-  await page.route(base+'/api/chat',route=>route.continue({url:relay.url+'/api/chat'}));
   await page.goto(base+'/classroom/'+cid);const toolbar=page.getByTestId('lecture-toolbar');await toolbar.waitFor({timeout:60000});
   await toolbar.getByRole('button',{name:/^(目錄|目录|Contents)$/}).click();await page.getByRole('dialog').getByRole('button').nth(spec.page).click();await page.getByRole('dialog').waitFor({state:'hidden'});
   const host=page.locator(`iframe[title="Interactive Scene nobel07-sakaguchi-page-${String(spec.page).padStart(2,'0')}"]:visible`);await host.waitFor();const frame=await(await host.elementHandle()).contentFrame();await frame.locator('#reading').selectOption(spec.reading);await frame.locator('#voice').selectOption(spec.voice);
@@ -66,10 +67,15 @@ try{
   const started=Date.now();let quietSince=0;
   while(true){
    if(aborted)throw Error('Acceptance cancelled');assert.ok(Date.now()-started<180000,'Real UI answer/speech did not finish');
-   const entries=relay.reports.filter(r=>r.case===spec.id);if(entries.some(e=>e.error))throw Error('Real chat transport failed');if(result.tts.some(t=>t.error))throw Error('Real speech failed');
-   await page.evaluate(()=>Promise.allSettled(window.__qaAudioHashes));const audio=await page.evaluate(()=>window.__qaDynamicAudio);
+   assert.equal(report.consoleErrors.length,initialConsoleErrorCount,'New browser console error during case');
+   assert.equal(report.pageErrors.length,initialPageErrorCount,'New browser page error during case');
+   const entries=relay.reports.filter(r=>r.case===spec.id);result.chat=entries;if(entries.some(e=>e.error))throw Error('Real chat transport failed');if(result.tts.some(t=>t.error))throw Error('Real speech failed');
+   await page.evaluate(()=>Promise.allSettled(window.__qaAudioHashes));const audio=await page.evaluate(()=>window.__qaDynamicAudio);result.audio=audio;
    const allEnded=result.tts.length>0&&result.tts.every(t=>audio.filter(a=>a.sourceSHA256===t.sourceSHA256).reduce((sum,a)=>sum+a.ended,0)>=result.tts.filter(x=>x.sourceSHA256===t.sourceSHA256).length);
-   if(entries.length&&entries.every(e=>e.finishedAt&&e.events.some(v=>v.type==='done'))&&pendingSpeech===0&&allEnded){quietSince||=Date.now();if(Date.now()-quietSince>=1500){result.audio=audio;result.chat=entries;break}}else quietSince=0;
+   const last=entries.at(-1);
+   const sessionTerminated=last?.events.some(e=>e.type==='cue_user'||(e.type==='done'&&e.data.totalAgents===0));
+   const uiIdle=await page.getByTestId('roundtable-non-presentation-input-stage').getAttribute('aria-busy')==='false';
+   if(entries.length&&entries.every(e=>e.finishedAt&&e.events.some(v=>v.type==='done'))&&sessionTerminated&&uiIdle&&pendingSpeech===0&&allEnded){quietSince||=Date.now();if(Date.now()-quietSince>=1500){result.audio=audio;result.chat=entries;result.sessionTerminated=true;result.uiStreamingStopped=true;break}}else quietSince=0;
    await delay(100);
   }
   await Promise.all(speechJobs);assertChatBoundaries(result.chat);const expectedAgent=fixture.stage.generatedAgentConfigs.find(a=>a.role===spec.role);
@@ -106,15 +112,18 @@ try{
   await toolbar.getByRole('button',{name:/^(播放講解|播放讲解|Play narration)$/}).click();
   await frame.waitForFunction(()=>{const a=document.getElementById('narration');return !a.paused&&a.currentTime>.35});
   result.intentionalStops.push({url:await frame.evaluate(()=>document.getElementById('narration').currentSrc),at:Date.now(),action:'close isolated context'});
-  result.pass=true;await context.close();
+  await context.close();
   for(const failure of result.requestFailures)failure.intentionalMediaAbort=failure.resource==='media'&&failure.error==='net::ERR_ABORTED'&&result.intentionalStops.some(stop=>stop.url===failure.url&&failure.at>=stop.at-100&&failure.at<=stop.at+3000);
   assert.deepEqual(result.requestFailures.filter(f=>!f.intentionalMediaAbort),[]);
+  result.pass=true;
  }
  assert.equal(report.cases.length,3);assert.ok(report.cases.every(c=>c.pass));assert.deepEqual(report.pageErrors,[]);assert.deepEqual(report.consoleErrors,[]);assert.equal(aborted,false,'Acceptance cancelled');report.pass=true;
-}catch(error){report.error=String(error.stack??error);await currentPage?.screenshot({path:out+'/failure.png',fullPage:true}).catch(()=>{});process.exitCode=1}
+}catch(error){report.error=String(error.stack??error);if(report.cases.length)report.cases.at(-1).pass=false;await currentPage?.screenshot({path:out+'/failure.png',fullPage:true}).catch(()=>{});process.exitCode=1}
 finally{
- const cleanup=await Promise.allSettled([Promise.resolve().then(()=>relay?.close()),Promise.resolve().then(()=>browser?.close())]);
- report.cleanup=cleanup.map((value,index)=>({target:index===0?'relay':'browser',status:value.status,error:value.status==='rejected'?String(value.reason):undefined}));
+ const cleanup=await Promise.allSettled([Promise.resolve().then(()=>relay?.close()),Promise.resolve().then(()=>gateway?.close()),Promise.resolve().then(()=>browser?.close())]);
+ report.transportRequests=relay?.reports??[];
+ report.gatewayRequests=gateway?.reports??[];
+ report.cleanup=cleanup.map((value,index)=>({target:['relay','gateway','browser'][index],status:value.status,error:value.status==='rejected'?String(value.reason):undefined}));
  report.fullReleaseAccepted=false;report.unverifiedRequiredCoverage=['Dynamic speech interrupted by scene or voice switches has not been exercised by these three completion cases.'];
  if(aborted||cleanup.some(c=>c.status==='rejected')){report.pass=false;process.exitCode=1;report.cancelled=aborted}
  await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2)+'\n');

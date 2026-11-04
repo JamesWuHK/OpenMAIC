@@ -27,15 +27,27 @@
     },
     "components/roundtable/index.tsx": {
       "baseSHA256": "63a5dc7816df18b2ce14fc9757af1c084b5fffec799a8f4757550f2c1ce5823a",
-      "SHA256": "7d7a766780daddab5f63b63166eee0c20119d38219eef56fb54cba6977c23f75"
+      "SHA256": "b919681eace379794c0263ce497ad9e714b2d0d6b849f57d41487807ad2ca635"
     },
     "components/classroom/NobelLectureChrome.tsx": {
       "baseSHA256": "f2f3f33b4fd700491ebae4d2c1316a7511e83fa1d19a398d2a40ed6714f1ec1a",
-      "SHA256": "7940adbd38c1648247d407e5e9bc5c30daa9f38a8affd9821eedc1b64d818f71"
+      "SHA256": "713a47c919a73220fad89b2451535b8d23b5956c90df9c7445deb77153fe28e7"
+    },
+    "lib/chat/nobel-qa-routing.ts": {
+      "baseSHA256": null,
+      "SHA256": "186205c69bf8e01958ee849524b59c4199a201616f9b188190effb04fffbaf0f"
+    },
+    "tests/learner/nobel-qa-routing.test.ts": {
+      "baseSHA256": null,
+      "SHA256": "3370a96f45da31873927dde901eb8a052b3486d87bffbdf98e96a2c47f5bf19a"
+    },
+    "components/chat/use-chat-sessions.ts": {
+      "baseSHA256": "3d47cdd751c0f2e88b21b2b2f1b22e241344fca5a5ada2bbeedbb40384b25574",
+      "SHA256": "bf88b55ac8e6cb94fc69f13dc808663fc42aba9bac4f2df93f92e21190ab2fe8"
     }
   },
-  "scope": "Eight files: prior seven source/test files plus Nobel lecture dialog stacking above toolbar",
-  "build": "MOBILE_MENU_FIX_NOT_BUILT",
+  "scope": "Eleven source/test files: prior narration and learner UI repairs, plus scoped ordinary Nobel question routing and regression tests; accessible streaming state and no background series prefetch",
+  "build": "SCOPED_QUESTION_ROUTING_NOT_BUILT",
   "published": false,
   "previousBase": "7b1da522d071bfddf50f0526ac337fd2016f8d50",
   "threeWayMergeTree": "43122c430439aa301c536ec856a638927a34c61f",

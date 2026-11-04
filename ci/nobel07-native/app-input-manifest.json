@@ -3,7 +3,7 @@
   "expected.json": "43b623dcc9dfb72571fdb1010be3b28eee267397dcef16156f67faaf315ae570",
   "course-package.zip": "878513e959c8f8a2fba33597fffb552d63e7d885016c93f3daae14113fc48a57",
   "app-browser.sh": "fad8acfcb24819531a3ba0a1c165cb3e76ba6bb81c3f526dcde44487be6a5c3e",
-  "app-source-manifest.json": "8446b559c0c5701669610062bbcb03c31f982465a9681a2260e3ca223a1398ad",
+  "app-source-manifest.json": "50ea8d0c05cc6356fc9c318d7c9a1e35e6fb123d6c57919235cd8eca44ca2204",
   "seccomp_profile.json": "0c4b9e74b24ed79572cf0b1aaa9c92afc8a13019d8f794c13c73aa4174e9db5a",
   "qa-native-app.mjs": "9d64d154b0df8fdbf44f79a8515878060f277d148304094d32728ca74782fd28",
   "package-lock.json": "6b56559d8dbc97efad275de3c453f163c54cbc95ce1156ced06f67a112260c32",
