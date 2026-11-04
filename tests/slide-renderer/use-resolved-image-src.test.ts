@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import type { PPTImageElement } from '@openmaic/dsl';
 import type { MediaTask } from '@/lib/store/media-generation';
-import { resolveImageSrc } from '@/components/slide-renderer/components/element/ImageElement/useResolvedImageSrc';
+import {
+  refreshLearnerClassroomSvgUrl,
+  resolveImageSrc,
+} from '@/components/slide-renderer/components/element/ImageElement/useResolvedImageSrc';
 
 const STAGE = 'stage-a';
 
@@ -37,6 +40,23 @@ function task(over: Partial<MediaTask>): MediaTask {
 }
 
 describe('resolveImageSrc (pure)', () => {
+  it('refreshes old classroom SVG URLs in learner playback without changing other media', () => {
+    const old = '/api/classroom-media/hk-s04-01-radar-rain/media/radar-four-step-original.svg';
+    expect(refreshLearnerClassroomSvgUrl(old, true)).toBe(`${old}?v=svg-mime-20261104`);
+    expect(refreshLearnerClassroomSvgUrl(old, false)).toBe(old);
+    expect(refreshLearnerClassroomSvgUrl(`${old}?v=2`, true)).toBe(`${old}?v=2`);
+    expect(refreshLearnerClassroomSvgUrl('https://other.example/figure.svg', true)).toBe(
+      'https://other.example/figure.svg',
+    );
+    expect(refreshLearnerClassroomSvgUrl(old.replace('.svg', '.png'), true)).toBe(
+      old.replace('.svg', '.png'),
+    );
+    const image = { ...PLACEHOLDER, src: old };
+    expect(resolveImageSrc(image, STAGE, undefined, null, false, true).resolvedSrc).toBe(
+      `${old}?v=svg-mime-20261104`,
+    );
+  });
+
   it('returns the objectUrl when the placeholder task is done', () => {
     const r = resolveImageSrc(
       PLACEHOLDER,

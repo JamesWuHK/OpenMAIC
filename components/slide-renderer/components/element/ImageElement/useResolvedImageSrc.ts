@@ -14,6 +14,17 @@ import { isGeneratedMediaPlaceholder } from '@/lib/media/media-ref';
 import { useMediaGenerationStore, type MediaTask } from '@/lib/store/media-generation';
 import { useSettingsStore } from '@/lib/store/settings';
 import { resolveMediaTaskForElement } from '@/lib/media/media-task-resolution';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+
+/** Old learner browser documents can retain the pre-SVG-MIME URL in IndexedDB. */
+export function refreshLearnerClassroomSvgUrl(src: string, learnerDeployment: boolean): string {
+  if (
+    !learnerDeployment ||
+    !src.startsWith('/api/classroom-media/') ||
+    !src.toLowerCase().endsWith('.svg')
+  ) return src;
+  return `${src}?v=svg-mime-20261104`;
+}
 
 export interface ResolvedImageSrc {
   /**
@@ -43,6 +54,7 @@ export function resolveImageSrc(
   task: MediaTask | undefined,
   assetUrl?: string | null,
   mediaGenerationDisabled = false,
+  learnerDeployment = false,
 ): ResolvedImageSrc {
   const isPlaceholder = !!stageId && isGeneratedMediaPlaceholder(elementInfo.src);
   const effectiveTask =
@@ -56,7 +68,10 @@ export function resolveImageSrc(
     lease,
     mediaGenerationDisabled,
   );
-  const resolvedSrc = renderableMediaUrl(resolution) ?? '';
+  const resolvedSrc = refreshLearnerClassroomSvgUrl(
+    renderableMediaUrl(resolution) ?? '',
+    learnerDeployment,
+  );
   return {
     resolvedSrc,
     isPlaceholder,
@@ -90,7 +105,10 @@ export function useResolvedImageSrc(elementInfo: PPTImageElement): ResolvedImage
   );
   const resolution = useResolvedMediaRef(elementInfo.src, task, mediaGenerationDisabled);
   return {
-    resolvedSrc: renderableMediaUrl(resolution) ?? '',
+    resolvedSrc: refreshLearnerClassroomSvgUrl(
+      renderableMediaUrl(resolution) ?? '',
+      isLearnerDeployment(),
+    ),
     isPlaceholder: !!stageId && isGeneratedMediaPlaceholder(elementInfo.src),
     resolvedFromAsset: resolution.kind === 'url',
     task,
