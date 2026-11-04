@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.58.2",
+    "esbuild": "0.25.12",
+    "react": "19.2.3",
+    "zustand": "5.0.10"
+  }
+}
