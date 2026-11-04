@@ -198,3 +198,19 @@ The homepage regression now checks the mounted hero title and keeps the navigati
 and overflow assertions, with a 60-second budget on the bounded cloud worker.
 Because runtime audio code changed to preserve current production behavior, a
 fresh image is required; the previous image must not replace the newer deployment.
+
+## Reviewed free-quota matrix
+
+The official key metadata reports a free-tier daily request budget of 50, with
+zero used before testing. The explicit `core-matrix` selection avoids repeating
+the shared session checks unnecessarily: all six courses receive real initial
+desktop discussion, same-role complete speech, queue drain and Stop; all six
+receive mobile UI/layout, legacy navigation, input and language checks. Course 01
+receives real follow-up and generated-speech Pause/Resume on both devices. Each
+course's fresh generated transcript still needs independent science review.
+
+This matrix passed independent source review. It does not establish all-six
+mobile generated-discussion acceptance or Safari browser acceptance. Estimated
+model usage is not a guaranteed request allowance: actual usage must be tracked,
+and incomplete checks remain pending if the free limit is reached. No paid
+fallback, top-up or alternate-account quota evasion is permitted.

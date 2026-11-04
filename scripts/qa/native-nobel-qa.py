@@ -219,10 +219,15 @@ def browser():
     selected = {course['id'].split('-')[2] for course in manifest['courses']} if requested == 'all' else set(requested.split(','))
     if not selected or not selected.issubset({'01', '02', '03', '04', '05', '06'}):
         raise ValueError('Choose approved lesson numbers only')
+    checks = os.environ.get('QA_CHECKS', 'full')
+    if checks not in ['full', 'core-matrix']:
+        raise ValueError('Unknown acceptance matrix')
     for course in sorted(manifest['courses'], key=lambda item: item['id']):
         if course['id'].split('-')[2] not in selected:
             continue
-        for mode in ['ui', 'discussion']:
+        representative = course['id'].split('-')[2] == '01'
+        modes = ['ui'] if checks == 'core-matrix' and batch == 'mobile' and not representative else ['ui', 'discussion']
+        for mode in modes:
             if (task / 'browser.cid').exists():
                 prior = owned.resource('browser')
                 if prior:
@@ -234,7 +239,10 @@ def browser():
                 '-e', 'XDG_CACHE_HOME=/tmp/nobel-browser-cache',
                 '-e', 'XDG_CONFIG_HOME=/tmp/nobel-browser-config',
                 '-e', 'QA_ORIGIN=' + os.environ['QA_ORIGIN'],
-                '-e', 'QA_EXPECTED_IMAGE_SOURCE=' + source, '-e', 'QA_FOLLOWUP=1',
+                '-e', 'QA_EXPECTED_IMAGE_SOURCE=' + source,
+                '-e', 'QA_MATRIX=' + checks,
+                '-e', 'QA_FOLLOWUP=' + ('1' if checks == 'full' or representative else '0'),
+                '-e', 'QA_PAUSE_RESUME=' + ('1' if representative else '0'),
                 '-e', 'QA_MEDIA_ORIGIN=https://class.wanli.ai', '-v', str(task) + ':/task:ro',
                 '-v', str(task / 'evidence') + ':/task/evidence:rw', '-v', str(tool) + ':/qa:ro'],
                 ['node', '/task/qa.mjs', mode, course['id'], batch])

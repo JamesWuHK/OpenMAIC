@@ -53,6 +53,13 @@
             "mobile"
           ]
         },
+        "checks": {
+          "description": "Full repetition, or reviewed shared-runtime matrix within the free quota",
+          "required": true,
+          "type": "choice",
+          "default": "full",
+          "options": ["full", "core-matrix"]
+        },
         "courses": {
           "description": "Approved lesson numbers: all or a comma-separated unfinished subset",
           "required": false,
@@ -247,7 +254,8 @@
         "QA_RELAY_CA_BASE64": "${{ inputs.relay_ca_base64 }}",
         "QA_RELAY_TOKEN": "${{ secrets.NOBEL_QA_RELAY_TOKEN }}",
         "QA_DEVICE": "${{ inputs.device }}",
-        "QA_COURSES": "${{ inputs.courses }}"
+        "QA_COURSES": "${{ inputs.courses }}",
+        "QA_CHECKS": "${{ inputs.checks }}"
       },
       "steps": [
         {

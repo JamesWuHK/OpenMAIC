@@ -9,6 +9,9 @@ const mobile=process.argv[4]==='mobile';
 const out='/task/evidence';fs.mkdirSync(out,{recursive:true});
 const data=JSON.parse(fs.readFileSync('/task/candidate/classrooms/'+id+'.json'));
 const record={id,base,mode,mobile,image:JSON.parse(fs.readFileSync('/task/preview.json')).image,courseSHA256:crypto.createHash('sha256').update(fs.readFileSync('/task/candidate/classrooms/'+id+'.json')).digest('hex'),startedAt:new Date().toISOString(),chat:[],speech:[],pageErrors:[],consoleErrors:[],pass:false};
+record.acceptanceMatrix=process.env.QA_MATRIX||'full';
+record.followupRequired=mode==='discussion'&&process.env.QA_FOLLOWUP==='1';
+record.pauseResumeRequired=mode==='discussion'&&process.env.QA_PAUSE_RESUME==='1';
 record.qaSHA256=crypto.createHash('sha256').update(fs.readFileSync('/task/qa.mjs')).digest('hex');
 const b=await chromium.launch({headless:true,args:['--disable-dev-shm-usage']});
 let p;
@@ -62,6 +65,7 @@ try{
   // currentSrc can still describe the previous clip until native play starts.
   const src=this.src||this.currentSrc;
   const speech=sources.get(src),previous=observed.get(this);
+  if(speech){window.__nativeQAMedia??=[];window.__nativeQAMedia[speech.index]=this;}
   if(!previous||previous.src!==src||previous.row.speechIndex!==(speech?.index??null)){
    if(previous)for(const [event,listener] of previous.listeners)this.removeEventListener(event,listener);
    const row={agentId:speech?.agentId||null,speechIndex:speech?.index??null,source:src.startsWith('data:')?'generated':'narration',ended:false,error:null,advanced:false,audible:false,first:null,last:0,rate:this.playbackRate};
@@ -140,6 +144,22 @@ try{
   await join.click();record.joinedAt=Date.now();
   // Reveal the real chat transcript; model/audio requests are never mocked.
   const toggle=p.getByRole('button',{name:'Toggle chat',exact:true});if(await toggle.isVisible())await toggle.click();
+  if(record.pauseResumeRequired){
+   await p.waitForFunction(()=>window.__nativeQAMedia?.some(a=>a&&!a.paused&&!a.ended&&a.currentTime>.2&&a.duration-a.currentTime>2),{},{timeout:120000});
+   const active=await p.evaluate(()=>window.__nativeQAMedia.findLastIndex(a=>a&&!a.paused&&!a.ended&&a.duration-a.currentTime>2));
+   assert(active>=0,'No generated clip available for actual pause/resume');
+   const bubble=p.locator('[class~="group/bubble"]').filter({visible:true}).last();
+   await bubble.click();
+   await p.waitForFunction(index=>window.__nativeQAMedia[index].paused,active,{timeout:5000});
+   const pausedAt=await p.evaluate(index=>window.__nativeQAMedia[index].currentTime,active);
+   await p.waitForTimeout(1000);
+   const held=await p.evaluate(index=>({paused:window.__nativeQAMedia[index].paused,time:window.__nativeQAMedia[index].currentTime}),active);
+   assert(held.paused&&Math.abs(held.time-pausedAt)<.15,'Pause did not hold the actual generated audio');
+   await bubble.click();
+   await p.waitForFunction(({index,time})=>{const a=window.__nativeQAMedia[index];return a&&!a.paused&&a.currentTime>time+.15},{index:active,time:pausedAt},{timeout:10000});
+   record.pauseResumePassed=true;
+   record.pauseResume={speechIndex:active,pausedAt,heldAt:held.time};
+  }
   let stableSince=null;
   for(let i=0;i<150;i++){
    await p.waitForTimeout(2000);
