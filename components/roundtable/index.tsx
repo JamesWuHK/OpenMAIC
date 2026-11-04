@@ -400,6 +400,9 @@ export function Roundtable({
         }
         // Block if in send cooldown (e.g. text was sent while voice was processing)
         if (isSendCooldownRef.current) {
+          if (isLearnerDeployment()) {
+            toast.info('上一個問題仍在處理，請稍後再試。');
+          }
           setIsVoiceOpen(false);
           return;
         }
@@ -410,7 +413,7 @@ export function Roundtable({
         setIsVoiceOpen(false);
       },
       onError: (error) => {
-        toast.error(error);
+        toast.error(error, isLearnerDeployment() ? { duration: 8000 } : undefined);
         setIsVoiceOpen(false);
       },
     });

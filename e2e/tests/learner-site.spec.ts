@@ -254,7 +254,7 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
   await expect(page.getByText(question).first()).toBeVisible();
 });
 
-test('manual stop submits the last Cantonese interim transcript', async ({ page }) => {
+test('manual stop submits the last Cantonese interim transcript even without browser end', async ({ page }) => {
   const question = '老師，雷達回波係咩？';
   await page.addInitScript((transcript) => {
     localStorage.setItem('locale', 'zh-TW');
@@ -279,9 +279,7 @@ test('manual stop submits the last Cantonese interim transcript', async ({ page 
         }, 50);
       }
 
-      stop() {
-        this.onend?.();
-      }
+      stop() {}
     }
     for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) {
       Object.defineProperty(window, name, {

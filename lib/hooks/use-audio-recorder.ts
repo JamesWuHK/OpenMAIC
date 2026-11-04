@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { ASR_PROVIDERS } from '@/lib/audio/constants';
 import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
@@ -29,6 +29,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const stopWatchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not typed
   const speechRecognitionRef = useRef<any>(null);
   // Synchronous lock to prevent rapid re-entry (React state updates are async)
@@ -144,6 +145,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           recognition.interimResults = isLearnerDeployment();
           let hasFinalTranscript = false;
           let hasRecognitionError = false;
+          let hasEnded = false;
           let lastInterimTranscript = '';
 
           recognition.onstart = () => {
@@ -166,6 +168,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
               length: number;
             };
           }) => {
+            if (hasEnded) return;
             let transcript = '';
             let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -185,7 +188,12 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           };
 
           recognition.onerror = (event: { error: string }) => {
+            if (hasEnded) return;
             hasRecognitionError = true;
+            if (stopWatchdogRef.current) {
+              clearTimeout(stopWatchdogRef.current);
+              stopWatchdogRef.current = null;
+            }
             log.error('Speech recognition error:', event.error);
             let errorMessage = '语音识别失败';
 
@@ -194,6 +202,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
                 // Non-fatal: caused by our own cancel/stop logic or rapid toggle
                 busyRef.current = false;
                 setIsRecording(false);
+                setIsProcessing(false);
                 setRecordingTime(0);
                 if (timerRef.current) {
                   clearInterval(timerRef.current);
@@ -220,7 +229,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
 
             onError?.(errorMessage);
             busyRef.current = false;
+            if (speechRecognitionRef.current === recognition) speechRecognitionRef.current = null;
             setIsRecording(false);
+            setIsProcessing(false);
             setRecordingTime(0);
             if (timerRef.current) {
               clearInterval(timerRef.current);
@@ -229,6 +240,12 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           };
 
           recognition.onend = () => {
+            if (hasEnded) return;
+            hasEnded = true;
+            if (stopWatchdogRef.current) {
+              clearTimeout(stopWatchdogRef.current);
+              stopWatchdogRef.current = null;
+            }
             if (!hasFinalTranscript && !hasRecognitionError) {
               if (lastInterimTranscript.trim()) {
                 onTranscription?.(lastInterimTranscript.trim());
@@ -241,7 +258,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
               }
             }
             busyRef.current = false;
+            if (speechRecognitionRef.current === recognition) speechRecognitionRef.current = null;
             setIsRecording(false);
+            setIsProcessing(false);
             setRecordingTime(0);
             if (timerRef.current) {
               clearInterval(timerRef.current);
@@ -307,10 +326,13 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
   const stopRecording = useCallback(() => {
     // Stop Speech Recognition if active
     if (speechRecognitionRef.current) {
-      speechRecognitionRef.current.stop();
-      speechRecognitionRef.current = null;
-      busyRef.current = false;
+      const recognition = speechRecognitionRef.current;
       setIsRecording(false);
+      setIsProcessing(true);
+      recognition.stop();
+      // Some Chrome sessions never deliver `end` after a manual stop. Finish
+      // through the same handler so a partial result is sent or an error is shown.
+      stopWatchdogRef.current = setTimeout(() => recognition.onend?.(), 5000);
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -335,6 +357,10 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
   const cancelRecording = useCallback(() => {
     // Cancel Speech Recognition if active
     if (speechRecognitionRef.current) {
+      if (stopWatchdogRef.current) {
+        clearTimeout(stopWatchdogRef.current);
+        stopWatchdogRef.current = null;
+      }
       speechRecognitionRef.current.onresult = null; // Prevent transcription callback
       speechRecognitionRef.current.onerror = null; // Suppress browser abort error events
       speechRecognitionRef.current.onend = null; // Cancel must not report a missing question
@@ -374,6 +400,10 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
       audioChunksRef.current = [];
     }
   }, [isRecording]);
+
+  useEffect(() => () => {
+    if (stopWatchdogRef.current) clearTimeout(stopWatchdogRef.current);
+  }, []);
 
   return {
     isRecording,
