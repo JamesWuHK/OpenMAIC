@@ -14,7 +14,10 @@ test('preflight targets only the existing Linux runner and cannot build, delete,
  assert.equal(job.steps.length,2);
  assert.match(job.steps[0].uses,/^actions\/checkout@[a-f0-9]{40}$/);
  assert.equal(job.steps[0].with['persist-credentials'],false);
+ assert.equal(job.steps[0].with.clean,false,'Preserve existing dependency tree for read-only measurement');
  const run=job.steps[1].run;
  assert.match(run,/MemAvailable/);assert.match(run,/5242880/);assert.match(run,/20971520/);
+ assert.match(run,/find node_modules -xdev/);
+ assert.match(run,/sha256sum pnpm-lock.yaml/);
  assert(!/docker\s+(run|build|rm|stop|kill|prune|pull|push|compose)|\bsudo\b|\b(rm|curl|wget)\b|secrets\.|API_KEY|workflow_dispatch\/|gh api/i.test(run),'Preflight must remain read-only and credential-free');
 });

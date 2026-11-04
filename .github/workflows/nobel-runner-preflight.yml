@@ -1,23 +1,41 @@
 {
   "name": "Nobel existing Linux runner preflight",
   "on": {
-    "push": {"branches": ["codex/nobel-runner-recovery-20261104"]},
+    "push": {
+      "branches": [
+        "codex/nobel-runner-recovery-20261104"
+      ]
+    },
     "workflow_dispatch": {}
   },
-  "permissions": {"contents": "read"},
-  "concurrency": {"group": "openmaic-linux-preflight", "cancel-in-progress": false},
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "openmaic-linux-preflight",
+    "cancel-in-progress": false
+  },
   "jobs": {
     "preflight": {
-      "runs-on": ["self-hosted", "Linux", "X64", "openmaic", "cloud-ci"],
+      "runs-on": [
+        "self-hosted",
+        "Linux",
+        "X64",
+        "openmaic",
+        "cloud-ci"
+      ],
       "timeout-minutes": 5,
       "steps": [
         {
           "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
-          "with": {"persist-credentials": false}
+          "with": {
+            "persist-credentials": false,
+            "clean": false
+          }
         },
         {
           "name": "Read-only runner and capacity checks",
-          "run": "set -euo pipefail\ntest \"$GITHUB_REPOSITORY\" = JamesWuHK/OpenMAIC\ntest \"$RUNNER_OS\" = Linux\ntest \"$(uname -m)\" = x86_64\nprintf 'Runner: %s\\n' \"$RUNNER_NAME\"\ngit rev-parse HEAD\nnode --test tests/ci/nobel-runner-preflight.test.mjs\ndocker version --format '{{.Server.Version}}'\ndocker ps --format '{{.Names}} {{.Status}}'\ndocker_root=$(docker info --format '{{.DockerRootDir}}')\nmemory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)\ndisk_kib=$(df -Pk \"$docker_root\" | awk 'NR==2 {print $4}')\ninodes=$(df -Pi \"$docker_root\" | awk 'NR==2 {print $4}')\nprintf 'Available memory KiB: %s; Docker disk KiB: %s; inodes: %s\\n' \"$memory_kib\" \"$disk_kib\" \"$inodes\"\ntest \"$memory_kib\" -ge 5242880\ntest \"$disk_kib\" -ge 20971520\ntest \"$inodes\" -ge 1000000"
+          "run": "set -euo pipefail\ntest \"$GITHUB_REPOSITORY\" = JamesWuHK/OpenMAIC\ntest \"$RUNNER_OS\" = Linux\ntest \"$(uname -m)\" = x86_64\nprintf 'Runner: %s\\n' \"$RUNNER_NAME\"\ngit rev-parse HEAD\nnode --test tests/ci/nobel-runner-preflight.test.mjs\ndocker version --format '{{.Server.Version}}'\ndocker ps --format '{{.Names}} {{.Status}}'\ndocker_root=$(docker info --format '{{.DockerRootDir}}')\nmemory_kib=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)\ndisk_kib=$(df -Pk \"$docker_root\" | awk 'NR==2 {print $4}')\ninodes=$(df -Pi \"$docker_root\" | awk 'NR==2 {print $4}')\nprintf 'Available memory KiB: %s; Docker disk KiB: %s; inodes: %s\\n' \"$memory_kib\" \"$disk_kib\" \"$inodes\"\ndf -Pi \"$docker_root\" \"$GITHUB_WORKSPACE\" \"$RUNNER_TEMP\"\nsha256sum pnpm-lock.yaml\nif test -d node_modules; then\n  dependency_inodes=$(find node_modules -xdev -printf '%D:%i\\n' | sort -u | wc -l)\n  dependency_paths=$(find node_modules -xdev -printf '.\\n' | wc -l)\n  printf 'Dependency unique inodes: %s; paths: %s\\n' \"$dependency_inodes\" \"$dependency_paths\"\n  du -sk node_modules\nelse\n  printf 'Dependency tree absent; no estimate available\\n'\nfi\ntest \"$memory_kib\" -ge 5242880\ntest \"$disk_kib\" -ge 20971520\ntest \"$inodes\" -ge 1000000"
         }
       ]
     }
