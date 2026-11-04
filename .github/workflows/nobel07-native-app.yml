@@ -120,7 +120,10 @@
         {
           "name": "Collect candidate diagnostics",
           "if": "always()",
-          "run": "python3 ci/nobel07-native/app-cleanup.py"
+          "run": "python3 ci/nobel07-native/app-cleanup.py",
+          "env": {
+            "NOBEL07_CLEAN_GENERATED_DEPENDENCIES": "${{ !cancelled() }}"
+          }
         },
         {
           "name": "Save evidence (not full course acceptance)",

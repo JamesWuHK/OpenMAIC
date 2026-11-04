@@ -16,4 +16,15 @@ for name in [f"nobel07-app-browser-{os.environ['GITHUB_RUN_ID']}-{os.environ['GI
 assert w.name.startswith('nobel07-app-') and not w.is_symlink()
 for p in [w/'data/classrooms',w/'ci/nobel07-native/node_modules',Path(os.environ['RUNNER_TEMP'])/f"nobel07-app-npm-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"]:
  if p.exists():assert not p.is_symlink();shutil.rmtree(p)
-(out/'owned-cleanup.json').write_text(json.dumps({'records':records,'imagesRetained':True,'productionTouched':False},indent=2)+'\n')
+dependency_records=[]
+if os.environ.get('NOBEL07_CLEAN_GENERATED_DEPENDENCIES')=='true':
+ assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['GITHUB_SHA']
+ tracked=subprocess.check_output(['git','ls-files','packages/**/package.json'],text=True).splitlines()
+ targets=[w/'node_modules']+[w/Path(name).parent/'node_modules' for name in tracked]
+ for target in dict.fromkeys(targets):
+  if not target.exists() and not target.is_symlink():continue
+  assert target.name=='node_modules' and w in target.parents
+  if target.is_symlink():dependency_records.append({'path':str(target.relative_to(w)),'skipped':'root symlink'});continue
+  assert target.resolve().is_relative_to(w)
+  shutil.rmtree(target);dependency_records.append({'path':str(target.relative_to(w)),'removed':True})
+(out/'owned-cleanup.json').write_text(json.dumps({'records':records,'generatedDependencyDirs':dependency_records,'dependencyCleanupSkippedForCancellation':os.environ.get('NOBEL07_CLEAN_GENERATED_DEPENDENCIES')!='true','imagesRetained':True,'productionTouched':False},indent=2)+'\n')

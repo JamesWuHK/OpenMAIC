@@ -1257,7 +1257,7 @@ export function Roundtable({
                             </span>
                           </div>
                         </div>
-                        {teacherConfig?.persona && (
+                        {!isLearnerDeployment() && teacherConfig?.persona && (
                           <p className="text-xs text-muted-foreground mt-2 leading-relaxed whitespace-pre-line">
                             {teacherConfig.persona}
                           </p>
@@ -1912,7 +1912,7 @@ export function Roundtable({
                     | undefined;
                   const roleLabel = roleLabelKey ? t(`settings.agentRoles.${roleLabelKey}`) : '';
                   const i18nDescription = t(`settings.agentDescriptions.${student.id}`);
-                  const description =
+                  const description = isLearnerDeployment() ? '' :
                     i18nDescription !== `settings.agentDescriptions.${student.id}`
                       ? i18nDescription
                       : agentConfig?.persona || '';

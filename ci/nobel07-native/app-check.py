@@ -21,4 +21,4 @@ with zipfile.ZipFile(q/'course-package.zip') as z:
   name=Path(i.filename);assert not name.is_absolute() and '..' not in name.parts and (i.external_attr>>16)&0o170000!=0o120000
   b=z.read(i);assert hashlib.sha256(b).hexdigest()==expected['files'][i.filename];p=folder/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
 (folder.parent/(cid+'.json')).write_bytes((folder/'classroom.json').read_bytes())
-print('Exact four-file runtime and 53-file classroom fixture verified; isolated cloud build only')
+print('Exact reviewed application sources and 53-file classroom fixture verified; isolated cloud build only')

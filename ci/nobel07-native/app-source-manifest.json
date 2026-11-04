@@ -24,9 +24,13 @@
     "e2e/tests/learner-site.spec.ts": {
       "baseSHA256": "c876296e8ba13d815783d1c007c9807f215a40a92aeeae7c926848e31af7a6d1",
       "SHA256": "f201db99b8745159c10563c0f9655f7dcbb00a577a87d2cfaa6c31b8d831ea2a"
+    },
+    "components/roundtable/index.tsx": {
+      "baseSHA256": "63a5dc7816df18b2ce14fc9757af1c084b5fffec799a8f4757550f2c1ce5823a",
+      "SHA256": "7d7a766780daddab5f63b63166eee0c20119d38219eef56fb54cba6977c23f75"
     }
   },
-  "scope": "Four Nobel07 runtime files plus home hero wrapping and stable loaded-content regression assertion; no student text changes",
+  "scope": "Seven files: four Nobel07 narration runtime files; home wrap and regression; student-only hiding of internal agent persona",
   "build": "PREVIOUS_FOUR_FILE_IMAGE_BUILT_44b74436_NEW_HOME_PATCH_NOT_BUILT",
   "published": false
 }

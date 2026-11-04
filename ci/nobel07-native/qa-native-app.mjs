@@ -37,6 +37,17 @@ try{
   await frame.locator('#play-page').click();await playing('audio/yue-HK/page-04.mp3');await markStop('discussion opened');await toolbar.getByRole('button',{name:/^(課堂提問|提问讨论|Ask and discuss)$/}).click();await page.getByTestId('nobel-classroom-interaction').waitFor({state:'visible'});await frame.waitForFunction(()=>document.getElementById('narration').paused&&!document.getElementById('narration').getAttribute('src'));
   await frame.evaluate(()=>{window.__blockedPlayCount=0;window.__blockedPlayListener=()=>window.__blockedPlayCount++;document.getElementById('narration').addEventListener('play',window.__blockedPlayListener)});
   await toolbar.getByRole('button',{name:/^(播放講解|播放讲解|Play narration)$/}).click();const blockedProof=await frame.evaluate(()=>new Promise(resolve=>{const a=document.getElementById('narration');let bad=false,samples=0;const start=performance.now();const timer=setInterval(()=>{samples++;bad ||= !a.paused||a.currentTime>0||!!a.getAttribute('src');if(performance.now()-start>=1000){clearInterval(timer);a.removeEventListener('play',window.__blockedPlayListener);resolve({played:window.__blockedPlayCount,bad,samples,observedMs:performance.now()-start})}},50)}));assert.equal(blockedProof.played,0);assert.equal(blockedProof.bad,false);report.cases.push({kind:'native-discussion-panel-stops-and-blocks',viewport,...blockedProof,pass:true});
+  if(viewport.width===1440){
+   const fixture=JSON.parse(await fs.readFile('data/classrooms/'+cid+'.json','utf8'));
+   for(const agent of fixture.stage.generatedAgentConfigs){
+    const avatar=page.locator('img[alt="'+agent.name+'"]:visible').first();await avatar.hover();
+    const card=page.locator('[data-slot="hover-card-content"]:visible');await card.waitFor();
+    assert.deepEqual(await card.locator('p').allTextContents(),[agent.name]);
+    assert.ok(!(await card.textContent()).includes(agent.persona.slice(0,24)));
+    await page.mouse.move(0,0);await card.waitFor({state:'hidden'});
+    report.cases.push({kind:'learner-role-card-no-internal-persona',role:agent.role,viewport,pass:true});
+   }
+  }
   await context.close();
  }
  assert.equal(report.cases.filter(c=>c.kind==='native-page-reading-voice-transcript').length,96);assert.deepEqual(report.consoleErrors,[]);assert.deepEqual(report.pageErrors,[]);for(const f of report.failedRequests)f.intentionalMediaAbort=f.resource==='media'&&f.error==='net::ERR_ABORTED'&&report.intentionalStops.some(s=>s.url===f.url&&s.viewport.width===f.viewport.width&&f.at>=s.at-100&&f.at<=s.at+3000);assert.deepEqual(report.failedRequests.filter(f=>!f.intentionalMediaAbort),[]);report.pass=true;
