@@ -1,0 +1,93 @@
+{
+  "runId": 41894238936,
+  "status": "PARTIAL_PASS_WITH_LATER_HARNESS_FAILURE",
+  "imageId": "sha256:c822ccb74b64823189ba3a0c60b98d514dfff5c770521ace2a1cd90b53f3109e",
+  "source": "935320ee5d5e8fc4de35135ff6c0680b0b5c7936",
+  "classroomSHA256": "9f147c465945a48545b441aa04140b0753ed880c411a73f239eb83fae323d8df",
+  "cases": [
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 2,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 3,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 4,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 5,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 7,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 8,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 9,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 10,
+      "pass": true
+    },
+    {
+      "kind": "native-quiz-wrong-feedback-retry-correct",
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 11,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 12,
+      "pass": true
+    },
+    {
+      "kind": "native-scene",
+      "page": 12,
+      "pass": true
+    }
+  ],
+  "originalFailure": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByText('切換至普通話講解 →', { exact: true }).first() to be visible\n",
+  "failureCause": "Same browser context correctly restored page 12; the test incorrectly expected page 1."
+}
