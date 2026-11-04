@@ -42,6 +42,22 @@ describe('Security response headers', () => {
         value: "frame-ancestors 'self'",
       });
     });
+
+    it('sandboxes classroom media after the general framing rule', async () => {
+      const config = await loadConfig();
+      const headerGroups = await config.headers!();
+      const mediaGroup = headerGroups.find(
+        (group) => group.source === '/api/classroom-media/:path*',
+      );
+
+      expect(mediaGroup?.headers).toContainEqual({
+        key: 'Content-Security-Policy',
+        value: "frame-ancestors 'self'; sandbox; default-src 'none'; style-src 'unsafe-inline'",
+      });
+      expect(headerGroups.indexOf(mediaGroup!)).toBeGreaterThan(
+        headerGroups.findIndex((group) => group.source === '/(.*)'),
+      );
+    });
   });
 
   describe('with ALLOWED_FRAME_ANCESTORS', () => {

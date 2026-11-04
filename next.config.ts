@@ -69,6 +69,18 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // Classroom media can contain SVG artwork. Sandbox direct navigation
+        // to any classroom media URL while retaining image/audio embedding.
+        // This must follow the catch-all rule: Next uses the last matching CSP.
+        source: '/api/classroom-media/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: `frame-ancestors ${frameAncestors}; sandbox; default-src 'none'; style-src 'unsafe-inline'`,
+          },
+        ],
+      },
     ];
   },
 };
