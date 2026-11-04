@@ -1,4 +1,5 @@
 import importlib.util
+import contextlib
 import json
 import pathlib
 import tempfile
@@ -69,6 +70,39 @@ class ResourceOwnership(unittest.TestCase):
         with patch.object(resources.subprocess, 'run', return_value=result):
             with self.assertRaisesRegex(RuntimeError, 'Cannot connect'):
                 resources.inspect('a' * 64)
+
+    def test_cleanup_removes_exact_owned_cid_before_unique_image_tag(self):
+        with tempfile.TemporaryDirectory() as directory, contextlib.chdir(directory):
+            task = pathlib.Path(directory)
+            (task / 'owner.json').write_text('{}')
+            (task / 'artifacts/learner-image-qa').mkdir(parents=True)
+            actual = dict(self.actual, State={'Running': True})
+            image = {'Id': self.expected['image'], 'Config': actual['Config']}
+            (task / 'app.json').write_text(json.dumps(self.expected))
+            def docker(args, **kwargs):
+                if args[:3] == ['docker', 'image', 'inspect']:
+                    return resources.subprocess.CompletedProcess(args, 0, json.dumps([image]), '')
+                return resources.subprocess.CompletedProcess(args, 0, '', '')
+            with patch.object(resources, 'context', return_value=('123-1', 'c' * 40, task)), \
+                    patch.object(resources, 'checked_task', return_value=('123-1', 'c' * 40, task)), \
+                    patch.object(resources, 'resource', side_effect=[None, actual]), \
+                    patch.object(resources.subprocess, 'run', side_effect=docker) as run:
+                resources.collect_cleanup()
+                mutations = [c.args[0] for c in run.call_args_list if 'rm' in c.args[0]]
+                self.assertEqual(mutations, [['docker', 'rm', '-f', self.expected['cid']],
+                                             ['docker', 'image', 'rm', 'wanli-nobel-ci:123-1']])
+
+    def test_image_daemon_error_fails_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            task = pathlib.Path(directory)
+            (task / 'owner.json').write_text('{}')
+            result = resources.subprocess.CompletedProcess([], 1, '', 'Cannot connect to Docker daemon')
+            with patch.object(resources, 'context', return_value=('123-1', 'c' * 40, task)), \
+                    patch.object(resources, 'checked_task'), \
+                    patch.object(resources, 'resource', return_value=None), \
+                    patch.object(resources.subprocess, 'run', return_value=result):
+                with self.assertRaisesRegex(RuntimeError, 'Cannot connect'):
+                    resources.collect_cleanup()
 
 
 if __name__ == '__main__':

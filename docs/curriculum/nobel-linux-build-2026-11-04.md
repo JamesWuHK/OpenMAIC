@@ -44,7 +44,11 @@ permission and no deployment, cloud, or model credentials.
   days. Export does not authorize a deployment. The exact source SHA and image ID
   accompany the image.
 
-Light checks: seven Python ownership/capacity tests and three Node packaging / CI
+No dependency cache is uploaded. GitHub's current [billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+lists self-hosted runner use as free; no runner instance, paid provider, account
+upgrade or billing setting is created or changed by this workflow.
+
+Light checks: nine Python ownership/capacity tests and three Node packaging / CI
 contract tests passed. Independent technical review passed for one bounded CI
 attempt, conditional on verifying the pinned official setup-buildx action source
 and options before execution. Actual image build, TypeScript, runtime prompt
