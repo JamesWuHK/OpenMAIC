@@ -3,9 +3,9 @@
   "createdAt": "2026-11-04T00:00:00.000Z",
   "stage": {
     "id": "hk-nobel-07-sakaguchi-illustrated-v2",
-    "name": "坂口志文：身體裏為甚麼需要「勸架員」？",
+    "name": "坂口志文：身體裏為甚麼需要「勸架員」？（廣東話講解）",
     "description": "從坂口志文追問的免疫謎題出發，認識身體怎樣減少免疫誤傷，理解2025年諾貝爾生理學或醫學獎的研究價值。",
-    "languageDirective": "所有學生可見文字均使用香港繁體中文。用廣東話講解。不提供個人診療建議。",
+    "languageDirective": "所有學生可見文字均使用香港繁體中文。用廣東話講解。不提供個人診療建議。 說明調節作用時使用「有助減少誤傷」，不保證完全不會出錯；生活比喻不代表細胞有人的意識。",
     "createdAt": 1793793600000,
     "updatedAt": 1793793600000,
     "style": "slide",
@@ -14,7 +14,7 @@
         "id": "nobel07-teacher",
         "name": "科學故事老師",
         "role": "teacher",
-        "persona": "用生活中的例子解釋免疫控制，區分基礎發現與仍在研究的治療。",
+        "persona": "我會用生活例子講清楚免疫控制，也會說明科學比喻的限制：調節性T細胞有助減少免疫誤傷，並非保證不會出錯；研究前景也不等於已證明治癒。",
         "avatar": "/avatars/teacher.png",
         "color": "#24665f",
         "priority": 10
@@ -23,7 +23,7 @@
         "id": "nobel07-assistant",
         "name": "科學小助手",
         "role": "assistant",
-        "persona": "幫助理解證據和類比的邊界，不提供個人診療建議。",
+        "persona": "我會幫你區分研究證據、生活比喻與尚待驗證的治療方向。不提供個人診療建議。",
         "avatar": "/avatars/assist.png",
         "color": "#2563eb",
         "priority": 7
@@ -32,7 +32,7 @@
         "id": "nobel07-student",
         "name": "好奇同學",
         "role": "student",
-        "persona": "這是一位AI同學，喜歡從熟悉的生活現象提問，並根據證據修正理解。",
+        "persona": "我是AI同學，喜歡問「在甚麼情況下才成立？」並用證據修正理解。",
         "avatar": "/avatars/curious.png",
         "color": "#bf9949",
         "priority": 5

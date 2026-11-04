@@ -1,5 +1,5 @@
 {
-  "runId": 41895650817,
+  "runId": 41898329713,
   "status": "PARTIAL_PASS_WITH_LATER_HARNESS_FAILURE",
   "imageId": "sha256:c822ccb74b64823189ba3a0c60b98d514dfff5c770521ace2a1cd90b53f3109e",
   "source": "935320ee5d5e8fc4de35135ff6c0680b0b5c7936",
@@ -100,10 +100,197 @@
     {
       "kind": "mobile-portrait-overflow-landscape-fullscreen",
       "pass": true
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 1,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 2,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 3,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 4,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 5,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 6,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 7,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 8,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 9,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 10,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
+    },
+    {
+      "kind": "actual-footer-safe-bounds",
+      "page": 12,
+      "pass": true,
+      "artBox": {
+        "x": 222.890625,
+        "y": 118.59375,
+        "width": 979.199951171875,
+        "height": 550.7999877929688
+      },
+      "noteBox": {
+        "x": 275.7674255371094,
+        "y": 640.50732421875,
+        "width": 871.4879455566406,
+        "height": 14.5350341796875
+      }
     }
   ],
-  "originalFailure": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button').filter({ has: locator('svg.lucide-message-square') }).last()\n    - locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" aria-selected=\"false\" data-state=\"inactive\" data-slot=\"tabs-trigger\" id=\"radix-_r_p_-trigger-chat\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" aria-controls=\"radix-_r_p_-content-chat\" class=\"rounded-md border border-transparent px-2 py-1 font-medium group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-vis…>…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    56 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
-  "failureCause": "Hidden chat tab matched instead of visible roundtable input button; selector corrected.",
+  "originalFailure": "AssertionError [ERR_ASSERTION]: Real native discussion did not finish its returned speech naturally",
+  "failureCause": "Unlisted course rejected by native published-ID speech authorization (404); text/model protocol closed normally.",
   "layoutChangesProvenSeparate": [
     {
       "id": "hk-nobel-07-sakaguchi-illustrated-v2",
@@ -119,5 +306,6 @@
       "oldSHA256": "0c32e3df2540d5ec283ec5a2f2b4fbb074a8850f7e412b800cd96af193c4bc29",
       "newSHA256": "f69b5814e3c14043efdc6fff5d46b2bb925c65edd631359108c78ba9ae1de954"
     }
-  ]
+  ],
+  "newRoleAndVoiceLabelChanges": "Stage configuration only; all actions/quiz/media and corrected footer geometry unchanged."
 }
