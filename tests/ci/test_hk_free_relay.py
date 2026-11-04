@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import subprocess
 from unittest.mock import patch
 
 path = Path(__file__).resolve().parents[2] / 'scripts/qa/hk-free-relay.py'
@@ -66,6 +67,22 @@ class ScopedHostRelay(unittest.TestCase):
                     relay.start(directory)
                 close.assert_called_once_with(directory)
 
+    def test_diagnostic_write_failure_does_not_skip_owned_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            save = relay.save
+            def fail_diagnostic(root, name, value):
+                if name == 'startup-failed.json':
+                    raise OSError('diagnostic disk error')
+                save(root, name, value)
+            with patch.object(relay, 'checked_root', return_value=(root, self.state)), \
+                    patch.object(relay, '_start', side_effect=RuntimeError('startup failed')), \
+                    patch.object(relay, 'save', side_effect=fail_diagnostic), \
+                    patch.object(relay, '_close') as close:
+                with self.assertRaisesRegex(RuntimeError, 'startup failed'):
+                    relay.start(directory)
+                close.assert_called_once_with(directory)
+
     def test_competing_start_cannot_acquire_or_clean_up_winner(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -126,6 +143,37 @@ class ScopedHostRelay(unittest.TestCase):
                 with relay.task_lock(root):
                     self.fail('symlink lock accepted')
             self.assertEqual(target.read_text(), 'retain')
+
+    def test_missing_container_inspection_accepts_docker_lowercase_error(self):
+        result = subprocess.CompletedProcess(['docker'], 1, '', 'error: no such object: ' + self.state['cid'])
+        with patch.object(relay.subprocess, 'run', return_value=result):
+            self.assertIsNone(relay.inspect(self.state['cid']))
+        result.stderr = 'Cannot connect to the Docker daemon'
+        with patch.object(relay.subprocess, 'run', return_value=result):
+            with self.assertRaisesRegex(RuntimeError, 'unavailable'):
+                relay.inspect(self.state['cid'])
+
+    def test_production_port_environment_cannot_redirect_the_relay_listener(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            state = dict(self.state, certificateBase64='public-certificate')
+            for name in ['token.txt', 'key.pem']:
+                (root / name).write_text('test-only')
+            production = dict(self.actual, State={'Running': True, 'StartedAt': 'baseline'}, RestartCount=0,
+                              Config={'Env': ['PORT=3000', 'OPENROUTER_API_KEY=synthetic-test-only']})
+            captured = {}
+            def run(*args):
+                if args[:2] == ('docker', 'run'):
+                    captured.update(row.split('=', 1) for row in (root / 'relay.env').read_text().splitlines())
+                    raise RuntimeError('test stop before any real container creation')
+            with patch.object(relay, 'checked_root', return_value=(root, state)), \
+                    patch.object(relay, 'memory_mib', return_value=512), \
+                    patch.object(relay, 'inspect', return_value=production), \
+                    patch.object(relay, 'run', side_effect=run):
+                with self.assertRaisesRegex(RuntimeError, 'test stop'):
+                    relay._start(directory)
+            self.assertEqual(captured['PORT'], '8787')
+            self.assertFalse((root / 'relay.env').exists())
 
 
 if __name__ == '__main__':

@@ -37,7 +37,7 @@ def run(*args):
 def inspect(identity):
     result = subprocess.run(['docker', 'inspect', identity], capture_output=True, text=True, timeout=10)
     if result.returncode:
-        if 'No such object:' in result.stderr or 'No such container:' in result.stderr:
+        if 'no such object:' in result.stderr.lower() or 'no such container:' in result.stderr.lower():
             return None
         raise RuntimeError('Docker inspection unavailable')
     return json.loads(result.stdout)[0]
@@ -223,7 +223,7 @@ def _start(value):
     state['productionBaseline'] = {'id': before['Id'], 'started': before['State']['StartedAt'],
                                    'restarts': before['RestartCount']}
     save(root, 'owner.json', state)
-    values = {'OPENROUTER_API_KEY': key, 'QA_RELAY_TOKEN': (root / 'token.txt').read_text(),
+    values = {'PORT': '8787', 'OPENROUTER_API_KEY': key, 'QA_RELAY_TOKEN': (root / 'token.txt').read_text(),
               'QA_TLS_KEY_BASE64': base64.b64encode((root / 'key.pem').read_bytes()).decode(),
               'QA_TLS_CERT_BASE64': state['certificateBase64'], 'NODE_OPTIONS': '--max-old-space-size=48'}
     envfile = root / 'relay.env'
@@ -317,10 +317,15 @@ def start(value):
         save(root, 'owner.json', initial)
         try:
             _start(value)
-        except BaseException:
+        except BaseException as error:
             # The lock and this explicit claim grant rollback authority even
             # if a failure occurs after creating the process or guardian.
             _, current = checked_root(value)
+            try:
+                save(root, 'startup-failed.json', {'at': time.time(), 'phase': current['phase'],
+                                                  'exceptionType': type(error).__name__})
+            except OSError:
+                pass
             if current.get('startAttempt') == attempt:
                 _close(value)
             raise
