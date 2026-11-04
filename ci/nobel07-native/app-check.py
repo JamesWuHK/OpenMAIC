@@ -1,14 +1,18 @@
 from pathlib import Path
-import os,json,hashlib,zipfile,subprocess,shutil
+import os,json,hashlib,zipfile,subprocess,shutil,time
 assert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux' and os.getuid()!=0
 w=Path.cwd();assert w==Path(os.environ['TASK_WORKSPACE']) and w.name==f"nobel07-app-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}"
 assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['GITHUB_SHA']
 q=w/'ci/nobel07-native'
 for name,want in json.loads((q/'app-input-manifest.json').read_text()).items():assert hashlib.sha256((q/name).read_bytes()).hexdigest()==want,name
 for name,proof in json.loads((q/'app-source-manifest.json').read_text())['files'].items():assert hashlib.sha256((w/name).read_bytes()).hexdigest()==proof['SHA256'],name
-memory=int(next(s.split()[1] for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:')));disk=shutil.disk_usage(w).free
-assert memory>=8*1024**2 and disk>=20*1024**3,'Cloud reserve insufficient; do not build'
-a=w/'artifacts';a.mkdir(exist_ok=True);(a/'nobel07-build-resource.json').write_text(json.dumps({'availableKiB':memory,'freeDiskBytes':disk,'newMachineCreated':False,'productionTouched':False})+'\n')
+a=w/'artifacts';a.mkdir(exist_ok=True);samples=[];started=time.monotonic()
+while True:
+ memory=int(next(s.split()[1] for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:')));disk=shutil.disk_usage(w).free
+ samples.append({'at':time.time(),'availableKiB':memory,'freeDiskBytes':disk});(a/'nobel07-build-resource.json').write_text(json.dumps({'samples':samples,'requiredAvailableKiB':8*1024**2,'requiredFreeDiskBytes':20*1024**3,'newMachineCreated':False,'productionTouched':False})+'\n')
+ if memory>=8*1024**2 and disk>=20*1024**3:break
+ assert time.monotonic()-started<180,f'Cloud reserve insufficient: availableMiB={memory//1024},freeGiB={disk/1024**3:.2f}; required 8GiB RAM/20GiB disk; no build started'
+ time.sleep(5)
 expected=json.loads((q/'expected.json').read_text());raw=(q/'course-package.zip').read_bytes();assert hashlib.sha256(raw).hexdigest()==expected['zipSHA256'];cid=expected['courseId'];assert cid=='hk-nobel-07-sakaguchi-lecture-v1'
 folder=w/'data/classrooms'/cid;folder.mkdir(parents=True,exist_ok=False)
 with zipfile.ZipFile(q/'course-package.zip') as z:
