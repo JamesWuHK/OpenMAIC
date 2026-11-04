@@ -20,7 +20,6 @@ jobs:
     timeout-minutes: 90
     env:
       CI: 'true'
-      LEARNER_QA_BASE_URL: http://127.0.0.1:3100
       NEXT_TELEMETRY_DISABLED: '1'
       PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
@@ -63,7 +62,8 @@ jobs:
             --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
       - name: Start isolated exact-image candidate
         run: |
-          docker run -d --name learner-candidate -p 127.0.0.1:3100:3000 \
+          candidate_name="learner-candidate-$GITHUB_RUN_ID"
+          docker run -d --name "$candidate_name" -p 127.0.0.1::3000 \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
             -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
@@ -71,8 +71,11 @@ jobs:
             -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
             -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
             "wanli-learner-ci:$GITHUB_SHA"
+          candidate_port="$(docker port "$candidate_name" 3000/tcp | awk -F: 'NR==1 {print $NF}')"
+          test -n "$candidate_port"
+          echo "LEARNER_QA_BASE_URL=http://127.0.0.1:$candidate_port" >> "$GITHUB_ENV"
           for attempt in {1..30}; do
-            if curl -fsS http://127.0.0.1:3100/api/health >/dev/null; then exit 0; fi
+            if curl -fsS "http://127.0.0.1:$candidate_port/api/health" >/dev/null; then exit 0; fi
             sleep 2
           done
           exit 1
@@ -101,10 +104,11 @@ jobs:
         if: always()
         run: |
           mkdir -p artifacts/learner-image-qa
-          if docker inspect learner-candidate >/dev/null 2>&1; then
-            docker logs learner-candidate > artifacts/learner-image-qa/container.log 2>&1
-            docker inspect learner-candidate --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
-            docker rm -f learner-candidate
+          candidate_name="learner-candidate-$GITHUB_RUN_ID"
+          if docker inspect "$candidate_name" >/dev/null 2>&1; then
+            docker logs "$candidate_name" > artifacts/learner-image-qa/container.log 2>&1
+            docker inspect "$candidate_name" --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
+            docker rm -f "$candidate_name"
           fi
       - name: Save evidence (not full course acceptance)
         if: always()
