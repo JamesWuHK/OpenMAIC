@@ -82,7 +82,8 @@
         },
         {
           "name": "Start isolated exact-image candidate",
-          "run": "candidate_name=\"learner-candidate-$GITHUB_RUN_ID\"\ndocker run -d --name \"$candidate_name\" --label wanli.qa.owner=nobel07-native-app-20261104 --label \"wanli.qa.run=$GITHUB_RUN_ID\" --memory 2048m --memory-swap 2560m --cpus 1 --pids-limit 256 --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1::3000 \\\n  -e OPENMAIC_DEPLOYMENT_MODE=learner \\\n  -e OPENAI_API_KEY=synthetic-ci-not-a-secret \\\n  -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \\\n  -e DEFAULT_MODEL=openai:gpt-4o-mini \\\n  -v \"$TASK_WORKSPACE/content/learner:/app/content/learner:ro\" \\\n  -v \"$TASK_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro\" \\\n  -v \"$TASK_WORKSPACE/data/classrooms:/app/data/classrooms:ro\" \\\n  \"$NOBEL07_APP_IMAGE_ID\"\ncandidate_port=\"$(docker port \"$candidate_name\" 3000/tcp | awk -F: 'NR==1 {print $NF}')\"\ntest -n \"$candidate_port\"\necho \"LEARNER_QA_BASE_URL=http://127.0.0.1:$candidate_port\" >> \"$GITHUB_ENV\"\nfor attempt in {1..30}; do\n  if curl -fsS \"http://127.0.0.1:$candidate_port/api/health\" >/dev/null; then exit 0; fi\n  sleep 2\ndone\nexit 1\n"
+          "run": "candidate_name=\"learner-candidate-$GITHUB_RUN_ID\"\ndocker run -d --name \"$candidate_name\" --label wanli.qa.owner=nobel07-native-app-20261104 --label \"wanli.qa.run=$GITHUB_RUN_ID\" --memory 2048m --memory-swap 2560m --cpus 1 --pids-limit 256 --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1::3000 \\\n  -e OPENMAIC_DEPLOYMENT_MODE=learner \\\n  -e OPENAI_API_KEY=synthetic-ci-not-a-secret \\\n  -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \\\n  -e DEFAULT_MODEL=openai:gpt-4o-mini \\\n  -v \"$TASK_WORKSPACE/content/learner:/app/content/learner:ro\" \\\n  -v \"$TASK_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro\" \\\n  -v \"$TASK_WORKSPACE/data/classrooms:/app/data/classrooms:ro\" \\\n  \"$NOBEL07_APP_IMAGE_ID\"\ncandidate_port=\"$(docker port \"$candidate_name\" 3000/tcp | awk -F: 'NR==1 {print $NF}')\"\ntest -n \"$candidate_port\"\necho \"LEARNER_QA_BASE_URL=http://127.0.0.1:$candidate_port\" >> \"$GITHUB_ENV\"\nfor attempt in {1..30}; do\n  if curl -fsS \"http://127.0.0.1:$candidate_port/api/health\" >/dev/null; then exit 0; fi\n  sleep 2\ndone\nexit 1\n",
+          "id": "start_candidate"
         },
         {
           "name": "Image API readiness boundary",
@@ -99,7 +100,8 @@
         {
           "name": "Actual Nobel07 React shell, media, transcript and interaction acceptance",
           "timeout-minutes": 20,
-          "run": "bash ci/nobel07-native/app-browser.sh"
+          "run": "bash ci/nobel07-native/app-browser.sh",
+          "if": "${{ !cancelled() && steps.start_candidate.outcome == 'success' }}"
         },
         {
           "name": "Export tested candidate (not deployment approval)",

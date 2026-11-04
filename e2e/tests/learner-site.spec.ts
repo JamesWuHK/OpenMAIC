@@ -51,8 +51,26 @@ test.beforeEach(async ({ page }) => {
 test('homepage communicates the Hong Kong series proposition and navigates to discovery', async ({
   page,
 }, testInfo) => {
+  const contentLoaded = page.waitForResponse((response) =>
+    new URL(response.url()).pathname === '/api/learner/site-content' &&
+    response.request().method() === 'GET',
+  );
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: '把每個好奇心，變成一門課' })).toBeVisible();
+  const contentResponse = await contentLoaded;
+  expect(contentResponse.ok()).toBe(true);
+  const content = await contentResponse.json();
+  expect(typeof content.hero?.title).toBe('string');
+  expect(content.hero.title.length).toBeGreaterThan(0);
+  const heading = page.getByRole('heading', { level: 1, name: content.hero.title });
+  await expect(heading).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  await expect.poll(() => heading.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return bounds.left >= 0 && bounds.right <= document.documentElement.clientWidth + 1 &&
+      Array.from(element.querySelectorAll('span')).every((span) =>
+        span.scrollWidth <= span.clientWidth + 1,
+      );
+  })).toBe(true);
   await expect(page.getByRole('heading', { name: '從香港真問題出發' })).toBeVisible();
   await expect(page.getByRole('button', { name: /香港探索/ })).toBeVisible();
   await expectNoDocumentOverflow(page);
