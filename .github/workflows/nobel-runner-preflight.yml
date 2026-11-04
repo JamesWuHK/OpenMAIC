@@ -1,11 +1,6 @@
 {
   "name": "Nobel existing Linux runner preflight",
   "on": {
-    "push": {
-      "branches": [
-        "codex/nobel-runner-recovery-20261104"
-      ]
-    },
     "workflow_dispatch": {}
   },
   "permissions": {

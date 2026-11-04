@@ -5,7 +5,7 @@ const path=new URL('../../.github/workflows/nobel-runner-preflight.yml',import.m
 test('preflight targets only the existing Linux runner and cannot build, delete, or deploy',()=>{
  assert(fs.existsSync(path),'Missing isolated Linux preflight workflow');
  const workflow=JSON.parse(fs.readFileSync(path,'utf8'));
- assert.deepEqual(workflow.on,{push:{branches:['codex/nobel-runner-recovery-20261104']},workflow_dispatch:{}});
+ assert.deepEqual(workflow.on,{workflow_dispatch:{}});
  assert.deepEqual(workflow.permissions,{contents:'read'});
  const job=workflow.jobs.preflight;
  assert.deepEqual(job['runs-on'],['self-hosted','Linux','X64','openmaic','cloud-ci']);

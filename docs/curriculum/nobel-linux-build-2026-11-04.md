@@ -82,3 +82,33 @@ rollback and public end-to-end verification each need their own evidence. The
 legacy content-only publisher still has an unresolved shared-file lease recovery
 issue and must not be executed. The current work has changed no production
 containers, content, model routes, Caddy configuration, DNS or billing settings.
+
+## Application routing and scoped catalog plan
+
+The six known Nobel legacy lecture URL families are now handled in a learner-only
+server layout. A redirect activates only after the existing filesystem reader
+finds the matching native discussion edition in the published catalog and validates
+its classroom file. Other course IDs do not read the catalog through this resolver.
+The dynamic layout reads the mounted publication state, so staging a draft does
+not change legacy links. Four resolver tests and independent technical review
+passed; real server/browser navigation is still pending. Next may emit HTTP 307
+or a streaming client redirect: acceptance must navigate the old link in the real
+browser and verify the final native classroom URL and frozen classroom data.
+
+This makes changing the shared Caddyfile unnecessary for legacy-link compatibility.
+The old publisher must still not run; prepare a content-only transaction using
+the existing unchanged-Caddy guard and the new pure catalog planner.
+
+`scripts/learner/nobel-catalog-merge.py` preserves all current metadata and course
+additions, changing only the six approved IDs. It rejects missing/changed source
+versions, duplicates, and moved series ownership. Six tests and independent review
+passed. Applying it to both real archived baseline files yields exactly the two
+approved frozen metadata objects. It is a planning function with no publishing I/O.
+
+At 2026-11-04T04:25Z the production image remained `3cb7e161...` / source `8dc9efc2...`,
+restart count zero, health 200. Both production metadata hashes remained unchanged,
+and the six current Nobel classrooms still contained one teacher and zero discussion
+actions. No production writes were made. A read-only dependency inode measurement
+was queued as run `41771991875`; subsequent preflights are manual-only to avoid
+unnecessary push-triggered checks. API core quota was exhausted again; the published
+reset is 2026-11-04T04:48:35Z. No alternate credentials or status paths were used.

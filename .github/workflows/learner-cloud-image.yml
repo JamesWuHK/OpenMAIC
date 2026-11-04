@@ -56,7 +56,7 @@
         },
         {
           "name": "Ownership and packaging regression",
-          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nnode --test tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs"
+          "run": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/ci -p test_nobel_resources.py\nPYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/learner -p test_nobel_catalog_merge.py\nnode --test tests/ci/nobel-runner-preflight.test.mjs tests/ci/nobel-image-workflow.test.mjs tests/ci/learner-image-prompt-inputs.test.mjs\nnode --experimental-strip-types --test tests/learner/legacy-nobel-redirect.test.mjs"
         },
         {
           "name": "Relevant regression tests",
