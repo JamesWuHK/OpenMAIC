@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { ASR_PROVIDERS } from '@/lib/audio/constants';
 import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { normalizeASRUploadAudio } from '@/lib/audio/wav-utils';
 import { createLogger } from '@/lib/logger';
 
@@ -108,6 +109,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
         // operator force-off locally before invoking the Web Speech API.
         const serverDisabledError = getASRServerDisabledError(asrProvidersConfig[asrProviderId]);
         if (serverDisabledError) {
+          busyRef.current = false;
           onError?.(serverDisabledError);
           return;
         }
@@ -116,6 +118,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
         if (asrProviderId === 'browser-native') {
           // Check if Speech Recognition is supported
           if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+            busyRef.current = false;
             onError?.('您的浏览器不支持语音识别功能');
             return;
           }
@@ -125,9 +128,17 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API instance shape isn't in lib.dom
           const recognition: any = new SpeechRecognitionCtor();
 
-          recognition.lang = asrLanguage || 'zh-CN';
+          // Existing learner profiles saved the old generic `zh` default.
+          // Treat that ambiguous value as Cantonese for the Hong Kong site;
+          // an explicit language selection still takes precedence.
+          recognition.lang =
+            isLearnerDeployment() && (!asrLanguage || asrLanguage === 'zh')
+              ? 'zh-HK'
+              : asrLanguage || 'zh-CN';
           recognition.continuous = continuous;
           recognition.interimResults = false;
+          let hasFinalTranscript = false;
+          let hasRecognitionError = false;
 
           recognition.onstart = () => {
             setIsRecording(true);
@@ -157,11 +168,13 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
               }
             }
             if (transcript) {
+              hasFinalTranscript = true;
               onTranscription?.(transcript);
             }
           };
 
           recognition.onerror = (event: { error: string }) => {
+            hasRecognitionError = true;
             log.error('Speech recognition error:', event.error);
             let errorMessage = '语音识别失败';
 
@@ -177,7 +190,9 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
                 }
                 return;
               case 'no-speech':
-                errorMessage = '未检测到语音输入';
+                errorMessage = isLearnerDeployment()
+                  ? '未聽到你的問題，請再說一次，或改用文字輸入。'
+                  : '未检测到语音输入';
                 break;
               case 'audio-capture':
                 errorMessage = '无法访问麦克风';
@@ -203,6 +218,13 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           };
 
           recognition.onend = () => {
+            if (!hasFinalTranscript && !hasRecognitionError) {
+              onError?.(
+                isLearnerDeployment()
+                  ? '未聽到你的問題，請再說一次，或改用文字輸入。'
+                  : '未检测到语音问题，请重试或改用文字输入',
+              );
+            }
             busyRef.current = false;
             setIsRecording(false);
             setRecordingTime(0);
@@ -300,6 +322,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
     if (speechRecognitionRef.current) {
       speechRecognitionRef.current.onresult = null; // Prevent transcription callback
       speechRecognitionRef.current.onerror = null; // Suppress browser abort error events
+      speechRecognitionRef.current.onend = null; // Cancel must not report a missing question
       speechRecognitionRef.current.stop();
       speechRecognitionRef.current = null;
       busyRef.current = false;

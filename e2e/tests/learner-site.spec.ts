@@ -178,3 +178,69 @@ test('Nobel lecture question control opens a private, age-appropriate Q&A panel'
     await expect(questionInput).toBeHidden();
   }
 });
+
+test('spoken Cantonese question reaches the classroom agent', async ({ page }) => {
+  const question = '老師，點解兩種氣味會唔同？';
+  await page.addInitScript((transcript) => {
+    class FakeSpeechRecognition {
+      lang = '';
+      continuous = false;
+      interimResults = false;
+      onstart: (() => void) | null = null;
+      onresult: ((event: unknown) => void) | null = null;
+      onerror: ((event: unknown) => void) | null = null;
+      onend: (() => void) | null = null;
+
+      start() {
+        document.documentElement.dataset.testAsrLanguage = this.lang;
+        window.setTimeout(() => {
+          this.onstart?.();
+          this.onresult?.({
+            resultIndex: 0,
+            results: { 0: { 0: { transcript }, isFinal: true }, length: 1 },
+          });
+          this.onend?.();
+        }, 50);
+      }
+
+      stop() {
+        this.onend?.();
+      }
+
+      abort() {
+        this.onend?.();
+      }
+    }
+
+    Object.defineProperty(window, 'webkitSpeechRecognition', {
+      configurable: true,
+      value: FakeSpeechRecognition,
+    });
+  }, question);
+
+  await page.route('**/api/classroom?id=*', async (route) => {
+    const fixture = await readFile(
+      path.join(
+        process.cwd(),
+        'e2e',
+        'fixtures',
+        'nobel-interaction',
+        'hk-nobel-01-kagan-lecture-v4.json',
+      ),
+      'utf8',
+    );
+    await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
+  });
+
+  await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
+  await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
+  const interactionPanel = page.locator('#nobel-classroom-interaction');
+  const request = page.waitForRequest(
+    (candidate) =>
+      candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
+  );
+  await interactionPanel.locator('button:has(svg.lucide-mic):visible').last().click();
+  await request;
+  await expect(page.locator('html')).toHaveAttribute('data-test-asr-language', 'zh-HK');
+  await expect(interactionPanel.getByText(question)).toBeVisible();
+});

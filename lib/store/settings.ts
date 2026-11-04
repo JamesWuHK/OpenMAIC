@@ -41,6 +41,7 @@ import {
 } from '@/lib/store/settings-validation';
 import { createKVPersistStorage, purgeLegacyPersistKey } from '@/lib/store/kv-persist';
 import { isTTSProviderEnabled } from '@/lib/audio/provider-enablement';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 
 const log = createLogger('Settings');
 
@@ -497,7 +498,7 @@ const getDefaultAudioConfig = () => ({
   ttsVoice: 'default',
   ttsSpeed: 1.0,
   asrProviderId: 'browser-native' as ASRProviderId,
-  asrLanguage: 'zh',
+  asrLanguage: isLearnerDeployment() ? 'zh-HK' : 'zh',
   ttsProvidersConfig: {
     // Built-in providers default enabled:true — they only ever surface once
     // configured (API key or server-managed), so "enabled" is a user opt-OUT,
@@ -1420,7 +1421,7 @@ export const useSettingsStore = create<SettingsState>()(
               asrProvidersConfig: rest as typeof state.asrProvidersConfig,
               ...(state.asrProviderId === id && {
                 asrProviderId: 'browser-native' as ASRProviderId,
-                asrLanguage: 'zh',
+                asrLanguage: isLearnerDeployment() ? 'zh-HK' : 'zh',
               }),
             };
           }),
