@@ -470,7 +470,7 @@ export function useDiscussionTTS({
           messageId,
           `stream-${state.partIndex}`,
           state.pending,
-          agentId ?? state.agentId,
+          state.agentId ?? agentId,
         );
       }
       streamingSpeechRef.current.delete(messageId);

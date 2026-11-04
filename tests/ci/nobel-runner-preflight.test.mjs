@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import test from 'node:test';
+const path=new URL('../../.github/workflows/nobel-runner-preflight.yml',import.meta.url);
+test('preflight targets only the existing Linux runner and cannot build, delete, or deploy',()=>{
+ assert(fs.existsSync(path),'Missing isolated Linux preflight workflow');
+ const workflow=JSON.parse(fs.readFileSync(path,'utf8'));
+ assert.deepEqual(workflow.on,{push:{branches:['codex/nobel-runner-recovery-20261104']},workflow_dispatch:{}});
+ assert.deepEqual(workflow.permissions,{contents:'read'});
+ const job=workflow.jobs.preflight;
+ assert.deepEqual(job['runs-on'],['self-hosted','Linux','X64','openmaic','cloud-ci']);
+ assert(job['timeout-minutes']<=10);
+ assert.deepEqual(Object.keys(workflow.jobs),['preflight']);
+ assert.equal(job.steps.length,2);
+ assert.match(job.steps[0].uses,/^actions\/checkout@[a-f0-9]{40}$/);
+ assert.equal(job.steps[0].with['persist-credentials'],false);
+ const run=job.steps[1].run;
+ assert.match(run,/MemAvailable/);assert.match(run,/5242880/);assert.match(run,/20971520/);
+ assert(!/docker\s+(run|build|rm|stop|kill|prune|pull|push|compose)|\bsudo\b|\b(rm|curl|wget)\b|secrets\.|API_KEY|workflow_dispatch\/|gh api/i.test(run),'Preflight must remain read-only and credential-free');
+});

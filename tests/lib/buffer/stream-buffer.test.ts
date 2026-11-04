@@ -360,3 +360,27 @@ describe('StreamBuffer Pi wrap-up ordering', () => {
     expect(actionSignal?.aborted).toBe(true);
   });
 });
+
+
+describe('SSE speech ownership ahead of the reveal cursor', () => {
+  it('seals each pending sentence with its actual message owner before any reveal tick', () => {
+    const owners: Array<{ messageId: string; agentId: string | null }> = [];
+    const buffer = new StreamBuffer({
+      onAgentStart() {}, onAgentEnd() {}, onTextReveal() {}, onActionReady() {},
+      onLiveSpeech() {}, onSpeechProgress() {}, onThinking() {}, onCueUser() {},
+      onDone() {}, onError(message) { throw new Error(message); },
+      onSegmentSealed(messageId, _partId, _text, agentId) { owners.push({ messageId, agentId }); },
+    });
+    buffer.pushAgentStart({ messageId: 'student-message', agentId: 'student', agentName: 'Student' });
+    buffer.pushText('student-message', 'Student sentence.', 'student');
+    buffer.pushAgentEnd({ messageId: 'student-message', agentId: 'student' });
+    buffer.pushAgentStart({ messageId: 'teacher-message', agentId: 'teacher', agentName: 'Teacher' });
+    buffer.pushText('teacher-message', 'Teacher sentence.', 'teacher');
+    buffer.pushAgentEnd({ messageId: 'teacher-message', agentId: 'teacher' });
+    expect(owners).toEqual([
+      { messageId: 'student-message', agentId: 'student' },
+      { messageId: 'teacher-message', agentId: 'teacher' },
+    ]);
+    buffer.shutdown();
+  });
+});
