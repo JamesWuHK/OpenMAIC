@@ -37,8 +37,8 @@
           "working-directory": "ci/sakaguchi-release"
         },
         {
-          "name": "Verify published series entry and remaining Mandarin playback",
-          "run": "node ci/sakaguchi-release/postrelease.mjs"
+          "name": "Capture fully decoded published desktop slide",
+          "run": "node ci/sakaguchi-release/postrelease-desktop.mjs"
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
