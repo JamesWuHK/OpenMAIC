@@ -26,6 +26,7 @@ test('fluency fails closed on missing metrics or slow sound; user think time is 
  assert.equal(assessNativeLatency(good,true).passed,false);
  assert.equal(assessNativeLatency({...good,actions:[{kind:'join',firstTextMs:500,firstSoundMs:9000}]},false).passed,false);
  assert.equal(assessNativeLatency({...good,actions:[]},false).passed,false);
+ assert.equal(assessNativeLatency({...good,gaps:[{ms:-500,sameRole:false,crossesUserAction:false}]},false).passed,false);
 });
 test('real error before completion remains a failure',async()=>{
  const {state,a}=fixture();await a.play();a.error={code:4};a.emit('error');

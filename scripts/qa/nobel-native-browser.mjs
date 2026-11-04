@@ -185,6 +185,7 @@ try{
   record.allGeneratedTextVisible=record.generatedReplies.every(r=>visible.includes(r.text.replace(/\s/g,'')));
   assert(record.generatedReplies.length>=2,'No multi-role reply');
   assert(new Set(record.generatedReplies.map(r=>r.agentId)).size>=2,'Only one role spoke');
+  for(const agent of data.stage.generatedAgentConfigs)assert(record.generatedReplies.some(r=>r.agentId===agent.id&&r.text.trim()),'Required authored role did not speak: '+agent.id);
   assert(record.allGeneratedTextVisible,'Generated text did not fully reach visible transcript');
   assert(record.chat.every(x=>x.status===200&&x.done&&!x.errors.length),'Chat protocol error');
   assert(record.speech.length&&record.speech.every(x=>x.status===200),'Speech request failed');

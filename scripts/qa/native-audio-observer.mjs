@@ -97,7 +97,7 @@ export function assessNativeLatency(latency, followupRequired) {
  for(const gap of latency.gaps){
   if(gap.crossesUserAction)continue;
   const targetMs=gap.sameRole?targets.segmentGapMs:targets.roleGapMs;
-  if(!Number.isFinite(gap.ms)||gap.ms>targetMs)failures.push({...gap,targetMs});
+  if(!Number.isFinite(gap.ms)||gap.ms>targetMs||gap.ms < -50)failures.push({...gap,targetMs});
  }
  return {targets,passed:failures.length===0,failures,
   scope:'Observed runs only; insufficient samples to claim production p95. First text is received SSE, first sound is browser playback state.'};
