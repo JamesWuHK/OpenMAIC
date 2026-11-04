@@ -361,3 +361,29 @@ Do not deploy b75 over that newer microphone/interaction work. A standalone,
 unintegrated one-next-clip synthesis helper has five cancellation/cache tests
 and independent technical review PASS. Its integration must preserve the other
 chat's current TTS retry work and the existing reused-Audio/pause/stop behavior.
+
+## User-selected self-hosted execution, latest 09:00 UTC evidence
+
+The user explicitly selected the existing selfrunner for subsequent work.
+`openmaic-cloud-linux` (runner21) was initially offline, then recovered before
+the new read-only preflight ran; root did not restart a host or create a machine.
+[Preflight41803912418](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41803912418)
+ran on `grok-bot-vm-450431152`: available RAM10,663,252KiB, Docker disk69,159,188KiB,
+and537,475 free inodes. It correctly FAILED the unchanged1,000,000-inode gate.
+Do not relabel this as a successful full-build preflight or remove another
+task's files/cache to force it through.
+
+Both build and native-QA jobs now honor the existing runner choice; omitted
+choice defaults to the five self-hosted labels. Standard public Ubuntu requires
+an explicit selection and is never a fallback. Self-hosted relay handshakes
+truthfully report non-ephemeral identity, checked against the active GitHub
+job's runner name and all five labels before any runner-only firewall opening.
+No relay, firewall or production changes were performed for this switch.
+
+The preflight workflow also offers an explicit `speech` suite: dependency-free
+Node tests for lookahead, reused-Audio lifecycle, six-course turn policy and the
+latency observer. It does not build, install dependencies, start Docker, call a
+model or deploy. It is separate from the unchanged full-capacity gate. Static
+independent technical review passed; actual selfrunner speech-suite result is
+pending below. Neither this routing change nor those unit tests establish
+fluent discussion or close the scientific-content blockers.

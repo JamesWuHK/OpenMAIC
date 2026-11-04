@@ -81,6 +81,12 @@ def validate_acceptance(acceptance, source, image_id):
 
 
 def prepare():
+    runner_kind = os.environ.get('QA_RUNNER_KIND', 'self-hosted')
+    runner_name = os.environ.get('RUNNER_NAME', '')
+    if runner_kind not in ['self-hosted', 'public-standard'] or not runner_name:
+        raise RuntimeError('Missing explicit runner identity')
+    if runner_kind == 'self-hosted' and runner_name != 'openmaic-cloud-linux':
+        raise RuntimeError('Expected the existing OpenMAIC self-hosted runner')
     source, run_id = os.environ['CANDIDATE_SOURCE_SHA'], os.environ['IMAGE_RUN_ID']
     if not re.fullmatch('[a-f0-9]{40}', source) or not re.fullmatch(r'\d+', run_id):
         raise ValueError('Invalid tested image identity')
@@ -167,7 +173,8 @@ def prepare():
                  'imageSource': source, 'image': image_id, 'buildRun': run_id,
                  'qaRun': os.environ['GITHUB_RUN_ID'], 'qaAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
                  'qaJob': os.environ['GITHUB_JOB'],
-                 'ephemeralPublicRunner': True, 'published': False}
+                 'runnerKind': runner_kind, 'runnerName': runner_name,
+                 'ephemeralPublicRunner': runner_kind == 'public-standard', 'published': False}
     (task / 'evidence/handshake.json').write_text(json.dumps(handshake, indent=2))
     with open(os.environ['GITHUB_ENV'], 'a') as env:
         env.write('IMAGE_TAG=' + image_id + '\n')

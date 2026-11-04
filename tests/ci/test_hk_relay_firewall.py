@@ -82,6 +82,39 @@ class RunnerOnlyFirewall(unittest.TestCase):
                 firewall.download_handshake('123', 1, self.sha)
             download.assert_not_called()
 
+    def test_existing_selfrunner_is_verified_by_name_and_all_labels(self):
+        handshake = dict(self.handshake, ephemeralPublicRunner=False,
+                         runnerKind='self-hosted', runnerName='openmaic-cloud-linux')
+        labels = ['self-hosted', 'Linux', 'X64', 'openmaic', 'cloud-ci']
+        for name, actual_labels, allowed in [('openmaic-cloud-linux', labels, True),
+                                            ('another-machine', labels, False),
+                                            ('openmaic-cloud-linux', labels[:-1], False)]:
+            jobs = {'jobs': [{'name': 'native_qa', 'status': 'in_progress',
+                              'labels': actual_labels, 'runner_name': name}]}
+            with self.subTest(name=name, labels=actual_labels), tempfile.TemporaryDirectory() as directory:
+                with patch.object(firewall, 'command', side_effect=[self.run, jobs]), \
+                        patch.object(firewall, 'download_handshake', return_value=(handshake, {})), \
+                        patch.object(firewall, 'rules', side_effect=[[self.https], [self.https, dict(self.rule, state='open')]]), \
+                        patch.object(firewall, 'aws') as aws:
+                    if allowed:
+                        firewall.open_rule(directory, '123', self.sha, self.image)
+                        aws.assert_called_once()
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, 'runner does not match'):
+                            firewall.open_rule(directory, '123', self.sha, self.image)
+                        aws.assert_not_called()
+
+    def test_selfrunner_cannot_claim_to_be_an_ephemeral_public_runner(self):
+        jobs = {'jobs': [{'name': 'native_qa', 'status': 'in_progress',
+                          'labels': ['self-hosted', 'ubuntu-24.04'], 'runner_name': 'openmaic-cloud-linux'}]}
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(firewall, 'command', side_effect=[self.run, jobs]), \
+                    patch.object(firewall, 'download_handshake', return_value=(self.handshake, {})), \
+                    patch.object(firewall, 'aws') as aws:
+                with self.assertRaisesRegex(RuntimeError, 'runner does not match'):
+                    firewall.open_rule(directory, '123', self.sha, self.image)
+                aws.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

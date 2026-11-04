@@ -14,6 +14,13 @@ spec.loader.exec_module(qa)
 
 
 class NativeQAInputs(unittest.TestCase):
+    def test_wrong_selfrunner_is_rejected_before_any_artifact_or_cloud_access(self):
+        with patch.dict(os.environ, {'QA_RUNNER_KIND': 'self-hosted', 'RUNNER_NAME': 'another-machine'}), \
+                patch.object(qa.owned, 'command') as command:
+            with self.assertRaisesRegex(RuntimeError, 'existing OpenMAIC self-hosted runner'):
+                qa.prepare()
+            command.assert_not_called()
+
     def test_git_request_is_explicit_and_cannot_supply_any_provider_secret(self):
         request = {'nonce': 'c' * 32, 'image_run_id': '123', 'image_source': 'a' * 40,
                    'relay_url': 'https://8.8.8.8:8787/v1', 'relay_ca_base64': 'public-CA-placeholder',

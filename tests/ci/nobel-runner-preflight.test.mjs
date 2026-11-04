@@ -5,10 +5,12 @@ const path=new URL('../../.github/workflows/nobel-runner-preflight.yml',import.m
 test('preflight targets only the existing Linux runner and cannot build, delete, or deploy',()=>{
  assert(fs.existsSync(path),'Missing isolated Linux preflight workflow');
  const workflow=JSON.parse(fs.readFileSync(path,'utf8'));
- assert.deepEqual(workflow.on,{workflow_dispatch:{}});
+ assert.deepEqual(Object.keys(workflow.on),['workflow_dispatch']);
+ assert.deepEqual(workflow.on.workflow_dispatch.inputs.suite,{description:'Read-only capacity check or dependency-free speech regression checks',type:'choice',required:true,default:'capacity',options:['capacity','speech']});
  assert.deepEqual(workflow.permissions,{contents:'read'});
  const job=workflow.jobs.preflight;
  assert.deepEqual(job['runs-on'],['self-hosted','Linux','X64','openmaic','cloud-ci']);
+ assert.equal(job.env.PREFLIGHT_SUITE,"${{ inputs.suite || 'capacity' }}");
  assert(job['timeout-minutes']<=10);
  assert.deepEqual(Object.keys(workflow.jobs),['preflight']);
  assert.equal(job.steps.length,2);
@@ -19,5 +21,7 @@ test('preflight targets only the existing Linux runner and cannot build, delete,
  assert.match(run,/MemAvailable/);assert.match(run,/5242880/);assert.match(run,/20971520/);
  assert.match(run,/find node_modules -xdev/);
  assert.match(run,/sha256sum pnpm-lock.yaml/);
+ assert.match(run,/speech-lookahead.test.mjs/);
+ assert.match(run,/case "\$PREFLIGHT_SUITE" in/);
  assert(!/docker\s+(run|build|rm|stop|kill|prune|pull|push|compose)|\bsudo\b|\b(rm|curl|wget)\b|secrets\.|API_KEY|workflow_dispatch\/|gh api/i.test(run),'Preflight must remain read-only and credential-free');
 });

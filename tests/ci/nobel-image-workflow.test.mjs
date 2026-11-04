@@ -33,7 +33,8 @@ test('image workflow is bounded, manual on the recovery branch, and contains no 
   assert(!/secrets\.|docker\s+(prune|system\s+prune|push)|--with-deps|learner-candidate/.test(JSON.stringify(job)));
   assert(job.steps.some(step => step.if === 'always()' && step.run?.includes('nobel-resources.py cleanup')));
   const qa = workflow.jobs.native_qa;
-  assert.equal(qa['runs-on'], 'ubuntu-24.04');
+  assert.equal(qa['runs-on'], job['runs-on']);
+  assert.equal(qa.env.QA_RUNNER_KIND, "${{ inputs.runner || 'self-hosted' }}");
   assert(qa.if.includes("github.event.repository.visibility == 'public'"));
   assert(qa.if.includes('github.event.repository.private == false'));
   assert.equal(qa.env.QA_RELAY_TOKEN, '${{ secrets.NOBEL_QA_RELAY_TOKEN }}');

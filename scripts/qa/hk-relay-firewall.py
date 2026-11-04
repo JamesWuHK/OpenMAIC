@@ -86,7 +86,7 @@ def open_rule(session, run_id, expected_source, image_source):
         raise RuntimeError('Expected active exact-source native workflow')
     handshake, provenance = download_handshake(run_id, run['run_attempt'], expected_source)
     if (handshake['workflowSource'] != expected_source or handshake['imageSource'] != image_source or
-            handshake.get('ephemeralPublicRunner') is not True or handshake.get('published') is not False or
+            handshake.get('published') is not False or
             handshake.get('qaRun') != run_id or handshake.get('qaAttempt') != str(run['run_attempt']) or
             handshake.get('qaJob') != 'native_qa'):
         raise RuntimeError('Runner handshake identity mismatch')
@@ -95,8 +95,20 @@ def open_rule(session, run_id, expected_source, image_source):
         raise ValueError('Expected public runner IPv4')
     jobs = command(['gh', 'api', f'repos/{REPO}/actions/runs/{run_id}/jobs'])['jobs']
     active = [job for job in jobs if job['name'] == 'native_qa' and job['status'] == 'in_progress']
-    if len(active) != 1 or 'ubuntu-24.04' not in active[0].get('labels', []):
-        raise RuntimeError('Expected the active standard Ubuntu QA job')
+    if len(active) != 1:
+        raise RuntimeError('Expected one active native QA job')
+    job = active[0]
+    labels = set(job.get('labels', []))
+    if handshake.get('ephemeralPublicRunner') is True:
+        valid_runner = ('ubuntu-24.04' in labels and 'self-hosted' not in labels and
+                        handshake.get('runnerKind', 'public-standard') == 'public-standard')
+    else:
+        valid_runner = (handshake.get('ephemeralPublicRunner') is False and
+                        handshake.get('runnerKind') == 'self-hosted' and
+                        handshake.get('runnerName') == job.get('runner_name') == 'openmaic-cloud-linux' and
+                        {'self-hosted', 'Linux', 'X64', 'openmaic', 'cloud-ci'}.issubset(labels))
+    if not valid_runner:
+        raise RuntimeError('Active QA runner does not match the authenticated handshake')
     before = rules()
     if any(overlaps(row) for row in before):
         raise RuntimeError('Relay port already has an owner; do not merge or replace its rule')
