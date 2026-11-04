@@ -1,0 +1,49 @@
+{
+  "name": "Nobel07 clean stopped owned dependencies only",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/nobel07-owned-cleanup-20261104"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "nobel07-native-app-existing-linux",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "clean": {
+      "runs-on": [
+        "self-hosted",
+        "Linux",
+        "X64",
+        "openmaic",
+        "cloud-ci"
+      ],
+      "timeout-minutes": 12,
+      "steps": [
+        {
+          "name": "Verify stopped run ownership and remove only generated dependencies",
+          "env": {
+            "GITHUB_TOKEN": "${{ github.token }}"
+          },
+          "run": "python3 - <<'CLEAN'\nimport os,json,subprocess,shutil,urllib.request,time\nfrom pathlib import Path\nassert os.environ['GITHUB_REPOSITORY']=='JamesWuHK/OpenMAIC' and os.environ['RUNNER_NAME']=='openmaic-cloud-linux' and os.getuid()!=0\nbase=Path(os.environ['GITHUB_WORKSPACE']);assert base.resolve()==Path('/opt/actions-runner/openmaic/_work/OpenMAIC/OpenMAIC') and not base.is_symlink()\nruns={41777552065:'b19650ea53bae52470607e743a3bf312e21f4a28',41782220557:'83dbc2d1ec76f5d796ad949469fc7d6e5677640f',41784400886:'e9d8836283595fefb98e6a93d6fbad2ea78d4d12',41790523813:'fd37afce3109da61825d105af96c13ec22b6eab4'}\nout=Path(os.environ['RUNNER_TEMP'])/f\"nobel07-owned-cleanup-{os.environ['GITHUB_RUN_ID']}\";out.mkdir(exist_ok=True)\ndef capacity():\n s=os.statvfs(base);return {'freeBytes':s.f_bavail*s.f_frsize,'freeInodes':s.f_favail}\nreport={'startedAt':time.time(),'before':capacity(),'records':[],'sharedCacheDeleted':False,'dockerPrunePerformed':False,'productionTouched':False}\ndef save(): (out/'report.json').write_text(json.dumps(report,indent=2)+'\\n')\nsave()\nfor run,sha in runs.items():\n request=urllib.request.Request(f'https://api.github.com/repos/JamesWuHK/OpenMAIC/actions/runs/{run}',headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'})\n with urllib.request.urlopen(request,timeout=20) as response: state=json.load(response)\n assert state['head_sha']==sha and state['head_branch']=='codex/nobel07-native-app-20261104' and state['status']=='completed' and state['conclusion'] in ['failure','cancelled'],f'Run {run} is not an eligible stopped failed run'\n for attempt in range(1,state['run_attempt']+1):\n  workspace=base/f'nobel07-app-{run}-{attempt}';record={'run':run,'attempt':attempt,'workspace':workspace.name,'removed':[],'skipped':[]};report['records'].append(record);save()\n  if not workspace.exists():record['absent']=True;save();continue\n  assert not workspace.is_symlink() and workspace.resolve().parent==base and workspace.stat().st_uid==os.getuid()\n  actual=subprocess.check_output(['git','-C',str(workspace),'rev-parse','HEAD'],text=True).strip();assert actual==sha\n  # A stopped workflow must also have no live process rooted in its old workspace.\n  for proc in Path('/proc').iterdir():\n   if not proc.name.isdigit():continue\n   try: cwd=(proc/'cwd').resolve(strict=True)\n   except (OSError,RuntimeError):continue\n   assert cwd!=workspace and workspace not in cwd.parents,f'Live process still uses {workspace.name}; no cleanup'\n  ids=subprocess.check_output(['docker','ps','-q'],text=True).split()\n  for cid in ids:\n   mounts=json.loads(subprocess.check_output(['docker','inspect','--format','{{json .Mounts}}',cid],text=True))\n   for mount in mounts:\n    source=Path(mount.get('Source','/'));assert source!=workspace and workspace not in source.parents,'Active container mount protects this workspace'\n  tracked=subprocess.check_output(['git','-C',str(workspace),'ls-files','packages/**/package.json'],text=True).splitlines()\n  targets=[workspace/'node_modules',workspace/'ci/nobel07-native/node_modules']+[workspace/Path(f).parent/'node_modules' for f in tracked]\n  for target in dict.fromkeys(targets):\n   if not target.exists() and not target.is_symlink():continue\n   assert target.name=='node_modules' and workspace in target.parents\n   if target.is_symlink():record['skipped'].append(str(target.relative_to(workspace)));continue\n   assert target.resolve().is_relative_to(workspace)\n   size=subprocess.run(['du','-sk',str(target)],capture_output=True,text=True,timeout=60);beforeKiB=int(size.stdout.split()[0]) if size.returncode==0 else None\n   shutil.rmtree(target);record['removed'].append({'path':str(target.relative_to(workspace)),'allocatedKiBBefore':beforeKiB});save()\nreport.update(completedAt=time.time(),after=capacity(),verdict='COMPLETED_OWNED_DEPENDENCIES_ONLY');save();print(json.dumps(report))\nCLEAN\n"
+        },
+        {
+          "name": "Save exact cleanup receipt",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "nobel07-owned-cleanup-${{ github.run_id }}",
+            "path": "${{ runner.temp }}/nobel07-owned-cleanup-${{ github.run_id }}/",
+            "retention-days": 7
+          }
+        }
+      ]
+    }
+  }
+}
