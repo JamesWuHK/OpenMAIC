@@ -11,7 +11,7 @@ while True:
  memory=int(next(s.split()[1] for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:')));disk=shutil.disk_usage(w).free
  samples.append({'at':time.time(),'availableKiB':memory,'freeDiskBytes':disk});(a/'nobel07-build-resource.json').write_text(json.dumps({'samples':samples,'requiredAvailableKiB':8*1024**2,'requiredFreeDiskBytes':20*1024**3,'newMachineCreated':False,'productionTouched':False})+'\n')
  if memory>=8*1024**2 and disk>=20*1024**3:break
- assert time.monotonic()-started<180,f'Cloud reserve insufficient: availableMiB={memory//1024},freeGiB={disk/1024**3:.2f}; required 8GiB RAM/20GiB disk; no build started'
+ assert time.monotonic()-started<900,f'Cloud reserve insufficient: availableMiB={memory//1024},freeGiB={disk/1024**3:.2f}; required 8GiB RAM/20GiB disk; no build started'
  time.sleep(5)
 expected=json.loads((q/'expected.json').read_text());raw=(q/'course-package.zip').read_bytes();assert hashlib.sha256(raw).hexdigest()==expected['zipSHA256'];cid=expected['courseId'];assert cid=='hk-nobel-07-sakaguchi-lecture-v1'
 folder=w/'data/classrooms'/cid;folder.mkdir(parents=True,exist_ok=False)
