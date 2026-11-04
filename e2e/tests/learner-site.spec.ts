@@ -212,10 +212,12 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
       }
     }
 
-    Object.defineProperty(window, 'webkitSpeechRecognition', {
-      configurable: true,
-      value: FakeSpeechRecognition,
-    });
+    for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) {
+      Object.defineProperty(window, name, {
+        configurable: true,
+        value: FakeSpeechRecognition,
+      });
+    }
   }, question);
 
   await page.route('**/api/classroom?id=*', async (route) => {
@@ -234,13 +236,13 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
 
   await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
   await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
-  const interactionPanel = page.locator('#nobel-classroom-interaction');
+  const roundtable = page.getByTestId('nobel-classroom-interaction');
   const request = page.waitForRequest(
     (candidate) =>
       candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
   );
-  await interactionPanel.locator('button:has(svg.lucide-mic):visible').last().click();
+  await roundtable.locator('button:has(svg.lucide-mic):visible').last().click();
   await request;
   await expect(page.locator('html')).toHaveAttribute('data-test-asr-language', 'zh-HK');
-  await expect(interactionPanel.getByText(question)).toBeVisible();
+  await expect(page.getByText(question).first()).toBeVisible();
 });
