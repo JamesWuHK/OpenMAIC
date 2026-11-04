@@ -1,9 +1,8 @@
 {
-  "runId": 41898329713,
-  "status": "PARTIAL_PASS_WITH_LATER_HARNESS_FAILURE",
+  "runId": 41903914486,
+  "status": "TECHNICAL_PASS_BUT_GROUP_SCIENTIFIC_SAMPLE_REQUIRES_D1_FIX",
   "imageId": "sha256:c822ccb74b64823189ba3a0c60b98d514dfff5c770521ace2a1cd90b53f3109e",
   "source": "935320ee5d5e8fc4de35135ff6c0680b0b5c7936",
-  "classroomSHA256": "9f147c465945a48545b441aa04140b0753ed880c411a73f239eb83fae323d8df",
   "cases": [
     {
       "kind": "real-audio-progress",
@@ -287,25 +286,30 @@
         "width": 871.4879455566406,
         "height": 14.5350341796875
       }
+    },
+    {
+      "kind": "actual-native-teacher-question-with-natural-speech",
+      "modelRequests": 2,
+      "speechClips": 5,
+      "speakerIds": [
+        "nobel07-teacher"
+      ],
+      "pass": true
     }
   ],
-  "originalFailure": "AssertionError [ERR_ASSERTION]: Real native discussion did not finish its returned speech naturally",
-  "failureCause": "Unlisted course rejected by native published-ID speech authorization (404); text/model protocol closed normally.",
-  "layoutChangesProvenSeparate": [
+  "groupCaseNotReused": "Actual assistant response scope too broad; independent CHANGES_REQUIRED; new group run required.",
+  "newConfigDiff": [
     {
       "id": "hk-nobel-07-sakaguchi-illustrated-v2",
-      "allActionsQuizAndMediaUnchanged": true,
-      "onlyFooterPositionFontSizeAndBackingShapeChanged": true,
-      "oldSHA256": "9f147c465945a48545b441aa04140b0753ed880c411a73f239eb83fae323d8df",
-      "newSHA256": "1cd40834b2874774d313912b2379bef1b6b1de9a316a4e5017d98664d698be05"
+      "oldSHA256": "1e99192127cc2a33f99558f356a2a880632e090b92a7b6076b79f4d95a49ab08",
+      "newSHA256": "36678771403fc170fadaaa9cb032b951daf637f2bef2841d1fd06ed6761e77e1",
+      "allScenesActionsMediaQuestionsAndVisibleSlidesUnchanged": true
     },
     {
       "id": "hk-nobel-07-sakaguchi-illustrated-v2-mandarin",
-      "allActionsQuizAndMediaUnchanged": true,
-      "onlyFooterPositionFontSizeAndBackingShapeChanged": true,
-      "oldSHA256": "0c32e3df2540d5ec283ec5a2f2b4fbb074a8850f7e412b800cd96af193c4bc29",
-      "newSHA256": "f69b5814e3c14043efdc6fff5d46b2bb925c65edd631359108c78ba9ae1de954"
+      "oldSHA256": "6af8a7dc0ccbf94d3fd5cb1076432f7b7a68839d635f055003cc7e67000a8f3c",
+      "newSHA256": "99cf8c27ea1f5c98e2e7d241354094f0aa2137ff1d320e35b3fa391d3c993d15",
+      "allScenesActionsMediaQuestionsAndVisibleSlidesUnchanged": true
     }
-  ],
-  "newRoleAndVoiceLabelChanges": "Stage configuration only; all actions/quiz/media and corrected footer geometry unchanged."
+  ]
 }

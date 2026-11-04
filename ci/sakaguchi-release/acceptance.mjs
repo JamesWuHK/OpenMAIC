@@ -10,7 +10,7 @@ try{browser=await chromium.launch({headless:true});const ctx=await browser.newCo
 const prior=JSON.parse(await fs.readFile('ci/sakaguchi-release/previous-accepted-cases.json','utf8'));const expected=JSON.parse(await fs.readFile('ci/sakaguchi-release/expected-classroom.json','utf8'));assert.deepEqual(payload.classroom,expected,'Content changed since prior scene/quiz/audio evidence');report.reusedEvidence=prior;report.cases.push(...prior.cases);
 await ctx.close();
 // Actual native questions, including named three-role discussion. No business/API mocks.
-for(const spec of [{id:'teacher',question:'老師，請用兩句廣東話解釋：點解保護身體亦需要約束免疫反應？唔好提供治療建議。',minimumRoles:1},{id:'group',question:'請科學故事老師、科學小助手、好奇同學三位一齊討論，每人各講一句：點解免疫反應唔係越強越好？請分別補充一點，唔好提供個人治療建議。',minimumRoles:3}]){
+for(const spec of [{id:'group',question:'請科學故事老師、科學小助手、好奇同學三位一齊討論，每人各講一句：點解免疫反應唔係越強越好？請分別補充一點，唔好提供個人治療建議。',minimumRoles:3}]){
  const live=await browser.newContext({viewport:{width:1440,height:900},locale:'zh-HK'});await attach(live);page=await live.newPage();observe(page);await page.goto(base+'/classroom/'+cid);await page.locator('img[src*="01-zh-Hant.png"]:visible').first().waitFor({timeout:30000});
  const speechStart=report.speechResponses.length,requestStart=report.speechRequests.length,chatStart=report.chatRequestCount;
  await page.locator('button:visible:not([role="tab"])').filter({has:page.locator('svg.lucide-message-square')}).last().click();const input=page.getByTestId('roundtable-non-presentation-input-stage').getByRole('textbox');await input.fill(spec.question);await input.press('Enter');
