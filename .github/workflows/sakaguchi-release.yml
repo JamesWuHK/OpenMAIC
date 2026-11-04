@@ -37,8 +37,8 @@
           "working-directory": "ci/sakaguchi-release"
         },
         {
-          "name": "Validate actual native classroom, quizzes, media and voice switch",
-          "run": "node ci/sakaguchi-release/acceptance.mjs"
+          "name": "Verify published series entry and remaining Mandarin playback",
+          "run": "node ci/sakaguchi-release/postrelease.mjs"
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
