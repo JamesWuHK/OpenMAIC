@@ -189,26 +189,26 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
 
           recognition.onerror = (event: { error: string }) => {
             if (hasEnded) return;
-            hasRecognitionError = true;
             if (stopWatchdogRef.current) {
               clearTimeout(stopWatchdogRef.current);
               stopWatchdogRef.current = null;
             }
+            if (event.error === 'aborted' && recognition.manualStopRequested) {
+              recognition.onend?.();
+              return;
+            }
+            hasRecognitionError = true;
             log.error('Speech recognition error:', event.error);
             let errorMessage = '语音识别失败';
 
             switch (event.error) {
               case 'aborted':
-                // Non-fatal: caused by our own cancel/stop logic or rapid toggle
-                busyRef.current = false;
-                setIsRecording(false);
-                setIsProcessing(false);
-                setRecordingTime(0);
-                if (timerRef.current) {
-                  clearInterval(timerRef.current);
-                  timerRef.current = null;
-                }
-                return;
+                // Cancel removes handlers before stopping. An unexpected
+                // browser abort must not silently discard the learner's turn.
+                errorMessage = isLearnerDeployment()
+                  ? '錄音意外中斷，請再試一次或改用文字輸入。'
+                  : '语音识别已中断';
+                break;
               case 'no-speech':
                 errorMessage = isLearnerDeployment()
                   ? '未聽到你的問題，請再說一次，或改用文字輸入。'
@@ -329,6 +329,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
       const recognition = speechRecognitionRef.current;
       setIsRecording(false);
       setIsProcessing(true);
+      recognition.manualStopRequested = true;
       recognition.stop();
       // Some Chrome sessions never deliver `end` after a manual stop. Finish
       // through the same handler so a partial result is sent or an error is shown.
