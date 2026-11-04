@@ -82,7 +82,7 @@ jobs:
       - name: Image API readiness boundary
         run: node scripts/qa-learner-image-boundary.mjs
       - name: Install CI Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
       - name: Existing learner desktop and mobile browser regression
         run: pnpm exec playwright test --config playwright.learner.config.ts
       - name: Export tested candidate (not deployment approval)
