@@ -122,7 +122,7 @@
           "if": "always()",
           "run": "python3 ci/nobel07-native/app-cleanup.py",
           "env": {
-            "NOBEL07_CLEAN_GENERATED_DEPENDENCIES": "${{ !cancelled() }}"
+            "NOBEL07_CLEAN_GENERATED_DEPENDENCIES": "${{ job.status != 'cancelled' }}"
           }
         },
         {
