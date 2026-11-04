@@ -20,6 +20,7 @@ import { isQwenCloneVoice, resolveTTSModelForVoice } from '@/lib/audio/constants
 import { toast } from 'sonner';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { takeCompleteSpeechSegments } from '@/lib/audio/discussion-speech-segments';
+import { createDiscussionAudioSegment } from '@/lib/audio/discussion-audio-segment';
 import {
   isVoiceBindingUnavailable,
   markVoiceBindingNoticeShown,
@@ -78,6 +79,8 @@ export function useDiscussionTTS({
   const segmentDoneCounterRef = useRef(0);
   const abortControllerRef = useRef<AbortController | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const activeAudioSegmentRef = useRef<ReturnType<typeof createDiscussionAudioSegment> | null>(null);
+  const blockedPlaybackToastRef = useRef<string | number | null>(null);
   const onAudioStateChangeRef = useRef(onAudioStateChange);
   onAudioStateChangeRef.current = onAudioStateChange;
   const processQueueRef = useRef<() => void>(() => {});
@@ -298,38 +301,58 @@ export function useDiscussionTTS({
       if (!data.base64) throw new Error('No audio in response');
 
       const audioUrl = `data:audio/${data.format || 'mp3'};base64,${data.base64}`;
-      const audio = new Audio(audioUrl);
+      // Keep Safari's element permission across clips; segment state is separate.
+      activeAudioSegmentRef.current?.invalidate();
+      const audio = audioRef.current ?? new Audio();
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.src = audioUrl;
       audio.playbackRate = playbackSpeed;
       audio.volume = ttsMuted ? 0 : ttsVolume;
       audioRef.current = audio;
-      audio.addEventListener('ended', () => {
-        audioRef.current = null;
-        isPlayingRef.current = false;
-        segmentDoneCounterRef.current++;
-        onAudioStateChangeRef.current?.(item.agentId, 'idle');
-        if (!pausedRef.current) {
-          queueMicrotask(() => processQueueRef.current());
-        }
+      const segment = createDiscussionAudioSegment(audio, {
+        isCurrent: () => activeAudioSegmentRef.current === segment,
+        isPaused: () => pausedRef.current,
+        setPaused: (value) => { pausedRef.current = value; },
+        onPlaying: () => onAudioStateChangeRef.current?.(item.agentId, 'playing'),
+        onFinish: () => {
+          isPlayingRef.current = false;
+          segmentDoneCounterRef.current++;
+          onAudioStateChangeRef.current?.(item.agentId, 'idle');
+          if (!pausedRef.current) queueMicrotask(() => processQueueRef.current());
+        },
+        onError: () => {
+          if (learner && !failureNoticeShownRef.current) {
+            failureNoticeShownRef.current = true;
+            toast.warning('暫時無法播放討論語音，請稍後重試。');
+          }
+        },
+        onUnblocked: () => {
+          if (blockedPlaybackToastRef.current !== null) {
+            toast.dismiss(blockedPlaybackToastRef.current);
+            blockedPlaybackToastRef.current = null;
+          }
+        },
+        onBlocked: (retry, skip) => {
+          onAudioStateChangeRef.current?.(item.agentId, 'idle');
+          blockedPlaybackToastRef.current = toast.warning('瀏覽器已阻止自動播放討論語音。', {
+            duration: Infinity,
+            action: { label: '播放語音', onClick: retry },
+            cancel: { label: '跳過語音', onClick: skip },
+          });
+        },
       });
-      audio.addEventListener('error', () => {
-        audioRef.current = null;
-        isPlayingRef.current = false;
-        segmentDoneCounterRef.current++;
-        onAudioStateChangeRef.current?.(item.agentId, 'idle');
-        if (!pausedRef.current) {
-          queueMicrotask(() => processQueueRef.current());
-        }
-      });
+      activeAudioSegmentRef.current = segment;
 
       // If paused during TTS generation, keep audio ready but don't play
       if (pausedRef.current) {
-        onAudioStateChangeRef.current?.(item.agentId, 'playing');
+        onAudioStateChangeRef.current?.(item.agentId, 'idle');
         audio.pause();
         return;
       }
 
-      onAudioStateChangeRef.current?.(item.agentId, 'playing');
-      await audio.play();
+      await segment.play();
     } catch (err) {
       const cloneUnavailable =
         err &&
@@ -360,7 +383,6 @@ export function useDiscussionTTS({
           toast.warning('暫時無法播放討論語音，請檢查音量或稍後重試。');
         }
       }
-      audioRef.current = null;
       isPlayingRef.current = false;
       segmentDoneCounterRef.current++;
       onAudioStateChangeRef.current?.(item.agentId, 'idle');
@@ -479,15 +501,18 @@ export function useDiscussionTTS({
   );
 
   const cleanup = useCallback(() => {
+    activeAudioSegmentRef.current?.invalidate();
+    activeAudioSegmentRef.current = null;
     failureNoticeShownRef.current = false;
     pausedRef.current = false;
     currentProviderRef.current = null;
     abortControllerRef.current?.abort();
     abortControllerRef.current = null;
     if (audioRef.current) {
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
       audioRef.current.pause();
       audioRef.current.src = '';
-      audioRef.current = null;
     }
     browserCancelRef.current();
     queueRef.current = [];
@@ -512,13 +537,13 @@ export function useDiscussionTTS({
   const resume = useCallback(() => {
     if (!pausedRef.current) return;
     pausedRef.current = false;
-    if (currentProviderRef.current === 'browser-native-tts') {
-      browserResumeRef.current();
-    } else if (audioRef.current && audioRef.current.paused) {
-      audioRef.current.play();
-    } else if (!isPlayingRef.current) {
-      // Audio finished while paused — kick-start the queue
+    if (!isPlayingRef.current) {
+      // A retained Audio element may already have finished while paused.
       processQueueRef.current();
+    } else if (currentProviderRef.current === 'browser-native-tts') {
+      browserResumeRef.current();
+    } else {
+      void activeAudioSegmentRef.current?.play();
     }
   }, []);
 

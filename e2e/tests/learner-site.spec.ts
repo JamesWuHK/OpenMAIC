@@ -51,8 +51,10 @@ test.beforeEach(async ({ page }) => {
 test('homepage communicates the Hong Kong series proposition and navigates to discovery', async ({
   page,
 }, testInfo) => {
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: '把每個好奇心，變成一門課' })).toBeVisible();
+  test.setTimeout(60_000);
+  const content = JSON.parse(await readFile(path.join(process.cwd(), 'content/learner/site-content.json'), 'utf8'));
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByRole('heading', { name: content.hero.title, exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: '從香港真問題出發' })).toBeVisible();
   await expect(page.getByRole('button', { name: /香港探索/ })).toBeVisible();
   await expectNoDocumentOverflow(page);

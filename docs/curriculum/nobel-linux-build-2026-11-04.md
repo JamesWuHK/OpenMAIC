@@ -174,3 +174,27 @@ The host relay controller is a separate, still-unpublished operation. Its source
 review and owned cleanup must pass before starting it or opening its dedicated
 runner-only port. Nothing in the native QA workflow publishes content or changes
 production. Real six-course output and audio acceptance remain pending.
+
+## Second image result and current production compatibility
+
+[Run 41777736745](https://github.com/JamesWuHK/OpenMAIC/actions/runs/41777736745)
+built source `497e85a3a0d1fdab959aa077237489f1a442ce6c`. Regression/type checks,
+image construction, real runtime prompt hashes and synthetic API boundary passed.
+The real browser started successfully: ten checks passed, but both homepage
+checks still expected a retired default title instead of the mounted site's
+current hero title. The desktop snapshot confirms the correct mounted heading.
+The image remains explicitly unaccepted; the diagnostic artifact was retained.
+
+A fresh read-only host check found another session had deployed source
+`7b1da522d071bfddf50f0526ac337fd2016f8d50` with Safari audio-element reuse and
+manual Play/Skip recovery. The final candidate preserves that behavior while
+separating each segment's completion state from the reusable element. It fixes
+completed-clip replay on Resume, duplicate error completion, stale permission
+actions, unhandled Resume rejection and a superseded play promise's late rejection.
+Seven focused fake-Audio lifecycle tests and independent review passed. Actual
+Safari acceptance is not inferred from these tests.
+
+The homepage regression now checks the mounted hero title and keeps the navigation
+and overflow assertions, with a 60-second budget on the bounded cloud worker.
+Because runtime audio code changed to preserve current production behavior, a
+fresh image is required; the previous image must not replace the newer deployment.
