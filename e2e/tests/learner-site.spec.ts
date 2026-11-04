@@ -236,12 +236,12 @@ test('spoken Cantonese question reaches the classroom agent', async ({ page }) =
 
   await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
   await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
-  const voiceControl = page.getByTestId('nobel-voice-question');
+  const roundtable = page.getByTestId('nobel-classroom-interaction');
   const request = page.waitForRequest(
     (candidate) =>
       candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
   );
-  await voiceControl.locator('button').click();
+  await roundtable.locator('button:has(svg.lucide-mic):visible').last().click();
   await request;
   await expect(page.locator('html')).toHaveAttribute('data-test-asr-language', 'zh-HK');
   await expect(page.getByText(question).first()).toBeVisible();

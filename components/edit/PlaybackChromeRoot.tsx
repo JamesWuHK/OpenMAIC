@@ -19,7 +19,6 @@ import { SceneSidebar } from '@/components/stage/scene-sidebar';
 import { Header } from '@/components/header';
 import { CanvasArea } from '@/components/canvas/canvas-area';
 import { Roundtable } from '@/components/roundtable';
-import { SpeechButton } from '@/components/audio/speech-button';
 import { NobelLectureHeader, NobelLectureToolbar } from '@/components/classroom/NobelLectureChrome';
 import { PlaybackEngine, computePlaybackView, shouldAutoResumeLecture } from '@/lib/playback';
 import type { EngineMode, TriggerEvent, Effect } from '@/lib/playback';
@@ -1464,66 +1463,12 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     // when entering Pro mode.
     const sceneViewerHeight = (() => {
       const headerHeight = isPresenting || hideHeader ? 0 : 80;
-      const roundtableHeight = mode === 'playback' && !isPresenting && !lectureLayout ? 192 : 0;
+      const roundtableHeight =
+        mode === 'playback' && !isPresenting && (!lectureLayout || classroomInteractionOpen)
+          ? lectureLayout ? 240 : 192
+          : 0;
       return `calc(100% - ${headerHeight + roundtableHeight}px)`;
     })();
-
-    const handleClassroomMessageSend = async (msg: string) => {
-      const draft = draftElementReferenceRef.current;
-      const elementReferenceSnapshot: ElementReferenceSendSnapshot | undefined = draft
-        ? {
-            reference: draft.reference,
-            selectionVersion: draft.selectionVersion,
-          }
-        : undefined;
-      // Always clear Level-1 pause state — the closure may hold a stale
-      // isDiscussionPaused value (e.g. voice input's onTranscription callback
-      // captures onMessageSend before React re-renders with the updated state).
-      setIsDiscussionPaused(false);
-      // Clear the sticky livePausedRef so the next agent-loop buffer
-      // starts unpaused. (pauseActiveLiveBuffer sets a ref that new
-      // buffers inherit — must be cleared before sendMessage creates one.)
-      chatAreaRef.current?.resumeActiveLiveBuffer();
-      // Flush any buffered / in-flight TTS audio from the previous
-      // agent turn so it doesn't leak into the next round.
-      discussionTTS.cleanup();
-      // Clear soft-paused state — user is continuing the topic
-      if (isTopicPending) {
-        setIsTopicPending(false);
-        setLiveSpeech(null);
-        setSpeakingAgentId(null);
-      }
-      setChatIsSoftClosing(false);
-      // User interrupts during playback — handleUserInterrupt triggers
-      // onUserInterrupt callback which already calls sendMessage, so skip
-      // the direct sendMessage below to avoid sending twice.
-      // Include 'paused' because onInputActivate pauses the engine before
-      // the user finishes typing — without this the interrupt position
-      // would never be saved and resuming after QA skips to the next sentence.
-      if (
-        engineRef.current &&
-        (engineMode === 'playing' || engineMode === 'live' || engineMode === 'paused')
-      ) {
-        pendingInterruptElementReferenceRef.current = elementReferenceSnapshot;
-        try {
-          engineRef.current.handleUserInterrupt(msg);
-        } finally {
-          pendingInterruptElementReferenceRef.current = undefined;
-        }
-      } else {
-        void sendMessageWithElementReference(msg, elementReferenceSnapshot);
-      }
-      // Auto-switch to chat tab when user sends a message
-      chatAreaRef.current?.switchToTab('chat');
-      setIsCueUser(false);
-      // Immediately mark streaming for synchronized stop button
-      setChatIsStreaming(true);
-      setChatSessionType(chatSessionType || 'qa');
-      // Optimistic thinking: show thinking dots immediately so there's
-      // no blank gap between userMessage expiry and the SSE thinking event.
-      // The real SSE event will overwrite this with the same or updated value.
-      setThinkingState({ stage: 'director' });
-    };
 
     return (
       <div
@@ -1658,10 +1603,19 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                 'transition-opacity duration-300',
                 !isPresenting && 'shrink-0',
                 isPresenting && 'absolute inset-x-0 bottom-0 z-20',
-                lectureLayout && 'absolute inset-x-0 bottom-16 z-30',
               )}
+              id={lectureLayout ? 'nobel-classroom-interaction' : undefined}
               data-testid={lectureLayout ? 'nobel-classroom-interaction' : undefined}
             >
+              {lectureLayout && (
+                <div className="h-12 overflow-y-auto border-y border-amber-200 bg-amber-50 px-3 py-1 text-xs leading-relaxed text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100" role="note">
+                  {locale === 'en-US'
+                    ? 'Ask about this lesson only. AI replies can be wrong. Do not share names, school, phone, or health information. For personal concerns, tell a trusted adult.'
+                    : locale === 'zh-CN'
+                      ? '请围绕本课提问。AI 回答可能不准确；请勿透露姓名、学校、电话或健康资料。个人困扰请告诉可信任的大人。'
+                      : '請圍繞本課提問。AI 回答可能不準確；請勿透露姓名、學校、電話或健康資料。個人困擾請告訴可信任的大人。'}
+                </div>
+              )}
               <Roundtable
                 mode={mode}
                 startInputOpen={lectureLayout && classroomInteractionOpen}
@@ -1692,7 +1646,62 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                 isSoftClosing={chatIsSoftClosing}
                 softCloseDeadline={softCloseDeadline}
                 isTopicPending={isTopicPending}
-                onMessageSend={handleClassroomMessageSend}
+                onMessageSend={async (msg) => {
+                  const draft = draftElementReferenceRef.current;
+                  const elementReferenceSnapshot: ElementReferenceSendSnapshot | undefined = draft
+                    ? {
+                        reference: draft.reference,
+                        selectionVersion: draft.selectionVersion,
+                      }
+                    : undefined;
+                  // Always clear Level-1 pause state — the closure may hold a stale
+                  // isDiscussionPaused value (e.g. voice input's onTranscription callback
+                  // captures onMessageSend before React re-renders with the updated state).
+                  setIsDiscussionPaused(false);
+                  // Clear the sticky livePausedRef so the next agent-loop buffer
+                  // starts unpaused. (pauseActiveLiveBuffer sets a ref that new
+                  // buffers inherit — must be cleared before sendMessage creates one.)
+                  chatAreaRef.current?.resumeActiveLiveBuffer();
+                  // Flush any buffered / in-flight TTS audio from the previous
+                  // agent turn so it doesn't leak into the next round.
+                  discussionTTS.cleanup();
+                  // Clear soft-paused state — user is continuing the topic
+                  if (isTopicPending) {
+                    setIsTopicPending(false);
+                    setLiveSpeech(null);
+                    setSpeakingAgentId(null);
+                  }
+                  setChatIsSoftClosing(false);
+                  // User interrupts during playback — handleUserInterrupt triggers
+                  // onUserInterrupt callback which already calls sendMessage, so skip
+                  // the direct sendMessage below to avoid sending twice.
+                  // Include 'paused' because onInputActivate pauses the engine before
+                  // the user finishes typing — without this the interrupt position
+                  // would never be saved and resuming after QA skips to the next sentence.
+                  if (
+                    engineRef.current &&
+                    (engineMode === 'playing' || engineMode === 'live' || engineMode === 'paused')
+                  ) {
+                    pendingInterruptElementReferenceRef.current = elementReferenceSnapshot;
+                    try {
+                      engineRef.current.handleUserInterrupt(msg);
+                    } finally {
+                      pendingInterruptElementReferenceRef.current = undefined;
+                    }
+                  } else {
+                    void sendMessageWithElementReference(msg, elementReferenceSnapshot);
+                  }
+                  // Auto-switch to chat tab when user sends a message
+                  chatAreaRef.current?.switchToTab('chat');
+                  setIsCueUser(false);
+                  // Immediately mark streaming for synchronized stop button
+                  setChatIsStreaming(true);
+                  setChatSessionType(chatSessionType || 'qa');
+                  // Optimistic thinking: show thinking dots immediately so there's
+                  // no blank gap between userMessage expiry and the SSE thinking event.
+                  // The real SSE event will overwrite this with the same or updated value.
+                  setThinkingState({ stage: 'director' });
+                }}
                 onDiscussionStart={() => {
                   // User clicks "Join" on ProactiveCard
                   engineRef.current?.confirmDiscussion();
@@ -1780,34 +1789,18 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           (edit) mode unmounts this whole PlaybackChromeRoot, so the
           edit branch has no chat. */}
         <div
-          id={lectureLayout ? 'nobel-classroom-interaction' : undefined}
           className={cn(
             lectureLayout
               ? classroomInteractionOpen
-                ? 'fixed inset-x-2 bottom-[calc(16rem+env(safe-area-inset-bottom))] top-20 z-40 flex flex-col overflow-hidden sm:inset-y-20 sm:left-auto sm:right-3 sm:bottom-20 sm:w-[min(360px,calc(100vw-1.5rem))]'
+                ? 'hidden lg:flex lg:shrink-0 lg:flex-col'
                 : 'hidden'
               : 'flex shrink-0',
           )}
           aria-hidden={lectureLayout && !classroomInteractionOpen || undefined}
         >
-          {lectureLayout && classroomInteractionOpen && (
-            <div className="shrink-0 border-b border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100" role="note">
-              {locale === 'en-US'
-                ? 'Ask about this lesson only. AI tutor replies are AI-generated and can be wrong. Do not share your or someone else’s name, school, phone, health information, or other personal information. For health or personal concerns, tell a teacher, parent, or another trusted adult.'
-                : locale === 'zh-CN'
-                  ? '请围绕本课提问。AI 助教的回答由人工智能生成，可能不准确。请勿输入你或他人的姓名、学校、电话、健康相关信息或其他个人信息。如有健康或个人困扰，请告诉老师、家长或其他可信任的大人。'
-                  : '請圍繞本課提問。AI 助教的回答由人工智能生成，可能不準確。請勿輸入你或他人的姓名、學校、電話、健康相關資訊或其他個人資料。如有健康或個人困擾，請告訴老師、家長或其他你信任的大人。'}
-            </div>
-          )}
-          {lectureLayout && classroomInteractionOpen && (
-            <div data-testid="nobel-voice-question" className="flex shrink-0 items-center justify-between border-b border-amber-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-amber-800 dark:bg-slate-900 dark:text-slate-200">
-              <span>{locale === 'en-US' ? 'Ask by voice' : locale === 'zh-CN' ? '语音提问' : '語音提問'}</span>
-              <SpeechButton onTranscription={handleClassroomMessageSend} disabled={chatIsStreaming} size="md" />
-            </div>
-          )}
           <ChatArea
             ref={chatAreaRef}
-            className={lectureLayout ? 'h-full min-h-0 flex-1 !w-full' : undefined}
+            className={lectureLayout ? 'h-full min-h-0' : undefined}
             width={chatAreaWidth}
             onWidthChange={setChatAreaWidth}
             collapsed={lectureLayout ? !classroomInteractionOpen : chatAreaCollapsed}
