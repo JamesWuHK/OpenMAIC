@@ -30,8 +30,19 @@
           "with": {
             "persist-credentials": false,
             "fetch-depth": 1,
-            "path": "nobel07-native-${{ github.run_id }}-${{ github.run_attempt }}"
-          }
+            "path": "nobel07-native-${{ github.run_id }}-${{ github.run_attempt }}",
+            "sparse-checkout": "ci/nobel07-native"
+          },
+          "env": {
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "http.version",
+            "GIT_CONFIG_VALUE_0": "HTTP/1.1",
+            "GIT_CONFIG_KEY_1": "http.lowSpeedLimit",
+            "GIT_CONFIG_VALUE_1": "1024",
+            "GIT_CONFIG_KEY_2": "http.lowSpeedTime",
+            "GIT_CONFIG_VALUE_2": "30"
+          },
+          "timeout-minutes": 8
         },
         {
           "name": "Bounded browser acceptance on existing runner",
