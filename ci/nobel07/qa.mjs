@@ -33,11 +33,12 @@ try{
  for(const viewport of [{name:'desktop',width:1440,height:900},{name:'mobile',width:390,height:844}]){
   const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},serviceWorkers:'block'});
   await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===base)return route.continue();report.externalRequests.push({url:u.href});return route.abort('blockedbyclient');});
+  await context.addInitScript(()=>{window.__nobel07MediaEvents=[];for(const type of ['loadstart','loadedmetadata','canplay','playing','pause','waiting','stalled','suspend','ended','error','emptied','abort'])document.addEventListener(type,event=>{const a=event.target;if(!(a instanceof HTMLMediaElement))return;const log=window.__nobel07MediaEvents;log.push({at:Date.now(),performanceNow:performance.now(),visibility:document.visibilityState,type,src:a.currentSrc||a.src,time:a.currentTime,duration:a.duration,paused:a.paused,ended:a.ended,ready:a.readyState,error:a.error?.code||null});if(log.length>500)log.shift();},true);});
   const page=await context.newPage();page.setDefaultTimeout(15000);
   page.on('console',m=>{if(m.type()==='error')report.consoleErrors.push({viewport:viewport.name,text:m.text()});});page.on('pageerror',e=>report.pageErrors.push({viewport:viewport.name,message:e.message}));
   page.on('requestfailed',request=>report.failedRequests.push({viewport:viewport.name,at:Date.now(),url:request.url(),resource:request.resourceType(),error:request.failure()?.errorText}));
   await page.goto(base,{waitUntil:'networkidle'});assert.equal(await page.locator('.slide').count(),1);
-  async function snapshot(){return page.locator('#narration').evaluate(a=>({src:a.currentSrc||a.src,time:a.currentTime,duration:a.duration,paused:a.paused,ended:a.ended,muted:a.muted,volume:a.volume,rate:a.playbackRate,ready:a.readyState,error:a.error?{code:a.error.code,message:a.error.message}:null}));}
+  async function snapshot(){return page.locator('#narration').evaluate(a=>({wallTime:Date.now(),performanceNow:performance.now(),visibility:document.visibilityState,src:a.currentSrc||a.src,time:a.currentTime,duration:a.duration,paused:a.paused,ended:a.ended,muted:a.muted,volume:a.volume,rate:a.playbackRate,ready:a.readyState,networkState:a.networkState,seeking:a.seeking,loop:a.loop,buffered:Array.from({length:a.buffered.length},(_,i)=>[a.buffered.start(i),a.buffered.end(i)]),error:a.error?{code:a.error.code,message:a.error.message}:null}));}
   async function stop(){const s=await snapshot();report.intentionalStops.push({at:Date.now(),url:s.src,viewport:viewport.name,action:'Stop audio button'});await page.locator('#stop-audio').click();await page.waitForFunction(()=>{const a=document.getElementById('narration');return a.paused&&!a.getAttribute('src');});}
   async function navigate(n){let old=Number((await page.locator('#counter').textContent()).split('/')[0]);while(old!==n){await page.locator(old<n?'#next':'#prev').click();old=Number((await page.locator('#counter').textContent()).split('/')[0]);}assert.equal(old,n);}
   async function layout(){const d=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,body:document.body.scrollWidth,inner:innerWidth}));assert.ok(d.doc<=d.inner+1&&d.body<=d.inner+1,'Horizontal overflow '+JSON.stringify(d));}
@@ -47,10 +48,13 @@ try{
    await button.click();const response=await responsePromise;assert.match(response.headers()['content-type']||'',/^audio\/mpeg/);
    await page.waitForFunction(file=>{const a=document.getElementById('narration');return a.currentSrc.endsWith('/'+file)&&a.currentTime>=.35&&!a.paused&&!a.muted&&a.volume>0&&a.playbackRate===1&&a.readyState>=2&&!a.error;},file,{timeout:15000});
    const progressed=await snapshot();assert.ok(Math.abs(progressed.duration-clip.durationSeconds)<.25,'Duration mismatch');
-   if(full)await page.waitForFunction(()=>{const a=document.getElementById('narration');return a.ended&&a.currentTime>=a.duration-.1&&!a.error;},null,{timeout:Math.ceil((clip.durationSeconds+15)*1000)});
-   const final=await snapshot();assert.equal(final.error,null);assert.equal(final.rate,1);assert.equal(final.muted,false);if(full)assert.equal(final.ended,true);
-   report.audio.push({viewport:viewport.name,reading:await page.locator('#reading').inputValue(),voice:await page.locator('#voice').inputValue(),file,expectedSHA256:clip.sha256,status:response.status(),contentType:response.headers()['content-type'],startedAt,progressed,final,fullCompletionRequired:full,stopMode:full?'native ended':'explicit UI stop after progress'});
-   await stop();
+   const record={viewport:viewport.name,reading:await page.locator('#reading').inputValue(),voice:await page.locator('#voice').inputValue(),file,expectedSHA256:clip.sha256,status:response.status(),contentType:response.headers()['content-type'],startedAt,progressed,fullCompletionRequired:full,stopMode:full?'native ended':'explicit UI stop after progress',checkPassed:false,samples:[]};report.audio.push(record);
+   let timer;
+   try{
+    if(full){timer=setInterval(()=>{void snapshot().then(value=>record.samples.push({at:Date.now(),...value})).catch(()=>{});},1000);await page.waitForFunction(()=>{const a=document.getElementById('narration');return a.ended&&a.currentTime>=a.duration-.1&&!a.error;},null,{timeout:Math.ceil((clip.durationSeconds+15)*1000)});}
+    record.final=await snapshot();assert.equal(record.final.error,null);assert.equal(record.final.rate,1);assert.equal(record.final.muted,false);if(full)assert.equal(record.final.ended,true);
+    await stop();record.checkPassed=true;
+   }catch(error){record.failureSnapshot=await snapshot().catch(()=>null);record.mediaEvents=await page.evaluate(()=>window.__nobel07MediaEvents).catch(()=>[]);throw error;}finally{if(timer)clearInterval(timer);}
   }
   for(const reading of ['zh-Hant','zh-Hans']){
    await page.locator('#reading').selectOption(reading);assert.equal(await page.locator('html').getAttribute('lang'),reading);
@@ -91,7 +95,7 @@ try{
   await context.close();report.cases.push({kind:'active-voice-and-navigation-stop',viewport:viewport.name,pass:true});await writeReport();
  }
  assert.equal(report.cases.filter(c=>c.kind==='page-language-voice').length,96);
- const seen=new Set(report.audio.map(a=>a.file));assert.deepEqual([...seen].sort(),[...clips.keys()].sort());
+ assert.ok(report.audio.every(a=>a.checkPassed));const seen=new Set(report.audio.map(a=>a.file));assert.deepEqual([...seen].sort(),[...clips.keys()].sort());
  assert.equal(report.audio.filter(a=>a.fullCompletionRequired&&a.final.ended).length,6);
  for(const failure of report.failedRequests)failure.intentionalMediaAbort=failure.error==='net::ERR_ABORTED'&&failure.resource==='media'&&report.intentionalStops.some(s=>s.url===failure.url&&s.viewport===failure.viewport&&failure.at>=s.at-100&&failure.at<=s.at+3000);
  assert.deepEqual(report.failedRequests.filter(f=>!f.intentionalMediaAbort),[]);assert.deepEqual(report.consoleErrors,[]);assert.deepEqual(report.pageErrors,[]);assert.deepEqual(report.externalRequests,[]);

@@ -24,7 +24,7 @@ def owned(c):
 def resources(memory=2097152):
  m={s.split(':')[0]:int(s.split()[1]) for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith(('MemAvailable:','SwapFree:'))}
  disk=shutil.disk_usage(proof['dockerRoot']).free;tempdisk=shutil.disk_usage(ROOT).free
- sample={'at':time.time(),'availableKiB':m['MemAvailable'],'swapFreeKiB':m['SwapFree'],'dockerFreeBytes':disk,'workspaceFreeBytes':tempdisk}
+ sample={'at':time.time(),'monotonic':time.monotonic(),'bootTime':time.clock_gettime(time.CLOCK_BOOTTIME),'loadAverage':list(os.getloadavg()),'availableKiB':m['MemAvailable'],'swapFreeKiB':m['SwapFree'],'dockerFreeBytes':disk,'workspaceFreeBytes':tempdisk}
  with (REPORTS/'resources.jsonl').open('a') as f:f.write(json.dumps(sample)+'\n')
  assert m['MemAvailable']>=memory,'Insufficient host memory reserve';assert disk>=10*1024**3 and tempdisk>=5*1024**3,'Insufficient disk reserve'
  return sample
