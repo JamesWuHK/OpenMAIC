@@ -1,0 +1,10 @@
+{
+  "course-package.zip": "4c3439217fd69f583841e8278ea01498a75f05d6e3b3b95f1bfa80a39b7a0b47",
+  "expected.json": "b44a17885bbecb59dd111eaa90c86d95dbfe1ef2a8e71281a9bf7861c4de718d",
+  "package.json": "e7785ce470cb01a868cedba0dd6c0eb78000eee6c27cd03ed5caadb2a893683e",
+  "package-lock.json": "59051f3bc74cf8c96323ee01411d78a4c64c6920056b1039b74b74c8f3f5a7b1",
+  "qa.mjs": "8dae84e4f3062b5be603515ca335edd362d5d0be0b36cb0c0598068b3360a784",
+  "runner.py": "c47f24dd9495b9fc128e3aede7ca3fa2471d9ca39bef7f99260ed7db2544621f",
+  "cleanup.py": "568270640dd6bcd381f2d27a7f51f476b6df1c9bea28e631dd8d685f71c3cfff",
+  "seccomp_profile.json": "0c4b9e74b24ed79572cf0b1aaa9c92afc8a13019d8f794c13c73aa4174e9db5a"
+}

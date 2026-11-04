@@ -1,0 +1,61 @@
+{
+  "name": "Nobel07 isolated browser acceptance",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/nobel07-browser-20261104"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "nobel07-existing-linux-browser",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "browser": {
+      "runs-on": [
+        "self-hosted",
+        "Linux",
+        "X64",
+        "openmaic",
+        "cloud-ci"
+      ],
+      "timeout-minutes": 45,
+      "steps": [
+        {
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 1,
+            "path": "nobel07-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "name": "Bounded browser acceptance on existing runner",
+          "working-directory": "nobel07-${{ github.run_id }}-${{ github.run_attempt }}",
+          "run": "python3 ci/nobel07/runner.py"
+        },
+        {
+          "name": "Always reconcile only this run owned container",
+          "if": "always()",
+          "working-directory": "nobel07-${{ github.run_id }}-${{ github.run_attempt }}",
+          "run": "python3 ci/nobel07/cleanup.py"
+        },
+        {
+          "name": "Preserve acceptance evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "nobel07-browser-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/nobel07-${{ github.run_id }}-${{ github.run_attempt }}/reports",
+            "if-no-files-found": "warn",
+            "retention-days": 7
+          }
+        }
+      ]
+    }
+  }
+}

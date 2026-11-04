@@ -1,0 +1,8 @@
+{
+  "name": "nobel07-cloud-browser-acceptance",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.58.2"
+  }
+}

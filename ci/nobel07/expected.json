@@ -1,0 +1,902 @@
+{
+  "zipSHA256": "4c3439217fd69f583841e8278ea01498a75f05d6e3b3b95f1bfa80a39b7a0b47",
+  "files": {
+    "audio/yue-HK/page-01.mp3": "676c26900ee24cd510eb4783d81783d85e52b819e2e630113a8f3edbb0ae95af",
+    "audio/yue-HK/page-02.mp3": "72edd013c3fdb2b6b911568ab45e13549158ad000bf40298e37a15be29f1d5c8",
+    "audio/yue-HK/page-03.mp3": "e0e1154df0bde043dbf69d7fcfce184da1b1ac142053630eafc200ba1688b5e3",
+    "audio/yue-HK/page-04.mp3": "264f2d97d57e7cf508ea5f74c05b57e43e04e050d10ce6b2855ab8291b3b2f7f",
+    "audio/yue-HK/page-05.mp3": "cc92ece2f25b8b28eb5e5872ec3d46e7b7bc847d7bbc4acdd9bf8ff4f5dfa18e",
+    "audio/yue-HK/page-06.mp3": "6ce85522562a3b876be5d7f774e78bbd1ab73367884b8c19522cfe79e9bebd0b",
+    "audio/yue-HK/page-07.mp3": "e62f3f88a8bd406c939e9b0e85df408c22bbe132141100a7431f86dfb0df847a",
+    "audio/yue-HK/page-08.mp3": "cec003f2071e4e3f1aaf432f0682fbd635d668f6b97a4fffec00fa72be0f79be",
+    "audio/yue-HK/page-09.mp3": "103ccdfcd7f09fc9d832c4ae51c9dd0d61d8b4e71e652e7f5a4dfc74f12155d7",
+    "audio/yue-HK/page-10.mp3": "8fc7b3cc6d3d8927814e3002f0d338217bdbe95fe399a9efe2d8ae8411981326",
+    "audio/yue-HK/page-11.mp3": "9d1f780547ab0a9b2cfb4ab7cf529dc420d8903f4418bcceb960aeff9a102940",
+    "audio/yue-HK/page-12.mp3": "4c9c4db9403ecd70afb3943271838b86ea51389560fddc4572197db73197f627",
+    "audio/yue-HK/q-1-a.mp3": "a16a2654739c210ff6bc100e7e50bd334d8879efe27058d94f9e8c35537eb1fa",
+    "audio/yue-HK/q-1-b.mp3": "12cfbfc5bc72015025eb43b7fc1afdf87005cdf5d2888ec2a909c21fbad06fe4",
+    "audio/yue-HK/q-1-c.mp3": "7616d8eaf1d132362fee59c5e872a1b04ae89a9b791183ec4ed40d5019053ba7",
+    "audio/yue-HK/q-1.mp3": "c80f17164ab72500a4328a8f5394c2fcb59e8d2ee6821e83f5e714ad20d376fd",
+    "audio/yue-HK/q-2-a.mp3": "c9717bc714fbf169eb7374a50e9e82f31cdc2c2ce923840b199acd676ac93ee9",
+    "audio/yue-HK/q-2-b.mp3": "9cf670fbc2e928f594a54b850b2148b67df85efda0044eac14162111145edec3",
+    "audio/yue-HK/q-2.mp3": "1b71191e01e9ff9a9626c9dfce527ae476c0e108ddbcfa0b51376812fad6290a",
+    "audio/yue-HK/q-3-a.mp3": "dafb0167c3de3e29d7634d86cb720505b17075b96986c1b9719e96e2fafe1f17",
+    "audio/yue-HK/q-3-b.mp3": "c6219b3e77a26829b8b60153c42fe615f8e8fef56031db4eef07afdef37243d1",
+    "audio/yue-HK/q-3-c.mp3": "fd5801d84f58a69b7dfbf9e2d32bab696221bcf29a316a1916766e8ad56482f7",
+    "audio/yue-HK/q-3.mp3": "817fd0c4a6e9806ee2c22c05eeb71044864d47825e2948d162640dcdf64f1cf0",
+    "audio/yue-HK/vote-a.mp3": "89c685a428049f412331fa1301b08bbcea09baa63aca2799feeb0d6afdd4ff41",
+    "audio/yue-HK/vote-b.mp3": "53ee6ee6fe2161769abed421dbdd30aaa9cb7dd94c8fe87c175b2e5f6b5e54ef",
+    "audio/zh-CN/page-01.mp3": "4ed443e76a53af63e1661df397d862b121547647e3803f9da6de8fae8dc768e3",
+    "audio/zh-CN/page-02.mp3": "d8d8470d54a79fe11f90b2e4a629568d8bbcfb1f3ff177ebc6aeb634b929f9f6",
+    "audio/zh-CN/page-03.mp3": "3add45b3278db347ba920926f79445eb114c81ab2d9ecf3ec9a02f77668d2246",
+    "audio/zh-CN/page-04.mp3": "3e3df7718a4ddb9708798b3159d5206001107bc9813e03e8f8c1fd23fd4c12d4",
+    "audio/zh-CN/page-05.mp3": "5160636e040cc220a559817c6e3cd71ed721f9242c8b5cbcee6812687d433633",
+    "audio/zh-CN/page-06.mp3": "f0edc897fb9eeb4d3dad832cbc2924856a87b471cc6baa7ea965061f1e4f92eb",
+    "audio/zh-CN/page-07.mp3": "da23809e0973775168a91093226b0e429682feff092e4bd4e9aa74a39f3af8cd",
+    "audio/zh-CN/page-08.mp3": "20f084632d6d7df9958d094b819832b29b180e4b1e40a1fd0bedc555e08cfdd9",
+    "audio/zh-CN/page-09.mp3": "9a841669c9fab1e3a3b7ffd31be81257ffd9c108769b950be71bd13b33b9f919",
+    "audio/zh-CN/page-10.mp3": "61ce0fe3c0ec8f994db74195d204fec0fe8fdb7dbe06730666558f2dfba3bd11",
+    "audio/zh-CN/page-11.mp3": "c68596fc862acfe92d02eac179cc91065f15c73d4e1add1a02eec1adf648198e",
+    "audio/zh-CN/page-12.mp3": "e4c1bbec3c3a6eb57864924e0bb38a68b7f6fe30234134a920bc49d56be3e8ae",
+    "audio/zh-CN/q-1-a.mp3": "f78a95a50a68b1fbe34247734787a6410abbed9eca31a4710262293c68a6c5e5",
+    "audio/zh-CN/q-1-b.mp3": "a82fcdeee500010bce690abda19e54beb155d4c28a636447a9a22120e4e3ba58",
+    "audio/zh-CN/q-1-c.mp3": "afa42eec05c451f4f5792fde1ed0bb9b22440b72a747f4fefc52ddcb89efd2ba",
+    "audio/zh-CN/q-1.mp3": "fbdd450a16a830fc623fb488f9ddf920cdb958741d8fc2ea87c912a9893bfbca",
+    "audio/zh-CN/q-2-a.mp3": "5e53abcb0f46c2e017ada314691a05798056344300eb2634bd4b1349c79fed7d",
+    "audio/zh-CN/q-2-b.mp3": "bb23e0b0f05324e804a06e2923dfbde5b826fa45865729e0035d64f0697b6dd9",
+    "audio/zh-CN/q-2.mp3": "d92aa426a6e60422fd61ac323419e1acbe3c8523f8e31c14969ca83710ed3589",
+    "audio/zh-CN/q-3-a.mp3": "d2991d404044a6d7d90651f4a8cf22d0ff980c1d5e147b3cedc56d375b9edb63",
+    "audio/zh-CN/q-3-b.mp3": "404639dbb1b51e2ddaeda54ecd0996167aeb3fb4524b3d9a5813e40fd0329b35",
+    "audio/zh-CN/q-3-c.mp3": "fe04a8e775f03fb21c5306c3c6fcd48eae05c81fb52aad1e7e6e477c18696870",
+    "audio/zh-CN/q-3.mp3": "1bb37541fdb0716be90d90749c8f63bdb221c2d7db1a2bf6d587fee874974d25",
+    "audio/zh-CN/vote-a.mp3": "d4f1a09e993a0f3d41fd2be59a09f667fa234bc289da4dbeb85f754ff90e0ad7",
+    "audio/zh-CN/vote-b.mp3": "a1a6e8c544b9d3094bc84f8c5d3a0098a03d3d072995d73f958a71236eac8362",
+    "index.html": "1307503b6788f1e000764f5b3803c4479e1396330c8a8519f379ea2b7e5889b2",
+    "media/healthy-t-cell.jpg": "4cb929f4a215eca199389eddb38dd9dc018b0085aab6a807c364143bedbdf0f7",
+    "media/sakaguchi-portrait.jpg": "03e28bd1e0e6fdc67096de733123b02ed560db58f7a8df4eb6aeaa9c2c9b9e63"
+  },
+  "clips": [
+    {
+      "id": "page-01",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-01.mp3",
+      "textSHA256": "52cbe9f43582f5d96a390c050fa4a7ecb0f85a9fa1391f19669c837b3a3485ed",
+      "sha256": "4ed443e76a53af63e1661df397d862b121547647e3803f9da6de8fae8dc768e3",
+      "bytes": 267692,
+      "durationSeconds": 33.432,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-02",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-02.mp3",
+      "textSHA256": "4190ff576440dd4308d70f9a14cb229eeb54f8c503004bc9b1af7b4835eb2c02",
+      "sha256": "d8d8470d54a79fe11f90b2e4a629568d8bbcfb1f3ff177ebc6aeb634b929f9f6",
+      "bytes": 252332,
+      "durationSeconds": 31.512,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-03",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-03.mp3",
+      "textSHA256": "902580f70934304b2de1d32556b0d3947be2e642322e148a58ec8fdeef914894",
+      "sha256": "3add45b3278db347ba920926f79445eb114c81ab2d9ecf3ec9a02f77668d2246",
+      "bytes": 305708,
+      "durationSeconds": 38.184,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-04",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-04.mp3",
+      "textSHA256": "40ef9caa398873308490b351cbaf937a6e62bf8a9c1907bf3f18ef38c81166d7",
+      "sha256": "3e3df7718a4ddb9708798b3159d5206001107bc9813e03e8f8c1fd23fd4c12d4",
+      "bytes": 233516,
+      "durationSeconds": 29.16,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-05",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-05.mp3",
+      "textSHA256": "136db85818613493dd63fdbd41e865696f0b1cd5c8d0017ebf93204975b3544b",
+      "sha256": "5160636e040cc220a559817c6e3cd71ed721f9242c8b5cbcee6812687d433633",
+      "bytes": 383276,
+      "durationSeconds": 47.88,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-06",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-06.mp3",
+      "textSHA256": "702efadd2fd655021d934de548cec01f8e827f1d648cbaa4f9ad08be125b2f05",
+      "sha256": "f0edc897fb9eeb4d3dad832cbc2924856a87b471cc6baa7ea965061f1e4f92eb",
+      "bytes": 266540,
+      "durationSeconds": 33.288,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-07",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-07.mp3",
+      "textSHA256": "5a3b5c827d4f42b6390dc564f7db958774fc54b5003d7370be5e89bd1c2a706a",
+      "sha256": "da23809e0973775168a91093226b0e429682feff092e4bd4e9aa74a39f3af8cd",
+      "bytes": 308396,
+      "durationSeconds": 38.52,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-08",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-08.mp3",
+      "textSHA256": "07ce00f6d626476a92d286b25a31d970b2b6e2a13020353a3ec2c523364fadc3",
+      "sha256": "20f084632d6d7df9958d094b819832b29b180e4b1e40a1fd0bedc555e08cfdd9",
+      "bytes": 294380,
+      "durationSeconds": 36.768,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-09",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-09.mp3",
+      "textSHA256": "78c68b3c60d5930b48f6d20642465499a012c00739fbec5ff42086890aad458d",
+      "sha256": "9a841669c9fab1e3a3b7ffd31be81257ffd9c108769b950be71bd13b33b9f919",
+      "bytes": 333164,
+      "durationSeconds": 41.616,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-10",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-10.mp3",
+      "textSHA256": "b2188a93ab70af3f9cf6e503d68c7550db146f19cb990407e4995ee74ccbe57e",
+      "sha256": "61ce0fe3c0ec8f994db74195d204fec0fe8fdb7dbe06730666558f2dfba3bd11",
+      "bytes": 299948,
+      "durationSeconds": 37.464,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-11",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-11.mp3",
+      "textSHA256": "52c3bade0e6ed2b46d39d5a6f9a27e5b94542fb1ee37cbd53da87fb206785311",
+      "sha256": "c68596fc862acfe92d02eac179cc91065f15c73d4e1add1a02eec1adf648198e",
+      "bytes": 151532,
+      "durationSeconds": 18.912,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-12",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/zh-CN/page-12.mp3",
+      "textSHA256": "cd0b6b5d68bcce2a2ced8649d674ba0667dab4cf3a2c45cc9716a451722071db",
+      "sha256": "e4c1bbec3c3a6eb57864924e0bb38a68b7f6fe30234134a920bc49d56be3e8ae",
+      "bytes": 298412,
+      "durationSeconds": 37.272,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-01",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-01.mp3",
+      "textSHA256": "fc14b4aefa961c8d8e4d0e0cbc01a928ee9599877d797edfba59270a622241b0",
+      "sha256": "676c26900ee24cd510eb4783d81783d85e52b819e2e630113a8f3edbb0ae95af",
+      "bytes": 282668,
+      "durationSeconds": 35.304,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-02",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-02.mp3",
+      "textSHA256": "e5137f2f505f259287087c86537b64c5134789a88a4fae4a2921b7a1296429db",
+      "sha256": "72edd013c3fdb2b6b911568ab45e13549158ad000bf40298e37a15be29f1d5c8",
+      "bytes": 285356,
+      "durationSeconds": 35.64,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-03",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-03.mp3",
+      "textSHA256": "c0895c64a0302481fc1adcf474f63894d8f9d47402a1845498db3a65de7ffc67",
+      "sha256": "e0e1154df0bde043dbf69d7fcfce184da1b1ac142053630eafc200ba1688b5e3",
+      "bytes": 309932,
+      "durationSeconds": 38.712,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-04",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-04.mp3",
+      "textSHA256": "608d21a239eaa9c1598805c07f8dff65244d03cc2a75c31fdfc65e1cbd93d710",
+      "sha256": "264f2d97d57e7cf508ea5f74c05b57e43e04e050d10ce6b2855ab8291b3b2f7f",
+      "bytes": 305516,
+      "durationSeconds": 38.16,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-05",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-05.mp3",
+      "textSHA256": "211657504e62dfb60cd08438fb03a9bf8440c11c07e3e9742dda43793778acf4",
+      "sha256": "cc92ece2f25b8b28eb5e5872ec3d46e7b7bc847d7bbc4acdd9bf8ff4f5dfa18e",
+      "bytes": 365228,
+      "durationSeconds": 45.624,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-06",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-06.mp3",
+      "textSHA256": "2db8374ac71922062ab72598b0e0e19975bf4ba379095addd9e7556b09db51f6",
+      "sha256": "6ce85522562a3b876be5d7f774e78bbd1ab73367884b8c19522cfe79e9bebd0b",
+      "bytes": 275948,
+      "durationSeconds": 34.464,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-07",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-07.mp3",
+      "textSHA256": "57b14fb7fed83f2de1794a5ef4e022d44989568b4293582b0863efd281437006",
+      "sha256": "e62f3f88a8bd406c939e9b0e85df408c22bbe132141100a7431f86dfb0df847a",
+      "bytes": 369644,
+      "durationSeconds": 46.176,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-08",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-08.mp3",
+      "textSHA256": "4e3c8cb6cd4a1e31f8930dd4303122e44f9ae4e94b81b0ddb75b0afe4c443e2a",
+      "sha256": "cec003f2071e4e3f1aaf432f0682fbd635d668f6b97a4fffec00fa72be0f79be",
+      "bytes": 305708,
+      "durationSeconds": 38.184,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-09",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-09.mp3",
+      "textSHA256": "49c431ec7b61bd9d768da590cfc4a277133db1fab00fc1412c9f45db2bbfefba",
+      "sha256": "103ccdfcd7f09fc9d832c4ae51c9dd0d61d8b4e71e652e7f5a4dfc74f12155d7",
+      "bytes": 311276,
+      "durationSeconds": 38.88,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-10",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-10.mp3",
+      "textSHA256": "0f487e23cf3c61b6883cef8571a78a253bc97db02075abfee2014ef966346858",
+      "sha256": "8fc7b3cc6d3d8927814e3002f0d338217bdbe95fe399a9efe2d8ae8411981326",
+      "bytes": 298988,
+      "durationSeconds": 37.344,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-11",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-11.mp3",
+      "textSHA256": "9cb2c24e9f2c3835655b1cb497806f9f421dbe7b8de2b1c0804f4e76d41e83c7",
+      "sha256": "9d1f780547ab0a9b2cfb4ab7cf529dc420d8903f4418bcceb960aeff9a102940",
+      "bytes": 151724,
+      "durationSeconds": 18.936,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "page-12",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "narration",
+      "file": "audio/yue-HK/page-12.mp3",
+      "textSHA256": "d8a257d2a9c916f451935bc671837c89f8c373fbe086250190792fbe7285fcba",
+      "sha256": "4c9c4db9403ecd70afb3943271838b86ea51389560fddc4572197db73197f627",
+      "bytes": 306092,
+      "durationSeconds": 38.232,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/zh-CN/q-1.mp3",
+      "textSHA256": "d47befbe0c84bdf29f57c077895243c9fce12679ba33b62df2605d506fcf0a6f",
+      "sha256": "fbdd450a16a830fc623fb488f9ddf920cdb958741d8fc2ea87c912a9893bfbca",
+      "bytes": 113132,
+      "durationSeconds": 14.112,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-a",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-1-a.mp3",
+      "textSHA256": "4632ffb9e5c27d86c949a2b85ff67ac537e6279e04aa6ecae84d1faad46b358d",
+      "sha256": "f78a95a50a68b1fbe34247734787a6410abbed9eca31a4710262293c68a6c5e5",
+      "bytes": 50348,
+      "durationSeconds": 6.264,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-b",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-1-b.mp3",
+      "textSHA256": "b75c7833102edef0deed736026ec88d5831bf984df4dba039679c88bf16c51b0",
+      "sha256": "a82fcdeee500010bce690abda19e54beb155d4c28a636447a9a22120e4e3ba58",
+      "bytes": 48236,
+      "durationSeconds": 6.0,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-c",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-1-c.mp3",
+      "textSHA256": "6e08b121af3f3ca81c91dc82a698d30587194dfde97836f4ab96a0599862577b",
+      "sha256": "afa42eec05c451f4f5792fde1ed0bb9b22440b72a747f4fefc52ddcb89efd2ba",
+      "bytes": 28268,
+      "durationSeconds": 3.504,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/zh-CN/q-2.mp3",
+      "textSHA256": "45fe4b070bbe48028d7fd9cfe51fa0a50d2fc4d02ac9ec3f1961da396567e1d9",
+      "sha256": "d92aa426a6e60422fd61ac323419e1acbe3c8523f8e31c14969ca83710ed3589",
+      "bytes": 113900,
+      "durationSeconds": 14.208,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2-a",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-2-a.mp3",
+      "textSHA256": "f216d7da313da2aa59b03cbd09c7f73a4b3e19a5a86e3a7cc6a130da59021a95",
+      "sha256": "5e53abcb0f46c2e017ada314691a05798056344300eb2634bd4b1349c79fed7d",
+      "bytes": 24428,
+      "durationSeconds": 3.024,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2-b",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-2-b.mp3",
+      "textSHA256": "c979ae34daf960ee9d99f764670d2bf8bd8f5a26fa09a71943e967c2dc2b1843",
+      "sha256": "bb23e0b0f05324e804a06e2923dfbde5b826fa45865729e0035d64f0697b6dd9",
+      "bytes": 43628,
+      "durationSeconds": 5.424,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/zh-CN/q-3.mp3",
+      "textSHA256": "a9056f4f254fc786cf7bd28d17a6e1014685a22ffcd71b6098b2c15b412fb767",
+      "sha256": "1bb37541fdb0716be90d90749c8f63bdb221c2d7db1a2bf6d587fee874974d25",
+      "bytes": 121388,
+      "durationSeconds": 15.144,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-a",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-3-a.mp3",
+      "textSHA256": "bc1c292e57487641cde2503909c2028332962c6c996842886ad299d1a9f75b13",
+      "sha256": "d2991d404044a6d7d90651f4a8cf22d0ff980c1d5e147b3cedc56d375b9edb63",
+      "bytes": 23468,
+      "durationSeconds": 2.904,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-b",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-3-b.mp3",
+      "textSHA256": "7b94428778dd75dcabb34d7e5e6506fb6873a081b14eed757e8d2fc64fe69843",
+      "sha256": "404639dbb1b51e2ddaeda54ecd0996167aeb3fb4524b3d9a5813e40fd0329b35",
+      "bytes": 23852,
+      "durationSeconds": 2.952,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-c",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/q-3-c.mp3",
+      "textSHA256": "8079d28e0005844e174977d1ed3ef55931f5a4648004e2fcb40977ae02c0cecd",
+      "sha256": "fe04a8e775f03fb21c5306c3c6fcd48eae05c81fb52aad1e7e6e477c18696870",
+      "bytes": 39980,
+      "durationSeconds": 4.968,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "vote-a",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/vote-a.mp3",
+      "textSHA256": "fe61a5742c08112eba1b685241345585c9959679464c143a1ead6fb5b16bace4",
+      "sha256": "d4f1a09e993a0f3d41fd2be59a09f667fa234bc289da4dbeb85f754ff90e0ad7",
+      "bytes": 44012,
+      "durationSeconds": 5.472,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "vote-b",
+      "language": "zh-CN",
+      "voice": "Tingting",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/zh-CN/vote-b.mp3",
+      "textSHA256": "444057ae48f47c5fd259cc92da6944ceb906a85bf27a04f79fa3680dfce99e53",
+      "sha256": "a1a6e8c544b9d3094bc84f8c5d3a0098a03d3d072995d73f958a71236eac8362",
+      "bytes": 49580,
+      "durationSeconds": 6.168,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/yue-HK/q-1.mp3",
+      "textSHA256": "a0d4493b6d64deba9189358ebf1d90113f537015c774e6afaff506a537812c92",
+      "sha256": "c80f17164ab72500a4328a8f5394c2fcb59e8d2ee6821e83f5e714ad20d376fd",
+      "bytes": 118316,
+      "durationSeconds": 14.76,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-a",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-1-a.mp3",
+      "textSHA256": "503344d4f5d7c4a2e300ddaa8493b2618559f0c6a7d0314bbef42291d4fb38cd",
+      "sha256": "a16a2654739c210ff6bc100e7e50bd334d8879efe27058d94f9e8c35537eb1fa",
+      "bytes": 63404,
+      "durationSeconds": 7.896,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-b",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-1-b.mp3",
+      "textSHA256": "a4c44a19db6166694bd15558f77707d6d1ac092f36b86599e2fa15dacc2d64bf",
+      "sha256": "12cfbfc5bc72015025eb43b7fc1afdf87005cdf5d2888ec2a909c21fbad06fe4",
+      "bytes": 49196,
+      "durationSeconds": 6.12,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-1-c",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-1-c.mp3",
+      "textSHA256": "396e11a4aec9fac0a96b24bf1ba8122c11ff6ad2cbc2b869396b965f7deec960",
+      "sha256": "7616d8eaf1d132362fee59c5e872a1b04ae89a9b791183ec4ed40d5019053ba7",
+      "bytes": 36908,
+      "durationSeconds": 4.584,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/yue-HK/q-2.mp3",
+      "textSHA256": "af188d3c9e44f5ecb6d8f621956cf24b678ba7eb3ffd1c0cecec0482554c4223",
+      "sha256": "1b71191e01e9ff9a9626c9dfce527ae476c0e108ddbcfa0b51376812fad6290a",
+      "bytes": 111596,
+      "durationSeconds": 13.92,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2-a",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-2-a.mp3",
+      "textSHA256": "7cd4e48ecaf140cacbf0c08990a54fe562d5cb3ff7c39de6d43fee257c373f46",
+      "sha256": "c9717bc714fbf169eb7374a50e9e82f31cdc2c2ce923840b199acd676ac93ee9",
+      "bytes": 42284,
+      "durationSeconds": 5.256,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-2-b",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-2-b.mp3",
+      "textSHA256": "58f88abaf64c916685779772eecbe44eb2944b577416e2c4b594930771b77d52",
+      "sha256": "9cf670fbc2e928f594a54b850b2148b67df85efda0044eac14162111145edec3",
+      "bytes": 44396,
+      "durationSeconds": 5.52,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "question",
+      "file": "audio/yue-HK/q-3.mp3",
+      "textSHA256": "d16e00872882e638ca8a4a74c182cf68bf4cfce50726ec4abd0c5e52d0280133",
+      "sha256": "817fd0c4a6e9806ee2c22c05eeb71044864d47825e2948d162640dcdf64f1cf0",
+      "bytes": 130220,
+      "durationSeconds": 16.248,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-a",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-3-a.mp3",
+      "textSHA256": "f13ce6a398082669d5d13948cc1913f4a1f0b1f2cb08c8f3489ac01496b9cbd7",
+      "sha256": "dafb0167c3de3e29d7634d86cb720505b17075b96986c1b9719e96e2fafe1f17",
+      "bytes": 26924,
+      "durationSeconds": 3.336,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-b",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-3-b.mp3",
+      "textSHA256": "d80183c5b35f4dcdd1705af301e06720594771a39258a869b9ccb1305f19d925",
+      "sha256": "c6219b3e77a26829b8b60153c42fe615f8e8fef56031db4eef07afdef37243d1",
+      "bytes": 24044,
+      "durationSeconds": 2.976,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "q-3-c",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/q-3-c.mp3",
+      "textSHA256": "54003de4a8bfe7643fad27989193465853babda84af2b40a19f5e9898b808369",
+      "sha256": "fd5801d84f58a69b7dfbf9e2d32bab696221bcf29a316a1916766e8ad56482f7",
+      "bytes": 38828,
+      "durationSeconds": 4.824,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "vote-a",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/vote-a.mp3",
+      "textSHA256": "e1e993587c748007493041685aebbb6521facfc3e0d55bbbd92e69ab74c5d7bd",
+      "sha256": "89c685a428049f412331fa1301b08bbcea09baa63aca2799feeb0d6afdd4ff41",
+      "bytes": 58988,
+      "durationSeconds": 7.344,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    },
+    {
+      "id": "vote-b",
+      "language": "yue-HK",
+      "voice": "Sinji",
+      "rateWordsPerMinute": 175,
+      "kind": "feedback",
+      "file": "audio/yue-HK/vote-b.mp3",
+      "textSHA256": "56999f6feb48686d8798f24e89bb55a3d8ddcd5d586937ab0060eade66b7a349",
+      "sha256": "53ee6ee6fe2161769abed421dbdd30aaa9cb7dd94c8fe87c175b2e5f6b5e54ef",
+      "bytes": 47852,
+      "durationSeconds": 5.952,
+      "codec": "mp3",
+      "decodeExitCode": 0
+    }
+  ],
+  "reading": {
+    "zh-Hans": [
+      {
+        "h1": "先认识一位研究“别打错人”的医生",
+        "feedback": {}
+      },
+      {
+        "h1": "商场保安，抓得越多越好吗？",
+        "feedback": {}
+      },
+      {
+        "h1": "一个反常结果，让他想追下去",
+        "feedback": {}
+      },
+      {
+        "h1": "身体不只有一种“保护队员”",
+        "feedback": {}
+      },
+      {
+        "h1": "不是给细胞起个名字，就算发现了",
+        "feedback": {}
+      },
+      {
+        "h1": "“劝架员”到底做了什么？",
+        "feedback": {}
+      },
+      {
+        "h1": "为什么是三个人共同获奖？",
+        "feedback": {}
+      },
+      {
+        "h1": "这对普通人有什么用？",
+        "feedback": {}
+      },
+      {
+        "h1": "有趣的转折：为什么不是越多越好？",
+        "feedback": {}
+      },
+      {
+        "h1": "诺奖为什么奖励这样的基础发现？",
+        "feedback": {}
+      },
+      {
+        "h1": "三次小判断",
+        "feedback": {
+          "0": [
+            "把数量和保护效果混为一谈，过度或错误的反应也能伤害身体。",
+            "抓住主线，调节性T细胞参与控制，但并非唯一机制。",
+            "不对，免疫系统有多种细胞和分工。"
+          ],
+          "1": [
+            "把动物实验直接等同于人的疗效。",
+            "正确，动物研究能提供线索，但不能代替临床检验。"
+          ],
+          "2": [
+            "忽略了某些肿瘤中的控制问题。",
+            "忽略了维持免疫控制的重要作用。",
+            "正确，同一种作用是否有帮助，要看具体情境。"
+          ]
+        }
+      },
+      {
+        "h1": "带走一个问题",
+        "feedback": {}
+      }
+    ],
+    "zh-Hant": [
+      {
+        "h1": "先認識一位研究“別打錯人”的醫生",
+        "feedback": {}
+      },
+      {
+        "h1": "商場保安，抓得越多越好嗎？",
+        "feedback": {}
+      },
+      {
+        "h1": "一個反常結果，讓他想追下去",
+        "feedback": {}
+      },
+      {
+        "h1": "身體不只有一種“保護隊員”",
+        "feedback": {}
+      },
+      {
+        "h1": "不是給細胞起個名字，就算發現了",
+        "feedback": {}
+      },
+      {
+        "h1": "“勸架員”到底做了什麼？",
+        "feedback": {}
+      },
+      {
+        "h1": "為什麼是三個人共同獲獎？",
+        "feedback": {}
+      },
+      {
+        "h1": "這對普通人有什麼用？",
+        "feedback": {}
+      },
+      {
+        "h1": "有趣的轉折：為什麼不是越多越好？",
+        "feedback": {}
+      },
+      {
+        "h1": "諾獎為什麼獎勵這樣的基礎發現？",
+        "feedback": {}
+      },
+      {
+        "h1": "三次小判斷",
+        "feedback": {
+          "0": [
+            "把數量和保護效果混為一談，過度或錯誤的反應也能傷害身體。",
+            "抓住主線，調節性T細胞參與控制，但並非唯一機制。",
+            "不對，免疫系統有多種細胞和分工。"
+          ],
+          "1": [
+            "把動物實驗直接等同於人的療效。",
+            "正確，動物研究能提供線索，但不能代替臨床檢驗。"
+          ],
+          "2": [
+            "忽略了某些腫瘤中的控制問題。",
+            "忽略了維持免疫控制的重要作用。",
+            "正確，同一種作用是否有幫助，要看具體情境。"
+          ]
+        }
+      },
+      {
+        "h1": "帶走一個問題",
+        "feedback": {}
+      }
+    ]
+  },
+  "voteFeedback": {
+    "zh-Hans": [
+      "拦住正常顾客也会造成伤害，保护不能只比行动次数。",
+      "对，保护需要合适的对象和程度；接下来看看身体如何做到。"
+    ],
+    "zh-Hant": [
+      "攔住正常顧客也會造成傷害，保護不能只比行動次數。",
+      "對，保護需要合適的對象和程度；接下來看看身體如何做到。"
+    ]
+  }
+}
