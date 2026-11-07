@@ -4,83 +4,83 @@
     "id": "hk-nobel-01-kagan-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/01-kagan/hk-nobel-01-kagan-illustrated-v2.json",
-    "sha256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780"
+    "sha256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229"
   },
   {
     "course": 1,
     "id": "hk-nobel-01-kagan-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/01-kagan/hk-nobel-01-kagan-illustrated-v2-mandarin.json",
-    "sha256": "1e82e201f03f5341a5c362731499062e0e81f49ab7018d2e83328ceb00a69c36"
+    "sha256": "4ed979936d13fec701af539d451b432414db0822e7a1a66d81f31b37abb4c299"
   },
   {
     "course": 2,
     "id": "hk-nobel-02-soai-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/02-soai/hk-nobel-02-soai-illustrated-v2.json",
-    "sha256": "3e4afbe9c4c9d2e584c87892cc2238930c0ccf180ed3dd08485400f6f17dcdaa"
+    "sha256": "36888763014ac81e7542719e1649ee3648a975f1aa0898167d45abf85b78ac1d"
   },
   {
     "course": 2,
     "id": "hk-nobel-02-soai-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/02-soai/hk-nobel-02-soai-illustrated-v2-mandarin.json",
-    "sha256": "405d8269e19810351a27a4a3ef8bba511a7ed43fe58f524e17220012ea680087"
+    "sha256": "9b9e7390b6e3b5b57b8e5e8363da63c082e83c95c4c84d7e7e91db3e6145f165"
   },
   {
     "course": 3,
     "id": "hk-nobel-03-halzen-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/03-halzen/hk-nobel-03-halzen-illustrated-v2.json",
-    "sha256": "bfc5e2d10fedefc91f8599803b4be47fde5a47fb1c03134b08fc608182c500e8"
+    "sha256": "f11c0e0f7189115deeff67b28e83201a9a34adfae2b5b416ee536f5fbd0cec7c"
   },
   {
     "course": 3,
     "id": "hk-nobel-03-halzen-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/03-halzen/hk-nobel-03-halzen-illustrated-v2-mandarin.json",
-    "sha256": "d5259d37e50f6d4f660f608bd9fef90863c0d72938aac6703d7e5ffa2790fa4c"
+    "sha256": "d5b78ed52fc2f30a9b539281ed74b3768714a6222a2a5ba2d8959418d801a89e"
   },
   {
     "course": 4,
     "id": "hk-nobel-04-deisseroth-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/04-deisseroth/hk-nobel-04-deisseroth-illustrated-v2.json",
-    "sha256": "91aac520ee517f4b319d920966d19e08f334564856dfe1f6fea574bfa78c2413"
+    "sha256": "e717dc53d9093acecf1204b35f9cdae75d909e237458e969a950bb3a129e3701"
   },
   {
     "course": 4,
     "id": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/04-deisseroth/hk-nobel-04-deisseroth-illustrated-v2-mandarin.json",
-    "sha256": "70d4e9e9ee7f988f3697c8a302f1d552c15638ae4625fde4ae15a1a0df1ee842"
+    "sha256": "a8f795b9f47d75f528805022970c2b7b925e0783599a73715c74d28efb554030"
   },
   {
     "course": 5,
     "id": "hk-nobel-05-hegemann-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/05-hegemann/hk-nobel-05-hegemann-illustrated-v2.json",
-    "sha256": "7312e1fdb8b856505d5fa1afc4d24be5a75a0116b0654645fc8acaf17ac613c3"
+    "sha256": "bdb0a2e031b39096e5af249efca94303dfb8a87d5db915c94fc557634eb603d4"
   },
   {
     "course": 5,
     "id": "hk-nobel-05-hegemann-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/05-hegemann/hk-nobel-05-hegemann-illustrated-v2-mandarin.json",
-    "sha256": "28b5d9b71822a4de22b9dcf53dc610700592e98c959f9e7c51e3d353ff79fd34"
+    "sha256": "3154913edfb3fd06e0555f864673a396b57e20c8602db6ada53c382e19d0a971"
   },
   {
     "course": 6,
     "id": "hk-nobel-06-nagel-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/06-nagel/hk-nobel-06-nagel-illustrated-v2.json",
-    "sha256": "8d746584dc1ee437a823ce61ccc4838efd41c6bbcfb98a316d49529b696db589"
+    "sha256": "41360e83b926ea55ff9b686ba85fefbd0a6c89d8cb0993e9b6c9e54f026a1fc5"
   },
   {
     "course": 6,
     "id": "hk-nobel-06-nagel-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/06-nagel/hk-nobel-06-nagel-illustrated-v2-mandarin.json",
-    "sha256": "724334198caaa5d05c4e439efbb73c2e3de244e8d8c9104dcccf8f1e2f9ec85e"
+    "sha256": "0754b7dc48fc830ea618254523222c3c1dab161a52321ea2154131ab912302f3"
   }
 ]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hk-nobel-01-kagan-illustrated-v2",
+    "oldSHA256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780",
+    "newSHA256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229",
+    "onlyChangedFields": [
+      "stage.languageDirective",
+      "generatedAgentConfigs.persona",
+      "discussion.topic",
+      "discussion.prompt"
+    ],
+    "lectureQuizImagesAudioUnchanged": true
+  },
+  {
+    "id": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+    "oldSHA256": "1e82e201f03f5341a5c362731499062e0e81f49ab7018d2e83328ceb00a69c36",
+    "newSHA256": "4ed979936d13fec701af539d451b432414db0822e7a1a66d81f31b37abb4c299",
+    "onlyChangedFields": [
+      "stage.languageDirective",
+      "generatedAgentConfigs.persona",
+      "discussion.topic",
+      "discussion.prompt"
+    ],
+    "lectureQuizImagesAudioUnchanged": true
+  },
+  {
+    "id": "hk-nobel-02-soai-illustrated-v2",
+    "oldSHA256": "3e4afbe9c4c9d2e584c87892cc2238930c0ccf180ed3dd08485400f6f17dcdaa",
+    "newSHA256": "36888763014ac81e7542719e1649ee3648a975f1aa0898167d45abf85b78ac1d",
+    "onlyChangedFields": [
+      "stage.languageDirective",
+      "generatedAgentConfigs.persona",
+      "discussion.topic",
+      "discussion.prompt"
+    ],
+    "lectureQuizImagesAudioUnchanged": true
+  },
+  {
+    "id": "hk-nobel-02-soai-illustrated-v2-mandarin",
+    "oldSHA256": "405d8269e19810351a27a4a3ef8bba511a7ed43fe58f524e17220012ea680087",
+    "newSHA256": "9b9e7390b6e3b5b57b8e5e8363da63c082e83c95c4c84d7e7e91db3e6145f165",
+    "onlyChangedFields": [
+      "stage.languageDirective",
+      "generatedAgentConfigs.persona",
+      "discussion.topic",
+      "discussion.prompt"
+    ],
+    "lectureQuizImagesAudioUnchanged": true
+  }
+]

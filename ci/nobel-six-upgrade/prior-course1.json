@@ -1,6 +1,7 @@
 {
-  "run": 42363266734,
-  "sha256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780",
+  "run": 42364027917,
+  "sha256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229",
+  "previousCourseSHA256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780",
   "cases": [
     {
       "kind": "real-audio-progress",
@@ -68,7 +69,54 @@
       "kind": "scene",
       "page": 11,
       "pass": true
+    },
+    {
+      "kind": "native-quiz-wrong-feedback-retry-correct",
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 12,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 13,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 13,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 13,
+      "pass": true
+    },
+    {
+      "kind": "real-voice-switch",
+      "pass": true
+    },
+    {
+      "kind": "mobile-portrait-landscape-fullscreen",
+      "pass": true
     }
   ],
-  "scope": "Only passed scenes before quiz retry harness race. No full acceptance inferred."
+  "scope": "Reuse only unchanged lecture, scenes, quiz, audio and mobile from exact pre-config course; changed fields independently reviewed in discussion config reports. Old actual discussion NOT accepted for new version.",
+  "compatibilityProof": "discussion-bounds-diff-1-2.json"
 }
