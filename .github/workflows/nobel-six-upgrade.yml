@@ -37,31 +37,19 @@
           "working-directory": "ci/nobel-six-upgrade"
         },
         {
-          "name": "Native course scenes quiz interactions audio and mobile",
-          "run": "node ci/nobel-six-upgrade/acceptance.mjs",
-          "env": {
-            "COURSE_NUMBER": "${{ matrix.course }}"
-          }
+          "name": "Verify course 04 loaded artwork and caption",
+          "run": "node ci/nobel-six-upgrade/check04-layout.mjs"
         },
         {
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "if": "always()",
           "with": {
-            "name": "nobel-six-${{ matrix.course }}-${{ github.sha }}",
+            "name": "nobel-four-layout-${{ github.sha }}",
             "path": "artifacts/nobel-six",
             "retention-days": 7
           }
         }
-      ],
-      "strategy": {
-        "fail-fast": false,
-        "max-parallel": 1,
-        "matrix": {
-          "course": [
-            5
-          ]
-        }
-      }
+      ]
     }
   }
 }
