@@ -60,14 +60,14 @@
     "id": "hk-nobel-05-hegemann-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/05-hegemann/hk-nobel-05-hegemann-illustrated-v2.json",
-    "sha256": "bdb0a2e031b39096e5af249efca94303dfb8a87d5db915c94fc557634eb603d4"
+    "sha256": "06e241ea991859d05b2254ff8e6a7ad6dc75cf35646cecef5d18a230ec66fd54"
   },
   {
     "course": 5,
     "id": "hk-nobel-05-hegemann-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/05-hegemann/hk-nobel-05-hegemann-illustrated-v2-mandarin.json",
-    "sha256": "3154913edfb3fd06e0555f864673a396b57e20c8602db6ada53c382e19d0a971"
+    "sha256": "75792e1499f816f0c90d697f6af05b2c2e788edd17e281caa17cc55613ba5b50"
   },
   {
     "course": 6,

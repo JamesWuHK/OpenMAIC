@@ -58,7 +58,7 @@
         "max-parallel": 1,
         "matrix": {
           "course": [
-            1
+            5
           ]
         }
       }

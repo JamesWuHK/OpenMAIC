@@ -1,0 +1,148 @@
+{
+  "run": 42369650978,
+  "sha256": "06e241ea991859d05b2254ff8e6a7ad6dc75cf35646cecef5d18a230ec66fd54",
+  "previousCourseSHA256": "bdb0a2e031b39096e5af249efca94303dfb8a87d5db915c94fc557634eb603d4",
+  "cases": [
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 2,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 3,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 4,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 5,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "two-condition-all-four-states-reset-retry",
+      "states": [
+        {
+          "protein": false,
+          "light": false,
+          "text": "通道示意：關閉"
+        },
+        {
+          "protein": true,
+          "light": false,
+          "text": "通道示意：關閉"
+        },
+        {
+          "protein": true,
+          "light": true,
+          "text": "通道示意：開啟"
+        },
+        {
+          "protein": false,
+          "light": true,
+          "text": "通道示意：關閉"
+        },
+        {
+          "protein": false,
+          "light": false,
+          "text": "通道示意：關閉"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 7,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 8,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 9,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 10,
+      "pass": true
+    },
+    {
+      "kind": "native-quiz-wrong-feedback-retry-correct",
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 11,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 12,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 12,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "zh-CN",
+      "page": 12,
+      "pass": true
+    },
+    {
+      "kind": "real-voice-switch",
+      "pass": true
+    },
+    {
+      "kind": "mobile-portrait-landscape-fullscreen",
+      "pass": true
+    }
+  ],
+  "scope": "Reuse unchanged scenes quiz audio interaction and mobile; old discussion not accepted.",
+  "compatibilityProof": "discussion-clarity-diff-05.json"
+}

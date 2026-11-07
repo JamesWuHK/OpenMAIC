@@ -1,0 +1,22 @@
+[
+  {
+    "id": "hk-nobel-05-hegemann-illustrated-v2",
+    "oldSHA256": "bdb0a2e031b39096e5af249efca94303dfb8a87d5db915c94fc557634eb603d4",
+    "newSHA256": "06e241ea991859d05b2254ff8e6a7ad6dc75cf35646cecef5d18a230ec66fd54",
+    "changedFields": [
+      "stage.languageDirective",
+      "discussion.prompt"
+    ],
+    "lectureQuizMediaAudioUnchanged": true
+  },
+  {
+    "id": "hk-nobel-05-hegemann-illustrated-v2-mandarin",
+    "oldSHA256": "3154913edfb3fd06e0555f864673a396b57e20c8602db6ada53c382e19d0a971",
+    "newSHA256": "75792e1499f816f0c90d697f6af05b2c2e788edd17e281caa17cc55613ba5b50",
+    "changedFields": [
+      "stage.languageDirective",
+      "discussion.prompt"
+    ],
+    "lectureQuizMediaAudioUnchanged": true
+  }
+]
