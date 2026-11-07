@@ -84,7 +84,8 @@ ENV OPENMAIC_BUILD_CPUS=$OPENMAIC_BUILD_CPUS
 
 COPY . .
 
-RUN rm -rf .next && NODE_OPTIONS="$NEXT_BUILD_NODE_OPTIONS" pnpm build
+RUN rm -rf .next && NODE_OPTIONS="$NEXT_BUILD_NODE_OPTIONS" pnpm build && \
+    node scripts/verify-learner-route-manifests.mjs .next
 
 # ---- Stage 4: Runner ----
 FROM ${NODE_IMAGE} AS runner
@@ -119,6 +120,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/content ./content
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Use the completed build manifests, rather than intermediate traced copies.
+COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app-paths-manifest.json ./.next/server/app-paths-manifest.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/app-path-routes-manifest.json ./.next/app-path-routes-manifest.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/routes-manifest.json ./.next/routes-manifest.json
+COPY --from=builder /app/scripts/verify-learner-route-manifests.mjs ./scripts/verify-learner-route-manifests.mjs
+RUN node scripts/verify-learner-route-manifests.mjs .next
 
 USER nextjs
 
