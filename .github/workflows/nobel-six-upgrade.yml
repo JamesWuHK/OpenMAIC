@@ -1,0 +1,68 @@
+{
+  "name": "Nobel six-course native content acceptance",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/nobel-six-upgrade-20261107"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "nobel-six-upgrade-20261107",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "acceptance": {
+      "runs-on": "ubuntu-22.04",
+      "timeout-minutes": 35,
+      "steps": [
+        {
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "sparse-checkout": "ci/nobel-six-upgrade"
+          }
+        },
+        {
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "with": {
+            "node-version": 22
+          }
+        },
+        {
+          "run": "npm install --no-save --package-lock=false playwright\nnpx playwright install --with-deps chromium",
+          "working-directory": "ci/nobel-six-upgrade"
+        },
+        {
+          "name": "Native course scenes quiz interactions audio and mobile",
+          "run": "node ci/nobel-six-upgrade/acceptance.mjs",
+          "env": {
+            "COURSE_NUMBER": "${{ matrix.course }}"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "nobel-six-${{ matrix.course }}-${{ github.sha }}",
+            "path": "artifacts/nobel-six",
+            "retention-days": 7
+          }
+        }
+      ],
+      "strategy": {
+        "fail-fast": false,
+        "max-parallel": 1,
+        "matrix": {
+          "course": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  }
+}

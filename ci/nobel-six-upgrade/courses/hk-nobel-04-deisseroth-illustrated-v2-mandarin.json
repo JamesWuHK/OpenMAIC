@@ -1,0 +1,1284 @@
+{
+  "id": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+  "createdAt": "2026-10-24T06:18:36.481Z",
+  "stage": {
+    "id": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+    "name": "戴瑟羅斯：他向藻類借來一束光（圖文講授・普通話）",
+    "description": "先認識一位醫生與腦科學家，再看看藻類的感光本領如何變成研究神經活動的工具。從校園類比、真實照片與具體研究，理解這項諾獎的價值與界線。",
+    "createdAt": 1792822716481,
+    "updatedAt": 1792822716481,
+    "style": "人物與探險式科學敘事，暖白編輯版面、深藍標題、真實資料照片與清楚圖說",
+    "languageDirective": "所有學生可見文字使用香港繁體中文，以普通話作適齡普通講授。先人物故事，再講研究難題、為甚麼獲獎、對普通人的價值和必要原理；類比有邊界，區分研究工具與仍待驗證的應用。不提供個人診療，不編童年或心理，不泛化所有情況。",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel04-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "我是科學故事老師，會用香港學生熟悉的生活例子講清研究的核心價值；不把比喻當成機制，也不把研究前景說成現成產品或療效。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel04-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "我是科學小助手，會幫你分清研究條件、證據與未知，某些情況不代表全部；動物實驗不能直接證明人的療效，不提供個人診療。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel04-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "我是AI同學，會用簡短追問幫大家澄清疑問，不假裝是真實小朋友。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel04-illustrated-01",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "卡爾・戴瑟羅斯",
+      "order": 1,
+      "outlineId": "nobel04-illustrated-01-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-01-speech",
+          "type": "speech",
+          "text": "資料照片中的人叫卡爾・戴瑟羅斯，英文是 Karl Deisseroth。他是腦科學家，也是精神科醫生。他後來在訪談中回憶，小時候會好奇為什麼說話和文字會帶來感受，也曾經問自己：感受能不能用科學研究？到醫學院見習精神科時，他看到患者需要很多幫助，而這個領域還有很多未解的問題，使他決定走近精神科。這段是他親口講的回憶，不是我們猜出來的童年天才故事。他先在大學學習，之後在史丹福完成神經科學博士和醫學學位，再接受精神科訓練。二零二六年，他和黑格曼、納格爾共同獲得諾貝爾生理學或醫學獎。三個人做的工作互相接力，還有很多合作研究者參與。接下來，我們會看到一件頗意外的事：研究人的大腦，為什麼會需要向小小的藻類借一樣工具？",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/01-zh-Hant.png",
+              "name": "卡爾・戴瑟羅斯；怎樣知道，哪一群腦細胞真的有作用？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-01-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-01-photo",
+              "left": 666.0714285714286,
+              "top": 135.0,
+              "width": 217.85714285714286,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/source-portrait.jpg",
+              "name": "卡爾·戴瑟羅斯（Karl Deisseroth），2025年肖像。"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-01-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\"><p class=\"caption\">卡爾·戴瑟羅斯（Karl Deisseroth），2025年肖像。</p><p class=\"credit\">Christopher P. Michel · <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" rel=\"noopener\" target=\"_blank\">CC BY-SA 4.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:Karl_Deisseroth_2025_C_01.jpg\" rel=\"noopener\" target=\"_blank\">來源</a></p></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-01-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-voice-link",
+              "left": 44,
+              "top": 486,
+              "width": 430,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:15px\"><a href=\"/classroom/hk-nobel-04-deisseroth-illustrated-v2\">切換至廣東話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-04-deisseroth-illustrated-v2"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "資料照片中的人叫卡爾・戴瑟羅斯，英文是 Karl Deisseroth。他是腦科學家，也是精神科醫生。他後來在訪談中回憶，小時候會好奇為什麼說話和文字會帶來感受，也曾經問自己：感受能不能用科學研究？到醫學院見習精神科時，他看到患者需要很多幫助，而這個領域還有很多未解的問題，使他決定走近精神科。這段是他親口講的回憶，不是我們猜出來的童年天才故事。他先在大學學習，之後在史丹福完成神經科學博士和醫學學位，再接受精神科訓練。二零二六年，他和黑格曼、納格爾共同獲得諾貝爾生理學或醫學獎。三個人做的工作互相接力，還有很多合作研究者參與。接下來，我們會看到一件頗意外的事：研究人的大腦，為什麼會需要向小小的藻類借一樣工具？"
+        },
+        "script": "資料照片中的人叫卡爾・戴瑟羅斯，英文是 Karl Deisseroth。他是腦科學家，也是精神科醫生。他後來在訪談中回憶，小時候會好奇為什麼說話和文字會帶來感受，也曾經問自己：感受能不能用科學研究？到醫學院見習精神科時，他看到患者需要很多幫助，而這個領域還有很多未解的問題，使他決定走近精神科。這段是他親口講的回憶，不是我們猜出來的童年天才故事。他先在大學學習，之後在史丹福完成神經科學博士和醫學學位，再接受精神科訓練。二零二六年，他和黑格曼、納格爾共同獲得諾貝爾生理學或醫學獎。三個人做的工作互相接力，還有很多合作研究者參與。接下來，我們會看到一件頗意外的事：研究人的大腦，為什麼會需要向小小的藻類借一樣工具？"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-02",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "一位醫生，也是一位研究者",
+      "order": 2,
+      "outlineId": "nobel04-illustrated-02-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-02-speech",
+          "type": "speech",
+          "text": "先看這張真實顯微照片。許多細胞好像連成一片網。照片用了螢光標記，方便研究者分辨細胞；紅色綠色不代表開心或不開心，也不是讀心術。你在街上聽到朋友叫你，轉頭看，再揮手，大腦裏面有很多細胞和連接參與。科學家可以記錄某些活動，但記錄到一群細胞同一時間活躍，還不足以講清楚因果。就像你看到幾個人同時走出教室，不能只靠這一幕就知道是誰叫大家走出去。戴瑟羅斯和其他研究者想要一種更細緻的工具：如果能夠在指定時間，改變選定細胞的活動，再看結果有沒有變化，我們就有更好的方法追問，這些細胞究竟有什麼作用。當然，大腦是互相連接的網絡；改變一處，也可能影響其他地方，不是一粒細胞就包辦一個複雜想法。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/02-zh-Hant.png",
+              "name": "一位醫生，也是一位研究者；他想更深入理解，腦細胞怎樣與感受和行為相連。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-02-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-02-photo",
+              "left": 620.0,
+              "top": 162.0550847457627,
+              "width": 310.0,
+              "height": 250.8898305084746,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/source-neurons.png",
+              "name": "培養的大鼠神經細胞，2018年螢光顯微照片。紅綠顏色來自標記蛋白，不是細胞正在想甚麼的讀數。"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-02-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\"><p class=\"caption\">培養的大鼠神經細胞，2018年螢光顯微照片。紅綠顏色來自標記蛋白，不是細胞正在想甚麼的讀數。</p><p class=\"credit\">Manuel Schottdorf · <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" rel=\"noopener\" target=\"_blank\">CC BY-SA 4.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:Synapsin_and_CamK2_positive_neurons.png\" rel=\"noopener\" target=\"_blank\">來源</a></p></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-02-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "先看這張真實顯微照片。許多細胞好像連成一片網。照片用了螢光標記，方便研究者分辨細胞；紅色綠色不代表開心或不開心，也不是讀心術。你在街上聽到朋友叫你，轉頭看，再揮手，大腦裏面有很多細胞和連接參與。科學家可以記錄某些活動，但記錄到一群細胞同一時間活躍，還不足以講清楚因果。就像你看到幾個人同時走出教室，不能只靠這一幕就知道是誰叫大家走出去。戴瑟羅斯和其他研究者想要一種更細緻的工具：如果能夠在指定時間，改變選定細胞的活動，再看結果有沒有變化，我們就有更好的方法追問，這些細胞究竟有什麼作用。當然，大腦是互相連接的網絡；改變一處，也可能影響其他地方，不是一粒細胞就包辦一個複雜想法。"
+        },
+        "script": "先看這張真實顯微照片。許多細胞好像連成一片網。照片用了螢光標記，方便研究者分辨細胞；紅色綠色不代表開心或不開心，也不是讀心術。你在街上聽到朋友叫你，轉頭看，再揮手，大腦裏面有很多細胞和連接參與。科學家可以記錄某些活動，但記錄到一群細胞同一時間活躍，還不足以講清楚因果。就像你看到幾個人同時走出教室，不能只靠這一幕就知道是誰叫大家走出去。戴瑟羅斯和其他研究者想要一種更細緻的工具：如果能夠在指定時間，改變選定細胞的活動，再看結果有沒有變化，我們就有更好的方法追問，這些細胞究竟有什麼作用。當然，大腦是互相連接的網絡；改變一處，也可能影響其他地方，不是一粒細胞就包辦一個複雜想法。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-03",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "看見一起發生，還不夠",
+      "order": 3,
+      "outlineId": "nobel04-illustrated-03-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "interactive",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-03-speech",
+          "type": "speech",
+          "text": "想像港鐵車站一邊有人排隊，一邊有閘口開放。你看到兩件事同時發生，可以就說閘口開放造成擠擁嗎？未必。可能與到站列車、上班時間或其他出入口有關。研究腦細胞也類似：看到某些細胞活躍與某個行為同時出現，還不足以知道它有甚麼作用。研究者要在合適條件下改變某個環節，再與對照比較。車站只是類比，不是說大腦真是一個車站。你可以先選一個判斷，再看解釋；答錯可以再選。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "interactive",
+        "url": "",
+        "html": "<!doctype html><html lang=\"zh-Hant-HK\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>html,body{margin:0;width:100%;min-height:100%;background:#f5f0e8;color:#102b38;font-family:system-ui,\"PingFang HK\",sans-serif}main{max-width:1080px;margin:auto;padding:14px 24px}.art{display:block;width:100%;max-height:48vh;object-fit:contain}.question{border:2px solid #b5d4c5;background:#fffaf0;border-radius:18px;padding:15px 22px}h2{font-family:\"Songti TC\",serif;font-size:clamp(18px,2.3vw,27px);margin:0 0 12px}.options{display:flex;gap:12px;flex-wrap:wrap}button{font:inherit;font-size:clamp(16px,1.7vw,22px);border:2px solid #368471;border-radius:10px;padding:10px 18px;background:#fff}button[aria-pressed=true]{background:#b5e5cf}.feedback{font-size:17px;line-height:1.55;min-height:2em}.note{font-size:13px;color:#47616c}</style><main><img class=\"art\" src=\"/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2/media/03-zh-Hant.png\" alt=\"看見一起發生，還不夠\"><section class=\"question\"><h2>只看見車站擠擁和閘口開放同時出現，能直接說閘口造成擠擁嗎？</h2><div class=\"options\"><button data-choice=\"0\" aria-pressed=\"false\">能，同時出現就足夠。</button><button data-choice=\"1\" aria-pressed=\"false\">不能，還要比較其他可能原因。</button></div><p class=\"feedback\" id=\"feedback\" aria-live=\"polite\"></p></section><p class=\"note\">教學類比與簡化示意，不是實驗數據；可再次選擇，重新比較。真實研究仍需更多條件與對照。</p></main><script>document.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-choice]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.getElementById('feedback').textContent=b.dataset.choice==='1'?'對。還要考慮列車、時間和其他出入口，並作合適的對照比較。':'同時出現不等於因果；不能排除到站列車、上班時間或其他原因。你可以再選。'})</script></html>",
+        "widgetType": "html",
+        "widgetConfig": {}
+      }
+    },
+    {
+      "id": "nobel04-illustrated-04",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "線索來自一種微藻",
+      "order": 4,
+      "outlineId": "nobel04-illustrated-04-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-04-speech",
+          "type": "speech",
+          "text": "故事現在轉到一位很小的主角：萊茵衣藻。它是單細胞綠藻，可以對光作出反應。畫面是手繪教學插畫，不是電子顯微影像，也不是當年的實驗現場。黑格曼、納格爾和其他研究者研究藻類怎樣感光，找到一類很特別的蛋白質。其中有一種叫通道視紫紅質二，簡稱 ChR2。名字長不要緊，記住它的本領就可以：收到合適的光，蛋白通道可以打開，讓帶電粒子通過細胞膜，使細胞的電狀態改變。我們用受光控制的小門作比喻。它不是真的有門鉸和鑰匙，而是蛋白質的形狀和通道功能會受光影響。最有趣的轉折是：一種微小藻類的感光本領，竟然可以為研究神經細胞提供線索。不過，找到藻類蛋白，和做成可靠的腦科學工具，中間還有一大段工作。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/04-zh-Hant.png",
+              "name": "線索來自一種微藻；有些藻類蛋白，能把合適的光連到細胞電訊號。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-04-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-04-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "故事現在轉到一位很小的主角：萊茵衣藻。它是單細胞綠藻，可以對光作出反應。畫面是手繪教學插畫，不是電子顯微影像，也不是當年的實驗現場。黑格曼、納格爾和其他研究者研究藻類怎樣感光，找到一類很特別的蛋白質。其中有一種叫通道視紫紅質二，簡稱 ChR2。名字長不要緊，記住它的本領就可以：收到合適的光，蛋白通道可以打開，讓帶電粒子通過細胞膜，使細胞的電狀態改變。我們用受光控制的小門作比喻。它不是真的有門鉸和鑰匙，而是蛋白質的形狀和通道功能會受光影響。最有趣的轉折是：一種微小藻類的感光本領，竟然可以為研究神經細胞提供線索。不過，找到藻類蛋白，和做成可靠的腦科學工具，中間還有一大段工作。"
+        },
+        "script": "故事現在轉到一位很小的主角：萊茵衣藻。它是單細胞綠藻，可以對光作出反應。畫面是手繪教學插畫，不是電子顯微影像，也不是當年的實驗現場。黑格曼、納格爾和其他研究者研究藻類怎樣感光，找到一類很特別的蛋白質。其中有一種叫通道視紫紅質二，簡稱 ChR2。名字長不要緊，記住它的本領就可以：收到合適的光，蛋白通道可以打開，讓帶電粒子通過細胞膜，使細胞的電狀態改變。我們用受光控制的小門作比喻。它不是真的有門鉸和鑰匙，而是蛋白質的形狀和通道功能會受光影響。最有趣的轉折是：一種微小藻類的感光本領，竟然可以為研究神經細胞提供線索。不過，找到藻類蛋白，和做成可靠的腦科學工具，中間還有一大段工作。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-05",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "需要三部分配合",
+      "order": 5,
+      "outlineId": "nobel04-illustrated-05-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-05-speech",
+          "type": "speech",
+          "text": "如果藻類有一個受光控制的小門，把它用在神經細胞，是不是就容易？其實不是。研究者不是把整隻藻類搬進大腦，而是運用編碼蛋白的基因，令選定細胞自己製造相應蛋白。蛋白要到達細胞膜上面，而且在新環境仍然工作，才有用。然後，合適的光還要送到研究目標。畫面用三個部分幫我們記住：合適蛋白、特定細胞，以及送達的光。這項研究同時要處理生物學和工程問題。這些是專業實驗研究，不是照著圖就可以自己操作。戴瑟羅斯和團隊要把一個有希望的想法，變成能夠反覆使用、檢查結果的方法。由點子到工具，正正需要很多訓練、合作和實驗。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/05-zh-Hant.png",
+              "name": "需要三部分配合；合適蛋白、特定細胞、送達的光。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-05-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-05-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "如果藻類有一個受光控制的小門，把它用在神經細胞，是不是就容易？其實不是。研究者不是把整隻藻類搬進大腦，而是運用編碼蛋白的基因，令選定細胞自己製造相應蛋白。蛋白要到達細胞膜上面，而且在新環境仍然工作，才有用。然後，合適的光還要送到研究目標。畫面用三個部分幫我們記住：合適蛋白、特定細胞，以及送達的光。這項研究同時要處理生物學和工程問題。這些是專業實驗研究，不是照著圖就可以自己操作。戴瑟羅斯和團隊要把一個有希望的想法，變成能夠反覆使用、檢查結果的方法。由點子到工具，正正需要很多訓練、合作和實驗。"
+        },
+        "script": "如果藻類有一個受光控制的小門，把它用在神經細胞，是不是就容易？其實不是。研究者不是把整隻藻類搬進大腦，而是運用編碼蛋白的基因，令選定細胞自己製造相應蛋白。蛋白要到達細胞膜上面，而且在新環境仍然工作，才有用。然後，合適的光還要送到研究目標。畫面用三個部分幫我們記住：合適蛋白、特定細胞，以及送達的光。這項研究同時要處理生物學和工程問題。這些是專業實驗研究，不是照著圖就可以自己操作。戴瑟羅斯和團隊要把一個有希望的想法，變成能夠反覆使用、檢查結果的方法。由點子到工具，正正需要很多訓練、合作和實驗。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-06",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "2005：把工具帶進神經研究",
+      "order": 6,
+      "outlineId": "nobel04-illustrated-06-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-06-speech",
+          "type": "speech",
+          "text": "到二零零五年，一篇重要論文發表了。研究者讓哺乳動物神經細胞表達 ChR2，再用快速光刺激，顯示可以精細控制神經細胞的電訊號。這裏不是說光突然令普通腦細胞全部有反應，而是先有具備相應蛋白的細胞，再有合適光刺激，兩者配合。論文作者不止一個人，包括博伊登、張鋒、班貝格、納格爾和戴瑟羅斯。你不需要背全部人名，但要明白：我們每課講一位主角，並不代表所有成果都由他一個人完成。之後，研究者繼續發展方法，把光控制帶入活體動物研究，也發展出可以增加或抑制活動的不同工具。真正改變腦科學的，是研究者更能選擇在哪些細胞、哪個時間施加改變，再和記錄、觀察配合，研究因果關係。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/06-zh-Hant.png",
+              "name": "2005：把工具帶進神經研究；戴瑟羅斯與合作者，讓光能用來控制神經活動。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-06-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-06-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "到二零零五年，一篇重要論文發表了。研究者讓哺乳動物神經細胞表達 ChR2，再用快速光刺激，顯示可以精細控制神經細胞的電訊號。這裏不是說光突然令普通腦細胞全部有反應，而是先有具備相應蛋白的細胞，再有合適光刺激，兩者配合。論文作者不止一個人，包括博伊登、張鋒、班貝格、納格爾和戴瑟羅斯。你不需要背全部人名，但要明白：我們每課講一位主角，並不代表所有成果都由他一個人完成。之後，研究者繼續發展方法，把光控制帶入活體動物研究，也發展出可以增加或抑制活動的不同工具。真正改變腦科學的，是研究者更能選擇在哪些細胞、哪個時間施加改變，再和記錄、觀察配合，研究因果關係。"
+        },
+        "script": "到二零零五年，一篇重要論文發表了。研究者讓哺乳動物神經細胞表達 ChR2，再用快速光刺激，顯示可以精細控制神經細胞的電訊號。這裏不是說光突然令普通腦細胞全部有反應，而是先有具備相應蛋白的細胞，再有合適光刺激，兩者配合。論文作者不止一個人，包括博伊登、張鋒、班貝格、納格爾和戴瑟羅斯。你不需要背全部人名，但要明白：我們每課講一位主角，並不代表所有成果都由他一個人完成。之後，研究者繼續發展方法，把光控制帶入活體動物研究，也發展出可以增加或抑制活動的不同工具。真正改變腦科學的，是研究者更能選擇在哪些細胞、哪個時間施加改變，再和記錄、觀察配合，研究因果關係。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-07",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "光怎樣改變細胞訊號？",
+      "order": 7,
+      "outlineId": "nobel04-illustrated-07-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "interactive",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-07-speech",
+          "type": "speech",
+          "text": "現在我們把原理收窄到最重要的一條線。以 ChR2 這種工具為例，第一，選定細胞要表達感光蛋白。第二，合適的光要到達這些蛋白。第三，通道打開，帶電粒子流動，細胞的電狀態就會改變。之後，研究者還要記錄神經訊號或者觀察行為，才知道影響是什麼。你可以把它想成受光控制的小門，但比喻只講通道可以受控制，不是細胞裏面真的有一扇門。也不可以把光想成遙控器裏面一串命令，叫一個人現在開心、現在忘記功課。大腦有很多互相連接的細胞，改變選定細胞可能經網絡影響其他部分，複雜行為不是簡單一按即成。這裏有一個小小的紙上比較：具備 ChR2 和收到合適光，兩個條件怎樣配合？你可以試著選一個情況，看看簡化示意會怎樣解釋。這是教學示意，不是實驗數據，也不是對每一粒細胞的保證。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "interactive",
+        "url": "",
+        "html": "<!doctype html><html lang=\"zh-Hant-HK\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>html,body{margin:0;width:100%;min-height:100%;background:#f5f0e8;color:#102b38;font-family:system-ui,\"PingFang HK\",sans-serif}main{max-width:1080px;margin:auto;padding:14px 24px}.art{display:block;width:100%;max-height:48vh;object-fit:contain}.question{border:2px solid #b5d4c5;background:#fffaf0;border-radius:18px;padding:15px 22px}h2{font-family:\"Songti TC\",serif;font-size:clamp(18px,2.3vw,27px);margin:0 0 12px}.options{display:flex;gap:12px;flex-wrap:wrap}button{font:inherit;font-size:clamp(16px,1.7vw,22px);border:2px solid #368471;border-radius:10px;padding:10px 18px;background:#fff}button[aria-pressed=true]{background:#b5e5cf}.feedback{font-size:17px;line-height:1.55;min-height:2em}.note{font-size:13px;color:#47616c}</style><main><img class=\"art\" src=\"/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2/media/07-zh-Hant.png\" alt=\"光怎樣改變細胞訊號？\"><section class=\"question small\"><h2>點選兩個條件，看看這個簡化示意怎樣解釋</h2><div class=\"options\"><button aria-pressed=\"false\" data-condition=\"protein\">感光蛋白：未設定</button><button aria-pressed=\"false\" data-condition=\"light\">合適光：未設定</button></div><p class=\"feedback\" id=\"logic-feedback\" role=\"status\">先看看兩個條件怎樣配合。這不是實驗數據。</p></section><p class=\"note\">教學類比與簡化示意，不是實驗數據；可再次選擇，重新比較。真實研究仍需更多條件與對照。</p></main><script>const state={protein:false,light:false};function update(){document.querySelectorAll('[data-condition]').forEach(b=>{const k=b.dataset.condition;b.setAttribute('aria-pressed',String(state[k]));b.textContent=(k==='protein'?'感光蛋白':'合適光')+'：'+(state[k]?'已設定':'未設定');});const result=!state.protein?'未設定ChR2：本示意不能用ChR2解釋光的效應。這不表示細胞完全沒有其他活動。':!state.light?'有感光蛋白，但未設定合適光：尚未加入本示意的光控制條件。':'具備ChR2與合適光：通道可開啟、改變電狀態。是否產生神經放電仍取決於實驗條件。';document.getElementById('logic-feedback').textContent=result;}document.querySelectorAll('[data-condition]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.condition;state[k]=!state[k];update();}));\n</script></html>",
+        "widgetType": "html",
+        "widgetConfig": {}
+      }
+    },
+    {
+      "id": "nobel04-illustrated-08",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "為甚麼值得諾獎？",
+      "order": 8,
+      "outlineId": "nobel04-illustrated-08-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-08-speech",
+          "type": "speech",
+          "text": "為什麼這件事值得諾貝爾獎？不是因為藍光本身很神奇，也不是因為已經解開大腦所有秘密。頒獎理由肯定的是光控離子通道和光遺傳學的發現。黑格曼和納格爾等人研究到藻類蛋白的特別本領，戴瑟羅斯和合作者再把它發展成精細研究神經活動的工具。以前單靠看到兩件事一起發生，可能難以分清誰影響誰。多了一種能夠改變選定細胞活動的方法，研究者就可以設計更有力的比較。不過，仍然要有對照，檢查照光本身有沒有其他影響，也要配合其他測量。這種方法傳到不同實驗室，令更多人可以追查各自的問題。偉大之處是人類多了一種研究能力，好像為大家多造了一件精細儀器。它不只服務一篇論文，而是令一大批原本難答的問題，變得更有機會找到答案。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3"
+        },
+        {
+          "id": "nobel04-illustrated-08-discussion",
+          "type": "discussion",
+          "agentId": "nobel04-assistant",
+          "topic": "這項研究為甚麼重要？它對普通人的價值和限制是甚麼？",
+          "prompt": "這是一段簡短課堂討論。科學小助手先釐清本課一個類比的界線；科學故事老師接着連回研究為甚麼重要；好奇同學提出一個相關追問。各角色只代表自己發言，完成後交回學生，不繼續延伸新回合；這段毋須開白板或新增圖表。不泛化所有情況，不提供個人診療。"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-08-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-08-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/08-zh-Hant.png",
+              "name": "為甚麼值得諾獎？；從觀察活動，前進到有條件地測試因果作用。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-08-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-08-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-08-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "為什麼這件事值得諾貝爾獎？不是因為藍光本身很神奇，也不是因為已經解開大腦所有秘密。頒獎理由肯定的是光控離子通道和光遺傳學的發現。黑格曼和納格爾等人研究到藻類蛋白的特別本領，戴瑟羅斯和合作者再把它發展成精細研究神經活動的工具。以前單靠看到兩件事一起發生，可能難以分清誰影響誰。多了一種能夠改變選定細胞活動的方法，研究者就可以設計更有力的比較。不過，仍然要有對照，檢查照光本身有沒有其他影響，也要配合其他測量。這種方法傳到不同實驗室，令更多人可以追查各自的問題。偉大之處是人類多了一種研究能力，好像為大家多造了一件精細儀器。它不只服務一篇論文，而是令一大批原本難答的問題，變得更有機會找到答案。"
+        },
+        "script": "為什麼這件事值得諾貝爾獎？不是因為藍光本身很神奇，也不是因為已經解開大腦所有秘密。頒獎理由肯定的是光控離子通道和光遺傳學的發現。黑格曼和納格爾等人研究到藻類蛋白的特別本領，戴瑟羅斯和合作者再把它發展成精細研究神經活動的工具。以前單靠看到兩件事一起發生，可能難以分清誰影響誰。多了一種能夠改變選定細胞活動的方法，研究者就可以設計更有力的比較。不過，仍然要有對照，檢查照光本身有沒有其他影響，也要配合其他測量。這種方法傳到不同實驗室，令更多人可以追查各自的問題。偉大之處是人類多了一種研究能力，好像為大家多造了一件精細儀器。它不只服務一篇論文，而是令一大批原本難答的問題，變得更有機會找到答案。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-09",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "普通人關心的問題",
+      "order": 9,
+      "outlineId": "nobel04-illustrated-09-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-09-speech",
+          "type": "speech",
+          "text": "站在普通人的角度，我們最關心的可能是：如果家人長期受腦部或精神疾病困擾，研究有沒有機會幫到他？光遺傳學的一個重要價值，是幫助研究者把問題問得更清楚。例如二零一一年的一項小鼠研究，研究者改變某些腦區之間特定連接的活動，觀察到小鼠焦慮樣行為會有變化。重點不是要你背腦區名，而是原來不同連接可能有不同作用；只講某個大範圍腦區活躍，可能還太粗略。更加清楚地瞭解相關細胞和連接，可能為後續藥物或其他治療研究提供方向。但我們要守住一條重要界線：小鼠的行為指標，不等同完整理解一個人的感受。動物研究有發現，也不等於人的焦慮已經可以用這個方法治好。由瞭解機制到可靠、安全的治療，還需要很多步、很多研究。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/09-zh-Hant.png",
+              "name": "普通人關心的問題；睡眠、記憶和情緒研究，多了一種重要工具。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-09-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-09-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "站在普通人的角度，我們最關心的可能是：如果家人長期受腦部或精神疾病困擾，研究有沒有機會幫到他？光遺傳學的一個重要價值，是幫助研究者把問題問得更清楚。例如二零一一年的一項小鼠研究，研究者改變某些腦區之間特定連接的活動，觀察到小鼠焦慮樣行為會有變化。重點不是要你背腦區名，而是原來不同連接可能有不同作用；只講某個大範圍腦區活躍，可能還太粗略。更加清楚地瞭解相關細胞和連接，可能為後續藥物或其他治療研究提供方向。但我們要守住一條重要界線：小鼠的行為指標，不等同完整理解一個人的感受。動物研究有發現，也不等於人的焦慮已經可以用這個方法治好。由瞭解機制到可靠、安全的治療，還需要很多步、很多研究。"
+        },
+        "script": "站在普通人的角度，我們最關心的可能是：如果家人長期受腦部或精神疾病困擾，研究有沒有機會幫到他？光遺傳學的一個重要價值，是幫助研究者把問題問得更清楚。例如二零一一年的一項小鼠研究，研究者改變某些腦區之間特定連接的活動，觀察到小鼠焦慮樣行為會有變化。重點不是要你背腦區名，而是原來不同連接可能有不同作用；只講某個大範圍腦區活躍，可能還太粗略。更加清楚地瞭解相關細胞和連接，可能為後續藥物或其他治療研究提供方向。但我們要守住一條重要界線：小鼠的行為指標，不等同完整理解一個人的感受。動物研究有發現，也不等於人的焦慮已經可以用這個方法治好。由瞭解機制到可靠、安全的治療，還需要很多步、很多研究。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-10",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "醫療希望，還要驗證",
+      "order": 10,
+      "outlineId": "nobel04-illustrated-10-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-10-speech",
+          "type": "speech",
+          "text": "我們再看一個和生活非常接近的例子。對一個嚴重視力受損的人來說，可以辨認桌上有物件，已經可能是一件有意義的事。二零二一年，Sahel、Roska 和合作者報告了一位視網膜色素病變患者的研究結果。研究結合令視網膜細胞表達感光蛋白，和專門設計的眼鏡。在測試之中，這位患者能夠辨認、定位和接觸部分物件。這個例子顯示，借用感光蛋白改變細胞反應的思路，有機會走向幫助人的研究。但不要把它講成恢復正常視力：報告是部分功能的改善，也不是說任何失明患者都適用，更不是戴一副普通眼鏡就行。眼鏡、細胞改變和訓練，要在特定研究條件下配合。還要記住，這項視覺研究由後續團隊完成，不可以把全部功勞放在戴瑟羅斯一個人身上。真正的希望，應該和清楚的證據邊界一起講。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/10-zh-Hant.png",
+              "name": "醫療希望，還要驗證；早期視覺研究有進展，不能說已恢復正常視力。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-10-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-10-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "我們再看一個和生活非常接近的例子。對一個嚴重視力受損的人來說，可以辨認桌上有物件，已經可能是一件有意義的事。二零二一年，Sahel、Roska 和合作者報告了一位視網膜色素病變患者的研究結果。研究結合令視網膜細胞表達感光蛋白，和專門設計的眼鏡。在測試之中，這位患者能夠辨認、定位和接觸部分物件。這個例子顯示，借用感光蛋白改變細胞反應的思路，有機會走向幫助人的研究。但不要把它講成恢復正常視力：報告是部分功能的改善，也不是說任何失明患者都適用，更不是戴一副普通眼鏡就行。眼鏡、細胞改變和訓練，要在特定研究條件下配合。還要記住，這項視覺研究由後續團隊完成，不可以把全部功勞放在戴瑟羅斯一個人身上。真正的希望，應該和清楚的證據邊界一起講。"
+        },
+        "script": "我們再看一個和生活非常接近的例子。對一個嚴重視力受損的人來說，可以辨認桌上有物件，已經可能是一件有意義的事。二零二一年，Sahel、Roska 和合作者報告了一位視網膜色素病變患者的研究結果。研究結合令視網膜細胞表達感光蛋白，和專門設計的眼鏡。在測試之中，這位患者能夠辨認、定位和接觸部分物件。這個例子顯示，借用感光蛋白改變細胞反應的思路，有機會走向幫助人的研究。但不要把它講成恢復正常視力：報告是部分功能的改善，也不是說任何失明患者都適用，更不是戴一副普通眼鏡就行。眼鏡、細胞改變和訓練，要在特定研究條件下配合。還要記住，這項視覺研究由後續團隊完成，不可以把全部功勞放在戴瑟羅斯一個人身上。真正的希望，應該和清楚的證據邊界一起講。"
+      }
+    },
+    {
+      "id": "nobel04-illustrated-11",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "三個小判斷",
+      "order": 11,
+      "outlineId": "nobel04-illustrated-11-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-11-speech",
+          "type": "speech",
+          "text": "故事講到這裏，你不需要考自己記不記得蛋白質的全名。試著用三個問題，捉住最重要的意思。第一，光遺傳學是不是用電筒照普通腦細胞就完成？要回想蛋白工具和合適光這兩個條件。第二，為什麼改變選定細胞活動會有研究價值？因為研究者可以再觀察結果，和適當對照作比較，追問細胞活動和結果的關係。第三，一位患者有部分視覺功能改善，能不能直接講成所有失明已經可以醫好？不能。每一個答案都可以再試，重點是看解釋，想清楚自己有沒有把研究工具誤當成神奇遙控器，或者把一個有限的研究結果誤當成對所有人的承諾。這也是讀科學新聞很有用的習慣：先問它真的做到什麼，再問還有什麼未證實。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel04-illustrated-11-q1",
+            "type": "single",
+            "question": "這項工具為甚麼可以讓選定神經細胞受光影響？",
+            "options": [
+              {
+                "value": "A",
+                "label": "普通電筒能向任何腦細胞發出思想指令。"
+              },
+              {
+                "value": "B",
+                "label": "選定細胞先表達感光蛋白，再接受合適的光。"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：不是思想遙控器。要先有相應感光蛋白，還要合適的光到達。；B：對。以ChR2為例，感光蛋白與合適光配合，改變細胞的電狀態。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel04-illustrated-11-q2",
+            "type": "single",
+            "question": "為甚麼這項研究值得諾獎？",
+            "options": [
+              {
+                "value": "A",
+                "label": "它讓研究者更精細地改變細胞活動、作比較，追問因果關係。"
+              },
+              {
+                "value": "B",
+                "label": "它已解開每一個人的所有想法。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。這是一種新的研究能力，仍要配合對照、記錄與其他方法。；B：研究方法更有力，不代表已讀懂所有思想或大腦所有秘密。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel04-illustrated-11-q3",
+            "type": "single",
+            "question": "2021年的視覺研究案例，最合理的說法是甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "任何失明都能戴普通眼鏡治好。"
+              },
+              {
+                "value": "B",
+                "label": "戴瑟羅斯一個人完成所有視覺治療研究。"
+              },
+              {
+                "value": "C",
+                "label": "後續團隊報告特定患者的部分功能改善，不能推廣成對所有人的保證。"
+              }
+            ],
+            "answer": [
+              "C"
+            ],
+            "analysis": "A：研究需要特定細胞改變、專用設備與研究條件，不能推廣到所有失明原因。；B：視覺研究由Sahel、Roska及合作者進行；基礎工具與後續應用有各自團隊的貢獻。；C：對。具體的研究進展值得期待，也要保留適用範圍與仍需驗證的部分。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "nobel04-illustrated-12",
+      "stageId": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
+      "title": "自然的小本領，人類的新工具",
+      "order": 12,
+      "outlineId": "nobel04-illustrated-12-outline",
+      "createdAt": 1792822716481,
+      "updatedAt": 1792822716481,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel04-illustrated-12-speech",
+          "type": "speech",
+          "text": "最後，回到戴瑟羅斯這個人。他不是一出世就懂得用光研究大腦。生物學學習、神經科學研究、醫學和精神科訓練，再加上和不同專長的人合作，才逐步形成這條研究道路。藻類的一種感光本領，和研究者想理解大腦的問題接在一起，變成了更多實驗室可以使用的工具。對普通人來說，價值一方面是我們更加有能力理解自己的大腦；另一方面，這些知識可能幫助後續研究，尋找更好的醫療方向。但是要一步一步驗證，不可以把希望當成保證。今天你帶走的不一定是一個專有名詞，而是一個更有力的提問習慣：看到兩件事一起發生，有沒有足夠理由講因果？研究者改變了什麼，又比較了什麼？下一課，我們會更走近藻類研究者黑格曼，看看一個關於微小生命的好奇問題，怎樣成為這個故事另一個重要起點。",
+          "audioId": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel04-illustrated-12-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel04-illustrated-12-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-04-deisseroth-illustrated-v2-mandarin/media/12-zh-Hant.png",
+              "name": "自然的小本領，人類的新工具；訓練與合作，把微藻線索帶進腦科學。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-12-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel04-illustrated-12-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel04-illustrated-12-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "最後，回到戴瑟羅斯這個人。他不是一出世就懂得用光研究大腦。生物學學習、神經科學研究、醫學和精神科訓練，再加上和不同專長的人合作，才逐步形成這條研究道路。藻類的一種感光本領，和研究者想理解大腦的問題接在一起，變成了更多實驗室可以使用的工具。對普通人來說，價值一方面是我們更加有能力理解自己的大腦；另一方面，這些知識可能幫助後續研究，尋找更好的醫療方向。但是要一步一步驗證，不可以把希望當成保證。今天你帶走的不一定是一個專有名詞，而是一個更有力的提問習慣：看到兩件事一起發生，有沒有足夠理由講因果？研究者改變了什麼，又比較了什麼？下一課，我們會更走近藻類研究者黑格曼，看看一個關於微小生命的好奇問題，怎樣成為這個故事另一個重要起點。"
+        },
+        "script": "最後，回到戴瑟羅斯這個人。他不是一出世就懂得用光研究大腦。生物學學習、神經科學研究、醫學和精神科訓練，再加上和不同專長的人合作，才逐步形成這條研究道路。藻類的一種感光本領，和研究者想理解大腦的問題接在一起，變成了更多實驗室可以使用的工具。對普通人來說，價值一方面是我們更加有能力理解自己的大腦；另一方面，這些知識可能幫助後續研究，尋找更好的醫療方向。但是要一步一步驗證，不可以把希望當成保證。今天你帶走的不一定是一個專有名詞，而是一個更有力的提問習慣：看到兩件事一起發生，有沒有足夠理由講因果？研究者改變了什麼，又比較了什麼？下一課，我們會更走近藻類研究者黑格曼，看看一個關於微小生命的好奇問題，怎樣成為這個故事另一個重要起點。"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1570 @@
+{
+  "id": "hk-nobel-02-soai-illustrated-v2",
+  "createdAt": "2026-10-24T06:21:14.343Z",
+  "stage": {
+    "id": "hk-nobel-02-soai-illustrated-v2",
+    "name": "硤合憲三：產物也能幫忙催化？（圖文講授・廣東話）",
+    "description": "先認識日本化學家硤合憲三，再跟著他的團隊追查一個意外問題：產物能否參與催化、幫助更多同類產物形成？從1995和2003年的真實研究，理解自催化為什麼獲得諾貝爾獎、對普通人的研究可能有何價值。",
+    "createdAt": 1792822874343,
+    "updatedAt": 1792822874343,
+    "style": "人物故事式普通講授；暖白編輯版面、真實許可照片、清楚圖說、原創原理圖與必要術語解釋",
+    "languageDirective": "所有學生可見文字使用香港繁體中文，以廣東話作適齡普通講授。先人物故事，再講研究難題、為甚麼獲獎、對普通人的價值和必要原理；類比有邊界，區分研究工具與仍待驗證的應用。不提供個人診療，不編童年或心理，不泛化所有情況。",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel02-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "我是科學故事老師，會用香港學生熟悉的生活例子講清研究的核心價值；不把比喻當成機制，也不把研究前景說成現成產品或療效。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel02-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "我是科學小助手，會幫你分清研究條件、證據與未知，某些情況不代表全部；動物實驗不能直接證明人的療效，不提供個人診療。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel02-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "我是AI同學，會用簡短追問幫大家澄清疑問，不假裝是真實小朋友。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel02-illustrated-01",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "硤合憲三",
+      "order": 1,
+      "outlineId": "nobel02-illustrated-01-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-01-speech",
+          "type": "speech",
+          "text": "呢位科學家叫硤合憲三，英文係 Kenso Soai。佢任職於東京理科大學；皇家瑞典科學院同東京大學嘅資料，稱佢為榮休教授，英文係 Professor Emeritus。二零二六年，佢同亨利卡甘一齊獲得諾貝爾化學獎。硤合其中一項研究貢獻，係發現不對稱自催化：某啲反應形成嘅產物，自己亦可以參與催化同一個反應。呢個念頭好似「影印出嚟嘅副本，返轉頭幫手印下一張」。但真實反應仲需要原料同合適條件。今堂我哋會跟住硤合嘅研究故事，睇下科學家點樣將呢個想法變成可以觀察嘅實驗結果。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/01-zh-Hant.png",
+              "name": "硤合憲三；如果產物也能回來幫忙，會發生甚麼？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-01-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-01-photo",
+              "left": 656.2305295950156,
+              "top": 135.0,
+              "width": 237.53894080996884,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/soai-mext.jpg",
+              "name": "硤合憲三資料肖像，非諾獎現場"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-01-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">文部科學省，2026年文化勳章受章者資料肖像；非諾獎現場；原圖未修改。 <a href=\"https://www.mext.go.jp/b_menu/houdou/2026/1422026_00001.htm\">來源</a>／<a href=\"https://www.mext.go.jp/b_menu/1351168.htm\">授權</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-01-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.tus.ac.jp/en/news/archive/20261007_3541.html\">東京理科大學：硤合憲三簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-voice-link",
+              "left": 44,
+              "top": 486,
+              "width": 430,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:15px\"><a href=\"/classroom/hk-nobel-02-soai-illustrated-v2-mandarin\">切換至普通話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-02-soai-illustrated-v2-mandarin"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "呢位科學家叫硤合憲三，英文係 Kenso Soai。佢任職於東京理科大學；皇家瑞典科學院同東京大學嘅資料，稱佢為榮休教授，英文係 Professor Emeritus。二零二六年，佢同亨利卡甘一齊獲得諾貝爾化學獎。硤合其中一項研究貢獻，係發現不對稱自催化：某啲反應形成嘅產物，自己亦可以參與催化同一個反應。呢個念頭好似「影印出嚟嘅副本，返轉頭幫手印下一張」。但真實反應仲需要原料同合適條件。今堂我哋會跟住硤合嘅研究故事，睇下科學家點樣將呢個想法變成可以觀察嘅實驗結果。"
+        },
+        "script": "呢位科學家叫硤合憲三，英文係 Kenso Soai。佢任職於東京理科大學；皇家瑞典科學院同東京大學嘅資料，稱佢為榮休教授，英文係 Professor Emeritus。二零二六年，佢同亨利卡甘一齊獲得諾貝爾化學獎。硤合其中一項研究貢獻，係發現不對稱自催化：某啲反應形成嘅產物，自己亦可以參與催化同一個反應。呢個念頭好似「影印出嚟嘅副本，返轉頭幫手印下一張」。但真實反應仲需要原料同合適條件。今堂我哋會跟住硤合嘅研究故事，睇下科學家點樣將呢個想法變成可以觀察嘅實驗結果。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-02",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "從學習到長期研究",
+      "order": 2,
+      "outlineId": "nobel02-illustrated-02-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-02-speech",
+          "type": "speech",
+          "text": "硤合喺東京大學讀化學，一九七四年大學畢業，一九七九年取得博士學位。之後佢去美國北卡羅來納大學做博士後研究，再返到東京理科大學繼續做化學研究。佢嘅團隊長期研究有機合成，探索點樣透過反應製造指定分子。東京理科大學嘅資料亦記錄，硤合感謝學生一路同行。呢啲經歷都有公開機構資料支持；我哋唔會編佢細個嘅故事，亦唔會扮知道佢每一步心入面點諗。科學家嘅成長，往往由學習、訓練、合作同長期研究組成。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/02-zh-Hant.png",
+              "name": "從學習到長期研究；科學家的本領，來自訓練、合作和持續追問。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-02-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-02-photo",
+              "left": 620.0,
+              "top": 186.87109375,
+              "width": 310.0,
+              "height": 201.2578125,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/source-campus.jpg",
+              "name": "東京理科大學神樂坂校區外觀；用於介紹硤合長期工作的學校環境，不是他當年就讀的東京大學。"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-02-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">東京理科大學神樂坂校區外觀；用於介紹硤合長期工作的學校環境，不是他當年就讀的東京大學。<span class=\"credit\">Hexen; · <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" rel=\"noopener\" target=\"_blank\">CC BY-SA 4.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:TokyoUniversityOfScience-Kagurazaka.jpg\" rel=\"noopener\" target=\"_blank\">圖片來源</a> · 已縮放及重新編碼以配合課堂版面</span></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-02-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.tus.ac.jp/en/news/archive/20261007_3541.html\">東京理科大學：硤合憲三簡介</a> · <a href=\"https://www.s.u-tokyo.ac.jp/en/info/11252/\">東京大學：硤合的求學經歷</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "硤合喺東京大學讀化學，一九七四年大學畢業，一九七九年取得博士學位。之後佢去美國北卡羅來納大學做博士後研究，再返到東京理科大學繼續做化學研究。佢嘅團隊長期研究有機合成，探索點樣透過反應製造指定分子。東京理科大學嘅資料亦記錄，硤合感謝學生一路同行。呢啲經歷都有公開機構資料支持；我哋唔會編佢細個嘅故事，亦唔會扮知道佢每一步心入面點諗。科學家嘅成長，往往由學習、訓練、合作同長期研究組成。"
+        },
+        "script": "硤合喺東京大學讀化學，一九七四年大學畢業，一九七九年取得博士學位。之後佢去美國北卡羅來納大學做博士後研究，再返到東京理科大學繼續做化學研究。佢嘅團隊長期研究有機合成，探索點樣透過反應製造指定分子。東京理科大學嘅資料亦記錄，硤合感謝學生一路同行。呢啲經歷都有公開機構資料支持；我哋唔會編佢細個嘅故事，亦唔會扮知道佢每一步心入面點諗。科學家嘅成長，往往由學習、訓練、合作同長期研究組成。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-03",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "先想起分子的左右手",
+      "order": 3,
+      "outlineId": "nobel02-illustrated-03-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-03-speech",
+          "type": "speech",
+          "text": "有啲分子好似左右手，可以互為鏡像，但淨係轉動其中一個，都未必可以令佢哋完全重合。呢啲分子由相同種類嘅原子組成，連接方法一樣，但空間方向唔同，呢種特徵叫手性。有啲化學反應會形成兩種鏡像產物。要控制邊一種多啲，化學家要先明白反應點樣進行。呢幅手套插畫只係類比，唔係硤合反應嘅分子結構。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-03-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-03-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/03-zh-Hant.png",
+              "name": "先想起分子的左右手；有些分子互為鏡像，不能只靠旋轉完全重合。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-03-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-03-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-03-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "有啲分子好似左右手，可以互為鏡像，但淨係轉動其中一個，都未必可以令佢哋完全重合。呢啲分子由相同種類嘅原子組成，連接方法一樣，但空間方向唔同，呢種特徵叫手性。有啲化學反應會形成兩種鏡像產物。要控制邊一種多啲，化學家要先明白反應點樣進行。呢幅手套插畫只係類比，唔係硤合反應嘅分子結構。"
+        },
+        "script": "有啲分子好似左右手，可以互為鏡像，但淨係轉動其中一個，都未必可以令佢哋完全重合。呢啲分子由相同種類嘅原子組成，連接方法一樣，但空間方向唔同，呢種特徵叫手性。有啲化學反應會形成兩種鏡像產物。要控制邊一種多啲，化學家要先明白反應點樣進行。呢幅手套插畫只係類比，唔係硤合反應嘅分子結構。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-04",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "產物回來幫忙",
+      "order": 4,
+      "outlineId": "nobel02-illustrated-04-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-04-speech",
+          "type": "speech",
+          "text": "普通反應可以先簡化成原料變成產物。催化劑會參與反應，幫助反應過程進行，可以先當佢係協助反應走某啲路線嘅幫手。自催化特別嘅地方，就係反應產物本身亦參與催化，幫同類產物繼續形成。但佢唔係產物自己變出一份副本。硤合研究嘅問題唔係「化學會唔會好似生命咁繁殖」，而係更具體：呢種化學關係可唔可以喺實驗入面出現？又可以點樣量度？將問題講得具體，先可以設計實驗驗證，唔係淨係靠比喻想像。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/04-zh-Hant.png",
+              "name": "產物回來幫忙；某些反應的產物，也能參與催化同一個反應。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-04-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-04-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.tus.ac.jp/en/news/archive/20261007_3541.html\">東京理科大學：硤合憲三簡介</a> · <a href=\"https://doi.org/10.1038/378767a0\">Soai 等：1995 年 Nature 論文</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "普通反應可以先簡化成原料變成產物。催化劑會參與反應，幫助反應過程進行，可以先當佢係協助反應走某啲路線嘅幫手。自催化特別嘅地方，就係反應產物本身亦參與催化，幫同類產物繼續形成。但佢唔係產物自己變出一份副本。硤合研究嘅問題唔係「化學會唔會好似生命咁繁殖」，而係更具體：呢種化學關係可唔可以喺實驗入面出現？又可以點樣量度？將問題講得具體，先可以設計實驗驗證，唔係淨係靠比喻想像。"
+        },
+        "script": "普通反應可以先簡化成原料變成產物。催化劑會參與反應，幫助反應過程進行，可以先當佢係協助反應走某啲路線嘅幫手。自催化特別嘅地方，就係反應產物本身亦參與催化，幫同類產物繼續形成。但佢唔係產物自己變出一份副本。硤合研究嘅問題唔係「化學會唔會好似生命咁繁殖」，而係更具體：呢種化學關係可唔可以喺實驗入面出現？又可以點樣量度？將問題講得具體，先可以設計實驗驗證，唔係淨係靠比喻想像。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-05",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "像副本幫忙印下一張",
+      "order": 5,
+      "outlineId": "nobel02-illustrated-05-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-05-speech",
+          "type": "speech",
+          "text": "想像學校圖書館有一份講義，放入影印機，印出嚟嘅副本又可以做下一次嘅模板。呢個比喻只係幫我哋理解「結果返到過程裏面」。喺某啲自催化反應入面，產物會參與後續催化，幫更多同類產物形成。圖上面嘅回箭嘴表示參與關係，唔係時間倒流。影印要有紙、墨粉同機器；化學反應亦需要原料、催化體系同合適條件。冇材料，唔會憑空多出產物。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/05-zh-Hant.png",
+              "name": "像副本幫忙印下一張；比喻只說明回接關係；反應仍需要原料和條件。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-05-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-05-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "想像學校圖書館有一份講義，放入影印機，印出嚟嘅副本又可以做下一次嘅模板。呢個比喻只係幫我哋理解「結果返到過程裏面」。喺某啲自催化反應入面，產物會參與後續催化，幫更多同類產物形成。圖上面嘅回箭嘴表示參與關係，唔係時間倒流。影印要有紙、墨粉同機器；化學反應亦需要原料、催化體系同合適條件。冇材料，唔會憑空多出產物。"
+        },
+        "script": "想像學校圖書館有一份講義，放入影印機，印出嚟嘅副本又可以做下一次嘅模板。呢個比喻只係幫我哋理解「結果返到過程裏面」。喺某啲自催化反應入面，產物會參與後續催化，幫更多同類產物形成。圖上面嘅回箭嘴表示參與關係，唔係時間倒流。影印要有紙、墨粉同機器；化學反應亦需要原料、催化體系同合適條件。冇材料，唔會憑空多出產物。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-06",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "好故事，還要有證據",
+      "order": 6,
+      "outlineId": "nobel02-illustrated-06-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-06-speech",
+          "type": "speech",
+          "text": "一個吸引嘅比喻唔係證據。真正做研究，反應物同條件要仔細控制，產物亦要量度。課堂唔需要記化學配方。我哋只要知道，研究團隊要比較：反應入面有冇自催化？開始時兩種鏡像嘅細微差別，會唔會影響之後嘅產物偏向？呢幅係量度同實驗紀錄嘅教學插畫，唔係硤合嘅研究現場或具體實驗操作。科學故事會經過提出問題、設計量度、檢查結果，而唔係話比喻講得通就算數。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/06-zh-Hant.png",
+              "name": "好故事，還要有證據；研究者必須量度真實反應，不能只靠比喻猜答案。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-06-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-06-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://doi.org/10.1038/378767a0\">Soai 等：1995 年 Nature 論文</a> · <a href=\"https://www.tus.ac.jp/en/news/archive/20261007_3541.html\">東京理科大學：硤合憲三簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "一個吸引嘅比喻唔係證據。真正做研究，反應物同條件要仔細控制，產物亦要量度。課堂唔需要記化學配方。我哋只要知道，研究團隊要比較：反應入面有冇自催化？開始時兩種鏡像嘅細微差別，會唔會影響之後嘅產物偏向？呢幅係量度同實驗紀錄嘅教學插畫，唔係硤合嘅研究現場或具體實驗操作。科學故事會經過提出問題、設計量度、檢查結果，而唔係話比喻講得通就算數。"
+        },
+        "script": "一個吸引嘅比喻唔係證據。真正做研究，反應物同條件要仔細控制，產物亦要量度。課堂唔需要記化學配方。我哋只要知道，研究團隊要比較：反應入面有冇自催化？開始時兩種鏡像嘅細微差別，會唔會影響之後嘅產物偏向？呢幅係量度同實驗紀錄嘅教學插畫，唔係硤合嘅研究現場或具體實驗操作。科學故事會經過提出問題、設計量度、檢查結果，而唔係話比喻講得通就算數。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-07",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "1995：看見自催化",
+      "order": 7,
+      "outlineId": "nobel02-illustrated-07-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-07-speech",
+          "type": "speech",
+          "text": "一九九五年，硤合憲三同 Shibata、Morioka、Choji 發表論文，報告咗一個實驗結果：喺特定反應裏，自催化可以放大某一種鏡像分子原本好細嘅比例優勢。「不對稱」喺呢度係指兩種鏡像形式唔再相等；「自催化」就係產物亦參與催化。我哋將兩個詞拆開講就得，唔使死記。呢項成果屬於論文列出嘅研究團隊。講故事時先認識硤合，但亦要記住合作者一齊完成研究。呢個發現令一個化學設想，變成可以實驗研究嘅現象。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-07-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-07-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/07-zh-Hant.png",
+              "name": "1995：看見自催化；硤合與合作者，量到產物幫助自身形成的結果。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-07-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-07-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-07-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://doi.org/10.1038/378767a0\">Soai 等：1995 年 Nature 論文</a> · <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "一九九五年，硤合憲三同 Shibata、Morioka、Choji 發表論文，報告咗一個實驗結果：喺特定反應裏，自催化可以放大某一種鏡像分子原本好細嘅比例優勢。「不對稱」喺呢度係指兩種鏡像形式唔再相等；「自催化」就係產物亦參與催化。我哋將兩個詞拆開講就得，唔使死記。呢項成果屬於論文列出嘅研究團隊。講故事時先認識硤合，但亦要記住合作者一齊完成研究。呢個發現令一個化學設想，變成可以實驗研究嘅現象。"
+        },
+        "script": "一九九五年，硤合憲三同 Shibata、Morioka、Choji 發表論文，報告咗一個實驗結果：喺特定反應裏，自催化可以放大某一種鏡像分子原本好細嘅比例優勢。「不對稱」喺呢度係指兩種鏡像形式唔再相等；「自催化」就係產物亦參與催化。我哋將兩個詞拆開講就得，唔使死記。呢項成果屬於論文列出嘅研究團隊。講故事時先認識硤合，但亦要記住合作者一齊完成研究。呢個發現令一個化學設想，變成可以實驗研究嘅現象。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-08",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "小偏向，可以被放大",
+      "order": 8,
+      "outlineId": "nobel02-illustrated-08-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-08-speech",
+          "type": "speech",
+          "text": "二零零三年嘅研究報告，極微小嘅起始鏡像偏向，經過連續自催化反應，可以放大到大於百分之九十九點五 ee。ee 係量度兩種鏡像形式偏向程度嘅指標。大於百分之九十九點五 ee，代表主要鏡像形式超過百分之九十九點七五，另一種少於百分之零點二五。起始偏向極之細，圖入面為咗令你睇得見而放大，唔係真實比例。呢個係特定實驗系統嘅結果，唔係所有反應都會咁，亦唔表示另一種形式數學上等於零。你唔使記公式，只要記住：喺呢個特定反應入面，小偏向可以經自催化變得明顯。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-08.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-08-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-08-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/08-zh-Hant.png",
+              "name": "小偏向，可以被放大；在特定反應條件下，連續自催化能增強鏡像偏向。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-08-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-08-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-08-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://doi.org/10.1002/anie.200390105\">Sato 等：2003 年不對稱自催化研究</a> · <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC6541725/\">Soai 與合作者：不對稱自催化回顧</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "二零零三年嘅研究報告，極微小嘅起始鏡像偏向，經過連續自催化反應，可以放大到大於百分之九十九點五 ee。ee 係量度兩種鏡像形式偏向程度嘅指標。大於百分之九十九點五 ee，代表主要鏡像形式超過百分之九十九點七五，另一種少於百分之零點二五。起始偏向極之細，圖入面為咗令你睇得見而放大，唔係真實比例。呢個係特定實驗系統嘅結果，唔係所有反應都會咁，亦唔表示另一種形式數學上等於零。你唔使記公式，只要記住：喺呢個特定反應入面，小偏向可以經自催化變得明顯。"
+        },
+        "script": "二零零三年嘅研究報告，極微小嘅起始鏡像偏向，經過連續自催化反應，可以放大到大於百分之九十九點五 ee。ee 係量度兩種鏡像形式偏向程度嘅指標。大於百分之九十九點五 ee，代表主要鏡像形式超過百分之九十九點七五，另一種少於百分之零點二五。起始偏向極之細，圖入面為咗令你睇得見而放大，唔係真實比例。呢個係特定實驗系統嘅結果，唔係所有反應都會咁，亦唔表示另一種形式數學上等於零。你唔使記公式，只要記住：喺呢個特定反應入面，小偏向可以經自催化變得明顯。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-09",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "為甚麼值得諾獎？",
+      "order": 9,
+      "outlineId": "nobel02-illustrated-09-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-09-speech",
+          "type": "speech",
+          "text": "諾獎表彰非線性效應同不對稱合成入面嘅自催化發現。硤合同卡甘嘅研究各有重點：硤合展示反應產物點樣加入後續催化；卡甘就發現催化劑組成同產物偏向之間可以出現非線性關係。兩條研究線都令化學家可以更深入研究鏡像分子點樣形成，亦推進人類理解化學反應嘅能力。諾獎頒畀嘅係基礎化學發現同研究能力，唔係話兩位科學家一個人整出咗某種藥或者產品。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-09.mp3"
+        },
+        {
+          "id": "nobel02-illustrated-09-discussion",
+          "type": "discussion",
+          "agentId": "nobel02-assistant",
+          "topic": "這項研究為甚麼重要？它對普通人的價值和限制是甚麼？",
+          "prompt": "這是一段簡短課堂討論。科學小助手先釐清本課一個類比的界線；科學故事老師接着連回研究為甚麼重要；好奇同學提出一個相關追問。各角色只代表自己發言，完成後交回學生，不繼續延伸新回合；這段毋須開白板或新增圖表。不泛化所有情況，不提供個人診療。"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/09-zh-Hant.png",
+              "name": "為甚麼值得諾獎？；自催化提供一條線索：分子的鏡像偏向怎樣增強？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-09-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-09-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://academie-sciences.fr/henri-kagan\">法國科學院：卡甘研究簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "諾獎表彰非線性效應同不對稱合成入面嘅自催化發現。硤合同卡甘嘅研究各有重點：硤合展示反應產物點樣加入後續催化；卡甘就發現催化劑組成同產物偏向之間可以出現非線性關係。兩條研究線都令化學家可以更深入研究鏡像分子點樣形成，亦推進人類理解化學反應嘅能力。諾獎頒畀嘅係基礎化學發現同研究能力，唔係話兩位科學家一個人整出咗某種藥或者產品。"
+        },
+        "script": "諾獎表彰非線性效應同不對稱合成入面嘅自催化發現。硤合同卡甘嘅研究各有重點：硤合展示反應產物點樣加入後續催化；卡甘就發現催化劑組成同產物偏向之間可以出現非線性關係。兩條研究線都令化學家可以更深入研究鏡像分子點樣形成，亦推進人類理解化學反應嘅能力。諾獎頒畀嘅係基礎化學發現同研究能力，唔係話兩位科學家一個人整出咗某種藥或者產品。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-10",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "普通人會得到甚麼？",
+      "order": 10,
+      "outlineId": "nobel02-illustrated-10-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-10-speech",
+          "type": "speech",
+          "text": "藥物、香味同材料研究，有時都需要更精確咁製造唔同形狀嘅分子。自催化研究令化學家多咗一種方法，追問反應入面嘅分子點樣互相影響。對普通人嚟講，潛在意義係未來研究者可能有更多方法，改進某啲精細化學品嘅製造過程。但要變成具體藥物、香料或者材料，仲要獨立設計、測試同驗證。唔可以話硤合反應本身已經直接變成一款市售產品，更唔可以將化學論文當成藥效證明。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-10.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/10-zh-Hant.png",
+              "name": "普通人會得到甚麼？；研究者多了理解分子形狀、設計反應的工具。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-10-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-10-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "藥物、香味同材料研究，有時都需要更精確咁製造唔同形狀嘅分子。自催化研究令化學家多咗一種方法，追問反應入面嘅分子點樣互相影響。對普通人嚟講，潛在意義係未來研究者可能有更多方法，改進某啲精細化學品嘅製造過程。但要變成具體藥物、香料或者材料，仲要獨立設計、測試同驗證。唔可以話硤合反應本身已經直接變成一款市售產品，更唔可以將化學論文當成藥效證明。"
+        },
+        "script": "藥物、香味同材料研究，有時都需要更精確咁製造唔同形狀嘅分子。自催化研究令化學家多咗一種方法，追問反應入面嘅分子點樣互相影響。對普通人嚟講，潛在意義係未來研究者可能有更多方法，改進某啲精細化學品嘅製造過程。但要變成具體藥物、香料或者材料，仲要獨立設計、測試同驗證。唔可以話硤合反應本身已經直接變成一款市售產品，更唔可以將化學論文當成藥效證明。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-11",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "不是生命起源的完整答案",
+      "order": 11,
+      "outlineId": "nobel02-illustrated-11-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-11-speech",
+          "type": "speech",
+          "text": "點解生命入面好多重要分子偏向用其中一種鏡像形式？呢個仍然係科學家研究緊嘅問題。硤合反應展示，化學系統可以放大好細嘅鏡像偏向，所以為研究生命分子嘅手性提供一種實驗線索。不過，實驗室裏面一個反應，唔等於遠古地球真係照住同一個過程發生。生命起源仲涉及環境、物質來源同好多其他步驟。偉大研究有時唔只回答問題，仲會令我哋知道下一步要點問、要搵乜證據。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-11-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-11-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/11-zh-Hant.png",
+              "name": "不是生命起源的完整答案；實驗提供化學線索；地球當年怎樣發生，仍要找證據。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-11-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-11-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-11-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a> · <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC6541725/\">Soai 與合作者：不對稱自催化回顧</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "點解生命入面好多重要分子偏向用其中一種鏡像形式？呢個仍然係科學家研究緊嘅問題。硤合反應展示，化學系統可以放大好細嘅鏡像偏向，所以為研究生命分子嘅手性提供一種實驗線索。不過，實驗室裏面一個反應，唔等於遠古地球真係照住同一個過程發生。生命起源仲涉及環境、物質來源同好多其他步驟。偉大研究有時唔只回答問題，仲會令我哋知道下一步要點問、要搵乜證據。"
+        },
+        "script": "點解生命入面好多重要分子偏向用其中一種鏡像形式？呢個仍然係科學家研究緊嘅問題。硤合反應展示，化學系統可以放大好細嘅鏡像偏向，所以為研究生命分子嘅手性提供一種實驗線索。不過，實驗室裏面一個反應，唔等於遠古地球真係照住同一個過程發生。生命起源仲涉及環境、物質來源同好多其他步驟。偉大研究有時唔只回答問題，仲會令我哋知道下一步要點問、要搵乜證據。"
+      }
+    },
+    {
+      "id": "nobel02-illustrated-12",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "三個小判斷",
+      "order": 12,
+      "outlineId": "nobel02-illustrated-12-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-12-speech",
+          "type": "speech",
+          "text": "而家用三條問題整理硤合嘅研究故事。第一，自催化係產物亦參與催化，幫更多同類產物形成，但仍要原料同條件。第二，大於百分之九十九點五 ee 係兩種鏡像比例非常唔平均，唔係產率。第三，呢項研究為生命起源提供化學線索，但冇證明遠古生命嘅完整歷史。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel02-illustrated-12-q1",
+            "type": "single",
+            "question": "“自催化”在硤合團隊研究裏，指什麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "反應產物也參與催化，幫助更多同類產物形成。"
+              },
+              {
+                "value": "B",
+                "label": "產物不用原料，就能無止境地複製。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。產物參與催化仍需要原料和合適條件。；B：不是這樣。自催化不代表憑空複製或永遠增長。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel02-illustrated-12-q2",
+            "type": "single",
+            "question": "2003年論文中的大於99.5% ee，代表什麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "兩種鏡像產物的比例非常偏向其中一種，不是產率。"
+              },
+              {
+                "value": "B",
+                "label": "反應把99.5%的原料變成了產物。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。ee描述兩種鏡像形式的偏向，不等於總產物有多少。；B：ee不是產率；這兩個數字回答不同問題。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel02-illustrated-12-q3",
+            "type": "single",
+            "question": "這項研究與生命起源的關係，哪句正確？",
+            "options": [
+              {
+                "value": "A",
+                "label": "它提供可研究的化學線索，但沒有證明遠古生命的完整歷史。"
+              },
+              {
+                "value": "B",
+                "label": "它已經證明生命一定由硤合反應開始。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。實驗室中的化學現象可以幫助提出問題，不等於歷史證明。；B：沒有證明。生命起源涉及許多尚待檢驗的過程。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "nobel02-illustrated-13",
+      "stageId": "hk-nobel-02-soai-illustrated-v2",
+      "title": "把奇怪問題變成可測量",
+      "order": 13,
+      "outlineId": "nobel02-illustrated-13-outline",
+      "createdAt": 1792822874343,
+      "updatedAt": 1792822874343,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel02-illustrated-13-speech",
+          "type": "speech",
+          "text": "由硤合嘅求學同研究經歷，到一九九五年同二零零三年嘅重要工作，我哋見到研究成果來自多年訓練、實驗同團隊合作。呢項發現幫人類研究，某啲特定反應入面嘅分子形狀點樣偏向形成，亦為未來化學研究留下工具同新問題。返到開場：產物會唔會幫忙？喺硤合團隊研究嘅特定反應入面，答案係會；但每一步都需要原料、條件同證據。好奇心帶來問題，實驗同證據先將問題變成科學發現。",
+          "audioId": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-13.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/audio/yue-HK/page-13.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel02-illustrated-13-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel02-illustrated-13-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-02-soai-illustrated-v2/media/13-zh-Hant.png",
+              "name": "把奇怪問題變成可測量；好奇心加上實驗，讓後來人繼續追問。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-13-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel02-illustrated-13-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel02-illustrated-13-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.tus.ac.jp/en/news/archive/20261007_3541.html\">東京理科大學：硤合憲三簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "由硤合嘅求學同研究經歷，到一九九五年同二零零三年嘅重要工作，我哋見到研究成果來自多年訓練、實驗同團隊合作。呢項發現幫人類研究，某啲特定反應入面嘅分子形狀點樣偏向形成，亦為未來化學研究留下工具同新問題。返到開場：產物會唔會幫忙？喺硤合團隊研究嘅特定反應入面，答案係會；但每一步都需要原料、條件同證據。好奇心帶來問題，實驗同證據先將問題變成科學發現。"
+        },
+        "script": "由硤合嘅求學同研究經歷，到一九九五年同二零零三年嘅重要工作，我哋見到研究成果來自多年訓練、實驗同團隊合作。呢項發現幫人類研究，某啲特定反應入面嘅分子形狀點樣偏向形成，亦為未來化學研究留下工具同新問題。返到開場：產物會唔會幫忙？喺硤合團隊研究嘅特定反應入面，答案係會；但每一步都需要原料、條件同證據。好奇心帶來問題，實驗同證據先將問題變成科學發現。"
+      }
+    }
+  ]
+}

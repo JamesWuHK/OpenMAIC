@@ -1,0 +1,1460 @@
+{
+  "id": "hk-nobel-03-halzen-illustrated-v2",
+  "createdAt": "2026-10-24T03:29:48.534Z",
+  "stage": {
+    "id": "hk-nobel-03-halzen-illustrated-v2",
+    "name": "哈爾岑：在南極深冰尋找宇宙線索（圖文講授・廣東話）",
+    "description": "先認識哈爾岑為甚麼被中微子吸引，再看他與團隊如何用南極深冰追查宇宙線索，並用簡單例子理解研究為何值得諾貝爾獎。",
+    "createdAt": 1792812588534,
+    "updatedAt": 1792812588534,
+    "style": "人物與探險式科學敘事，暖白編輯版面、深藍標題、真實資料照片與清楚圖說",
+    "languageDirective": "所有學生可見文字使用香港繁體中文，以廣東話作適齡普通講授。先人物故事，再講研究難題、為甚麼獲獎、對普通人的價值和必要原理；類比有邊界，區分研究工具與仍待驗證的應用。不提供個人診療，不編童年或心理，不泛化所有情況。",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel03-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "我是科學故事老師，會用香港學生熟悉的生活例子講清研究的核心價值；不把比喻當成機制，也不把研究前景說成現成產品或療效。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel03-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "我是科學小助手，會幫你分清研究條件、證據與未知，某些情況不代表全部；動物實驗不能直接證明人的療效，不提供個人診療。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel03-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "我是AI同學，會用簡短追問幫大家澄清疑問，不假裝是真實小朋友。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel03-illustrated-01",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "弗朗西斯・哈爾岑",
+      "order": 1,
+      "outlineId": "nobel03-illustrated-01-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-01-speech",
+          "type": "speech",
+          "text": "資料照片入面呢位物理學家叫弗朗西斯哈爾岑，英文係 Francis Halzen。佢喺比利時學習物理，一九六九年取得博士學位。到咗一九八零年代中期，佢同合作者開始研究一個新問題：可唔可以用中微子做一種新嘅宇宙望遠鏡？點解呢個念頭咁吸引佢？哈爾岑後來解釋，中微子可以穿過好多物質，可能帶我哋睇到普通光看唔到嘅宇宙。佢最感興趣嘅，就係有機會發現一啲以前睇唔到嘅事物。當時人類仲有一條好耐都未解開嘅問題：宇宙入面邊啲猛烈地方，會將粒子推到咁快、咁有能量？呢個故事唔係因為南極冰特別奇怪先開始，而係有人先問：有冇另一種方法，可以帶我哋搵到新答案？",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/01-zh-Hant.png",
+              "name": "弗朗西斯・哈爾岑；在南極冰裏，尋找宇宙送來的線索。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-01-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-01-photo",
+              "left": 660.9057437407953,
+              "top": 135.0,
+              "width": 228.18851251840942,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/source-face.jpg",
+              "name": "弗朗西斯·哈爾岑，2025年參加中微子望遠鏡研討會。"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-01-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\"><p class=\"caption\">弗朗西斯·哈爾岑，2025年參加中微子望遠鏡研討會。</p><p class=\"credit\">INFN · <a href=\"https://creativecommons.org/publicdomain/zero/1.0/\" rel=\"noopener\" target=\"_blank\">CC0 1.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:Francis_Halzen_(2025).jpg\" rel=\"noopener\" target=\"_blank\">圖片來源</a></p></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-01-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-voice-link",
+              "left": 44,
+              "top": 486,
+              "width": 430,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:15px\"><a href=\"/classroom/hk-nobel-03-halzen-illustrated-v2-mandarin\">切換至普通話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-03-halzen-illustrated-v2-mandarin"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "資料照片入面呢位物理學家叫弗朗西斯哈爾岑，英文係 Francis Halzen。佢喺比利時學習物理，一九六九年取得博士學位。到咗一九八零年代中期，佢同合作者開始研究一個新問題：可唔可以用中微子做一種新嘅宇宙望遠鏡？點解呢個念頭咁吸引佢？哈爾岑後來解釋，中微子可以穿過好多物質，可能帶我哋睇到普通光看唔到嘅宇宙。佢最感興趣嘅，就係有機會發現一啲以前睇唔到嘅事物。當時人類仲有一條好耐都未解開嘅問題：宇宙入面邊啲猛烈地方，會將粒子推到咁快、咁有能量？呢個故事唔係因為南極冰特別奇怪先開始，而係有人先問：有冇另一種方法，可以帶我哋搵到新答案？"
+        },
+        "script": "資料照片入面呢位物理學家叫弗朗西斯哈爾岑，英文係 Francis Halzen。佢喺比利時學習物理，一九六九年取得博士學位。到咗一九八零年代中期，佢同合作者開始研究一個新問題：可唔可以用中微子做一種新嘅宇宙望遠鏡？點解呢個念頭咁吸引佢？哈爾岑後來解釋，中微子可以穿過好多物質，可能帶我哋睇到普通光看唔到嘅宇宙。佢最感興趣嘅，就係有機會發現一啲以前睇唔到嘅事物。當時人類仲有一條好耐都未解開嘅問題：宇宙入面邊啲猛烈地方，會將粒子推到咁快、咁有能量？呢個故事唔係因為南極冰特別奇怪先開始，而係有人先問：有冇另一種方法，可以帶我哋搵到新答案？"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-02",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "宇宙不只用光說話",
+      "order": 2,
+      "outlineId": "nobel03-illustrated-02-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-02-speech",
+          "type": "speech",
+          "text": "宇宙入面有啲粒子跑得非常快。哈爾岑想追問：究竟係邊啲宇宙地方將佢哋推到咁快？呢啲地方唔係人造工廠，而係宇宙中非常猛烈嘅天然環境。科學家有時叫佢哋做宇宙加速器；呢個名聽落好似機器，其實係一個比喻。要搵返粒子由邊度嚟並唔容易。有啲粒子行過太空時會受到宇宙磁力影響，方向可能轉彎。好似你搭小巴，中途因為封路兜咗另一條路，淨係睇最後一段路，未必估到最初由邊度出發。小巴只係比喻，粒子唔係真係搭車。哈爾岑同同行想搵一種比較少被磁力拐彎嘅線索，故事下一位主角就係中微子。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/02-zh-Hant.png",
+              "name": "宇宙不只用光說話；有些猛烈的宇宙過程，還會送出中微子。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-02-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-02-photo",
+              "left": 620.0,
+              "top": 183.96484375,
+              "width": 310.0,
+              "height": 207.0703125,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/source-night.jpg",
+              "name": "南極冬夜的IceCube實驗室、銀河與極光，2021年。"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-02-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\"><p class=\"caption\">南極冬夜的IceCube實驗室、銀河與極光，2021年。</p><p class=\"credit\">John Hardin · <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"noopener\" target=\"_blank\">CC BY 4.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:The_ICL_at_Night.jpg\" rel=\"noopener\" target=\"_blank\">圖片來源</a></p></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-02-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "宇宙入面有啲粒子跑得非常快。哈爾岑想追問：究竟係邊啲宇宙地方將佢哋推到咁快？呢啲地方唔係人造工廠，而係宇宙中非常猛烈嘅天然環境。科學家有時叫佢哋做宇宙加速器；呢個名聽落好似機器，其實係一個比喻。要搵返粒子由邊度嚟並唔容易。有啲粒子行過太空時會受到宇宙磁力影響，方向可能轉彎。好似你搭小巴，中途因為封路兜咗另一條路，淨係睇最後一段路，未必估到最初由邊度出發。小巴只係比喻，粒子唔係真係搭車。哈爾岑同同行想搵一種比較少被磁力拐彎嘅線索，故事下一位主角就係中微子。"
+        },
+        "script": "宇宙入面有啲粒子跑得非常快。哈爾岑想追問：究竟係邊啲宇宙地方將佢哋推到咁快？呢啲地方唔係人造工廠，而係宇宙中非常猛烈嘅天然環境。科學家有時叫佢哋做宇宙加速器；呢個名聽落好似機器，其實係一個比喻。要搵返粒子由邊度嚟並唔容易。有啲粒子行過太空時會受到宇宙磁力影響，方向可能轉彎。好似你搭小巴，中途因為封路兜咗另一條路，淨係睇最後一段路，未必估到最初由邊度出發。小巴只係比喻，粒子唔係真係搭車。哈爾岑同同行想搵一種比較少被磁力拐彎嘅線索，故事下一位主角就係中微子。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-03",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "它常常穿過我們",
+      "order": 3,
+      "outlineId": "nobel03-illustrated-03-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-03-speech",
+          "type": "speech",
+          "text": "中微子係真實嘅微小粒子，唔係鬼怪故事入面嘅幽靈，亦唔係識得避開儀器。只不過，佢同周圍物質發生可以留下線索嘅事情，機會好少。好多中微子穿過冰、穿過地球，甚至穿過我哋身體，都冇留下我哋察覺到嘅變化。你可以想像一個好大嘅大堂，絕大多數人行過都冇碰到牆上嘅感應器；只有少數人經過時令感應器亮起。呢個只係比喻中微子好少留下線索，真實粒子唔係行入大堂。教學插畫入面嘅感光球唔係捕捉中微子嘅陷阱，更唔係直接影到佢。佢等緊嘅，係少數中微子令冰裏面嘅物質產生變化後，留下嘅微弱光線索。於是哈爾岑面對兩個問題：中微子好有用，但又咁難收到；點樣先有機會見到佢哋留下嘅少數線索？",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-03-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-03-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/03-zh-Hant.png",
+              "name": "它常常穿過我們；中微子很少與物質作用，因此也很難留下線索。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-03-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-03-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-03-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "中微子係真實嘅微小粒子，唔係鬼怪故事入面嘅幽靈，亦唔係識得避開儀器。只不過，佢同周圍物質發生可以留下線索嘅事情，機會好少。好多中微子穿過冰、穿過地球，甚至穿過我哋身體，都冇留下我哋察覺到嘅變化。你可以想像一個好大嘅大堂，絕大多數人行過都冇碰到牆上嘅感應器；只有少數人經過時令感應器亮起。呢個只係比喻中微子好少留下線索，真實粒子唔係行入大堂。教學插畫入面嘅感光球唔係捕捉中微子嘅陷阱，更唔係直接影到佢。佢等緊嘅，係少數中微子令冰裏面嘅物質產生變化後，留下嘅微弱光線索。於是哈爾岑面對兩個問題：中微子好有用，但又咁難收到；點樣先有機會見到佢哋留下嘅少數線索？"
+        },
+        "script": "中微子係真實嘅微小粒子，唔係鬼怪故事入面嘅幽靈，亦唔係識得避開儀器。只不過，佢同周圍物質發生可以留下線索嘅事情，機會好少。好多中微子穿過冰、穿過地球，甚至穿過我哋身體，都冇留下我哋察覺到嘅變化。你可以想像一個好大嘅大堂，絕大多數人行過都冇碰到牆上嘅感應器；只有少數人經過時令感應器亮起。呢個只係比喻中微子好少留下線索，真實粒子唔係行入大堂。教學插畫入面嘅感光球唔係捕捉中微子嘅陷阱，更唔係直接影到佢。佢等緊嘅，係少數中微子令冰裏面嘅物質產生變化後，留下嘅微弱光線索。於是哈爾岑面對兩個問題：中微子好有用，但又咁難收到；點樣先有機會見到佢哋留下嘅少數線索？"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-04",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "把南極變成望遠鏡？",
+      "order": 4,
+      "outlineId": "nobel03-illustrated-04-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-04-speech",
+          "type": "speech",
+          "text": "既然大部分中微子都唔會留下線索，咁可以點做？哈爾岑同合作者提出一個好大膽嘅方法：將好多感光儀器放入南極深冰，利用一大片天然冰做觀察區。呢度唔使背「一立方公里」呢個詞，你可以想像一個長、闊、高都大約一公里嘅巨大立體空間。教學插畫只係幫你想像嗰個巨大立體空間；IceCube原始陣列唔係今日最新配置。做得咁大，唔係想將每一個中微子都攔住；中微子大多數仍然會穿過。範圍大啲、觀察耐啲，先增加見到少數線索嘅機會。將一片冰變成望遠鏡，聽落好似好奇怪；但哈爾岑在意嘅問題一直都係：要用咩方法，先可以看到普通望遠鏡看不到嘅宇宙？",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/04-zh-Hant.png",
+              "name": "把南極變成望遠鏡？；在大量透明深冰中，布置能接收微弱光的裝置。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-04-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-04-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "既然大部分中微子都唔會留下線索，咁可以點做？哈爾岑同合作者提出一個好大膽嘅方法：將好多感光儀器放入南極深冰，利用一大片天然冰做觀察區。呢度唔使背「一立方公里」呢個詞，你可以想像一個長、闊、高都大約一公里嘅巨大立體空間。教學插畫只係幫你想像嗰個巨大立體空間；IceCube原始陣列唔係今日最新配置。做得咁大，唔係想將每一個中微子都攔住；中微子大多數仍然會穿過。範圍大啲、觀察耐啲，先增加見到少數線索嘅機會。將一片冰變成望遠鏡，聽落好似好奇怪；但哈爾岑在意嘅問題一直都係：要用咩方法，先可以看到普通望遠鏡看不到嘅宇宙？"
+        },
+        "script": "既然大部分中微子都唔會留下線索，咁可以點做？哈爾岑同合作者提出一個好大膽嘅方法：將好多感光儀器放入南極深冰，利用一大片天然冰做觀察區。呢度唔使背「一立方公里」呢個詞，你可以想像一個長、闊、高都大約一公里嘅巨大立體空間。教學插畫只係幫你想像嗰個巨大立體空間；IceCube原始陣列唔係今日最新配置。做得咁大，唔係想將每一個中微子都攔住；中微子大多數仍然會穿過。範圍大啲、觀察耐啲，先增加見到少數線索嘅機會。將一片冰變成望遠鏡，聽落好似好奇怪；但哈爾岑在意嘅問題一直都係：要用咩方法，先可以看到普通望遠鏡看不到嘅宇宙？"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-05",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "冰也有難題",
+      "order": 5,
+      "outlineId": "nobel03-illustrated-05-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-05-speech",
+          "type": "speech",
+          "text": "大想法要變成真正嘅儀器，唔可以只靠想像。IceCube之前，團隊先做過規模較細嘅冰中試驗。結果發現，有啲較淺嘅冰層入面有好多小氣泡，微弱嘅光經過時會散開，儀器就較難睇清楚線索。你可以想像隔住一塊好多霧點嘅玻璃，睇遠處細小嘅光會難啲；呢個比喻只係幫你想像氣泡會影響光線，唔代表冰同玻璃完全一樣。團隊冇因為第一次遇到困難就放棄，而係研究冰嘅情況，將感光儀器放到更深、較清澈嘅冰層再試。呢啲測試令後來嘅設計更有根據。二零零九年IceCube嘅鑽探營地，展示建造呢類巨大裝置需要嘅工作，唔係早期試驗現場；教學插畫只係示意，唔係現場照片。科學家有時唔係一開始就知道答案，而係先做細小測試，再按發現嘅問題改方法。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/05-zh-Hant.png",
+              "name": "冰也有難題；有些冰層會散射光；儀器和選址都要改進。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-05-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-05-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "大想法要變成真正嘅儀器，唔可以只靠想像。IceCube之前，團隊先做過規模較細嘅冰中試驗。結果發現，有啲較淺嘅冰層入面有好多小氣泡，微弱嘅光經過時會散開，儀器就較難睇清楚線索。你可以想像隔住一塊好多霧點嘅玻璃，睇遠處細小嘅光會難啲；呢個比喻只係幫你想像氣泡會影響光線，唔代表冰同玻璃完全一樣。團隊冇因為第一次遇到困難就放棄，而係研究冰嘅情況，將感光儀器放到更深、較清澈嘅冰層再試。呢啲測試令後來嘅設計更有根據。二零零九年IceCube嘅鑽探營地，展示建造呢類巨大裝置需要嘅工作，唔係早期試驗現場；教學插畫只係示意，唔係現場照片。科學家有時唔係一開始就知道答案，而係先做細小測試，再按發現嘅問題改方法。"
+        },
+        "script": "大想法要變成真正嘅儀器，唔可以只靠想像。IceCube之前，團隊先做過規模較細嘅冰中試驗。結果發現，有啲較淺嘅冰層入面有好多小氣泡，微弱嘅光經過時會散開，儀器就較難睇清楚線索。你可以想像隔住一塊好多霧點嘅玻璃，睇遠處細小嘅光會難啲；呢個比喻只係幫你想像氣泡會影響光線，唔代表冰同玻璃完全一樣。團隊冇因為第一次遇到困難就放棄，而係研究冰嘅情況，將感光儀器放到更深、較清澈嘅冰層再試。呢啲測試令後來嘅設計更有根據。二零零九年IceCube嘅鑽探營地，展示建造呢類巨大裝置需要嘅工作，唔係早期試驗現場；教學插畫只係示意，唔係現場照片。科學家有時唔係一開始就知道答案，而係先做細小測試，再按發現嘅問題改方法。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-06",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "一個想法，很多人接力",
+      "order": 6,
+      "outlineId": "nobel03-illustrated-06-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-06-speech",
+          "type": "speech",
+          "text": "再睇嚇教學插畫入面嘅玻璃感光球。要令佢哋喺深冰裏面長期工作，有好多事情要做：有人設計同製作儀器，有人鑽出深孔，有人將儀器放好，有人檢查每個感光點幾時收到光，仲有人用電腦整理紀錄。呢啲工作好似一個大城市有工程師、建築工人、交通控制員同資料整理人員，各自做唔同嘅事，先令一個大計畫運作。城市工作只係比喻分工，IceCube團隊做嘅係科學研究同南極工程。哈爾岑推動研究方向，亦有科學領導角色，但佢一個人唔可能鑽孔、造儀器、檢查紀錄同分析所有資料。國際科學家、工程人員同南極工作團隊嘅多年合作，先將構想變成可靠工具。呢度有個好重要嘅科學家成長故事：提出問題係開始，仲要學識同其他專長嘅人合作，先可以將好奇心變成大家都用得到嘅發現。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/06-zh-Hant.png",
+              "name": "一個想法，很多人接力；物理、工程、建造與分析，缺一不可。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-06-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-06-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "再睇嚇教學插畫入面嘅玻璃感光球。要令佢哋喺深冰裏面長期工作，有好多事情要做：有人設計同製作儀器，有人鑽出深孔，有人將儀器放好，有人檢查每個感光點幾時收到光，仲有人用電腦整理紀錄。呢啲工作好似一個大城市有工程師、建築工人、交通控制員同資料整理人員，各自做唔同嘅事，先令一個大計畫運作。城市工作只係比喻分工，IceCube團隊做嘅係科學研究同南極工程。哈爾岑推動研究方向，亦有科學領導角色，但佢一個人唔可能鑽孔、造儀器、檢查紀錄同分析所有資料。國際科學家、工程人員同南極工作團隊嘅多年合作，先將構想變成可靠工具。呢度有個好重要嘅科學家成長故事：提出問題係開始，仲要學識同其他專長嘅人合作，先可以將好奇心變成大家都用得到嘅發現。"
+        },
+        "script": "再睇嚇教學插畫入面嘅玻璃感光球。要令佢哋喺深冰裏面長期工作，有好多事情要做：有人設計同製作儀器，有人鑽出深孔，有人將儀器放好，有人檢查每個感光點幾時收到光，仲有人用電腦整理紀錄。呢啲工作好似一個大城市有工程師、建築工人、交通控制員同資料整理人員，各自做唔同嘅事，先令一個大計畫運作。城市工作只係比喻分工，IceCube團隊做嘅係科學研究同南極工程。哈爾岑推動研究方向，亦有科學領導角色，但佢一個人唔可能鑽孔、造儀器、檢查紀錄同分析所有資料。國際科學家、工程人員同南極工作團隊嘅多年合作，先將構想變成可靠工具。呢度有個好重要嘅科學家成長故事：提出問題係開始，仲要學識同其他專長嘅人合作，先可以將好奇心變成大家都用得到嘅發現。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-07",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "真正記錄的是微弱的光",
+      "order": 7,
+      "outlineId": "nobel03-illustrated-07-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-07-speech",
+          "type": "speech",
+          "text": "而家可以答返一開始嗰條問題：點解找中微子，要將感光球放入冰裏？少數中微子經過冰時，會令冰裏嘅物質產生變化，並出現其他粒子。呢啲粒子喺冰裏移動時，可能留下非常微弱嘅光。好多感光器會記低光喺邊度出現、先後次序係點。研究者再將紀錄放埋一齊，估計今次發生嘅事情大概來自邊個方向。你可以想像大廈走廊幾盞感應燈先後亮起，位置同時間可以提供有人點樣走過嘅線索。但IceCube唔係感應行人，真實研究亦要計算光喺冰裏面點樣傳播。最重要係：研究者冇直接影到中微子，而係用可量度嘅光線索，推想發生咗乜嘢。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-07-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-07-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/07-zh-Hant.png",
+              "name": "真正記錄的是微弱的光；少數中微子與物質作用後，後續粒子可留下光訊號。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-07-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-07-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-07-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "而家可以答返一開始嗰條問題：點解找中微子，要將感光球放入冰裏？少數中微子經過冰時，會令冰裏嘅物質產生變化，並出現其他粒子。呢啲粒子喺冰裏移動時，可能留下非常微弱嘅光。好多感光器會記低光喺邊度出現、先後次序係點。研究者再將紀錄放埋一齊，估計今次發生嘅事情大概來自邊個方向。你可以想像大廈走廊幾盞感應燈先後亮起，位置同時間可以提供有人點樣走過嘅線索。但IceCube唔係感應行人，真實研究亦要計算光喺冰裏面點樣傳播。最重要係：研究者冇直接影到中微子，而係用可量度嘅光線索，推想發生咗乜嘢。"
+        },
+        "script": "而家可以答返一開始嗰條問題：點解找中微子，要將感光球放入冰裏？少數中微子經過冰時，會令冰裏嘅物質產生變化，並出現其他粒子。呢啲粒子喺冰裏移動時，可能留下非常微弱嘅光。好多感光器會記低光喺邊度出現、先後次序係點。研究者再將紀錄放埋一齊，估計今次發生嘅事情大概來自邊個方向。你可以想像大廈走廊幾盞感應燈先後亮起，位置同時間可以提供有人點樣走過嘅線索。但IceCube唔係感應行人，真實研究亦要計算光喺冰裏面點樣傳播。最重要係：研究者冇直接影到中微子，而係用可量度嘅光線索，推想發生咗乜嘢。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-08",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "2013：宇宙的新訊息",
+      "order": 8,
+      "outlineId": "nobel03-illustrated-08-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-08-speech",
+          "type": "speech",
+          "text": "時間去到二零一三年，IceCube團隊發表咗來自地球之外、帶住好多能量嘅中微子證據。呢度講能量高，係話每粒粒子帶住嘅能量好多，唔係話佢跑得比光更快。呢個係非常重要嘅成果，但唔係電腦一閃，大家就即刻知道邊粒星發生咗乜。地球大氣入面亦會產生中微子，其他粒子都可能令儀器記到光。好似手機收到通知，唔打開睇來源同內容，就唔知道係邊個傳嚟；但手機通知只係比喻，真正研究要分析好多儀器紀錄。研究團隊比較光點出現嘅位置、時間同亮度，亦估計地球附近可能造成嘅訊號，再判斷證據最支持邊種解釋。二零一三年嘅研究支持有帶住好多能量嘅中微子來自地球以外，但唔係話每一粒都已經知道來自邊一顆星。教學插畫只係示意，唔係二零二一年嘅實驗室夜景，亦唔係當年發現嗰一刻。令人興奮嘅係，南極冰中嘅微光紀錄，終於帶出人類可以檢查嘅宇宙證據。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-08.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-08-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-08-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/08-zh-Hant.png",
+              "name": "2013：宇宙的新訊息；IceCube團隊報告地球之外高能中微子的證據。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-08-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-08-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-08-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "時間去到二零一三年，IceCube團隊發表咗來自地球之外、帶住好多能量嘅中微子證據。呢度講能量高，係話每粒粒子帶住嘅能量好多，唔係話佢跑得比光更快。呢個係非常重要嘅成果，但唔係電腦一閃，大家就即刻知道邊粒星發生咗乜。地球大氣入面亦會產生中微子，其他粒子都可能令儀器記到光。好似手機收到通知，唔打開睇來源同內容，就唔知道係邊個傳嚟；但手機通知只係比喻，真正研究要分析好多儀器紀錄。研究團隊比較光點出現嘅位置、時間同亮度，亦估計地球附近可能造成嘅訊號，再判斷證據最支持邊種解釋。二零一三年嘅研究支持有帶住好多能量嘅中微子來自地球以外，但唔係話每一粒都已經知道來自邊一顆星。教學插畫只係示意，唔係二零二一年嘅實驗室夜景，亦唔係當年發現嗰一刻。令人興奮嘅係，南極冰中嘅微光紀錄，終於帶出人類可以檢查嘅宇宙證據。"
+        },
+        "script": "時間去到二零一三年，IceCube團隊發表咗來自地球之外、帶住好多能量嘅中微子證據。呢度講能量高，係話每粒粒子帶住嘅能量好多，唔係話佢跑得比光更快。呢個係非常重要嘅成果，但唔係電腦一閃，大家就即刻知道邊粒星發生咗乜。地球大氣入面亦會產生中微子，其他粒子都可能令儀器記到光。好似手機收到通知，唔打開睇來源同內容，就唔知道係邊個傳嚟；但手機通知只係比喻，真正研究要分析好多儀器紀錄。研究團隊比較光點出現嘅位置、時間同亮度，亦估計地球附近可能造成嘅訊號，再判斷證據最支持邊種解釋。二零一三年嘅研究支持有帶住好多能量嘅中微子來自地球以外，但唔係話每一粒都已經知道來自邊一顆星。教學插畫只係示意，唔係二零二一年嘅實驗室夜景，亦唔係當年發現嗰一刻。令人興奮嘅係，南極冰中嘅微光紀錄，終於帶出人類可以檢查嘅宇宙證據。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-09",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "為甚麼值得諾獎？",
+      "order": 9,
+      "outlineId": "nobel03-illustrated-09-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-09-speech",
+          "type": "speech",
+          "text": "新工具帶嚟線索之後，其他研究者亦可以加入。二零一七年，IceCube記錄到一個中微子線索，並通知其他天文台。呢個線索值得追查，但當時來源仲未確定。世界各地同太空中嘅望遠鏡一齊望向相關天空位置，睇嚇有冇其他光線或資料可以幫手。好似城市裏一個人先發現線索，再請有唔同工具嘅人一齊查；呢個比喻只係講合作，唔代表天文台用同一種方法量度。後續研究為一個遙遠、非常活躍嘅星系可能係來源，提供更多證據。呢個故事讓我哋看到，冰裏嘅儀器唔係自己解開所有秘密，而係打開一扇門，令唔同研究團隊可以接住追問。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-09.mp3"
+        },
+        {
+          "id": "nobel03-illustrated-09-discussion",
+          "type": "discussion",
+          "agentId": "nobel03-assistant",
+          "topic": "這項研究為甚麼重要？它對普通人的價值和限制是甚麼？",
+          "prompt": "這是一段簡短課堂討論。科學小助手先釐清本課一個類比的界線；科學故事老師接着連回研究為甚麼重要；好奇同學提出一個相關追問。各角色只代表自己發言，完成後交回學生，不繼續延伸新回合；這段毋須開白板或新增圖表。不泛化所有情況，不提供個人診療。"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/09-zh-Hant.png",
+              "name": "為甚麼值得諾獎？；人類多了一種研究極端宇宙的新方法。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-09-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-09-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "新工具帶嚟線索之後，其他研究者亦可以加入。二零一七年，IceCube記錄到一個中微子線索，並通知其他天文台。呢個線索值得追查，但當時來源仲未確定。世界各地同太空中嘅望遠鏡一齊望向相關天空位置，睇嚇有冇其他光線或資料可以幫手。好似城市裏一個人先發現線索，再請有唔同工具嘅人一齊查；呢個比喻只係講合作，唔代表天文台用同一種方法量度。後續研究為一個遙遠、非常活躍嘅星系可能係來源，提供更多證據。呢個故事讓我哋看到，冰裏嘅儀器唔係自己解開所有秘密，而係打開一扇門，令唔同研究團隊可以接住追問。"
+        },
+        "script": "新工具帶嚟線索之後，其他研究者亦可以加入。二零一七年，IceCube記錄到一個中微子線索，並通知其他天文台。呢個線索值得追查，但當時來源仲未確定。世界各地同太空中嘅望遠鏡一齊望向相關天空位置，睇嚇有冇其他光線或資料可以幫手。好似城市裏一個人先發現線索，再請有唔同工具嘅人一齊查；呢個比喻只係講合作，唔代表天文台用同一種方法量度。後續研究為一個遙遠、非常活躍嘅星系可能係來源，提供更多證據。呢個故事讓我哋看到，冰裏嘅儀器唔係自己解開所有秘密，而係打開一扇門，令唔同研究團隊可以接住追問。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-10",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "普通人會得到甚麼？",
+      "order": 10,
+      "outlineId": "nobel03-illustrated-10-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-10-speech",
+          "type": "speech",
+          "text": "到咗二零二六年，諾貝爾物理學獎表彰哈爾岑對IceCube，以及發現來自宇宙、能量特別高嘅中微子嘅關鍵貢獻。點解呢項研究值得獎？因為佢唔只提出一個奇特想法，仲將想法變成可以記錄資料嘅巨大儀器，並帶返重要宇宙證據。之前普通望遠鏡睇唔到嘅線索，而家可以用另一種方法研究。站喺普通人角度，我哋住喺地球，亦一直喺宇宙入面；更瞭解宇宙點樣運作，係人類共同得到嘅知識。至於將來會唔會變成某種日常產品，唔可以保證，仍然要靠後續研究。獎項表揚哈爾岑嘅關鍵貢獻，但巨大儀器靠好多國家嘅科學家、工程人員同南極工作團隊一齊建造同分析。偉大嘅地方係：一個令人好奇嘅問題，最後變成全人類都可以繼續使用嘅新觀測方法。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-10.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/10-zh-Hant.png",
+              "name": "普通人會得到甚麼？；它先擴展人類認識宇宙的能力，並非現成家用產品。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-10-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-10-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "到咗二零二六年，諾貝爾物理學獎表彰哈爾岑對IceCube，以及發現來自宇宙、能量特別高嘅中微子嘅關鍵貢獻。點解呢項研究值得獎？因為佢唔只提出一個奇特想法，仲將想法變成可以記錄資料嘅巨大儀器，並帶返重要宇宙證據。之前普通望遠鏡睇唔到嘅線索，而家可以用另一種方法研究。站喺普通人角度，我哋住喺地球，亦一直喺宇宙入面；更瞭解宇宙點樣運作，係人類共同得到嘅知識。至於將來會唔會變成某種日常產品，唔可以保證，仍然要靠後續研究。獎項表揚哈爾岑嘅關鍵貢獻，但巨大儀器靠好多國家嘅科學家、工程人員同南極工作團隊一齊建造同分析。偉大嘅地方係：一個令人好奇嘅問題，最後變成全人類都可以繼續使用嘅新觀測方法。"
+        },
+        "script": "到咗二零二六年，諾貝爾物理學獎表彰哈爾岑對IceCube，以及發現來自宇宙、能量特別高嘅中微子嘅關鍵貢獻。點解呢項研究值得獎？因為佢唔只提出一個奇特想法，仲將想法變成可以記錄資料嘅巨大儀器，並帶返重要宇宙證據。之前普通望遠鏡睇唔到嘅線索，而家可以用另一種方法研究。站喺普通人角度，我哋住喺地球，亦一直喺宇宙入面；更瞭解宇宙點樣運作，係人類共同得到嘅知識。至於將來會唔會變成某種日常產品，唔可以保證，仍然要靠後續研究。獎項表揚哈爾岑嘅關鍵貢獻，但巨大儀器靠好多國家嘅科學家、工程人員同南極工作團隊一齊建造同分析。偉大嘅地方係：一個令人好奇嘅問題，最後變成全人類都可以繼續使用嘅新觀測方法。"
+      }
+    },
+    {
+      "id": "nobel03-illustrated-11",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "三個小判斷",
+      "order": 11,
+      "outlineId": "nobel03-illustrated-11-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-11-speech",
+          "type": "speech",
+          "text": "最後用三條小問題，睇嚇你捉唔捉到今日故事最重要嘅意思。第一，IceCube嘅感光器直接影到中微子未？冇。佢記錄嘅係少數中微子事件留下嘅微光。第二，點解記到一點光，仲未即刻知道宇宙邊度發生咗乜？因為地球大氣同其他粒子都可能令儀器有記錄，研究者要比較好多線索。第三，哈爾岑呢項研究帶來咩最清楚嘅價值？人類多咗一種研究宇宙嘅方法。你唔使背好多英文名、數字或者專有名詞。只要講得出，哈爾岑想知道普通光看不到嘅宇宙線索；佢同團隊把感光儀器放入南極深冰；微光紀錄幫人類得到新證據，就已經捉到故事主線。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel03-illustrated-11-q1",
+            "type": "single",
+            "question": "IceCube的感光器直接拍到了甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "中微子的樣子。"
+              },
+              {
+                "value": "B",
+                "label": "少數中微子事件留下的微光。"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：感光器記錄的是光，不是中微子的照片。；B：對。研究者從少數事件留下的光線索，推想發生了甚麼。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel03-illustrated-11-q2",
+            "type": "single",
+            "question": "為甚麼一點光還不足以說「一定來自遙遠宇宙」？",
+            "options": [
+              {
+                "value": "A",
+                "label": "其他粒子或地球大氣也可能帶來光線索。"
+              },
+              {
+                "value": "B",
+                "label": "只要有光，來源一定是同一顆星。"
+              },
+              {
+                "value": "C",
+                "label": "冰裏完全沒有光。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。研究者要比較光出現的位置、時間和其他可能來源。；B：一次光點不能指出唯一來源，還要看更多資料。；C：深冰能讓光線索傳到感光器；困難是分辨不同來源。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel03-illustrated-11-q3",
+            "type": "single",
+            "question": "這項獲獎研究最清楚的價值是甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "保證很快做出新的日常產品。"
+              },
+              {
+                "value": "B",
+                "label": "讓人類多一種研究宇宙的方法。"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：日常產品不是已保證的成果；仍需後續研究。；B：對。人類能用中微子留下的線索，研究以前較難看到的宇宙活動。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "nobel03-illustrated-12",
+      "stageId": "hk-nobel-03-halzen-illustrated-v2",
+      "title": "從大膽想法到可靠工具",
+      "order": 12,
+      "outlineId": "nobel03-illustrated-12-outline",
+      "createdAt": 1792812588534,
+      "updatedAt": 1792812588534,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel03-illustrated-12-speech",
+          "type": "speech",
+          "text": "故事最後，返到哈爾岑最初感興趣嘅問題：可唔可以用另一種方法，發現普通光看不到嘅宇宙？佢同合作者將南極深冰同感光儀器結合，等少數中微子留下嘅微光可以被記錄。科學家再將好多紀錄比較，先提出有證據支持嘅解釋。呢項研究令全人類多咗一種探索宇宙嘅方法，亦係佢獲得諾貝爾獎嘅重要原因。呢個故事唔係一個人忽然知道答案，而係有人對一條問題好好奇，然後同其他人一齊學習、試驗、改善方法。下一次你聽到一個陌生嘅科學名詞，可以先問：佢想解決邊個難題？呢個解答又可以為普通人、為全人類增加咩新知識？由好奇開始，再一步步搵證據，科學就會近好多。",
+          "audioId": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/audio/yue-HK/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel03-illustrated-12-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel03-illustrated-12-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-03-halzen-illustrated-v2/media/12-zh-Hant.png",
+              "name": "從大膽想法到可靠工具；想得大，也要量得準、驗得清。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-12-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel03-illustrated-12-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel03-illustrated-12-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "故事最後，返到哈爾岑最初感興趣嘅問題：可唔可以用另一種方法，發現普通光看不到嘅宇宙？佢同合作者將南極深冰同感光儀器結合，等少數中微子留下嘅微光可以被記錄。科學家再將好多紀錄比較，先提出有證據支持嘅解釋。呢項研究令全人類多咗一種探索宇宙嘅方法，亦係佢獲得諾貝爾獎嘅重要原因。呢個故事唔係一個人忽然知道答案，而係有人對一條問題好好奇，然後同其他人一齊學習、試驗、改善方法。下一次你聽到一個陌生嘅科學名詞，可以先問：佢想解決邊個難題？呢個解答又可以為普通人、為全人類增加咩新知識？由好奇開始，再一步步搵證據，科學就會近好多。"
+        },
+        "script": "故事最後，返到哈爾岑最初感興趣嘅問題：可唔可以用另一種方法，發現普通光看不到嘅宇宙？佢同合作者將南極深冰同感光儀器結合，等少數中微子留下嘅微光可以被記錄。科學家再將好多紀錄比較，先提出有證據支持嘅解釋。呢項研究令全人類多咗一種探索宇宙嘅方法，亦係佢獲得諾貝爾獎嘅重要原因。呢個故事唔係一個人忽然知道答案，而係有人對一條問題好好奇，然後同其他人一齊學習、試驗、改善方法。下一次你聽到一個陌生嘅科學名詞，可以先問：佢想解決邊個難題？呢個解答又可以為普通人、為全人類增加咩新知識？由好奇開始，再一步步搵證據，科學就會近好多。"
+      }
+    }
+  ]
+}

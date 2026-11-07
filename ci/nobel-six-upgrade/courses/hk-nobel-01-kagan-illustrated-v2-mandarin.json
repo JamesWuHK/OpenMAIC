@@ -1,0 +1,1570 @@
+{
+  "id": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+  "createdAt": "2026-10-24T06:16:54.384Z",
+  "stage": {
+    "id": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+    "name": "卡甘：化學家怎樣讓反應偏向一個分子方向？（圖文講授・普通話）",
+    "description": "先認識法國化學家 Henri Kagan，從香芹酮氣味不同的故事進入研究；再理解他的非線性效應與硤合憲三的自催化發現如何互補，並一起獲得諾貝爾化學獎。",
+    "createdAt": 1792822614384,
+    "updatedAt": 1792822614384,
+    "style": "人物故事式普通講授；暖白編輯版面、真實許可照片、清楚圖說、原創原理圖與必要術語解釋",
+    "languageDirective": "所有學生可見文字使用香港繁體中文，以普通話作適齡普通講授。先人物故事，再講研究難題、為甚麼獲獎、對普通人的價值和必要原理；類比有邊界，區分研究工具與仍待驗證的應用。不提供個人診療，不編童年或心理，不泛化所有情況。",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel01-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "我是科學故事老師，會用香港學生熟悉的生活例子講清研究的核心價值；不把比喻當成機制，也不把研究前景說成現成產品或療效。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel01-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "我是科學小助手，會幫你分清研究條件、證據與未知，某些情況不代表全部；動物實驗不能直接證明人的療效，不提供個人診療。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel01-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "我是AI同學，會用簡短追問幫大家澄清疑問，不假裝是真實小朋友。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel01-illustrated-01",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "亨利・卡甘",
+      "order": 1,
+      "outlineId": "nobel01-illustrated-01-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-01-speech",
+          "type": "speech",
+          "text": "今天先認識法國化學家亨利卡甘，英文是 Henri B. Kagan，他也是二零二六年諾貝爾化學獎得主之一。先想一想兩種鏡像的香芹酮：一種帶薄荷味，另一種帶葛縷子味。這是真實的分子例子，不是卡甘獲獎研究裏使用的樣品。再往前走一步，科學家還追問一個更大的謎：生命裏許多重要分子，為什麼主要採用同一種鏡像方向？卡甘與硤合的研究提供化學線索，但不是生命起源的完整答案。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/01-zh-Hant.png",
+              "name": "亨利・卡甘；分子的「左右手」，怎樣影響我們的生活？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-01-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-01-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://academie-sciences.fr/henri-kagan\">法國科學院：Henri Kagan 簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-voice-link",
+              "left": 44,
+              "top": 486,
+              "width": 430,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:15px\"><a href=\"/classroom/hk-nobel-01-kagan-illustrated-v2\">切換至廣東話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-01-kagan-illustrated-v2"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "今天先認識法國化學家亨利卡甘，英文是 Henri B. Kagan，他也是二零二六年諾貝爾化學獎得主之一。先想一想兩種鏡像的香芹酮：一種帶薄荷味，另一種帶葛縷子味。這是真實的分子例子，不是卡甘獲獎研究裏使用的樣品。再往前走一步，科學家還追問一個更大的謎：生命裏許多重要分子，為什麼主要採用同一種鏡像方向？卡甘與硤合的研究提供化學線索，但不是生命起源的完整答案。"
+        },
+        "script": "今天先認識法國化學家亨利卡甘，英文是 Henri B. Kagan，他也是二零二六年諾貝爾化學獎得主之一。先想一想兩種鏡像的香芹酮：一種帶薄荷味，另一種帶葛縷子味。這是真實的分子例子，不是卡甘獲獎研究裏使用的樣品。再往前走一步，科學家還追問一個更大的謎：生命裏許多重要分子，為什麼主要採用同一種鏡像方向？卡甘與硤合的研究提供化學線索，但不是生命起源的完整答案。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-02",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "基本功，變成新問題",
+      "order": 2,
+      "outlineId": "nobel01-illustrated-02-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-02-speech",
+          "type": "speech",
+          "text": "卡甘在索邦大學和巴黎高等化學學院學習化學，之後在法蘭西公學完成博士研究，研究類固醇化學。後來他長期在奧賽做研究，逐步投入不對稱催化和分子形狀的問題。官方機構留下了他的學習和研究履歷；沒有可靠來源的童年故事，我們就不會自己編。這段經歷讓我們看到，科學家不是突然就知道答案。他要學好基本功，加入研究團隊，再對一個問題持續追問。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/02-zh-Hant.png",
+              "name": "基本功，變成新問題；學習、訓練、合作，再把一個問題追得更深。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-02-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-02-photo",
+              "left": 660.5482897384306,
+              "top": 135.0,
+              "width": 228.90342052313883,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/kagan.jpg",
+              "name": "亨利・卡甘資料肖像，非諾獎現場"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-02-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">Collections École Polytechnique；資料照片，非諾獎現場；原檔已由Commons裁切。 <a href=\"https://commons.wikimedia.org/wiki/File:Henri_Kagan_(2014).jpg\">來源</a>／<a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">授權</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-02-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.college-de-france.fr/en/news/2026-nobel-prize-in-chemistry\">法蘭西公學：Kagan 的博士研究經歷</a> · <a href=\"https://academie-sciences.fr/henri-kagan\">法國科學院：Henri Kagan 簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "卡甘在索邦大學和巴黎高等化學學院學習化學，之後在法蘭西公學完成博士研究，研究類固醇化學。後來他長期在奧賽做研究，逐步投入不對稱催化和分子形狀的問題。官方機構留下了他的學習和研究履歷；沒有可靠來源的童年故事，我們就不會自己編。這段經歷讓我們看到，科學家不是突然就知道答案。他要學好基本功，加入研究團隊，再對一個問題持續追問。"
+        },
+        "script": "卡甘在索邦大學和巴黎高等化學學院學習化學，之後在法蘭西公學完成博士研究，研究類固醇化學。後來他長期在奧賽做研究，逐步投入不對稱催化和分子形狀的問題。官方機構留下了他的學習和研究履歷；沒有可靠來源的童年故事，我們就不會自己編。這段經歷讓我們看到，科學家不是突然就知道答案。他要學好基本功，加入研究團隊，再對一個問題持續追問。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-03",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "鏡中的手，套不上？",
+      "order": 3,
+      "outlineId": "nobel01-illustrated-03-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-03-speech",
+          "type": "speech",
+          "text": "想像一對左右手套。它們好像鏡子裏的影像，但你只轉動左手套，也未必可以讓它完全變成右手套。有些分子也有類似的立體關係：原子種類和連接次序一樣，方向卻互為鏡像，不能靠旋轉完全重合。這種情況叫手性。記住，不是所有分子都有手性。旁邊這幅手套插畫只是類比，不是香芹酮的分子結構。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-03-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-03-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/03-zh-Hant.png",
+              "name": "鏡中的手，套不上？；有些分子互為鏡像，卻不能只靠旋轉完全重合。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-03-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-03-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-03-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "想像一對左右手套。它們好像鏡子裏的影像，但你只轉動左手套，也未必可以讓它完全變成右手套。有些分子也有類似的立體關係：原子種類和連接次序一樣，方向卻互為鏡像，不能靠旋轉完全重合。這種情況叫手性。記住，不是所有分子都有手性。旁邊這幅手套插畫只是類比，不是香芹酮的分子結構。"
+        },
+        "script": "想像一對左右手套。它們好像鏡子裏的影像，但你只轉動左手套，也未必可以讓它完全變成右手套。有些分子也有類似的立體關係：原子種類和連接次序一樣，方向卻互為鏡像，不能靠旋轉完全重合。這種情況叫手性。記住，不是所有分子都有手性。旁邊這幅手套插畫只是類比，不是香芹酮的分子結構。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-04",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "同樣原子，不同氣味",
+      "order": 4,
+      "outlineId": "nobel01-illustrated-04-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-04-speech",
+          "type": "speech",
+          "text": "這張資料照片展示薄荷植物，讓我們從熟悉的氣味開始。不過，它不是香芹酮的來源照片，只是生活裏的薄荷。香芹酮有兩種互為鏡像的形式，原子種類和連接次序一樣，但三維方向不同。研究者發現，這兩種形式的氣味特徵也不同，一種帶薄荷味，另一種帶葛縷子味。為什麼鼻子會分辨到，是氣味分子和身體感受系統互相作用的問題。這是香芹酮的具體例子，不代表每一對鏡像分子都一定有這麼大的差別。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/04-zh-Hant.png",
+              "name": "同樣原子，不同氣味；香芹酮的兩種鏡像形式，氣味特徵可以不同。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-04-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-04-photo",
+              "left": 620.0,
+              "top": 171.25,
+              "width": 310.0,
+              "height": 232.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/source-mint.jpg",
+              "name": "元朗街市售賣的薄荷植物實拍；用於引出熟悉的薄荷氣味，並非香芹酮實驗材料照片。"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-04-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">元朗街市售賣的薄荷植物實拍；用於引出熟悉的薄荷氣味，並非香芹酮實驗材料照片。<span class=\"credit\">Peachyeung316 · <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" rel=\"noopener\" target=\"_blank\">CC BY-SA 4.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:A_mint_leaves_in_Yuen_Long.jpg\" rel=\"noopener\" target=\"_blank\">圖片來源</a> · 已縮放及重新編碼以配合課堂版面</span></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-04-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://pubmed.ncbi.nlm.nih.gov/5573954/\">Friedman &amp; Miller：香芹酮兩種氣味</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "這張資料照片展示薄荷植物，讓我們從熟悉的氣味開始。不過，它不是香芹酮的來源照片，只是生活裏的薄荷。香芹酮有兩種互為鏡像的形式，原子種類和連接次序一樣，但三維方向不同。研究者發現，這兩種形式的氣味特徵也不同，一種帶薄荷味，另一種帶葛縷子味。為什麼鼻子會分辨到，是氣味分子和身體感受系統互相作用的問題。這是香芹酮的具體例子，不代表每一對鏡像分子都一定有這麼大的差別。"
+        },
+        "script": "這張資料照片展示薄荷植物，讓我們從熟悉的氣味開始。不過，它不是香芹酮的來源照片，只是生活裏的薄荷。香芹酮有兩種互為鏡像的形式，原子種類和連接次序一樣，但三維方向不同。研究者發現，這兩種形式的氣味特徵也不同，一種帶薄荷味，另一種帶葛縷子味。為什麼鼻子會分辨到，是氣味分子和身體感受系統互相作用的問題。這是香芹酮的具體例子，不代表每一對鏡像分子都一定有這麼大的差別。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-05",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "化學家想控制甚麼？",
+      "order": 5,
+      "outlineId": "nobel01-illustrated-05-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-05-speech",
+          "type": "speech",
+          "text": "化學反應有時會形成兩種互為鏡像的產物。化學家會問：可不可以選擇合適的反應條件和催化劑，讓其中一種多一些？這個問題和藥物、氣味以及其他精細化學品的研究有關，因為分子形狀有時會影響性質。催化劑好像一個改變路線的助手，會參與反應，讓某些路徑比較容易；但它不會思考，也不保證每次只出一種產物。這幅是幫助理解產物偏向的教學插畫，不是卡甘的實驗現場。真實答案要量度產物，不可以單靠示意圖估計。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/05-zh-Hant.png",
+              "name": "化學家想控制甚麼？；讓反應製造較多需要的那一種鏡像形式。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-05-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-05-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "化學反應有時會形成兩種互為鏡像的產物。化學家會問：可不可以選擇合適的反應條件和催化劑，讓其中一種多一些？這個問題和藥物、氣味以及其他精細化學品的研究有關，因為分子形狀有時會影響性質。催化劑好像一個改變路線的助手，會參與反應，讓某些路徑比較容易；但它不會思考，也不保證每次只出一種產物。這幅是幫助理解產物偏向的教學插畫，不是卡甘的實驗現場。真實答案要量度產物，不可以單靠示意圖估計。"
+        },
+        "script": "化學反應有時會形成兩種互為鏡像的產物。化學家會問：可不可以選擇合適的反應條件和催化劑，讓其中一種多一些？這個問題和藥物、氣味以及其他精細化學品的研究有關，因為分子形狀有時會影響性質。催化劑好像一個改變路線的助手，會參與反應，讓某些路徑比較容易；但它不會思考，也不保證每次只出一種產物。這幅是幫助理解產物偏向的教學插畫，不是卡甘的實驗現場。真實答案要量度產物，不可以單靠示意圖估計。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-06",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "先猜一條直線",
+      "order": 6,
+      "outlineId": "nobel01-illustrated-06-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-06-speech",
+          "type": "speech",
+          "text": "假設催化劑裏某一種鏡像形式的比例多了一點，產物偏向也跟著多了一點，那麼我們可以先預期它們大致按直線變化。但真實化學反應裏，分子會互相作用，結果未必只由每種分子有多少決定。這幅手繪教學插畫裏的直線是課堂用的預測模型，不是卡甘的實驗數據。先講清楚原本怎樣估計，才容易看到實驗結果帶來的意外。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/06-zh-Hant.png",
+              "name": "先猜一條直線；如果催化劑偏向增加，產物會跟着等比例改變嗎？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-06-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-06-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://doi.org/10.1021/ja00269a036\">Puchot 等：1986 年原始論文</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "假設催化劑裏某一種鏡像形式的比例多了一點，產物偏向也跟著多了一點，那麼我們可以先預期它們大致按直線變化。但真實化學反應裏，分子會互相作用，結果未必只由每種分子有多少決定。這幅手繪教學插畫裏的直線是課堂用的預測模型，不是卡甘的實驗數據。先講清楚原本怎樣估計，才容易看到實驗結果帶來的意外。"
+        },
+        "script": "假設催化劑裏某一種鏡像形式的比例多了一點，產物偏向也跟著多了一點，那麼我們可以先預期它們大致按直線變化。但真實化學反應裏，分子會互相作用，結果未必只由每種分子有多少決定。這幅手繪教學插畫裏的直線是課堂用的預測模型，不是卡甘的實驗數據。先講清楚原本怎樣估計，才容易看到實驗結果帶來的意外。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-07",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "意外：沒有沿直線走",
+      "order": 7,
+      "outlineId": "nobel01-illustrated-07-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-07-speech",
+          "type": "speech",
+          "text": "一九八六年，卡甘和合作者報告了非線性效應的例子。用最簡單的說法：在某些反應裏，催化劑兩種鏡像形式的比例，和產物兩種鏡像形式的比例，不是簡單一對一的直線。有時產物偏向會比直線預期大，也可能出現其他非線性關係。不是所有非線性效應都代表自動放大。正因為結果不簡單，科學家才會繼續問：催化劑分子之間是不是互相作用？改變什麼條件會讓結果不同？這個新問題就是研究的價值。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-07-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-07-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/07-zh-Hant.png",
+              "name": "意外：沒有沿直線走；某些反應中，兩種偏向的關係會偏離直線。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-07-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-07-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-07-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://doi.org/10.1021/ja00269a036\">Puchot 等：1986 年原始論文</a> · <a href=\"https://pubmed.ncbi.nlm.nih.gov/29711141/\">Girard &amp; Kagan：非線性效應回顧</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "一九八六年，卡甘和合作者報告了非線性效應的例子。用最簡單的說法：在某些反應裏，催化劑兩種鏡像形式的比例，和產物兩種鏡像形式的比例，不是簡單一對一的直線。有時產物偏向會比直線預期大，也可能出現其他非線性關係。不是所有非線性效應都代表自動放大。正因為結果不簡單，科學家才會繼續問：催化劑分子之間是不是互相作用？改變什麼條件會讓結果不同？這個新問題就是研究的價值。"
+        },
+        "script": "一九八六年，卡甘和合作者報告了非線性效應的例子。用最簡單的說法：在某些反應裏，催化劑兩種鏡像形式的比例，和產物兩種鏡像形式的比例，不是簡單一對一的直線。有時產物偏向會比直線預期大，也可能出現其他非線性關係。不是所有非線性效應都代表自動放大。正因為結果不簡單，科學家才會繼續問：催化劑分子之間是不是互相作用？改變什麼條件會讓結果不同？這個新問題就是研究的價值。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-08",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "為甚麼值得諾獎？",
+      "order": 8,
+      "outlineId": "nobel01-illustrated-08-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-08-speech",
+          "type": "speech",
+          "text": "生命裏許多重要分子，例如組成蛋白質的氨基酸，主要採用同一種鏡像方向。科學家追問：化學反應怎樣可能慢慢偏向一種形狀？卡甘發現，在某些反應裏，催化劑和產物的鏡像比例不是簡單直線關係；硤合之後展示，產物也可以參與催化，幫助同類產物形成。這兩項是互相補充的化學線索，不是生命起源的完整答案。二零二六年諾貝爾化學獎表彰這些研究，因為化學家多了方法追查怎樣製造較多某一種分子形狀。這種理解也可能幫助藥物和其他精細化學品研究，但具體產品仍要另外研發和驗證。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3"
+        },
+        {
+          "id": "nobel01-illustrated-08-discussion",
+          "type": "discussion",
+          "agentId": "nobel01-assistant",
+          "topic": "這項研究為甚麼重要？它對普通人的價值和限制是甚麼？",
+          "prompt": "這是一段簡短課堂討論。科學小助手先釐清本課一個類比的界線；科學故事老師接着連回研究為甚麼重要；好奇同學提出一個相關追問。各角色只代表自己發言，完成後交回學生，不繼續延伸新回合；這段毋須開白板或新增圖表。不泛化所有情況，不提供個人診療。"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-08-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-08-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/08-zh-Hant.png",
+              "name": "為甚麼值得諾獎？；卡甘與硤合的研究，提供鏡像偏向如何出現和增強的線索。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-08-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-08-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-08-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "生命裏許多重要分子，例如組成蛋白質的氨基酸，主要採用同一種鏡像方向。科學家追問：化學反應怎樣可能慢慢偏向一種形狀？卡甘發現，在某些反應裏，催化劑和產物的鏡像比例不是簡單直線關係；硤合之後展示，產物也可以參與催化，幫助同類產物形成。這兩項是互相補充的化學線索，不是生命起源的完整答案。二零二六年諾貝爾化學獎表彰這些研究，因為化學家多了方法追查怎樣製造較多某一種分子形狀。這種理解也可能幫助藥物和其他精細化學品研究，但具體產品仍要另外研發和驗證。"
+        },
+        "script": "生命裏許多重要分子，例如組成蛋白質的氨基酸，主要採用同一種鏡像方向。科學家追問：化學反應怎樣可能慢慢偏向一種形狀？卡甘發現，在某些反應裏，催化劑和產物的鏡像比例不是簡單直線關係；硤合之後展示，產物也可以參與催化，幫助同類產物形成。這兩項是互相補充的化學線索，不是生命起源的完整答案。二零二六年諾貝爾化學獎表彰這些研究，因為化學家多了方法追查怎樣製造較多某一種分子形狀。這種理解也可能幫助藥物和其他精細化學品研究，但具體產品仍要另外研發和驗證。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-09",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "普通人會得到甚麼？",
+      "order": 9,
+      "outlineId": "nobel01-illustrated-09-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-09-speech",
+          "type": "speech",
+          "text": "普通人為什麼會在意呢？今天化學家已經會用不同的不對稱合成方法，製造較多某一種鏡像形式；卡甘的非線性效應，是理解某些催化反應的工具和線索。對我們來說，長遠價值可能是未來研究藥物、香料或者材料時，科學家多了方法去理解反應、比較條件和設計實驗。但不可以說卡甘一項發現直接製造了某款藥，更不可以保證任何產品一定有效、安全或者成功。基礎研究先擴大人類可以理解和嘗試的方法，之後仍要逐步驗證。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/09-zh-Hant.png",
+              "name": "普通人會得到甚麼？；更懂分子形狀，能幫助藥物、香味與材料的研究。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-09-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-09-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "普通人為什麼會在意呢？今天化學家已經會用不同的不對稱合成方法，製造較多某一種鏡像形式；卡甘的非線性效應，是理解某些催化反應的工具和線索。對我們來說，長遠價值可能是未來研究藥物、香料或者材料時，科學家多了方法去理解反應、比較條件和設計實驗。但不可以說卡甘一項發現直接製造了某款藥，更不可以保證任何產品一定有效、安全或者成功。基礎研究先擴大人類可以理解和嘗試的方法，之後仍要逐步驗證。"
+        },
+        "script": "普通人為什麼會在意呢？今天化學家已經會用不同的不對稱合成方法，製造較多某一種鏡像形式；卡甘的非線性效應，是理解某些催化反應的工具和線索。對我們來說，長遠價值可能是未來研究藥物、香料或者材料時，科學家多了方法去理解反應、比較條件和設計實驗。但不可以說卡甘一項發現直接製造了某款藥，更不可以保證任何產品一定有效、安全或者成功。基礎研究先擴大人類可以理解和嘗試的方法，之後仍要逐步驗證。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-10",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "有趣，也要講條件",
+      "order": 10,
+      "outlineId": "nobel01-illustrated-10-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-10-speech",
+          "type": "speech",
+          "text": "最後有三條界線要記清楚。第一，非線性效應出現在某些具體催化反應，不代表每個化學反應都會這樣。第二，結果偏離直線，不保證一定向某一邊放大；方向和程度要看實際反應。第三，研究鏡像分子和生命分子偏向的關係，可以提供線索，但不可以單靠這項研究，就說出生命起源的完整歷史。科學結論要連同條件和證據一起記住。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/10-zh-Hant.png",
+              "name": "有趣，也要講條件；某些反應、實測結果、生命起源的線索。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-10-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-10-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "最後有三條界線要記清楚。第一，非線性效應出現在某些具體催化反應，不代表每個化學反應都會這樣。第二，結果偏離直線，不保證一定向某一邊放大；方向和程度要看實際反應。第三，研究鏡像分子和生命分子偏向的關係，可以提供線索，但不可以單靠這項研究，就說出生命起源的完整歷史。科學結論要連同條件和證據一起記住。"
+        },
+        "script": "最後有三條界線要記清楚。第一，非線性效應出現在某些具體催化反應，不代表每個化學反應都會這樣。第二，結果偏離直線，不保證一定向某一邊放大；方向和程度要看實際反應。第三，研究鏡像分子和生命分子偏向的關係，可以提供線索，但不可以單靠這項研究，就說出生命起源的完整歷史。科學結論要連同條件和證據一起記住。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-11",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "把意外變成問題",
+      "order": 11,
+      "outlineId": "nobel01-illustrated-11-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-11-speech",
+          "type": "speech",
+          "text": "當實驗不按預想發展，下一步不是急著講原因，而是重複、比較，再找出什麼條件會讓結果改變。非線性效應讓研究者可以繼續設計實驗，研究催化劑和反應之間的關係。後來不同化學家都用這個想法去研究催化體系，這就是一項基礎發現慢慢變成領域工具的過程。科學研究不是每次都成功，也不是一個人孤立完成。論文、合作團隊和後續驗證，一起累積成今天的知識。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-11-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-11-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/11-zh-Hant.png",
+              "name": "把意外變成問題；重複、比較、找條件，才能知道結果是否可靠。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-11-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-11-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-11-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://pubmed.ncbi.nlm.nih.gov/29711141/\">Girard &amp; Kagan：非線性效應回顧</a> · <a href=\"https://academie-sciences.fr/henri-kagan\">法國科學院：Henri Kagan 簡介</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "當實驗不按預想發展，下一步不是急著講原因，而是重複、比較，再找出什麼條件會讓結果改變。非線性效應讓研究者可以繼續設計實驗，研究催化劑和反應之間的關係。後來不同化學家都用這個想法去研究催化體系，這就是一項基礎發現慢慢變成領域工具的過程。科學研究不是每次都成功，也不是一個人孤立完成。論文、合作團隊和後續驗證，一起累積成今天的知識。"
+        },
+        "script": "當實驗不按預想發展，下一步不是急著講原因，而是重複、比較，再找出什麼條件會讓結果改變。非線性效應讓研究者可以繼續設計實驗，研究催化劑和反應之間的關係。後來不同化學家都用這個想法去研究催化體系，這就是一項基礎發現慢慢變成領域工具的過程。科學研究不是每次都成功，也不是一個人孤立完成。論文、合作團隊和後續驗證，一起累積成今天的知識。"
+      }
+    },
+    {
+      "id": "nobel01-illustrated-12",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "三個小判斷",
+      "order": 12,
+      "outlineId": "nobel01-illustrated-12-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-12-speech",
+          "type": "speech",
+          "text": "現在用三條問題，把人物、發現和日常價值串連起來。第一，卡甘的研究讓化學家看到，某些催化反應的結果不是照著比例直線變化。第二，香芹酮的例子顯示，分子三維方向有時會影響我們聞到的氣味，但不可以說成所有鏡像分子都一樣。第三，研究工具可以幫助後來人理解和設計反應，但不等於已經保證有新藥或者保證療效。",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel01-illustrated-12-q1",
+            "type": "single",
+            "question": "卡甘與合作者的研究，主要幫化學家看見甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "某些反應的結果，未必按催化劑鏡像比例直線變化。"
+              },
+              {
+                "value": "B",
+                "label": "所有反應都會自動變成同一種分子。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。非線性效應提醒研究者，催化劑的組成和反應結果之間，關係可能比簡單比例更複雜。；B：不是所有反應都會這樣；這項研究揭示的是某些催化反應裏的重要現象。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel01-illustrated-12-q2",
+            "type": "single",
+            "question": "兩種香芹酮鏡像形式的故事說明甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "分子形狀的微小差異，有時會影響我們聞到的氣味。"
+              },
+              {
+                "value": "B",
+                "label": "所有鏡像分子一定有完全不同的用途。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。香芹酮是一個具體例子，不能把它擴大成所有分子都一樣。；B：不能這樣概括。不同分子的性質要分別測量和研究。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel01-illustrated-12-q3",
+            "type": "single",
+            "question": "這項諾獎研究對普通人的意義，怎樣說最穩妥？",
+            "options": [
+              {
+                "value": "A",
+                "label": "它幫助化學家理解、研究和設計某些不對稱反應；具體產品仍要驗證。"
+              },
+              {
+                "value": "B",
+                "label": "它已經保證每一種新藥都安全有效。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。基礎研究提供工具與理解，具體藥品仍需要獨立研發和嚴格驗證。；B：研究不等於藥品，更不等於安全有效的保證。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "nobel01-illustrated-13",
+      "stageId": "hk-nobel-01-kagan-illustrated-v2-mandarin",
+      "title": "小比例，大問題",
+      "order": 13,
+      "outlineId": "nobel01-illustrated-13-outline",
+      "createdAt": 1792822614384,
+      "updatedAt": 1792822614384,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel01-illustrated-13-speech",
+          "type": "speech",
+          "text": "今天我們從卡甘的故事認識到，催化劑的組成和產物的分子形狀，關係可能比直線更加豐富。薄荷和葛縷子的氣味提醒我們，分子的空間方向有時真的很重要。卡甘的非線性效應研究，讓化學家有新方法去研究反應和分子怎樣一起影響結果。這項發現值得諾獎，因為它打開了一條可以由更多人接續走下去的研究方向。下一課我們會跟隨硤合憲三，問一個更奇妙的問題：產物本身可不可以幫忙催化？",
+          "audioId": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-13.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/audio/zh-CN/page-13.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel01-illustrated-13-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel01-illustrated-13-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-01-kagan-illustrated-v2-mandarin/media/13-zh-Hant.png",
+              "name": "小比例，大問題；一項發現，讓後來人能問出更好的化學問題。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-13-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel01-illustrated-13-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel01-illustrated-13-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。 <a href=\"https://www.kva.se/en/news/the-nobel-prize-in-chemistry-2026/\">瑞典皇家科學院：2026年化學獎公告</a> · <a href=\"https://www.kva.se/en/prizes/nobel-prizes/they-solved-chemistrys-asymmetric-mystery/\">瑞典皇家科學院：化學不對稱之謎科普</a></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "今天我們從卡甘的故事認識到，催化劑的組成和產物的分子形狀，關係可能比直線更加豐富。薄荷和葛縷子的氣味提醒我們，分子的空間方向有時真的很重要。卡甘的非線性效應研究，讓化學家有新方法去研究反應和分子怎樣一起影響結果。這項發現值得諾獎，因為它打開了一條可以由更多人接續走下去的研究方向。下一課我們會跟隨硤合憲三，問一個更奇妙的問題：產物本身可不可以幫忙催化？"
+        },
+        "script": "今天我們從卡甘的故事認識到，催化劑的組成和產物的分子形狀，關係可能比直線更加豐富。薄荷和葛縷子的氣味提醒我們，分子的空間方向有時真的很重要。卡甘的非線性效應研究，讓化學家有新方法去研究反應和分子怎樣一起影響結果。這項發現值得諾獎，因為它打開了一條可以由更多人接續走下去的研究方向。下一課我們會跟隨硤合憲三，問一個更奇妙的問題：產物本身可不可以幫忙催化？"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1372 @@
+{
+  "id": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+  "createdAt": "2026-10-24T14:58:10.401Z",
+  "stage": {
+    "id": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+    "name": "格奧爾格·納格爾：光一閃，細胞裏的小門真的會打開嗎？（圖文講授・普通話）",
+    "description": "認識生物物理學家格奧爾格·納格爾，跟住「一束光如何令細胞裏的通道改變狀態？」這個真實問題，理解他與合作者如何測出藻類通道視紫紅質的功能，以及這項發現為何成為腦科學研究工具的重要起點。",
+    "createdAt": 1792853890401,
+    "updatedAt": 1792853890401,
+    "style": "人物故事與微觀實驗線索；使用可追溯的真實人物肖像、藻類顯微照片和標示清楚的教學機制圖。",
+    "languageDirective": "所有學生可見文字使用香港繁體中文，以普通話作適齡普通講授。先人物故事，再講研究難題、為甚麼獲獎、對普通人的價值和必要原理；類比有邊界，區分研究工具與仍待驗證的應用。不提供個人診療，不編童年或心理，不泛化所有情況。",
+    "generatedAgentConfigs": [
+      {
+        "id": "nobel06-teacher",
+        "name": "科學故事老師",
+        "role": "teacher",
+        "persona": "我是科學故事老師，會用香港學生熟悉的生活例子講清研究的核心價值；不把比喻當成機制，也不把研究前景說成現成產品或療效。",
+        "avatar": "/avatars/teacher.png",
+        "color": "#24665f",
+        "priority": 10
+      },
+      {
+        "id": "nobel06-assistant",
+        "name": "科學小助手",
+        "role": "assistant",
+        "persona": "我是科學小助手，會幫你分清研究條件、證據與未知，某些情況不代表全部；動物實驗不能直接證明人的療效，不提供個人診療。",
+        "avatar": "/avatars/assist.png",
+        "color": "#2563eb",
+        "priority": 7
+      },
+      {
+        "id": "nobel06-student",
+        "name": "好奇同學",
+        "role": "student",
+        "persona": "我是AI同學，會用簡短追問幫大家澄清疑問，不假裝是真實小朋友。",
+        "avatar": "/avatars/curious.png",
+        "color": "#bf9949",
+        "priority": 5
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "nobel06-illustrated-01",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "格奧爾格・納格爾",
+      "order": 1,
+      "outlineId": "nobel06-illustrated-01-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-01-speech",
+          "type": "speech",
+          "text": "這位是格奧爾格・納格爾，英文名 Georg Nagel，是德國生物物理學家。二零二六年，他與彼得・黑格曼、卡爾・戴瑟羅斯一起獲得諾貝爾生理學或醫學獎。先記住，這是三位得主和許多合作者接力完成的研究。今天我們會跟隨納格爾的重要一段：怎樣證明藻類的感光蛋白不只是「收到光」，而是真的會打開一條細胞通道，讓帶電微粒流過？這個答案後來成為研究腦細胞的一把新鑰匙。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-01.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-01-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-01-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/01-zh-Hant.png",
+              "name": "格奧爾格・納格爾；光一照，小門真的會開嗎？"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-01-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-01-photo",
+              "left": 661.6666666666666,
+              "top": 135.0,
+              "width": 226.66666666666669,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/source-nagel.jpg",
+              "name": "格奧爾格·納格爾教授，2022年照片；不是諾貝爾獎頒獎現場。"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-01-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">格奧爾格·納格爾教授，2022年照片；不是諾貝爾獎頒獎現場。<small>Millencolin · <a href=\"https://creativecommons.org/publicdomain/zero/1.0/\" rel=\"noopener\" target=\"_blank\">CC0 1.0</a> · <a href=\"https://commons.wikimedia.org/wiki/File:Prof._Dr._Georg_Nagel.png\" rel=\"noopener\" target=\"_blank\">圖片來源</a></small></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-01-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-01-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-voice-link",
+              "left": 44,
+              "top": 486,
+              "width": 430,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:15px\"><a href=\"/classroom/hk-nobel-06-nagel-illustrated-v2\">切換至廣東話講解 →</a></p>",
+              "defaultColor": "#24665f",
+              "defaultFontName": "Microsoft JhengHei",
+              "link": {
+                "type": "web",
+                "target": "/classroom/hk-nobel-06-nagel-illustrated-v2"
+              }
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "這位是格奧爾格・納格爾，英文名 Georg Nagel，是德國生物物理學家。二零二六年，他與彼得・黑格曼、卡爾・戴瑟羅斯一起獲得諾貝爾生理學或醫學獎。先記住，這是三位得主和許多合作者接力完成的研究。今天我們會跟隨納格爾的重要一段：怎樣證明藻類的感光蛋白不只是「收到光」，而是真的會打開一條細胞通道，讓帶電微粒流過？這個答案後來成為研究腦細胞的一把新鑰匙。"
+        },
+        "script": "這位是格奧爾格・納格爾，英文名 Georg Nagel，是德國生物物理學家。二零二六年，他與彼得・黑格曼、卡爾・戴瑟羅斯一起獲得諾貝爾生理學或醫學獎。先記住，這是三位得主和許多合作者接力完成的研究。今天我們會跟隨納格爾的重要一段：怎樣證明藻類的感光蛋白不只是「收到光」，而是真的會打開一條細胞通道，讓帶電微粒流過？這個答案後來成為研究腦細胞的一把新鑰匙。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-02",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "微藻的光感謎題",
+      "order": 2,
+      "outlineId": "nobel06-illustrated-02-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-02-speech",
+          "type": "speech",
+          "text": "萊茵衣藻是一種小到要用顯微鏡才看得清楚的單細胞綠藻。它可以游動，也會對光的方向作出反應。不過，它不是像人那樣看見整條街、認得路牌再決定方向。我們要追問的是：光照到細胞之後，裏面的訊號怎樣一步步改變？看到它游向光，只是看到最後結果，還不知道中間是哪個分子做了什麼。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-02.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-02-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-02-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/02-zh-Hant.png",
+              "name": "微藻的光感謎題；一個細胞，沒有人的眼睛，卻會對光作出反應。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-02-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-02-photo",
+              "left": 626.1344137273594,
+              "top": 135.0,
+              "width": 297.7311725452812,
+              "height": 305.0,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/source-alga.jpg",
+              "name": "萊茵衣藻的掃描電子顯微照片；灰白影像經電子顯微鏡成像，不是藻類的天然顏色。"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-02-caption",
+              "left": 610,
+              "top": 445,
+              "width": 340,
+              "height": 65,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">萊茵衣藻的掃描電子顯微照片；灰白影像經電子顯微鏡成像，不是藻類的天然顏色。<small>Dartmouth Electron Microscope Facility, Dartmouth College · <a href=\"https://creativecommons.org/publicdomain/mark/1.0/\" rel=\"noopener\" target=\"_blank\">Public domain</a> · <a href=\"https://commons.wikimedia.org/wiki/File:Chlamydomonas2-1.jpg\" rel=\"noopener\" target=\"_blank\">圖片來源</a></small></p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-02-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-02-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "萊茵衣藻是一種小到要用顯微鏡才看得清楚的單細胞綠藻。它可以游動，也會對光的方向作出反應。不過，它不是像人那樣看見整條街、認得路牌再決定方向。我們要追問的是：光照到細胞之後，裏面的訊號怎樣一步步改變？看到它游向光，只是看到最後結果，還不知道中間是哪個分子做了什麼。"
+        },
+        "script": "萊茵衣藻是一種小到要用顯微鏡才看得清楚的單細胞綠藻。它可以游動，也會對光的方向作出反應。不過，它不是像人那樣看見整條街、認得路牌再決定方向。我們要追問的是：光照到細胞之後，裏面的訊號怎樣一步步改變？看到它游向光，只是看到最後結果，還不知道中間是哪個分子做了什麼。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-03",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "先教書，再回到研究",
+      "order": 3,
+      "outlineId": "nobel06-illustrated-03-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-03-speech",
+          "type": "speech",
+          "text": "納格爾的成長路線不是一開始就直奔實驗室。他先在康斯坦茨大學讀生物學和生物物理學，曾經在瑞士中學教書，之後再讀博士，也去耶魯大學和洛克斐勒大學接受博士後訓練。他長期研究細胞膜上的電流，所以當團隊需要驗證一種候選蛋白會不會令電流改變，他的訓練就派上用場。真實的科研成長，往往是學習和本領慢慢累積，再遇到值得追問的問題。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-03.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-03-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-03-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/03-zh-Hant.png",
+              "name": "先教書，再回到研究；學習與不同經歷，逐步練出測量細胞電流的本領。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-03-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-03-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-03-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "納格爾的成長路線不是一開始就直奔實驗室。他先在康斯坦茨大學讀生物學和生物物理學，曾經在瑞士中學教書，之後再讀博士，也去耶魯大學和洛克斐勒大學接受博士後訓練。他長期研究細胞膜上的電流，所以當團隊需要驗證一種候選蛋白會不會令電流改變，他的訓練就派上用場。真實的科研成長，往往是學習和本領慢慢累積，再遇到值得追問的問題。"
+        },
+        "script": "納格爾的成長路線不是一開始就直奔實驗室。他先在康斯坦茨大學讀生物學和生物物理學，曾經在瑞士中學教書，之後再讀博士，也去耶魯大學和洛克斐勒大學接受博士後訓練。他長期研究細胞膜上的電流，所以當團隊需要驗證一種候選蛋白會不會令電流改變，他的訓練就派上用場。真實的科研成長，往往是學習和本領慢慢累積，再遇到值得追問的問題。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-04",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "找到線索，還要測功能",
+      "order": 4,
+      "outlineId": "nobel06-illustrated-04-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-04-speech",
+          "type": "speech",
+          "text": "這項研究是多個團隊一起接力。黑格曼的團隊研究衣藻怎樣感受光，其中成員 Suneel Kateriya 從藻類基因資料中辨認出一段可能有關的序列。納格爾和其他合作者利用熟悉的測量方法，將相關蛋白放在容易觀察的細胞裏面，檢查照光時有沒有電流變化。找到候選序列，和驗證蛋白功能，是互相合作的不同步驟。研究不是一個人突然做完全部。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-04.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-04-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-04-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/04-zh-Hant.png",
+              "name": "找到線索，還要測功能；合作團隊找到候選蛋白，再檢驗它遇光會做甚麼。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-04-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-04-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-04-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "這項研究是多個團隊一起接力。黑格曼的團隊研究衣藻怎樣感受光，其中成員 Suneel Kateriya 從藻類基因資料中辨認出一段可能有關的序列。納格爾和其他合作者利用熟悉的測量方法，將相關蛋白放在容易觀察的細胞裏面，檢查照光時有沒有電流變化。找到候選序列，和驗證蛋白功能，是互相合作的不同步驟。研究不是一個人突然做完全部。"
+        },
+        "script": "這項研究是多個團隊一起接力。黑格曼的團隊研究衣藻怎樣感受光，其中成員 Suneel Kateriya 從藻類基因資料中辨認出一段可能有關的序列。納格爾和其他合作者利用熟悉的測量方法，將相關蛋白放在容易觀察的細胞裏面，檢查照光時有沒有電流變化。找到候選序列，和驗證蛋白功能，是互相合作的不同步驟。研究不是一個人突然做完全部。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-05",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "不是看起來像，要量得出",
+      "order": 5,
+      "outlineId": "nobel06-illustrated-05-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-05-speech",
+          "type": "speech",
+          "text": "只看衣藻最後游到哪裏，還不知道是哪個分子令它反應。研究者將候選蛋白放入容易量度的細胞，再用儀器記錄光照前後的電流有沒有改變。如果帶電微粒穿過細胞膜，儀器就可能測到訊號。你可以想像樓宇門口有人出入時用感應器記錄，但這只是幫你理解「要量度中間過程」；細胞不是樓宇，電流也不是人流。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-05.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-05-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-05-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/05-zh-Hant.png",
+              "name": "不是看起來像，要量得出；比較光照前後，細胞膜上的電流有沒有改變。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-05-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-05-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-05-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "只看衣藻最後游到哪裏，還不知道是哪個分子令它反應。研究者將候選蛋白放入容易量度的細胞，再用儀器記錄光照前後的電流有沒有改變。如果帶電微粒穿過細胞膜，儀器就可能測到訊號。你可以想像樓宇門口有人出入時用感應器記錄，但這只是幫你理解「要量度中間過程」；細胞不是樓宇，電流也不是人流。"
+        },
+        "script": "只看衣藻最後游到哪裏，還不知道是哪個分子令它反應。研究者將候選蛋白放入容易量度的細胞，再用儀器記錄光照前後的電流有沒有改變。如果帶電微粒穿過細胞膜，儀器就可能測到訊號。你可以想像樓宇門口有人出入時用感應器記錄，但這只是幫你理解「要量度中間過程」；細胞不是樓宇，電流也不是人流。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-06",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "同一個蛋白，兩種本領",
+      "order": 6,
+      "outlineId": "nobel06-illustrated-06-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-06-speech",
+          "type": "speech",
+          "text": "最令人驚訝的發現是：這個蛋白不是只負責接收光，再叫另一個零件做事；光會令通道本身改變狀態，帶電微粒可以穿過細胞膜，令電訊號改變。打個比方，好像感光器和一個細小閘門合起來做一個零件，光到了，閘門就改變狀態。不過蛋白不是電子閘機，微粒也不是乘客。比方只是幫我們抓住「光直接連到通道狀態」這一點。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-06.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-06-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-06-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/06-zh-Hant.png",
+              "name": "同一個蛋白，兩種本領；既能感光，又能讓帶電微粒通過。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-06-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-06-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-06-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "最令人驚訝的發現是：這個蛋白不是只負責接收光，再叫另一個零件做事；光會令通道本身改變狀態，帶電微粒可以穿過細胞膜，令電訊號改變。打個比方，好像感光器和一個細小閘門合起來做一個零件，光到了，閘門就改變狀態。不過蛋白不是電子閘機，微粒也不是乘客。比方只是幫我們抓住「光直接連到通道狀態」這一點。"
+        },
+        "script": "最令人驚訝的發現是：這個蛋白不是只負責接收光，再叫另一個零件做事；光會令通道本身改變狀態，帶電微粒可以穿過細胞膜，令電訊號改變。打個比方，好像感光器和一個細小閘門合起來做一個零件，光到了，閘門就改變狀態。不過蛋白不是電子閘機，微粒也不是乘客。比方只是幫我們抓住「光直接連到通道狀態」這一點。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-07",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "一步一步，把證據補齊",
+      "order": 7,
+      "outlineId": "nobel06-illustrated-07-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-07-speech",
+          "type": "speech",
+          "text": "二零零二年，研究團隊報告通道視紫紅質一型，簡稱 ChR1，可以形成受光控制的質子通道。二零零三年，團隊又確認另一種 ChR2，是直接受光開關的陽離子通道。這些名字聽起來很專業，不用全部背下來。你只要記住，研究者不是只找到一個蛋白，還逐步量度它怎樣回應光、容許哪類帶電微粒流過。新發現要靠一個個可檢查的結果累積起來。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-07.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-07-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-07-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/07-zh-Hant.png",
+              "name": "一步一步，把證據補齊；2002、2003年的研究，逐步確認不同光控通道。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-07-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-07-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-07-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "二零零二年，研究團隊報告通道視紫紅質一型，簡稱 ChR1，可以形成受光控制的質子通道。二零零三年，團隊又確認另一種 ChR2，是直接受光開關的陽離子通道。這些名字聽起來很專業，不用全部背下來。你只要記住，研究者不是只找到一個蛋白，還逐步量度它怎樣回應光、容許哪類帶電微粒流過。新發現要靠一個個可檢查的結果累積起來。"
+        },
+        "script": "二零零二年，研究團隊報告通道視紫紅質一型，簡稱 ChR1，可以形成受光控制的質子通道。二零零三年，團隊又確認另一種 ChR2，是直接受光開關的陽離子通道。這些名字聽起來很專業，不用全部背下來。你只要記住，研究者不是只找到一個蛋白，還逐步量度它怎樣回應光、容許哪類帶電微粒流過。新發現要靠一個個可檢查的結果累積起來。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-08",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "小門何時改變？",
+      "order": 8,
+      "outlineId": "nobel06-illustrated-08-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "interactive",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-08-speech",
+          "type": "speech",
+          "text": "現在試著按兩個條件：細胞有沒有通道蛋白，以及有沒有合適的光。畫面會顯示簡化示意中的通道狀態。這只是教學模型，不是實驗數據；真實細胞會受更多因素影響，也不代表一照光就會出現指定行為。這個小互動只幫你記住，研究工具要有合適條件，才會有可觀察的變化。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-08.mp3"
+        }
+      ],
+      "content": {
+        "type": "interactive",
+        "url": "",
+        "html": "<!doctype html><html lang=\"zh-Hant-HK\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>body{margin:0;background:#f5f0e8;color:#102b38;font-family:system-ui,\"PingFang HK\",sans-serif}main{padding:5vh 6vw}h1{font-family:\"Songti TC\",serif;font-size:clamp(24px,4vw,42px)}p{font-size:clamp(15px,2vw,22px)}.activity{border:2px solid #a8c7ba;border-radius:24px;padding:24px;background:#fffaf1}.switches{display:flex;gap:20px;flex-wrap:wrap}button{font:inherit;font-size:clamp(17px,2vw,26px);padding:16px 24px;border:2px solid #28766a;border-radius:15px;background:#fff}button[aria-pressed=true]{background:#b5e5cf} .door,.gate{padding:22px;margin-top:22px;background:#e4edf0;border-radius:16px}b{font-size:26px}.note{font-size:15px;color:#47616c}</style><main><h1>小門何時改變？</h1><p>蛋白和合適的光，都要配合。</p><section class=\"activity\"><h2>把兩個條件逐一打開</h2><div class=\"switches\"><button aria-pressed=\"false\" data-condition=\"protein\">通道蛋白：未設定</button><button aria-pressed=\"false\" data-condition=\"light\">合適的光：未設定</button></div><div aria-live=\"polite\" class=\"gate\"><b id=\"gate-state\">示意通道：關閉</b><p id=\"gate-copy\">兩個條件都具備時，示意才會改變。</p></div></section><p class=\"note\">教學示意，不是實驗數據；真實通道還受其他條件影響。可再次按按鈕改變條件，重新比較。</p></main><script>\nconst checks=[{\"q\":\"納格爾與合作者怎樣測試藻類感光蛋白的功能？\",\"options\":[\"只看藻最後停在哪裏。\",\"把蛋白放入可測量的細胞，觀察光照前後的電流變化。\"],\"answer\":1,\"explanations\":[\"只看結果還不知道中間是哪個分子在起作用。\",\"對。測量光照前後的電流，能直接檢查蛋白是否帶來可觀察的變化。\"]},{\"q\":\"納格爾研究的通道視紫紅質有甚麼關鍵特點？\",\"options\":[\"合適的光能改變通道狀態，讓帶電微粒通過細胞膜。\",\"它能像人的眼睛一樣拍出完整照片。\"],\"answer\":0,\"explanations\":[\"對。這就是光控通道的核心；真實細胞機制比簡化圖更複雜。\",\"不是。感光不等於有人的眼睛或相機功能。\"]},{\"q\":\"這項研究目前對普通人最可靠的意義是甚麼？\",\"options\":[\"所有腦部疾病都已有保證有效的光療。\",\"研究者多了一種研究特定神經細胞的新工具；醫療用途仍須逐項驗證。\"],\"answer\":1,\"explanations\":[\"不能這樣推論。研究工具和已證實療法是兩回事。\",\"對。新工具能推進基礎研究，具體治療效果仍要獨立驗證。\"]}];\nconst condition={protein:false,light:false};\nfunction update(){const open=condition.protein&&condition.light;document.querySelectorAll('[data-condition]').forEach(b=>{const k=b.dataset.condition;b.setAttribute('aria-pressed',String(condition[k]));b.textContent=(k==='protein'?'通道蛋白':'合適的光')+'：'+(condition[k]?'已設定':'未設定');});document.getElementById('gate-state').textContent=open?'示意通道：打開':'示意通道：關閉';document.getElementById('gate-copy').textContent=!condition.protein?'沒有通道蛋白，光控機制不會在此示意中出現。':!condition.light?'有通道蛋白，但還沒有合適的光。':'在簡化示意中，通道狀態改變，帶電微粒可以通過。真實細胞還有其他條件。';}\ndocument.querySelectorAll('[data-condition]').forEach(b=>b.addEventListener('click',()=>{condition[b.dataset.condition]=!condition[b.dataset.condition];update();}));\ndocument.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.q),j=Number(b.dataset.option);document.querySelectorAll('[data-q=\"'+i+'\"]').forEach(x=>{x.setAttribute('aria-pressed',String(x===b));});document.getElementById('feedback-'+i).textContent=checks[i].explanations[j];}));\n</script></html>",
+        "widgetType": "diagram",
+        "widgetConfig": {
+          "type": "diagram",
+          "componentId": "nobel01-series06-nagel-story-v1-test",
+          "version": 1
+        }
+      }
+    },
+    {
+      "id": "nobel06-illustrated-09",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "下一棒，研究神經細胞",
+      "order": 9,
+      "outlineId": "nobel06-illustrated-09-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-09-speech",
+          "type": "speech",
+          "text": "納格爾和合作者進一步顯示，通道視紫紅質不只可以在藻類細胞發揮作用，也可以在其他細胞裏面表現並對光有反應。這樣其他研究者就開始想：可不可以用這種天然光控蛋白研究神經細胞？之後，戴瑟羅斯和他的合作者將相關蛋白用來控制神經細胞活動，發展出光遺傳學。這是研究接力的下一棒，不是納格爾一個人完成。基礎研究的價值之一，就是讓其他人可以做以前難以做到的實驗。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-09.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-09-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-09-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/09-zh-Hant.png",
+              "name": "下一棒，研究神經細胞；能在其他細胞工作，才有機會成為新研究工具。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-09-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-09-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-09-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "納格爾和合作者進一步顯示，通道視紫紅質不只可以在藻類細胞發揮作用，也可以在其他細胞裏面表現並對光有反應。這樣其他研究者就開始想：可不可以用這種天然光控蛋白研究神經細胞？之後，戴瑟羅斯和他的合作者將相關蛋白用來控制神經細胞活動，發展出光遺傳學。這是研究接力的下一棒，不是納格爾一個人完成。基礎研究的價值之一，就是讓其他人可以做以前難以做到的實驗。"
+        },
+        "script": "納格爾和合作者進一步顯示，通道視紫紅質不只可以在藻類細胞發揮作用，也可以在其他細胞裏面表現並對光有反應。這樣其他研究者就開始想：可不可以用這種天然光控蛋白研究神經細胞？之後，戴瑟羅斯和他的合作者將相關蛋白用來控制神經細胞活動，發展出光遺傳學。這是研究接力的下一棒，不是納格爾一個人完成。基礎研究的價值之一，就是讓其他人可以做以前難以做到的實驗。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-10",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "為甚麼值得諾獎？",
+      "order": 10,
+      "outlineId": "nobel06-illustrated-10-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-10-speech",
+          "type": "speech",
+          "text": "為什麼這些發現值得諾獎？研究者以前可以觀察哪些神經細胞活躍，但「兩件事一起發生」未必表示一個造成另一個。光遺傳學提供一種新方法：研究者可以在受控條件下，令特定細胞對光有反應，再比較活動改變後的結果。這樣就多了一種追問因果關係的工具，但不是一次實驗就證明全部。還要有對照、重複和其他證據。諾獎認可的是多個研究步驟接力建立起來的方法。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-10.mp3"
+        },
+        {
+          "id": "nobel06-illustrated-10-discussion",
+          "type": "discussion",
+          "agentId": "nobel06-assistant",
+          "topic": "這項研究為甚麼重要？它對普通人的價值和限制是甚麼？",
+          "prompt": "這是一段簡短課堂討論。科學小助手先釐清本課一個類比的界線；科學故事老師接着連回研究為甚麼重要；好奇同學提出一個相關追問。各角色只代表自己發言，完成後交回學生，不繼續延伸新回合；這段毋須開白板或新增圖表。不泛化所有情況，不提供個人診療。"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-10-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-10-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/10-zh-Hant.png",
+              "name": "為甚麼值得諾獎？；研究者多了一種方法，測試特定細胞有甚麼作用。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-10-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-10-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-10-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "為什麼這些發現值得諾獎？研究者以前可以觀察哪些神經細胞活躍，但「兩件事一起發生」未必表示一個造成另一個。光遺傳學提供一種新方法：研究者可以在受控條件下，令特定細胞對光有反應，再比較活動改變後的結果。這樣就多了一種追問因果關係的工具，但不是一次實驗就證明全部。還要有對照、重複和其他證據。諾獎認可的是多個研究步驟接力建立起來的方法。"
+        },
+        "script": "為什麼這些發現值得諾獎？研究者以前可以觀察哪些神經細胞活躍，但「兩件事一起發生」未必表示一個造成另一個。光遺傳學提供一種新方法：研究者可以在受控條件下，令特定細胞對光有反應，再比較活動改變後的結果。這樣就多了一種追問因果關係的工具，但不是一次實驗就證明全部。還要有對照、重複和其他證據。諾獎認可的是多個研究步驟接力建立起來的方法。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-11",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "普通人會得到甚麼？",
+      "order": 11,
+      "outlineId": "nobel06-illustrated-11-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "slide",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-11-speech",
+          "type": "speech",
+          "text": "普通人會得到什麼？現在最實在的價值，是光遺傳學已經成為世界各地實驗室研究神經迴路的工具，幫科學家更仔細瞭解腦細胞怎樣和記憶、感受與行為有關。研究者也探索視力等醫療方向，但這項基礎發現不等於已經可以治好失明、抑鬱或者所有腦病。每個醫療用途都要分開檢查安全和效果。對普通人來說，今天得到的是更好的研究方法，將來的醫療應用仍要靠證據慢慢驗證。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-11.mp3"
+        }
+      ],
+      "content": {
+        "type": "slide",
+        "canvas": {
+          "id": "nobel06-illustrated-11-canvas",
+          "viewportSize": 1000,
+          "viewportRatio": 0.5625,
+          "theme": {
+            "backgroundColor": "#f6f1e6",
+            "themeColors": [
+              "#24665f",
+              "#bf9949",
+              "#102b38"
+            ],
+            "fontColor": "#102b38",
+            "fontName": "Microsoft JhengHei",
+            "outline": {
+              "color": "#102b38",
+              "width": 1,
+              "style": "solid"
+            },
+            "shadow": {
+              "h": 0,
+              "v": 0,
+              "blur": 0,
+              "color": "#000000"
+            }
+          },
+          "elements": [
+            {
+              "type": "image",
+              "id": "nobel06-illustrated-11-art",
+              "left": 0,
+              "top": 0,
+              "width": 1000,
+              "height": 562.5,
+              "rotate": 0,
+              "fixedRatio": true,
+              "src": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/media/11-zh-Hant.png",
+              "name": "普通人會得到甚麼？；今天已在用的是研究工具；醫療前景仍要逐項驗證。"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-11-key",
+              "left": 40,
+              "top": 100,
+              "width": 500,
+              "height": 250,
+              "rotate": 0,
+              "fill": "transparent",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "shape",
+              "id": "nobel06-illustrated-11-footer",
+              "left": 40,
+              "top": 519,
+              "width": 920,
+              "height": 33,
+              "rotate": 0,
+              "fill": "#F5F0E8",
+              "fixedRatio": false,
+              "path": "M 0 0 L 1 0 L 1 1 L 0 1 Z",
+              "viewBox": [
+                1,
+                1
+              ],
+              "name": "講解區"
+            },
+            {
+              "type": "text",
+              "id": "nobel06-illustrated-11-boundary",
+              "left": 44,
+              "top": 523,
+              "width": 910,
+              "height": 27,
+              "rotate": 0,
+              "content": "<p style=\"margin:0;font-size:10px;line-height:1.3\">教學插畫／類比，不是研究現場或實驗數據；研究及應用均有條件。</p>",
+              "defaultColor": "#47616c",
+              "defaultFontName": "Microsoft JhengHei"
+            }
+          ],
+          "background": {
+            "type": "solid",
+            "color": "#f6f1e6"
+          },
+          "script": "普通人會得到什麼？現在最實在的價值，是光遺傳學已經成為世界各地實驗室研究神經迴路的工具，幫科學家更仔細瞭解腦細胞怎樣和記憶、感受與行為有關。研究者也探索視力等醫療方向，但這項基礎發現不等於已經可以治好失明、抑鬱或者所有腦病。每個醫療用途都要分開檢查安全和效果。對普通人來說，今天得到的是更好的研究方法，將來的醫療應用仍要靠證據慢慢驗證。"
+        },
+        "script": "普通人會得到什麼？現在最實在的價值，是光遺傳學已經成為世界各地實驗室研究神經迴路的工具，幫科學家更仔細瞭解腦細胞怎樣和記憶、感受與行為有關。研究者也探索視力等醫療方向，但這項基礎發現不等於已經可以治好失明、抑鬱或者所有腦病。每個醫療用途都要分開檢查安全和效果。對普通人來說，今天得到的是更好的研究方法，將來的醫療應用仍要靠證據慢慢驗證。"
+      }
+    },
+    {
+      "id": "nobel06-illustrated-12",
+      "stageId": "hk-nobel-06-nagel-illustrated-v2-mandarin",
+      "title": "三個小判斷",
+      "order": 12,
+      "outlineId": "nobel06-illustrated-12-outline",
+      "createdAt": 1792853890401,
+      "updatedAt": 1792853890401,
+      "type": "quiz",
+      "actions": [
+        {
+          "id": "nobel06-illustrated-12-speech",
+          "type": "speech",
+          "text": "最後一頁，回答三條簡單問題，看看自己有沒有抓住主線。不需要背縮寫，最重要的是知道納格爾和合作者證明瞭什麼、為什麼這個工具重要，以及醫療前景還有哪些限制。答錯也沒問題，可以再試。",
+          "audioId": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3",
+          "audioUrl": "/api/classroom-media/hk-nobel-06-nagel-illustrated-v2-mandarin/audio/zh-CN/page-12.mp3"
+        }
+      ],
+      "content": {
+        "type": "quiz",
+        "questions": [
+          {
+            "id": "nobel06-illustrated-12-q1",
+            "type": "single",
+            "question": "納格爾與合作者怎樣測試藻類感光蛋白的功能？",
+            "options": [
+              {
+                "value": "A",
+                "label": "只看藻最後停在哪裏。"
+              },
+              {
+                "value": "B",
+                "label": "把蛋白放入可測量的細胞，觀察光照前後的電流變化。"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：只看結果還不知道中間是哪個分子在起作用。；B：對。測量光照前後的電流，能直接檢查蛋白是否帶來可觀察的變化。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel06-illustrated-12-q2",
+            "type": "single",
+            "question": "納格爾研究的通道視紫紅質有甚麼關鍵特點？",
+            "options": [
+              {
+                "value": "A",
+                "label": "合適的光能改變通道狀態，讓帶電微粒通過細胞膜。"
+              },
+              {
+                "value": "B",
+                "label": "它能像人的眼睛一樣拍出完整照片。"
+              }
+            ],
+            "answer": [
+              "A"
+            ],
+            "analysis": "A：對。這就是光控通道的核心；真實細胞機制比簡化圖更複雜。；B：不是。感光不等於有人的眼睛或相機功能。",
+            "points": 10,
+            "hasAnswer": true
+          },
+          {
+            "id": "nobel06-illustrated-12-q3",
+            "type": "single",
+            "question": "這項研究目前對普通人最可靠的意義是甚麼？",
+            "options": [
+              {
+                "value": "A",
+                "label": "所有腦部疾病都已有保證有效的光療。"
+              },
+              {
+                "value": "B",
+                "label": "研究者多了一種研究特定神經細胞的新工具；醫療用途仍須逐項驗證。"
+              }
+            ],
+            "answer": [
+              "B"
+            ],
+            "analysis": "A：不能這樣推論。研究工具和已證實療法是兩回事。；B：對。新工具能推進基礎研究，具體治療效果仍要獨立驗證。",
+            "points": 10,
+            "hasAnswer": true
+          }
+        ]
+      }
+    }
+  ]
+}
