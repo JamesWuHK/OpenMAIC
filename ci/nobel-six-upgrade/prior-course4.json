@@ -1,0 +1,53 @@
+{
+  "run": 42369650978,
+  "sha256": "e717dc53d9093acecf1204b35f9cdae75d909e237458e969a950bb3a129e3701",
+  "cases": [
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 2,
+      "pass": true
+    },
+    {
+      "kind": "cause-judgement-feedback-retry",
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 3,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 4,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 5,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 6,
+      "pass": true
+    }
+  ],
+  "scope": "Exact unchanged course: reuse passed first six scenes and cause judgement. Failure was hidden stale iframe selection; course unchanged."
+}
