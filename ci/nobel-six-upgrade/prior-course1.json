@@ -1,0 +1,74 @@
+{
+  "run": 42363266734,
+  "sha256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780",
+  "cases": [
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 1,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 2,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 3,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 4,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 5,
+      "pass": true
+    },
+    {
+      "kind": "real-audio-progress",
+      "voice": "yue-HK",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 6,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 7,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 8,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 9,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 10,
+      "pass": true
+    },
+    {
+      "kind": "scene",
+      "page": 11,
+      "pass": true
+    }
+  ],
+  "scope": "Only passed scenes before quiz retry harness race. No full acceptance inferred."
+}
