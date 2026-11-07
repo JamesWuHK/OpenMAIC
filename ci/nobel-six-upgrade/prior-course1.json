@@ -1,7 +1,7 @@
 {
   "run": 42364027917,
-  "sha256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229",
-  "previousCourseSHA256": "115ccb66fb178476c4b96f1c5ce3645f59c10b470f32b060991f964a82a22780",
+  "sha256": "a2c151408dbea85bfc3fa5606bd708ee412eda69c882070bfeca1f9ef3bd486c",
+  "previousCourseSHA256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229",
   "cases": [
     {
       "kind": "real-audio-progress",
@@ -118,5 +118,5 @@
     }
   ],
   "scope": "Reuse only unchanged lecture, scenes, quiz, audio and mobile from exact pre-config course; changed fields independently reviewed in discussion config reports. Old actual discussion NOT accepted for new version.",
-  "compatibilityProof": "discussion-bounds-diff-1-2.json"
+  "compatibilityProof": "discussion-clarity-diff-01.json"
 }

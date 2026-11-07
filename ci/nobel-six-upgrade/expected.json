@@ -4,14 +4,14 @@
     "id": "hk-nobel-01-kagan-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/01-kagan/hk-nobel-01-kagan-illustrated-v2.json",
-    "sha256": "af55000a06206d6b547bbbf3d6fbb2014122167241353f1f7bb253aed3863229"
+    "sha256": "a2c151408dbea85bfc3fa5606bd708ee412eda69c882070bfeca1f9ef3bd486c"
   },
   {
     "course": 1,
     "id": "hk-nobel-01-kagan-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/01-kagan/hk-nobel-01-kagan-illustrated-v2-mandarin.json",
-    "sha256": "4ed979936d13fec701af539d451b432414db0822e7a1a66d81f31b37abb4c299"
+    "sha256": "a6e4cbed5f95ddf0d9508ecc0234b7e712076f9c3b8d8481b285a454895a6427"
   },
   {
     "course": 2,
