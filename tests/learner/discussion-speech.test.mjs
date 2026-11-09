@@ -143,17 +143,21 @@ test('real Edge synthesis produces decodable nonempty speech for each classroom 
 });
 
 test('Nobel Mandarin classrooms select Mandarin voices for each discussion role', {skip: !moduleResult}, async () => {
-  const classroomId = 'hk-nobel-04-deisseroth-illustrated-v2-mandarin';
-  const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
-  for (const agentId of ['teacher', 'assistant', 'student']) {
-    assert.equal((await handler(request({classroomId, agentId, text: '我們一起討論。'}))).status, 200);
+  for (const classroomId of ['hk-nobel-04-deisseroth-illustrated-v2-mandarin', 'hk-nobel-07-sakaguchi-illustrated-v2-mandarin']) {
+    const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
+    for (const agentId of ['teacher', 'assistant', 'student']) {
+      assert.equal((await handler(request({classroomId, agentId, text: '我們一起討論。'}))).status, 200);
+    }
+    assert.deepEqual(calls.map(c => c.config.voice), ['zh-CN-YunxiNeural', 'zh-CN-XiaoxiaoNeural', 'zh-CN-XiaoyiNeural']);
   }
-  assert.deepEqual(calls.map(c => c.config.voice), ['zh-CN-YunxiNeural', 'zh-CN-XiaoxiaoNeural', 'zh-CN-XiaoyiNeural']);
 });
 
-test('non-Nobel classrooms ending in mandarin keep their established voices', {skip: !moduleResult}, async () => {
-  const classroomId = 'other-course-mandarin';
-  const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
-  assert.equal((await handler(request({classroomId}))).status, 200);
-  assert.equal(calls[0].config.voice, 'zh-HK-WanLungNeural');
+test('Cantonese Nobel and other classrooms keep their established voices', {skip: !moduleResult}, async () => {
+  for (const classroomId of ['hk-nobel-04-deisseroth-illustrated-v2', 'other-course-mandarin']) {
+    const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
+    for (const agentId of ['teacher', 'assistant', 'student']) {
+      assert.equal((await handler(request({classroomId, agentId}))).status, 200);
+    }
+    assert.deepEqual(calls.map(c => c.config.voice), ['zh-HK-WanLungNeural', 'zh-HK-HiuMaanNeural', 'zh-HK-HiuGaaiNeural']);
+  }
 });

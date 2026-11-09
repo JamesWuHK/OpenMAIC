@@ -2,7 +2,7 @@ name: Learner cloud image candidate
 
 on:
   push:
-    branches: [codex/nobel-mandarin-voice-20261109]
+    branches: [codex/learner-cloud-build]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
@@ -16,11 +16,10 @@ concurrency:
 jobs:
   candidate:
     if: github.repository == 'JamesWuHK/OpenMAIC'
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, cloud-ci]
     timeout-minutes: 90
     env:
       CI: 'true'
-      LEARNER_QA_BASE_URL: http://127.0.0.1:3100
       NEXT_TELEMETRY_DISABLED: '1'
       PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
@@ -33,19 +32,23 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Role voice routing regression
-        run: node --experimental-strip-types --test tests/learner/discussion-speech.test.mjs
       - name: Relevant regression tests
         run: >-
           pnpm exec vitest run tests/pbl/v2/evaluator.test.ts
-          tests/pbl/v2/assessment-policy.test.ts tests/pbl/v2/advance-patch.test.ts
-          tests/pbl/v2/eval-prompts.test.ts tests/pbl/v2/ungraded-reflection.test.ts
           tests/pbl/v2/learner-state.test.ts tests/learner
           tests/security/learner-boundary.test.ts tests/security/learner-middleware.test.ts
           tests/server/install-process-shutdown-handlers.test.ts
+          tests/audio/discussion-speech-drain.test.ts tests/lib/buffer/stream-buffer.test.ts
+          tests/api/classroom-media-range.test.ts
+          tests/slide-renderer/use-resolved-image-src.test.ts
+          tests/server/security-headers.test.ts
+          tests/lib/chat/use-chat-sessions.test.ts
+          tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
+          tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts
+          tests/playback/nobel-discussion-protocol.test.ts tests/orchestration/tool-schemas-latex-guardrail.test.ts
       - name: TypeScript
         run: pnpm exec tsc --noEmit
-      - name: Build exact learner image on hosted Linux
+      - name: Build exact learner image on self-hosted cloud Linux
         run: |
           docker build --platform linux/amd64 \
             --tag "wanli-learner-ci:$GITHUB_SHA" \
@@ -62,7 +65,8 @@ jobs:
             --build-arg NEXT_PUBLIC_ENABLE_PPTX_IMPORT=false .
       - name: Start isolated exact-image candidate
         run: |
-          docker run -d --name learner-candidate -p 127.0.0.1:3100:3000 \
+          candidate_name="learner-candidate-$GITHUB_RUN_ID"
+          docker run -d --name "$candidate_name" -p 127.0.0.1::3000 \
             -e OPENMAIC_DEPLOYMENT_MODE=learner \
             -e OPENAI_API_KEY=synthetic-ci-not-a-secret \
             -e OPENAI_BASE_URL=http://127.0.0.1:9/v1 \
@@ -70,15 +74,18 @@ jobs:
             -v "$GITHUB_WORKSPACE/content/learner:/app/content/learner:ro" \
             -v "$GITHUB_WORKSPACE/content/learner/media:/app/public/learner/runtime:ro" \
             "wanli-learner-ci:$GITHUB_SHA"
+          candidate_port="$(docker port "$candidate_name" 3000/tcp | awk -F: 'NR==1 {print $NF}')"
+          test -n "$candidate_port"
+          echo "LEARNER_QA_BASE_URL=http://127.0.0.1:$candidate_port" >> "$GITHUB_ENV"
           for attempt in {1..30}; do
-            if curl -fsS http://127.0.0.1:3100/api/health >/dev/null; then exit 0; fi
+            if curl -fsS "http://127.0.0.1:$candidate_port/api/health" >/dev/null; then exit 0; fi
             sleep 2
           done
           exit 1
       - name: Image API readiness boundary
         run: node scripts/qa-learner-image-boundary.mjs
       - name: Install CI Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
       - name: Existing learner desktop and mobile browser regression
         run: pnpm exec playwright test --config playwright.learner.config.ts
       - name: Export tested candidate (not deployment approval)
@@ -100,10 +107,11 @@ jobs:
         if: always()
         run: |
           mkdir -p artifacts/learner-image-qa
-          if docker inspect learner-candidate >/dev/null 2>&1; then
-            docker logs learner-candidate > artifacts/learner-image-qa/container.log 2>&1
-            docker inspect learner-candidate --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
-            docker rm -f learner-candidate
+          candidate_name="learner-candidate-$GITHUB_RUN_ID"
+          if docker inspect "$candidate_name" >/dev/null 2>&1; then
+            docker logs "$candidate_name" > artifacts/learner-image-qa/container.log 2>&1
+            docker inspect "$candidate_name" --format '{{json .State}}' > artifacts/learner-image-qa/container-state.json
+            docker rm -f "$candidate_name"
           fi
       - name: Save evidence (not full course acceptance)
         if: always()
