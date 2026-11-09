@@ -46,14 +46,14 @@
     "id": "hk-nobel-04-deisseroth-illustrated-v2",
     "voice": "yue-HK",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/04-deisseroth/hk-nobel-04-deisseroth-illustrated-v2.json",
-    "sha256": "e717dc53d9093acecf1204b35f9cdae75d909e237458e969a950bb3a129e3701"
+    "sha256": "0a862aea00ccda9e50fec399703903c80599523d363962c9b052297c9340c166"
   },
   {
     "course": 4,
     "id": "hk-nobel-04-deisseroth-illustrated-v2-mandarin",
     "voice": "zh-CN",
     "file": "/Users/wujames/Documents/ChatGPT/openmaic 部署/output/nobel-six-redesign-20261105/04-deisseroth/hk-nobel-04-deisseroth-illustrated-v2-mandarin.json",
-    "sha256": "a8f795b9f47d75f528805022970c2b7b925e0783599a73715c74d28efb554030"
+    "sha256": "bc67afb50b736d7157f026b7beca37f402879c6a9cd495a3e45e6dd9b38701ff"
   },
   {
     "course": 5,
