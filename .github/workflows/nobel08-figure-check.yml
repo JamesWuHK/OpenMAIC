@@ -1,0 +1,27 @@
+name: Nobel 08 private candidate figure check
+on:
+  push:
+    branches: [codex/nobel08-visual-check-20261109]
+permissions:
+  contents: read
+jobs:
+  figure:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: ci/nobel08-figure
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: npm install --no-save --package-lock=false playwright && npx playwright install --with-deps chromium
+        working-directory: ci/nobel08-figure
+      - run: node ci/nobel08-figure/check.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: nobel08-figure-${{ github.sha }}
+          path: artifacts/nobel08
+          retention-days: 7
