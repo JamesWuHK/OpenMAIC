@@ -1,0 +1,36 @@
+name: Nobel site release contract
+on:
+  push:
+    branches: [codex/nobel-site-contract-20261109]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Validate exact production schema
+        run: pnpm exec tsx scripts/validate-learner-site-content.ts ci/nobel-site/site-final.json
+      - name: Validate hashes and live links
+        run: |
+          node - <<'JS'
+          const fs=require('fs'),crypto=require('crypto'),assert=require('assert').strict;
+          const read=p=>{const b=fs.readFileSync(p);return {data:JSON.parse(b),sha:crypto.createHash('sha256').update(b).digest('hex')}};
+          const site=read('ci/nobel-site/site-final.json'),catalog=read('ci/nobel-site/catalog-final.json');
+          assert.equal(site.sha,'0217abe19d2cda8477ca5e250f84f3360b99a0a107d224f3aea173529edda0d0');
+          assert.equal(catalog.sha,'2ace84d0510246a2f3b3e01a0a66cbb9a691e914abbd8d3c16cd475c299aac40');
+          const nobel=site.data.series.find(x=>x.slug==='nobel-curiosity-lab');
+          assert.equal(nobel.lessonCount,7);assert.equal(nobel.liveCourseIds.length,7);
+          assert.ok(nobel.liveCourseIds.every(id=>catalog.data.courses.some(c=>c.id===id&&catalog.data.courses.some(m=>m.id===id+'-mandarin'))));
+          assert.ok(!catalog.data.courses.some(c=>c.id.startsWith('hk-nobel-08-')));
+          console.log(JSON.stringify({siteSHA:site.sha,catalogSHA:catalog.sha,lessonCount:nobel.lessonCount,variants:14,lesson08Registered:false}));
+          JS
