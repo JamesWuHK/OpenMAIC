@@ -1,0 +1,33 @@
+name: Nobel role voices live synthesis
+on:
+  push:
+    branches: [codex/nobel-voice-live-20261109]
+permissions:
+  contents: read
+jobs:
+  synthesize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ee44b759257a644c18dbdd4e56f5acaf3c9b0e0a
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install exact production voice engine
+        run: python3 -m venv "$RUNNER_TEMP/edge" && "$RUNNER_TEMP/edge/bin/pip" install edge-tts==7.3.1
+      - name: Generate and decode six role samples
+        working-directory: source
+        run: EDGE_TTS="$RUNNER_TEMP/edge/bin/edge-tts" node --experimental-strip-types ../ci/nobel-voice-live.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: nobel-six-role-voices
+          path: voice-artifacts/
+          retention-days: 7
