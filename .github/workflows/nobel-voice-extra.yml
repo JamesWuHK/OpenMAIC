@@ -1,0 +1,32 @@
+name: Nobel voice supplementary regression
+on:
+  push:
+    branches: [codex/nobel-voice-extra-20261109]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ee44b759257a644c18dbdd4e56f5acaf3c9b0e0a
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Previously omitted discussion and playback tests
+        run: >-
+          pnpm exec vitest run
+          tests/audio/discussion-speech-drain.test.ts tests/lib/buffer/stream-buffer.test.ts
+          tests/api/classroom-media-range.test.ts
+          tests/slide-renderer/use-resolved-image-src.test.ts
+          tests/server/security-headers.test.ts
+          tests/lib/chat/use-chat-sessions.test.ts
+          tests/playback/discussion-consumption.test.ts tests/playback/action-navigation.test.ts
+          tests/playback/nobel-discussion-context.test.ts tests/lib/orchestration/state-context.test.ts
+          tests/playback/nobel-discussion-protocol.test.ts tests/orchestration/tool-schemas-latex-guardrail.test.ts
