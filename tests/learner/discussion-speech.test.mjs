@@ -141,3 +141,19 @@ test('real Edge synthesis produces decodable nonempty speech for each classroom 
     }
   } finally { await rm(directory, {recursive:true, force:true}); }
 });
+
+test('Nobel Mandarin classrooms select Mandarin voices for each discussion role', {skip: !moduleResult}, async () => {
+  const classroomId = 'hk-nobel-04-deisseroth-illustrated-v2-mandarin';
+  const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
+  for (const agentId of ['teacher', 'assistant', 'student']) {
+    assert.equal((await handler(request({classroomId, agentId, text: '我們一起討論。'}))).status, 200);
+  }
+  assert.deepEqual(calls.map(c => c.config.voice), ['zh-CN-YunxiNeural', 'zh-CN-XiaoxiaoNeural', 'zh-CN-XiaoyiNeural']);
+});
+
+test('non-Nobel classrooms ending in mandarin keep their established voices', {skip: !moduleResult}, async () => {
+  const classroomId = 'other-course-mandarin';
+  const {handler, calls, request} = setup({publishedIds: async () => [classroomId]});
+  assert.equal((await handler(request({classroomId}))).status, 200);
+  assert.equal(calls[0].config.voice, 'zh-HK-WanLungNeural');
+});

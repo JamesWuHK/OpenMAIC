@@ -19,6 +19,14 @@ const ROLE_VOICES: Record<string, string> = {
   student: 'zh-HK-HiuGaaiNeural',
 };
 
+// Nobel Mandarin lessons are separately authored classroom variants. Keep the
+// established voices for every other classroom and for Cantonese variants.
+const NOBEL_MANDARIN_VOICES: Record<string, string> = {
+  teacher: 'zh-CN-YunxiNeural',
+  assistant: 'zh-CN-XiaoxiaoNeural',
+  student: 'zh-CN-XiaoyiNeural',
+};
+
 const MAX_BODY_BYTES = 16_384;
 
 function json(body: Record<string, unknown>, status = 200): Response {
@@ -89,8 +97,11 @@ export function createLearnerSpeechHandler(deps: SpeechDependencies) {
       const agent = classroom?.stage.generatedAgentConfigs?.find(agent => agent.id === agentId);
       if (!agent || !Object.hasOwn(ROLE_VOICES, agent.role)) return json({ error: 'Classroom speaker not found' }, 404);
       const signal = AbortSignal.any([request.signal, AbortSignal.timeout(30_000)]);
+      const voices = /^hk-nobel-\d{2}-[a-z0-9-]+-mandarin$/.test(classroomId)
+        ? NOBEL_MANDARIN_VOICES
+        : ROLE_VOICES;
       const result = await deps.synthesize({
-        providerId: 'edge-tts', voice: ROLE_VOICES[agent.role], speed: 1.2, signal,
+        providerId: 'edge-tts', voice: voices[agent.role], speed: 1.2, signal,
       }, text.trim());
       if (!result.audio.byteLength) throw new Error('Empty speech');
       return json({ base64: Buffer.from(result.audio).toString('base64'), format: result.format });
