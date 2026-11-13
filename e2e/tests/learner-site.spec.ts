@@ -326,3 +326,42 @@ test('manual stop submits Cantonese interim speech when Chrome aborts without en
   await request;
   await expect(page.getByText(question).first()).toBeVisible();
 });
+
+
+test('hidden fullscreen toolbar does not intercept slide clicks', async ({ page }) => {
+  // Reuse the checked-in classroom shape but render it through the normal
+  // illustrated-course player with a self-contained interactive slide.
+  const id = 'hk-nobel-08-hassabis-illustrated-v1-mandarin';
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.addInitScript(() => localStorage.setItem('locale', 'zh-TW'));
+  await page.route('**/api/classroom?id=*', async (route) => {
+    if (new URL(route.request().url()).searchParams.get('id') !== id) return route.continue();
+    const data = JSON.parse(await readFile(path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', 'hk-nobel-01-kagan-lecture-v4.json'), 'utf8'));
+    data.classroom.id = id;
+    data.classroom.stage.id = id;
+    data.classroom.scenes = data.classroom.scenes.slice(0, 1);
+    data.classroom.scenes[0].stageId = id;
+    data.classroom.scenes[0].type = 'interactive';
+    data.classroom.scenes[0].content = { type: 'interactive', html: '<!doctype html><html><body style="margin:0;background:white"><div style="height:100vh;width:100vw">slide</div></body></html>' };
+    data.classroom.scenes[0].actions = [];
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
+  });
+  await page.goto('/classroom/' + id);
+  await expect(page.locator('iframe:visible').first()).toBeVisible();
+  await page.getByRole('button', { name: /全螢幕|全屏|Fullscreen/i }).click();
+  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
+  const speed = page.getByRole('button', { name: 'Playback speed' });
+  await expect(speed).toBeAttached();
+  await page.waitForTimeout(5000);
+  const hiddenHit = await speed.evaluate((button) => {
+    const r = button.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+    return hit?.closest('button[aria-label="Playback speed"]') !== null;
+  });
+  expect(hiddenHit, 'hidden toolbar must not capture slide pointer events').toBe(false);
+  await page.mouse.move(5, 5);
+  await expect.poll(async () => speed.evaluate((button) => {
+    const r = button.getBoundingClientRect();
+    return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('button[aria-label="Playback speed"]') !== null;
+  })).toBe(true);
+});
