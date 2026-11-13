@@ -2,7 +2,7 @@ name: Learner discussion context candidate
 
 on:
   push:
-    branches: [codex/nobel-course-navigation-20261113]
+    branches: [codex/nobel-discussion-reply-20261114]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
