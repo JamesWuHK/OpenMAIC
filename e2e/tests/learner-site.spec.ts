@@ -3,6 +3,8 @@ import path from 'node:path';
 
 import { expect, test } from '@playwright/test';
 
+test.use({ launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] } });
+
 const screenshotDirectory = path.join(process.cwd(), 'artifacts', 'learner-site-qa');
 
 async function expectNoDocumentOverflow(page: import('@playwright/test').Page) {
@@ -186,7 +188,6 @@ test('Nobel lecture question control opens a private, age-appropriate Q&A panel'
 
 test.describe('learner managed recording', () => {
   test.use({
-    launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
     permissions: ['microphone'],
   });
 
