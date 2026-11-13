@@ -168,6 +168,63 @@ beforeEach(() => {
 });
 
 describe('runClassroomLoad', () => {
+  it.each([
+    ['switch-yue', 'switch-mandarin'],
+    ['switch-mandarin', 'switch-yue'],
+    ['switch-lesson-one', 'switch-lesson-two'],
+  ])('loads %s → %s from the server when only the previous classroom is warm', async (oldId, nextId) => {
+    useStageStore.getState().clearStore();
+    const requestedConfigs = [makeAgentConfig('requested-teacher', { persona: 'Requested course' })];
+    const requestedStage = makeStage(nextId, requestedConfigs);
+    const requestedScene = makeScene(nextId + '-scene', nextId);
+    applyClassroomStageAndScenes(makeStage(oldId), [makeScene(oldId + '-scene', oldId)], { persist: false });
+    vi.mocked(loadStageData).mockResolvedValueOnce(null);
+    const loadToken = claimStageSceneLoadToken();
+    const { deps } = makeDeps({
+      classroomId: nextId,
+      loadToken,
+      loadFromStorage: (id, token) => useStageStore.getState().loadFromStorage(id, token),
+      getCurrentStage: () => useStageStore.getState().stage,
+      fetchClassroom: vi.fn().mockResolvedValue({ stage: requestedStage, scenes: [requestedScene] }),
+      applyFallbackScenes: vi.fn().mockImplementation(async ({ stage, scenes }) => {
+        applyClassroomStageAndScenes(stage, scenes, { persist: false });
+        return true;
+      }),
+    });
+    try {
+      await runClassroomLoad(deps);
+      expect(deps.fetchClassroom).toHaveBeenCalledExactlyOnceWith(nextId, deps.isCurrent);
+      expect(useStageStore.getState().stage).toEqual(requestedStage);
+      expect(useStageStore.getState().scenes).toEqual([requestedScene]);
+      expect(deps.applyGeneratedAgents).toHaveBeenCalledWith(nextId, requestedConfigs);
+      expect(deps.setError).not.toHaveBeenCalled();
+      expect(deps.setLoading).toHaveBeenCalledWith(false);
+    } finally {
+      useStageStore.getState().clearStore();
+    }
+  });
+
+  it('keeps the matching warm classroom without refetching it', async () => {
+    const { deps, setStage } = makeDeps();
+    setStage(makeStage('stage-a', []));
+    await runClassroomLoad(deps);
+    expect(deps.fetchClassroom).not.toHaveBeenCalled();
+    expect(deps.loadRestoredMediaTasks).toHaveBeenCalledWith('stage-a');
+    expect(deps.setError).not.toHaveBeenCalled();
+  });
+
+  it('does not apply the previous classroom roster when the requested copy is missing', async () => {
+    const { deps, setStage } = makeDeps();
+    setStage(makeStage('previous-classroom'));
+    await runClassroomLoad(deps);
+    expect(deps.fetchClassroom).toHaveBeenCalledWith('stage-a', deps.isCurrent);
+    expect(deps.setError).toHaveBeenCalledWith('Requested classroom could not be loaded');
+    expect(deps.loadRestoredMediaTasks).not.toHaveBeenCalled();
+    expect(deps.applyGeneratedAgents).not.toHaveBeenCalled();
+    expect(deps.restoreAgentSelection).not.toHaveBeenCalled();
+    expect(deps.setLoading).toHaveBeenCalledWith(false);
+  });
+
   it('keeps the current load token valid when fallback scenes are committed', () => {
     useStageStore.getState().clearStore();
     const loadToken = claimStageSceneLoadToken();
