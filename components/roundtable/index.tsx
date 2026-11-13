@@ -446,6 +446,8 @@ export function Roundtable({
     if (isVoiceOpen) {
       if (isRecording) {
         stopRecording();
+      } else if (isLearnerDeployment()) {
+        cancelRecording();
       }
       setIsVoiceOpen(false);
     } else {
@@ -2205,3 +2207,4 @@ export function Roundtable({
     </div>
   );
 }
+

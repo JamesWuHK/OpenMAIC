@@ -3,6 +3,7 @@ import { ASR_PROVIDERS } from '@/lib/audio/constants';
 import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { normalizeASRUploadAudio } from '@/lib/audio/wav-utils';
+import { useLearnerAudioRecorder } from './use-learner-audio-recorder';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('AudioRecorder');
@@ -21,6 +22,7 @@ export interface UseAudioRecorderOptions {
 
 export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
   const { onTranscription, onError, recognitionLanguage, continuous = false } = options;
+  const learnerRecording = useLearnerAudioRecorder(options);
 
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -409,7 +411,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
     [],
   );
 
-  return {
+  return isLearnerDeployment() ? learnerRecording : {
     isRecording,
     isProcessing,
     recordingTime,
@@ -418,3 +420,4 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
     cancelRecording,
   };
 }
+

@@ -1,5 +1,6 @@
 'use client';
 
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { useSyncExternalStore } from 'react';
 import { useSettingsStore } from '@/lib/store/settings';
 import { ASR_PROVIDERS } from '@/lib/audio/constants';
@@ -8,7 +9,9 @@ import type { BuiltInASRProviderId } from '@/lib/audio/types';
 // Web Speech API support is constant per environment, so subscribing is a no-op.
 const subscribe = () => () => {};
 const getBrowserSpeechSupported = () =>
-  !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  isLearnerDeployment()
+    ? !!(navigator.mediaDevices?.getUserMedia && window.MediaRecorder)
+    : !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 /**
  * Single source of truth for "can the user use ASR right now".
@@ -35,6 +38,8 @@ export function useASRAvailable(): boolean {
     () => true,
   );
 
+  if (isLearnerDeployment()) return asrEnabled && browserSpeechSupported;
+
   const builtIn = ASR_PROVIDERS[asrProviderId as BuiltInASRProviderId];
   if (providerConfig?.serverDisabled) return false;
   const requiresKey = builtIn ? builtIn.requiresApiKey : (providerConfig?.requiresApiKey ?? true);
@@ -49,3 +54,4 @@ export function useASRAvailable(): boolean {
 
   return asrEnabled && keyOk && modelOk && browserOk;
 }
+

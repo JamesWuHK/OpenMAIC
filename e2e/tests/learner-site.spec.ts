@@ -183,150 +183,136 @@ test('Nobel lecture question control opens a private, age-appropriate Q&A panel'
   }
 });
 
-test('spoken Cantonese question reaches the classroom agent', async ({ page }) => {
-  const question = '老師，點解兩種氣味會唔同？';
-  await page.addInitScript((transcript) => {
-    localStorage.setItem('locale', 'zh-TW');
-    // Reproduce an existing Chrome profile whose old ASR preference is
-    // Mandarin even though the learner selected the HK/Traditional UI.
-    localStorage.setItem(
-      'maic:account:settings-storage',
-      JSON.stringify({ state: { asrLanguage: 'zh-CN' }, version: 4 }),
-    );
-    class FakeSpeechRecognition {
-      lang = '';
-      continuous = false;
-      interimResults = false;
-      onstart: (() => void) | null = null;
-      onresult: ((event: unknown) => void) | null = null;
-      onerror: ((event: unknown) => void) | null = null;
-      onend: (() => void) | null = null;
 
-      start() {
-        document.documentElement.dataset.testAsrLanguage = this.lang;
-        window.setTimeout(() => {
-          this.onstart?.();
-          this.onresult?.({
-            resultIndex: 0,
-            results: { 0: { 0: { transcript }, isFinal: true }, length: 1 },
-          });
-          this.onend?.();
-        }, 50);
-      }
-
-      stop() {
-        this.onend?.();
-      }
-
-      abort() {
-        this.onend?.();
-      }
-    }
-
-    for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) {
-      Object.defineProperty(window, name, {
-        configurable: true,
-        value: FakeSpeechRecognition,
-      });
-    }
-  }, question);
-
-  await page.route('**/api/classroom?id=*', async (route) => {
-    const fixture = await readFile(
-      path.join(
-        process.cwd(),
-        'e2e',
-        'fixtures',
-        'nobel-interaction',
-        'hk-nobel-01-kagan-lecture-v4.json',
-      ),
-      'utf8',
-    );
-    await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
+test.describe('learner managed recording', () => {
+  test.use({
+    launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
+    permissions: ['microphone'],
   });
 
-  await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
-  await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
-  const roundtable = page.getByTestId('nobel-classroom-interaction');
-  const request = page.waitForRequest(
-    (candidate) =>
-      candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
-  );
-  await roundtable.locator('button:has(svg.lucide-mic):visible').last().click();
-  await request;
-  await expect(page.locator('html')).toHaveAttribute('data-test-asr-language', 'zh-HK');
-  await expect(page.getByText(question).first()).toBeVisible();
-});
+  const id = 'hk-nobel-08-hassabis-illustrated-v1-mandarin';
+  async function installTranscriptionStub(page: import('@playwright/test').Page, delayed = false) {
+    await page.addInitScript(({ delayed }) => {
+      const original = window.fetch.bind(window);
+      (window as any).__asr = { returned: false };
+      window.fetch = async (input, init) => {
+        if (String(input) !== '/api/transcription') return original(input, init);
+        const form = init!.body as FormData;
+        const audio = form.get('audio') as File;
+        const bytes = new Uint8Array(await audio.arrayBuffer());
+        const state = (window as any).__asr;
+        state.keys = Array.from(form.keys()).sort();
+        state.language = form.get('language');
+        state.name = audio.name;
+        state.type = audio.type;
+        state.header = Array.from(bytes.slice(0, 12));
+        state.signal = init!.signal;
+        if (delayed) await new Promise<void>(resolve => { (window as any).__resolveASR = resolve; });
+        state.abortedAtResponse = !!init!.signal?.aborted;
+        state.returned = true;
+        // Intentionally ignore AbortSignal to exercise the stale-session guard.
+        return new Response(JSON.stringify({ text: 'Synthetic learner question' }), {
+          status: 200, headers: { 'content-type': 'application/json' },
+        });
+      };
+    }, { delayed });
+  }
 
-test('manual stop submits Cantonese interim speech when Chrome aborts without end', async ({
-  page,
-}) => {
-  const question = '老師，雷達回波係咩？';
-  await page.addInitScript((transcript) => {
-    localStorage.setItem('locale', 'zh-TW');
-    class InterimSpeechRecognition {
-      lang = '';
-      continuous = false;
-      interimResults = false;
-      onstart: (() => void) | null = null;
-      onresult: ((event: unknown) => void) | null = null;
-      onerror: ((event: unknown) => void) | null = null;
-      onend: (() => void) | null = null;
-
-      start() {
-        window.setTimeout(() => {
-          this.onstart?.();
-          document.documentElement.dataset.testInterimEnabled = String(this.interimResults);
-          this.onresult?.({
-            resultIndex: 0,
-            results: { 0: { 0: { transcript }, isFinal: false }, length: 1 },
-          });
-          document.documentElement.dataset.testInterimReady = 'true';
-        }, 50);
+  async function openRecordingCourse(page: import('@playwright/test').Page, locale = 'zh-TW') {
+    await page.addInitScript((value) => {
+      localStorage.setItem('locale', value);
+      for (const key of ['SpeechRecognition', 'webkitSpeechRecognition']) {
+        Object.defineProperty(window, key, { configurable: true, value: undefined });
       }
+    }, locale);
+    await page.route('**/api/classroom?id=*', async route => {
+      if (new URL(route.request().url()).searchParams.get('id') !== id) return route.continue();
+      const data = JSON.parse(await readFile(path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', 'hk-nobel-01-kagan-lecture-v4.json'), 'utf8'));
+      data.classroom.id = id;
+      data.classroom.stage.id = id;
+      for (const scene of data.classroom.scenes) scene.stageId = id;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
+    });
+    await page.goto('/classroom/' + id);
+    await expect(page.locator('button:has(svg.lucide-mic):visible').last()).toBeVisible();
+  }
+  const mic = (page: import('@playwright/test').Page) => page.locator('button:has(svg.lucide-mic):visible').last();
+  const stop = (page: import('@playwright/test').Page) => page.locator('div.pointer-events-auto.relative.group.cursor-pointer:has(svg.lucide-mic):visible').last();
+  const text = (page: import('@playwright/test').Page) => page.locator('button:has(svg.lucide-message-square):visible').last();
 
-      stop() {
-        this.onerror?.({ error: 'aborted' });
-      }
-    }
-    for (const name of ['SpeechRecognition', 'webkitSpeechRecognition']) {
-      Object.defineProperty(window, name, {
-        configurable: true,
-        value: InterimSpeechRecognition,
+  for (const [locale, language] of [['zh-TW', 'zh-HK'], ['zh-CN', 'zh-CN']]) {
+    test('records WAV and sends the ' + language + ' question through server ASR', async ({ page }) => {
+      let chat = '';
+      await installTranscriptionStub(page);
+      await page.route(/\/api\/chat(?:\/pi)?(?:\?|$)/, route => {
+        chat += route.request().postData() || '';
+        return route.abort();
       });
-    }
-  }, question);
+      await openRecordingCourse(page, locale);
+      await mic(page).click();
+      await page.waitForTimeout(700);
+      await stop(page).click();
+      await expect.poll(() => page.evaluate(() => (window as any).__asr.returned)).toBe(true);
+      const upload = await page.evaluate(() => {
+        const { signal, ...value } = (window as any).__asr;
+        return value;
+      });
+      expect(upload.keys).toEqual(['audio', 'language']);
+      expect(upload.name).toBe('recording.wav');
+      expect(upload.type).toBe('audio/wav');
+      expect(upload.language).toBe(language);
+      expect(upload.header.slice(0, 4)).toEqual([82, 73, 70, 70]);
+      expect(upload.header.slice(8, 12)).toEqual([87, 65, 86, 69]);
+      await expect.poll(() => chat).toContain('Synthetic learner question');
+    });
+  }
 
-  await page.route('**/api/classroom?id=*', async (route) => {
-    const fixture = await readFile(
-      path.join(
-        process.cwd(),
-        'e2e',
-        'fixtures',
-        'nobel-interaction',
-        'hk-nobel-01-kagan-lecture-v4.json',
-      ),
-      'utf8',
-    );
-    await route.fulfill({ status: 200, contentType: 'application/json', body: fixture });
+  test('closing input cancels an uploading transcription and ignores its late result', async ({ page }) => {
+    let chat = '';
+    await installTranscriptionStub(page, true);
+    await page.route(/\/api\/chat(?:\/pi)?(?:\?|$)/, route => {
+      chat += route.request().postData() || '';
+      return route.abort();
+    });
+    await openRecordingCourse(page);
+    await mic(page).click();
+    await page.waitForTimeout(700);
+    await stop(page).click();
+    await expect.poll(() => page.evaluate(() => typeof (window as any).__resolveASR)).toBe('function');
+    await text(page).click();
+    await page.evaluate(() => (window as any).__resolveASR());
+    await expect.poll(() => page.evaluate(() => (window as any).__asr.returned)).toBe(true);
+    expect(await page.evaluate(() => (window as any).__asr.abortedAtResponse)).toBe(true);
+    await page.waitForTimeout(500);
+    expect(chat).not.toContain('Synthetic learner question');
+    await expect(page.locator('textarea:visible').first()).toBeVisible();
   });
 
-  await page.goto('/classroom/hk-nobel-01-kagan-lecture-v4');
-  await page.getByRole('button', { name: /提问讨论|課堂提問|Ask and discuss/ }).click();
-  const roundtable = page.getByTestId('nobel-classroom-interaction');
-  const mic = roundtable.locator('button:has(svg.lucide-mic):visible').last();
-  await mic.click();
-  await expect(page.locator('html')).toHaveAttribute('data-test-interim-enabled', 'true');
-  await expect(page.locator('html')).toHaveAttribute('data-test-interim-ready', 'true');
-  const request = page.waitForRequest(
-    (candidate) =>
-      candidate.url().includes('/api/chat') && (candidate.postData() || '').includes(question),
-  );
-  await mic.click();
-  await request;
-  await expect(page.getByText(question).first()).toBeVisible();
+  test('closing while permission is pending stops a late microphone stream', async ({ page }) => {
+    await page.addInitScript(() => {
+      const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+      (window as any).__lateTracks = [];
+      navigator.mediaDevices.getUserMedia = async (constraints) => {
+        await new Promise<void>(resolve => { (window as any).__releasePermission = resolve; });
+        const stream = await original(constraints);
+        (window as any).__lateTracks = stream.getTracks();
+        return stream;
+      };
+    });
+    let uploads = 0;
+    await page.route('**/api/transcription', route => { uploads++; return route.abort(); });
+    await openRecordingCourse(page);
+    await mic(page).click();
+    await expect.poll(() => page.evaluate(() => typeof (window as any).__releasePermission)).toBe('function');
+    await text(page).click();
+    await page.evaluate(() => (window as any).__releasePermission());
+    await expect.poll(() => page.evaluate(() => {
+      const tracks = (window as any).__lateTracks;
+      return tracks.length > 0 && tracks.every((t: MediaStreamTrack) => t.readyState === 'ended');
+    })).toBe(true);
+    expect(uploads).toBe(0);
+  });
 });
-
 
 
 test('hidden fullscreen controls allow an overlapped slide link to work', async ({ page }) => {

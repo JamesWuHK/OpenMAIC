@@ -550,7 +550,7 @@ async function transcribeAzureASR(
   }
 
   const formData = new FormData();
-  formData.append('audio', audioBlob, 'recording.webm');
+  formData.append('audio', audioBlob, audioBlob.type.includes('wav') ? 'recording.wav' : 'recording.webm');
 
   const localeMap: Record<string, string> = {
     en: 'en-US',
@@ -629,3 +629,4 @@ export async function getCurrentASRConfig(): Promise<ASRModelConfig> {
 
 // Re-export from constants for convenience
 export { getAllASRProviders, getASRProvider, getASRSupportedLanguages } from './constants';
+

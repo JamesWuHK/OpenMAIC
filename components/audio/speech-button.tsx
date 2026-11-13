@@ -5,6 +5,7 @@ import { Mic, Loader2 } from 'lucide-react';
 import { useAudioRecorder } from '@/lib/hooks/use-audio-recorder';
 import { useASRAvailable } from '@/lib/hooks/use-asr-available';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
@@ -57,10 +58,10 @@ export function SpeechButton({
     });
 
   useEffect(() => {
-    if (shouldCancelRecordingOnDisable({ continuous, disabled, isRecording })) {
+    if ((isLearnerDeployment() && disabled && (isRecording || isProcessing)) || shouldCancelRecordingOnDisable({ continuous, disabled, isRecording })) {
       cancelRecording();
     }
-  }, [continuous, disabled, isRecording, cancelRecording]);
+  }, [continuous, disabled, isRecording, isProcessing, cancelRecording]);
 
   const active = isRecording || isProcessing;
 
@@ -74,6 +75,8 @@ export function SpeechButton({
   const handleClick = () => {
     if (isRecording) {
       stopRecording();
+    } else if (isProcessing && isLearnerDeployment()) {
+      cancelRecording();
     } else if (!isProcessing) {
       startRecording();
     }
@@ -89,7 +92,7 @@ export function SpeechButton({
       <TooltipTrigger asChild>
         <button
           type="button"
-          disabled={isDisabled || isProcessing}
+          disabled={isDisabled || (isProcessing && !isLearnerDeployment())}
           onClick={handleClick}
           className={cn(
             'relative flex items-center justify-center rounded-lg transition-all duration-200 shrink-0 cursor-pointer',
@@ -166,3 +169,4 @@ export function SpeechButton({
     </Tooltip>
   );
 }
+
