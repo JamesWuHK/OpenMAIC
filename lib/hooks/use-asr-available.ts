@@ -10,7 +10,7 @@ import type { BuiltInASRProviderId } from '@/lib/audio/types';
 const subscribe = () => () => {};
 const getBrowserSpeechSupported = () =>
   isLearnerDeployment()
-    ? !!(navigator.mediaDevices?.getUserMedia && window.MediaRecorder)
+    ? typeof navigator.mediaDevices?.getUserMedia === 'function' && typeof window.MediaRecorder !== 'undefined'
     : !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 /**
