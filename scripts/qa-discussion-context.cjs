@@ -1,4 +1,4 @@
-const { chromium } = require('playwright');
+const { chromium } = require('@playwright/test');
 const fs = require('fs'), path = require('path'), http = require('http'), assert = require('assert/strict');
 (async () => {
   const fixture = JSON.parse(fs.readFileSync(process.env.CANDIDATE_FILE || path.join(process.cwd(), 'e2e/fixtures/nobel-interaction/hk-nobel-02-soai-lecture-v4.json')));
