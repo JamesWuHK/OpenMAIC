@@ -3,6 +3,9 @@ const fs = require('fs'), path = require('path'), http = require('http'), assert
 (async () => {
   const fixture = JSON.parse(fs.readFileSync(process.env.CANDIDATE_FILE || path.join(process.cwd(), 'e2e/fixtures/nobel-interaction/hk-nobel-02-soai-lecture-v4.json')));
   const course = fixture.classroom || fixture;
+  course.id = 'hk-nobel-02-soai-illustrated-v2-mandarin';
+  course.stage.id = course.id;
+  for (const scene of course.scenes) scene.stageId = course.id;
   const id = course.id, source = course.scenes.find(s => s.actions.some(a => a.type === 'discussion')) || course.scenes[0];
   const topic = 'context-topic-20261113', prompt = 'context-prompt-20261113';
   const discussion = { id: 'context-test-discussion', type: 'discussion', agentId: 'default-1', ...source.actions.find(a => a.type === 'discussion'), topic, prompt };
@@ -40,7 +43,12 @@ const fs = require('fs'), path = require('path'), http = require('http'), assert
     await page.getByRole('button', { name: '繁', exact: true }).first().waitFor();
     const mute = page.getByRole('button', { name: 'Mute', exact: true }); if (await mute.count()) await mute.first().click();
     const join = page.getByRole('button', { name: /^(加入討論|加入讨论|Join discussion|Join Discussion)$/ });
-    if (!await join.count()) await page.getByRole('button', { name: 'Play', exact: true }).first().click();
+    const startupDeadline = Date.now() + 30000;
+    while (Date.now() < startupDeadline && !await join.isVisible()) {
+      const play = page.getByRole('button', { name: 'Play', exact: true }).first();
+      if (await play.isVisible()) await play.click();
+      await page.waitForTimeout(100);
+    }
     await join.waitFor({ timeout: 30000 }); await join.click();
     async function awaitCount(count) { const end = Date.now() + 20000; while (Date.now() < end) { if (r.requests.length >= count && (await page.locator('body').innerText()).includes('輪到你發言')) return; await page.waitForTimeout(100); } throw Error('mock discussion failed to cue'); }
     await awaitCount(2);
@@ -55,6 +63,6 @@ const fs = require('fs'), path = require('path'), http = require('http'), assert
     }
     assert.ok(r.requests.every(x => x.sessionType === 'discussion' && x.topic === topic && x.prompt === prompt)); assert.equal(r.errors.length, 0);
     r.pass = true; await context.close();
-  } catch (e) { r.failure = String(e); process.exitCode = 1; }
+  } catch (e) { r.failure = String(e); process.exitCode = 1; const pages = browser.contexts().flatMap(c => c.pages()); if (pages[0]) r.failureUI = await pages[0].locator('body').innerText().catch(() => ''); }
   finally { await browser.close(); proxy.closeAllConnections(); await new Promise(resolve => proxy.close(resolve)); http.globalAgent.destroy(); const out = process.env.QA_CONTEXT_OUTPUT || path.join(process.cwd(), 'artifacts/learner-site-qa', 'discussion-context-' + (process.env.QA_MOBILE === 'true' ? 'phone' : 'desktop') + '.json'); fs.mkdirSync(path.dirname(out), { recursive: true }); fs.writeFileSync(out, JSON.stringify(r, null, 2)); console.log(JSON.stringify({ pass: r.pass, failure: r.failure, code: r.code, requests: r.requests })); }
 })();
