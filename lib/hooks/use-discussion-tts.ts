@@ -20,6 +20,7 @@ import { isQwenCloneVoice, resolveTTSModelForVoice } from '@/lib/audio/constants
 import { toast } from 'sonner';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { takeCompleteSpeechSegments } from '@/lib/audio/discussion-speech-segments';
+import { fetchLearnerDiscussionSpeech } from '@/lib/learner/fetch-discussion-speech';
 import {
   isVoiceBindingUnavailable,
   markVoiceBindingNoticeShown,
@@ -249,6 +250,9 @@ export function useDiscussionTTS({
     onAudioStateChangeRef.current?.(item.agentId, 'generating');
     const controller = new AbortController();
     abortControllerRef.current = controller;
+    const isCurrent = () => !learner || (
+      !controller.signal.aborted && abortControllerRef.current === controller
+    );
 
     try {
       const providerConfig = ttsProvidersConfig[item.providerId];
@@ -261,7 +265,8 @@ export function useDiscussionTTS({
             voiceId: item.voiceId,
             language: locale,
           });
-      const res = await fetch(learner ? '/api/learner/speech' : '/api/generate/tts', {
+      if (!isCurrent()) return;
+      const requestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(
@@ -286,9 +291,13 @@ export function useDiscussionTTS({
               },
         ),
         signal: controller.signal,
-      });
-
+      };
+      const res = learner
+        ? await fetchLearnerDiscussionSpeech(requestInit)
+        : await fetch('/api/generate/tts', requestInit);
+      if (!isCurrent()) return;
       const data = await res.json();
+      if (!isCurrent()) return;
       if (!res.ok) {
         const error = new Error(
           typeof data.error === 'string' ? data.error : `TTS API error: ${res.status}`,
@@ -309,17 +318,18 @@ export function useDiscussionTTS({
       audioRef.current = audio;
       let finished = false;
       const finishCurrent = () => {
-        if (finished) return;
+        if (finished || !isCurrent()) return;
         finished = true;
         isPlayingRef.current = false;
         segmentDoneCounterRef.current++;
         onAudioStateChangeRef.current?.(item.agentId, 'idle');
         if (!pausedRef.current) {
-          queueMicrotask(() => processQueueRef.current());
+          queueMicrotask(() => { if (isCurrent()) processQueueRef.current(); });
         }
       };
       audio.onended = finishCurrent;
       audio.onerror = () => {
+        if (!isCurrent()) return;
         if (learner && !failureNoticeShownRef.current) {
           failureNoticeShownRef.current = true;
           toast.warning('暫時無法播放討論語音，請稍後重試。');
@@ -338,6 +348,7 @@ export function useDiscussionTTS({
       try {
         await audio.play();
       } catch (playError) {
+        if (!isCurrent()) return;
         if (learner && (playError as Error).name === 'NotAllowedError') {
           // The generated MP3 is valid, but the browser requires a direct click.
           // Keep this segment queued until the learner chooses Play or Skip.
@@ -348,11 +359,12 @@ export function useDiscussionTTS({
             action: {
               label: '播放語音',
               onClick: () => {
+                if (!isCurrent() || audioRef.current !== audio) return;
                 blockedPlaybackToastRef.current = null;
-                if (audioRef.current !== audio) return;
                 pausedRef.current = false;
                 onAudioStateChangeRef.current?.(item.agentId, 'playing');
                 void audio.play().catch((retryError) => {
+                  if (!isCurrent()) return;
                   console.error('[DiscussionTTS] Manual playback failed:', retryError);
                   toast.error('仍無法播放語音，請檢查瀏覽器的自動播放設定。');
                   finishCurrent();
@@ -362,8 +374,8 @@ export function useDiscussionTTS({
             cancel: {
               label: '跳過語音',
               onClick: () => {
+                if (!isCurrent() || audioRef.current !== audio) return;
                 blockedPlaybackToastRef.current = null;
-                if (audioRef.current !== audio) return;
                 pausedRef.current = false;
                 finishCurrent();
               },
@@ -374,6 +386,7 @@ export function useDiscussionTTS({
         throw playError;
       }
     } catch (err) {
+      if (!isCurrent()) return;
       const cloneUnavailable =
         err &&
         typeof err === 'object' &&
@@ -407,7 +420,7 @@ export function useDiscussionTTS({
       segmentDoneCounterRef.current++;
       onAudioStateChangeRef.current?.(item.agentId, 'idle');
       if (!pausedRef.current) {
-        queueMicrotask(() => processQueueRef.current());
+        queueMicrotask(() => { if (isCurrent()) processQueueRef.current(); });
       }
     }
   }, [
@@ -606,3 +619,4 @@ export function useDiscussionTTS({
     shouldHold,
   };
 }
+
