@@ -168,7 +168,7 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
     if (!isCurrent()) return;
 
-    if (storageUnavailable || !getCurrentStage()) {
+    if (storageUnavailable || getCurrentStage()?.id !== classroomId) {
       log.info('No IndexedDB data, trying server-side storage for:', classroomId);
       // The fetch path converts and commits under the per-stage document lock.
       // Once it returns, the document owns every allocation; a later
@@ -198,6 +198,11 @@ export async function runClassroomLoad<TMediaTasks = unknown>({
     }
 
     if (!isCurrent()) return;
+    // A missing target must not reuse the previous classroom's scenes or roster.
+    const loadedStage = getCurrentStage();
+    if (loadedStage && loadedStage.id !== classroomId) {
+      throw new Error('Requested classroom could not be loaded');
+    }
     // Metadata-only on the critical path: the default loader defers object-URL
     // creation for non-priority blobs, so this await is a table read, not a
     // full media hydration (the rest hydrates in the background after apply).
