@@ -329,8 +329,7 @@ test('manual stop submits Cantonese interim speech when Chrome aborts without en
 
 
 
-test('hidden fullscreen toolbar and volume popover allow slide interaction', async ({ page }) => {
-  // Exercise the normal illustrated-course player with a self-contained slide.
+test('hidden fullscreen controls allow an overlapped slide link to work', async ({ page }) => {
   const id = 'hk-nobel-08-hassabis-illustrated-v1-mandarin';
   await page.setViewportSize({ width: 844, height: 390 });
   await page.addInitScript(() => localStorage.setItem('locale', 'zh-TW'));
@@ -342,15 +341,37 @@ test('hidden fullscreen toolbar and volume popover allow slide interaction', asy
     data.classroom.scenes = data.classroom.scenes.slice(0, 1);
     data.classroom.scenes[0].stageId = id;
     data.classroom.scenes[0].type = 'interactive';
-    data.classroom.scenes[0].content = { type: 'interactive', html: `<!doctype html><html><body style="margin:0;height:100vh"><a href="#qa" style="position:absolute;bottom:1%;left:34%;font-size:16px" onclick="this.dataset.clicked='yes';return false">Source link</a></body></html>` };
+    data.classroom.scenes[0].content = { type: 'interactive', html: `<!doctype html><html><body style="margin:0;height:100vh"><a href="#qa" style="position:absolute;font-size:16px" onclick="this.dataset.clicked='yes';return false">Source link</a></body></html>` };
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
   });
   await page.goto('/classroom/' + id);
   await expect(page.locator('iframe:visible').first()).toBeVisible();
   await page.getByRole('button', { name: /全螢幕|全屏|Fullscreen/i }).click();
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
-  const volume = page.getByRole('button', { name: 'Mute', exact: true });
-  await volume.hover();
+  const speed = page.getByRole('button', { name: 'Playback speed' });
+  const speedBox = await speed.boundingBox();
+  const iframeBox = await page.locator('iframe:visible').first().boundingBox();
+  expect(speedBox).not.toBeNull();
+  expect(iframeBox).not.toBeNull();
+  const frame = page.frameLocator('iframe:visible').first();
+  const sourceLink = frame.getByRole('link', { name: 'Source link' });
+  await sourceLink.evaluate((link, target) => {
+    const scaleX = document.documentElement.clientWidth / target.frameWidth;
+    const scaleY = document.documentElement.clientHeight / target.frameHeight;
+    (link as HTMLElement).style.left = `${(target.x - target.frameX) * scaleX}px`;
+    (link as HTMLElement).style.top = `${(target.y - target.frameY) * scaleY}px`;
+  }, { x: speedBox!.x + speedBox!.width / 2, y: speedBox!.y + speedBox!.height / 2, frameX: iframeBox!.x, frameY: iframeBox!.y, frameWidth: iframeBox!.width, frameHeight: iframeBox!.height });
+  const linkBox = await sourceLink.boundingBox();
+  expect(linkBox).not.toBeNull();
+  expect(linkBox!.x).toBeLessThan(speedBox!.x + speedBox!.width);
+  expect(linkBox!.x + linkBox!.width).toBeGreaterThan(speedBox!.x);
+  expect(linkBox!.y).toBeLessThan(speedBox!.y + speedBox!.height);
+  expect(linkBox!.y + linkBox!.height).toBeGreaterThan(speedBox!.y);
+  expect(linkBox!.x + 2).toBeGreaterThan(speedBox!.x);
+  expect(linkBox!.x + 2).toBeLessThan(speedBox!.x + speedBox!.width);
+  expect(linkBox!.y + 2).toBeGreaterThan(speedBox!.y);
+  expect(linkBox!.y + 2).toBeLessThan(speedBox!.y + speedBox!.height);
+  await page.getByRole('button', { name: 'Mute', exact: true }).hover();
   const slider = page.locator('input[type=range]:visible').first();
   await expect(slider).toBeVisible();
   await slider.hover();
@@ -360,13 +381,34 @@ test('hidden fullscreen toolbar and volume popover allow slide interaction', asy
   const sliderHit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.tagName, {
     x: sliderBox!.x + sliderBox!.width / 2, y: sliderBox!.y + sliderBox!.height / 2,
   });
-  expect(sliderHit, 'hidden volume popover must not receive pointer events').not.toBe('INPUT');
-  const sourceLink = page.frameLocator('iframe:visible').first().getByRole('link', { name: 'Source link' });
-  await sourceLink.click();
+  expect(sliderHit, 'hidden volume popover must not receive pointer events').toBe('IFRAME');
+  // Move first, then wait for controls to hide again. Down/up use exactly this
+  // page-coordinate position, so no implicit locator mouse move wakes them.
+  await page.mouse.move(linkBox!.x + 2, linkBox!.y + 2);
+  await page.waitForTimeout(5000);
+  const hiddenSpeedBox = await speed.boundingBox();
+  expect(hiddenSpeedBox).not.toBeNull();
+  expect(linkBox!.x + 2).toBeGreaterThan(hiddenSpeedBox!.x);
+  expect(linkBox!.x + 2).toBeLessThan(hiddenSpeedBox!.x + hiddenSpeedBox!.width);
+  expect(linkBox!.y + 2).toBeGreaterThan(hiddenSpeedBox!.y);
+  expect(linkBox!.y + 2).toBeLessThan(hiddenSpeedBox!.y + hiddenSpeedBox!.height);
+  const hiddenHit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.tagName, {
+    x: linkBox!.x + 2, y: linkBox!.y + 2,
+  });
+  expect(hiddenHit, 'hidden toolbar must not intercept the overlapping slide link').toBe('IFRAME');
+  const toolbarOpacity = await speed.evaluate((button) => {
+    const toolbar = button.closest('.fixed.bottom-0');
+    return toolbar ? getComputedStyle(toolbar).opacity : null;
+  });
+  expect(toolbarOpacity).toBe('0');
+  await page.mouse.down();
+  await page.mouse.up();
   await expect(sourceLink).toHaveAttribute('data-clicked', 'yes');
+  expect(await speed.evaluate((button) => {
+    const toolbar = button.closest('.fixed.bottom-0');
+    return toolbar ? getComputedStyle(toolbar).opacity : null;
+  })).toBe('0');
   await page.mouse.move(5, 5);
-  const speed = page.getByRole('button', { name: 'Playback speed' });
-  await expect(speed).toBeVisible();
   const before = await speed.innerText();
   await speed.click();
   await expect(speed).not.toHaveText(before);
