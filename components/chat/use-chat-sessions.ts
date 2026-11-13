@@ -1705,6 +1705,12 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
             config: {
               agentIds,
               sessionType: session.type,
+              ...(session.type === 'discussion'
+                ? {
+                    discussionTopic: session.config.discussionTopic,
+                    discussionPrompt: session.config.discussionPrompt,
+                  }
+                : {}),
             },
             userProfile: {
               nickname: userProfileState.nickname || undefined,
@@ -1910,6 +1916,12 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
             config: {
               agentIds,
               sessionType,
+              ...(sessionType === 'discussion'
+                ? {
+                    discussionTopic: existingSession?.config.discussionTopic,
+                    discussionPrompt: existingSession?.config.discussionPrompt,
+                  }
+                : {}),
             },
             userProfile: {
               nickname: userProfileState.nickname || undefined,
@@ -2014,6 +2026,8 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         config: {
           agentIds,
           triggerAgentId: agentId,
+          discussionTopic: request.topic,
+          discussionPrompt: request.prompt,
         },
         toolCalls: [],
         pendingToolCalls: [],
@@ -2314,3 +2328,4 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
     resumeActiveLiveBuffer,
   };
 }
+

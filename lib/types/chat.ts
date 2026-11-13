@@ -121,6 +121,9 @@ export function interruptActiveChatSessions(
  */
 export interface SessionConfig {
   agentIds: string[];
+  /** Authored context must survive discussion follow-ups and pause/resume. */
+  discussionTopic?: string;
+  discussionPrompt?: string;
   triggerAgentId?: string; // For discussion: first agent to speak
   defaultAgentId?: string; // For QA: the responding agent
 }
@@ -486,3 +489,4 @@ export type StatelessEvent =
       };
     }
   | { type: 'error'; data: { message: string } };
+
