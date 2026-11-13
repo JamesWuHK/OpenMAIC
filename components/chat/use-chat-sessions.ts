@@ -53,6 +53,31 @@ import { refreshWhiteboardRuntimeProjection } from '@/lib/whiteboard/runtime/bro
 const log = createLogger('ChatSessions');
 const SOFT_CLOSE_TIMEOUT_MS = 15_000;
 
+/** Choose a selected, registered responder for a fresh discussion input. */
+export function resolveDiscussionReplyAgent(
+  agentIds: readonly string[],
+  getAgent: (id: string) => { role?: string; priority?: number } | undefined,
+  previousTriggerId?: string,
+): string | undefined {
+  const available: string[] = [];
+  let teacherId: string | undefined;
+  let teacherPriority = -Infinity;
+  for (const id of agentIds) {
+    const agent = getAgent(id);
+    if (!agent) continue;
+    available.push(id);
+    if (agent.role !== 'teacher') continue;
+    const priority = Number.isFinite(agent.priority) ? (agent.priority ?? 0) : 0;
+    if (teacherId === undefined || priority > teacherPriority) {
+      teacherId = id;
+      teacherPriority = priority;
+    }
+  }
+  return teacherId ??
+    (previousTriggerId && available.includes(previousTriggerId) ? previousTriggerId : available[0]);
+}
+
+
 export interface SoftCloseRegistration {
   token: string;
   deadline: number;
@@ -1851,7 +1876,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       // Read all selected agent IDs from settings store
       const settingsState = useSettingsStore.getState();
       const agentIds: string[] =
-        settingsState.selectedAgentIds?.length > 0 ? settingsState.selectedAgentIds : ['default-1'];
+        settingsState.selectedAgentIds?.length > 0 ? [...settingsState.selectedAgentIds] : ['default-1'];
 
       const userMessage: UIMessage<ChatMessageMetadata> = {
         id: userMessageId,
@@ -1871,6 +1896,16 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
         ? [...existingSession.messages, userMessage]
         : [userMessage];
       const sessionType: SessionType = existingSession?.type || 'qa';
+      // Use the native first-agent dispatch for each real student input. The
+      // Director still controls subsequent agents and the return to the user.
+      const discussionReplyAgent = sessionType === 'discussion'
+        ? resolveDiscussionReplyAgent(
+            agentIds,
+            (id) => useAgentRegistry.getState().getAgent(id),
+            existingSession?.config.triggerAgentId,
+          )
+        : undefined;
+
 
       // Pure updater — no side effects
       setSessions((prev) => {
@@ -1920,6 +1955,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
                 ? {
                     discussionTopic: existingSession?.config.discussionTopic,
                     discussionPrompt: existingSession?.config.discussionPrompt,
+                    ...(discussionReplyAgent ? { triggerAgentId: discussionReplyAgent } : {}),
                   }
                 : {}),
             },
