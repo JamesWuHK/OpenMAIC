@@ -35,6 +35,7 @@ import { StreamBuffer } from '@/lib/buffer/stream-buffer';
 import { waitForDiscussionSpeechDrain } from '@/lib/audio/wait-for-discussion-speech';
 import type { AgentStartItem, ActionItem } from '@/lib/buffer/stream-buffer';
 import { runAgentLoop, type AgentLoopStoreState } from '@/lib/chat/agent-loop';
+import { selectPendingUserMessages } from '@/lib/chat/pending-user-messages';
 import { ActionEngine } from '@/lib/action/engine';
 import {
   buildQuizResultsForStoreState,
@@ -1253,6 +1254,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
       controller: AbortController,
       sessionType: SessionType,
       onElementReferenceResponseAccepted?: (response: Response) => void,
+      pendingUserMessageId?: string,
     ): Promise<void> => {
       // Attach full configs for generated (non-default) agents so the server can use them.
       // The server-side registry only has default agents; generated agents exist only client-side.
@@ -1323,7 +1325,11 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
 
           getMessages: () => {
             const currentSession = sessionsRef.current.find((s) => s.id === sessionId);
-            return currentSession?.messages ?? requestTemplate.messages;
+            return selectPendingUserMessages(
+              currentSession?.messages,
+              requestTemplate.messages,
+              pendingUserMessageId,
+            );
           },
 
           fetchChat: (body, signal) =>
@@ -1916,6 +1922,7 @@ export function useChatSessions(options: UseChatSessionsOptions = {}) {
           controller,
           sessionType,
           options.onResponseAccepted,
+          userMessageId,
         );
       } catch (error) {
         // Ignore AbortError — it's intentional (user interrupted)
