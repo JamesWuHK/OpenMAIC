@@ -2,7 +2,7 @@
 import { createElement, act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { useChatSessions, normalizeStoredSessionsForRestore } from '@/components/chat/use-chat-sessions';
+import { useChatSessions, normalizeStoredSessionsForRestore, resolveDiscussionReplyAgent } from '@/components/chat/use-chat-sessions';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 const mocks = vi.hoisted(() => {
@@ -35,6 +35,17 @@ afterEach(async () => { await act(async () => root.unmount()); host.remove(); vi
 const start = (topic: string, prompt: string) => act(async () => { await api.startDiscussion({ agentId: 'default-1', topic, prompt }); });
 
 describe('discussion context lifecycle in the real hook', () => {
+  it('dispatches the teacher for every new discussion follow-up', async () => {
+    await start('topic', 'prompt');
+    await act(async () => { await api.sendMessage('first question'); });
+    await act(async () => { await api.sendMessage('second question'); });
+    expect(mocks.bodies).toHaveLength(3);
+    for (const body of mocks.bodies.slice(1)) {
+      expect(body.config).toMatchObject({ sessionType: 'discussion', triggerAgentId: 'default-1', discussionTopic: 'topic', discussionPrompt: 'prompt' });
+    }
+    expect(mocks.error).not.toHaveBeenCalled();
+  }, 15000);
+
   it('keeps the authored topic and prompt after soft pause and resume', async () => {
     await start('topic A', 'prompt A');
     await act(async () => { await api.softPauseActiveSession(); });
@@ -49,6 +60,7 @@ describe('discussion context lifecycle in the real hook', () => {
     await act(async () => { await api.sendMessage('ordinary question'); });
     const config = mocks.bodies.at(-1).config;
     expect(config.sessionType).toBe('qa');
+    expect(config).not.toHaveProperty('triggerAgentId');
     expect(config).not.toHaveProperty('discussionTopic'); expect(config).not.toHaveProperty('discussionPrompt');
     expect(mocks.error).not.toHaveBeenCalled();
   }, 15000);
@@ -63,4 +75,35 @@ describe('discussion context lifecycle in the real hook', () => {
     expect(restored.find(s => s.title === 'topic B')?.config).toMatchObject({ discussionTopic: 'topic B', discussionPrompt: 'prompt B' });
     expect(mocks.error).not.toHaveBeenCalled();
   }, 15000);
+});
+
+
+describe('discussion responder selection', () => {
+  const agents: Record<string, { role: string; priority: number }> = {
+    pupil: { role: 'student', priority: 99 },
+    helper: { role: 'assistant', priority: 90 },
+    tutor: { role: 'teacher', priority: 5 },
+    lead: { role: 'teacher', priority: 10 },
+    peerLead: { role: 'teacher', priority: 10 },
+  };
+  const getAgent = (id: string) => agents[id];
+  it('chooses the highest-priority selected teacher instead of the opening assistant', () => {
+    expect(resolveDiscussionReplyAgent(['helper', 'tutor', 'lead', 'pupil'], getAgent, 'helper')).toBe('lead');
+  });
+  it('keeps selected order when teacher priorities tie', () => {
+    expect(resolveDiscussionReplyAgent(['peerLead', 'lead'], getAgent)).toBe('peerLead');
+  });
+  it('does not reintroduce an unselected teacher', () => {
+    expect(resolveDiscussionReplyAgent(['pupil', 'helper'], getAgent, 'lead')).toBe('pupil');
+  });
+  it('retains a valid selected opening agent when no teacher is selected', () => {
+    expect(resolveDiscussionReplyAgent(['pupil', 'helper'], getAgent, 'helper')).toBe('helper');
+  });
+  it('skips registry-missing IDs for the fallback', () => {
+    expect(resolveDiscussionReplyAgent(['missing', 'helper'], getAgent, 'missing')).toBe('helper');
+  });
+  it('does not invent an agent for an empty or unavailable selection', () => {
+    expect(resolveDiscussionReplyAgent([], getAgent, 'lead')).toBeUndefined();
+    expect(resolveDiscussionReplyAgent(['missing'], getAgent, 'missing')).toBeUndefined();
+  });
 });
