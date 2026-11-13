@@ -22,7 +22,7 @@ vi.mock('sonner', () => ({ toast: { error: mocks.error, warning: vi.fn(), dismis
 let api: ReturnType<typeof useChatSessions>, root: Root, host: HTMLDivElement;
 function Harness() { api = useChatSessions(); return null; }
 beforeEach(async () => {
-  mocks.stage.chats = []; mocks.bodies.length = 0; mocks.error.mockClear();
+  mocks.settings.selectedAgentIds = ['default-1']; mocks.stage.chats = []; mocks.bodies.length = 0; mocks.error.mockClear();
   vi.stubGlobal('fetch', vi.fn(async (_url: string, init: RequestInit) => {
     mocks.bodies.push(JSON.parse(String(init.body)));
     const events = [{ type: 'cue_user', data: { fromAgentId: 'default-1' } }, { type: 'done', data: { totalAgents: 0, totalActions: 0, cueUserReceived: true } }];
@@ -36,12 +36,18 @@ const start = (topic: string, prompt: string) => act(async () => { await api.sta
 
 describe('discussion context lifecycle in the real hook', () => {
   it('dispatches the teacher for every new discussion follow-up', async () => {
-    await start('topic', 'prompt');
+    const selected = ['default-2', 'default-1', 'default-3'];
+    mocks.settings.selectedAgentIds = selected;
+    await act(async () => { await api.startDiscussion({ agentId: 'default-2', topic: 'topic', prompt: 'prompt' }); });
     await act(async () => { await api.sendMessage('first question'); });
     await act(async () => { await api.sendMessage('second question'); });
     expect(mocks.bodies).toHaveLength(3);
-    for (const body of mocks.bodies.slice(1)) {
+    expect(mocks.bodies[0].config.triggerAgentId).toBe('default-2');
+    expect(mocks.bodies[0].config.agentIds).toEqual(selected);
+    for (const [index, body] of mocks.bodies.slice(1).entries()) {
       expect(body.config).toMatchObject({ sessionType: 'discussion', triggerAgentId: 'default-1', discussionTopic: 'topic', discussionPrompt: 'prompt' });
+      expect(body.config.agentIds).toEqual(selected);
+      expect(body.messages.filter((message: any) => message.role === 'user').map((message: any) => message.parts[0].text)).toEqual(['first question', 'second question'].slice(0, index + 1));
     }
     expect(mocks.error).not.toHaveBeenCalled();
   }, 15000);
@@ -52,6 +58,7 @@ describe('discussion context lifecycle in the real hook', () => {
     await act(async () => { await api.resumeActiveSession(); });
     expect(mocks.bodies).toHaveLength(2);
     expect(mocks.bodies[1].config).toMatchObject({ sessionType: 'discussion', discussionTopic: 'topic A', discussionPrompt: 'prompt A' });
+    expect(mocks.bodies[1].config).not.toHaveProperty('triggerAgentId');
     expect(mocks.error).not.toHaveBeenCalled();
   }, 15000);
   it('does not inherit an ended discussion into a new ordinary Q&A session', async () => {
