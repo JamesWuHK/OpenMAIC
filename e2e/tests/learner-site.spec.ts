@@ -328,9 +328,9 @@ test('manual stop submits Cantonese interim speech when Chrome aborts without en
 });
 
 
-test('hidden fullscreen toolbar does not intercept slide clicks', async ({ page }) => {
-  // Reuse the checked-in classroom shape but render it through the normal
-  // illustrated-course player with a self-contained interactive slide.
+
+test('hidden fullscreen toolbar and volume popover allow slide interaction', async ({ page }) => {
+  // Exercise the normal illustrated-course player with a self-contained slide.
   const id = 'hk-nobel-08-hassabis-illustrated-v1-mandarin';
   await page.setViewportSize({ width: 844, height: 390 });
   await page.addInitScript(() => localStorage.setItem('locale', 'zh-TW'));
@@ -342,26 +342,32 @@ test('hidden fullscreen toolbar does not intercept slide clicks', async ({ page 
     data.classroom.scenes = data.classroom.scenes.slice(0, 1);
     data.classroom.scenes[0].stageId = id;
     data.classroom.scenes[0].type = 'interactive';
-    data.classroom.scenes[0].content = { type: 'interactive', html: '<!doctype html><html><body style="margin:0;background:white"><div style="height:100vh;width:100vw">slide</div></body></html>' };
-    data.classroom.scenes[0].actions = [];
+    data.classroom.scenes[0].content = { type: 'interactive', html: `<!doctype html><html><body style="margin:0;height:100vh"><a href="#qa" style="position:absolute;bottom:1%;left:34%;font-size:16px" onclick="this.dataset.clicked='yes';return false">Source link</a></body></html>` };
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
   });
   await page.goto('/classroom/' + id);
   await expect(page.locator('iframe:visible').first()).toBeVisible();
   await page.getByRole('button', { name: /全螢幕|全屏|Fullscreen/i }).click();
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
-  const speed = page.getByRole('button', { name: 'Playback speed' });
-  await expect(speed).toBeAttached();
+  const volume = page.getByRole('button', { name: 'Mute', exact: true });
+  await volume.hover();
+  const slider = page.locator('input[type=range]:visible').first();
+  await expect(slider).toBeVisible();
+  await slider.hover();
+  const sliderBox = await slider.boundingBox();
+  expect(sliderBox).not.toBeNull();
   await page.waitForTimeout(5000);
-  const hiddenHit = await speed.evaluate((button) => {
-    const r = button.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-    return hit?.closest('button[aria-label="Playback speed"]') !== null;
+  const sliderHit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.tagName, {
+    x: sliderBox!.x + sliderBox!.width / 2, y: sliderBox!.y + sliderBox!.height / 2,
   });
-  expect(hiddenHit, 'hidden toolbar must not capture slide pointer events').toBe(false);
+  expect(sliderHit, 'hidden volume popover must not receive pointer events').not.toBe('INPUT');
+  const sourceLink = page.frameLocator('iframe:visible').first().getByRole('link', { name: 'Source link' });
+  await sourceLink.click();
+  await expect(sourceLink).toHaveAttribute('data-clicked', 'yes');
   await page.mouse.move(5, 5);
-  await expect.poll(async () => speed.evaluate((button) => {
-    const r = button.getBoundingClientRect();
-    return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('button[aria-label="Playback speed"]') !== null;
-  })).toBe(true);
+  const speed = page.getByRole('button', { name: 'Playback speed' });
+  await expect(speed).toBeVisible();
+  const before = await speed.innerText();
+  await speed.click();
+  await expect(speed).not.toHaveText(before);
 });
