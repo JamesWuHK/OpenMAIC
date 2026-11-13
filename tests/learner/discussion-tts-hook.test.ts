@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { createElement, act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { useDiscussionTTS } from '@/lib/hooks/use-discussion-tts';
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 const mocks = vi.hoisted(() => ({
@@ -27,7 +27,7 @@ const agents = [{ id: 'teacher', role: 'teacher' }] as any;
 let api: ReturnType<typeof useDiscussionTTS>;
 let root: Root, container: HTMLDivElement;
 let request: ReturnType<typeof vi.fn>;
-let play: ReturnType<typeof vi.fn>;
+let play: Mock<() => Promise<void>>;
 const audios: any[] = [];
 const response = () => new Response(JSON.stringify({ base64: 'AA==', format: 'mp3' }), { status: 200 });
 function deferred<T>() { let resolve!: (value:T)=>void, reject!: (error:unknown)=>void;
@@ -36,7 +36,7 @@ async function flush() { await act(async()=>{for(let i=0;i<12;i++)await Promise.
 function Harness() { api=useDiscussionTTS({enabled:true,classroomId:'course',agents});return null; }
 function send(id:string) { act(()=>api.handleSegmentSealed(id,id,'孩子的問題','teacher')); }
 beforeEach(async()=>{
-  vi.clearAllMocks();audios.length=0;request=vi.fn();play=vi.fn().mockResolvedValue(undefined);
+  vi.clearAllMocks();audios.length=0;request=vi.fn();play=vi.fn<() => Promise<void>>().mockResolvedValue(undefined);
   vi.stubGlobal('fetch',request);
   vi.stubGlobal('Audio',class {src='';paused=true;volume=1;playbackRate=1;onended:any=null;onerror:any=null;
     constructor(){audios.push(this)} pause(){this.paused=true} play(){this.paused=false;return play()}});

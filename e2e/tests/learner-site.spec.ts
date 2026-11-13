@@ -219,7 +219,7 @@ test.describe('learner managed recording', () => {
     }, { delayed });
   }
 
-  async function openRecordingCourse(page: import('@playwright/test').Page, locale = 'zh-TW') {
+  async function openRecordingCourse(page: import('@playwright/test').Page, locale = 'zh-TW', courseId = id) {
     await page.addInitScript((value) => {
       localStorage.setItem('locale', value);
       for (const key of ['SpeechRecognition', 'webkitSpeechRecognition']) {
@@ -227,29 +227,33 @@ test.describe('learner managed recording', () => {
       }
     }, locale);
     await page.route('**/api/classroom?id=*', async route => {
-      if (new URL(route.request().url()).searchParams.get('id') !== id) return route.continue();
+      if (new URL(route.request().url()).searchParams.get('id') !== courseId) return route.continue();
       const data = JSON.parse(await readFile(path.join(process.cwd(), 'e2e', 'fixtures', 'nobel-interaction', 'hk-nobel-01-kagan-lecture-v4.json'), 'utf8'));
-      data.classroom.id = id;
-      data.classroom.stage.id = id;
-      for (const scene of data.classroom.scenes) scene.stageId = id;
+      data.classroom.id = courseId;
+      data.classroom.stage.id = courseId;
+      for (const scene of data.classroom.scenes) scene.stageId = courseId;
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
     });
-    await page.goto('/classroom/' + id);
+    await page.goto('/classroom/' + courseId);
     await expect(page.locator('button:has(svg.lucide-mic):visible').last()).toBeVisible();
   }
   const mic = (page: import('@playwright/test').Page) => page.locator('button:has(svg.lucide-mic):visible').last();
   const stop = (page: import('@playwright/test').Page) => page.locator('div.pointer-events-auto.relative.group.cursor-pointer:has(svg.lucide-mic):visible').last();
   const text = (page: import('@playwright/test').Page) => page.locator('button:has(svg.lucide-message-square):visible').last();
 
-  for (const [locale, language] of [['zh-TW', 'zh-HK'], ['zh-CN', 'zh-CN']]) {
-    test('records WAV and sends the ' + language + ' question through server ASR', async ({ page }) => {
+  for (const [locale, language, courseId] of [
+    ['zh-TW', 'zh-HK', id.replace('-mandarin', '')],
+    ['zh-CN', 'zh-HK', id.replace('-mandarin', '')],
+    ['zh-TW', 'zh-CN', id], ['zh-CN', 'zh-CN', id],
+  ]) {
+    test('records WAV and sends the ' + language + ' question with ' + locale + ' display through server ASR', async ({ page }) => {
       let chat = '';
       await installTranscriptionStub(page);
       await page.route(/\/api\/chat(?:\/pi)?(?:\?|$)/, route => {
         chat += route.request().postData() || '';
         return route.abort();
       });
-      await openRecordingCourse(page, locale);
+      await openRecordingCourse(page, locale, courseId);
       await mic(page).click();
       await page.waitForTimeout(700);
       await stop(page).click();
@@ -400,3 +404,4 @@ test('hidden fullscreen controls allow an overlapped slide link to work', async 
   await speed.click();
   await expect(speed).not.toHaveText(before);
 });
+

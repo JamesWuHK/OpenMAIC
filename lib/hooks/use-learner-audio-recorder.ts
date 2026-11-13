@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { audioBlobToWav } from '@/lib/audio/wav-utils';
 import { useSettingsStore } from '@/lib/store/settings';
 import { useI18n } from '@/lib/hooks/use-i18n';
+import { useStageStore } from '@/lib/store';
+import { nobelRecognitionLanguage } from '@/lib/learner/nobel-recognition-language';
 import type { UseAudioRecorderOptions } from './use-audio-recorder';
 
 interface Session {
@@ -17,6 +19,8 @@ interface Session {
 export function useLearnerAudioRecorder(options: UseAudioRecorderOptions) {
   const enabled = useSettingsStore(s => s.asrEnabled);
   const { locale } = useI18n();
+  const stageId = useStageStore(s => s.stage?.id);
+  const previousStageId = useRef(stageId);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -44,6 +48,13 @@ export function useLearnerAudioRecorder(options: UseAudioRecorderOptions) {
     setIsProcessing(false);
     setRecordingTime(0);
   }, [dispose]);
+
+  useEffect(() => {
+    if (previousStageId.current !== stageId) {
+      previousStageId.current = stageId;
+      cancelRecording();
+    }
+  }, [stageId, cancelRecording]);
 
   useEffect(() => {
     if (!enabled && session.current) cancelRecording();
@@ -76,7 +87,9 @@ export function useLearnerAudioRecorder(options: UseAudioRecorderOptions) {
       s.recorder = recorder;
       const chunks: Blob[] = [];
       // Freeze the classroom language for this utterance; do not use a stale provider preference.
-      const language = callbacks.current.recognitionLanguage || (locale === 'zh-TW' ? 'zh-HK' : locale);
+      const language = nobelRecognitionLanguage(stageId)
+        ?? callbacks.current.recognitionLanguage
+        ?? (locale === 'zh-TW' ? 'zh-HK' : locale);
       recorder.ondataavailable = event => {
         if (current() && event.data.size) chunks.push(event.data);
       };
@@ -139,7 +152,7 @@ export function useLearnerAudioRecorder(options: UseAudioRecorderOptions) {
         cancelRecording();
       } else dispose(s);
     }
-  }, [enabled, locale, cancelRecording, dispose]);
+  }, [enabled, locale, stageId, cancelRecording, dispose]);
 
   const stopRecording = useCallback(() => {
     const s = session.current;
@@ -148,4 +161,5 @@ export function useLearnerAudioRecorder(options: UseAudioRecorderOptions) {
 
   return { isRecording, isProcessing, recordingTime, startRecording, stopRecording, cancelRecording };
 }
+
 
