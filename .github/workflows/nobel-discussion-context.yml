@@ -2,7 +2,7 @@ name: Learner discussion context candidate
 
 on:
   push:
-    branches: [codex/nobel-discussion-context-20261113]
+    branches: [codex/nobel-course-navigation-20261113]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
@@ -37,7 +37,7 @@ jobs:
         run: node --experimental-strip-types --test tests/learner/discussion-speech.test.mjs
       - name: Relevant regression tests
         run: >-
-          pnpm exec vitest run tests/lib/chat/use-chat-sessions.test.ts tests/audio/azure-recording-contract.test.ts tests/pbl/v2/evaluator.test.ts
+          pnpm exec vitest run tests/classroom/load-classroom.test.ts tests/lib/chat/use-chat-sessions.test.ts tests/audio/azure-recording-contract.test.ts tests/pbl/v2/evaluator.test.ts
           tests/pbl/v2/assessment-policy.test.ts tests/pbl/v2/advance-patch.test.ts
           tests/pbl/v2/eval-prompts.test.ts tests/pbl/v2/ungraded-reflection.test.ts
           tests/pbl/v2/learner-state.test.ts tests/learner
@@ -118,4 +118,3 @@ jobs:
             artifacts/learner-image-qa/
             artifacts/learner-site-qa/
           retention-days: 7
-
