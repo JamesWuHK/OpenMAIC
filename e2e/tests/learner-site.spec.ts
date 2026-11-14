@@ -340,6 +340,8 @@ test('hidden fullscreen controls allow an overlapped slide link to work', async 
   await page.getByRole('button', { name: /全螢幕|全屏|Fullscreen/i }).click();
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
   const speed = page.getByRole('button', { name: 'Playback speed' });
+  // Native fullscreen and React's fullscreen toolbar commit on separate ticks.
+  await expect(speed).toBeVisible();
   const speedBox = await speed.boundingBox();
   const iframeBox = await page.locator('iframe:visible').first().boundingBox();
   expect(speedBox).not.toBeNull();
