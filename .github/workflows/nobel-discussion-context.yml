@@ -1,8 +1,8 @@
-name: Learner discussion context candidate
+name: Learner unified language candidate
 
 on:
   push:
-    branches: [codex/nobel-discussion-reply-20261114]
+    branches: [codex/nobel-unified-language-20261114]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
@@ -81,6 +81,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Existing learner desktop and mobile browser regression
         run: pnpm exec playwright test --config playwright.learner.config.ts
+      - name: Nobel combined UI and narration control (eight pairs, desktop and phone)
+        run: node scripts/qa-nobel-unified-language.cjs
       - name: Discussion context persists through two follow-ups (desktop)
         run: node scripts/qa-discussion-context.cjs
       - name: Discussion context persists through two follow-ups (phone)
@@ -118,3 +120,4 @@ jobs:
             artifacts/learner-image-qa/
             artifacts/learner-site-qa/
           retention-days: 7
+
