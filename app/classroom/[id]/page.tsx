@@ -23,6 +23,7 @@ import {
   runClassroomLoad,
 } from '@/lib/classroom/load-classroom';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { getNobelVoicePair, parseNobelSceneOrder } from '@/lib/learner/nobel-language-navigation';
 import { resolveClassroomDeploymentPolicy } from '@/lib/learner/classroom-policy';
 
 const log = createLogger('Classroom');
@@ -80,6 +81,20 @@ export default function ClassroomDetailPage() {
           // unmounts, so a learner never receives one editable paint.
           if (!nextLoading && classroomPolicy.forceReadOnly) {
             useStageStore.getState().setViewerAccess({ isOwner: false });
+          }
+          // Voice switching is a one-time page-position handoff, not a new
+          // playback command. Never restore another course or resume audio.
+          if (!nextLoading && isCurrent() && isLearnerDeployment() && getNobelVoicePair(classroomId)) {
+            const url = new URL(window.location.href);
+            const order = parseNobelSceneOrder(url.searchParams.get('nobelScene'));
+            const state = useStageStore.getState();
+            const scene = state.stage?.id === classroomId && order !== null
+              ? state.scenes.find((item) => item.order === order) : undefined;
+            if (scene) state.setCurrentSceneId(scene.id);
+            if (url.searchParams.has('nobelScene')) {
+              url.searchParams.delete('nobelScene');
+              window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+            }
           }
           setLoading(nextLoading);
         },
@@ -266,3 +281,4 @@ export default function ClassroomDetailPage() {
     </ThemeProvider>
   );
 }
+
