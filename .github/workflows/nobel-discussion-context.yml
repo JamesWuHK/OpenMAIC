@@ -1,8 +1,8 @@
-name: Learner unified language candidate
+name: Learner discussion caption candidate
 
 on:
   push:
-    branches: [codex/nobel-unified-language-20261114]
+    branches: [codex/learner-mic-feedback-20261114]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
@@ -34,10 +34,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Role voice routing regression
-        run: node --experimental-strip-types --test tests/learner/discussion-speech.test.mjs
+        run: node --experimental-strip-types --test tests/learner/discussion-speech.test.mjs tests/audio/discussion-caption.test.mjs
       - name: Relevant regression tests
         run: >-
-          pnpm exec vitest run tests/classroom/load-classroom.test.ts tests/lib/chat/use-chat-sessions.test.ts tests/audio/azure-recording-contract.test.ts tests/pbl/v2/evaluator.test.ts
+          pnpm exec vitest run tests/classroom/load-classroom.test.ts tests/lib/chat/use-chat-sessions.test.ts tests/lib/buffer/stream-buffer.test.ts tests/audio/azure-recording-contract.test.ts tests/pbl/v2/evaluator.test.ts
           tests/pbl/v2/assessment-policy.test.ts tests/pbl/v2/advance-patch.test.ts
           tests/pbl/v2/eval-prompts.test.ts tests/pbl/v2/ungraded-reflection.test.ts
           tests/pbl/v2/learner-state.test.ts tests/learner
@@ -83,6 +83,10 @@ jobs:
         run: pnpm exec playwright test --config playwright.learner.config.ts
       - name: Nobel combined UI and narration control (eight pairs, desktop and phone)
         run: node scripts/qa-nobel-unified-language.cjs
+      - name: Audio-driven discussion captions (desktop)
+        run: node scripts/qa-discussion-caption.cjs
+      - name: Audio-driven discussion captions (phone)
+        run: QA_MOBILE=true node scripts/qa-discussion-caption.cjs
       - name: Discussion context persists through two follow-ups (desktop)
         run: node scripts/qa-discussion-context.cjs
       - name: Discussion context persists through two follow-ups (phone)

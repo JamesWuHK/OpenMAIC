@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createDiscussionCaptionController,withDiscussionCaption} from '../../lib/audio/discussion-caption.ts';
+const first={messageId:'m1',partId:'p1',agentId:'teacher',text:'第一句'};
+const second={messageId:'m1',partId:'p2',agentId:'teacher',text:'第二句'};
+function harness(){let current=null;const timers=[];const controller=createDiscussionCaptionController(c=>current=c,{schedule:fn=>{const timer={fn,cancelled:false};timers.push(timer);return timer},cancel:t=>t.cancelled=true});return {controller,timers,get current(){return current},flush:()=>timers.filter(t=>!t.cancelled).forEach(t=>t.fn())}}
+test('a caption is ready as soon as the segment is selected, before generation or playback',()=>{const h=harness();h.controller.start(first);assert.deepEqual(h.current,first)});
+test('stream completion cannot clear a caption while its audio is still playing',()=>{const h=harness();h.controller.start(first);h.flush();assert.deepEqual(h.current,first)});
+test('ended audio leaves a readable tail and a stale timeout cannot erase the next segment',()=>{const h=harness();h.controller.start(first);h.controller.finish(first);const stale=h.timers[0];assert.deepEqual(h.current,first);h.controller.start(second);stale.fn();assert.deepEqual(h.current,second);h.controller.finish(second);h.flush();assert.equal(h.current,null)});
+test('a delayed old audio event cannot finish the new message even with the same part id',()=>{const h=harness();h.controller.start(first);const next={...first,messageId:'m2',text:'新問題的回答'};h.controller.start(next);h.controller.finish(first);h.flush();assert.deepEqual(h.current,next)});
+test('explicit stop or scene switch clears immediately and defeats late timer callbacks',()=>{const h=harness();h.controller.start(first);h.controller.finish(first);h.controller.clear();h.timers[0].fn();assert.equal(h.current,null)});
+test('current audio wins over a premature user cue and owns the correct speaker',()=>{const view={phase:'cueUser',sourceText:'錯誤的新文字',bubbleRole:null,activeRole:null,buttonState:'none',isInLiveFlow:true,isTopicActive:true};const result=withDiscussionCaption(view,first,false);assert.equal(result.sourceText,'第一句');assert.equal(result.audioCaptionActive,true);assert.equal(result.phase,'discussionActive');assert.equal(result.bubbleRole,'teacher');assert.equal(withDiscussionCaption(view,{...second,agentId:'student'},true).bubbleRole,'agent');assert.equal(withDiscussionCaption(view,null,false),view)});

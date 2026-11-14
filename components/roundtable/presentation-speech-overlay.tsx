@@ -293,7 +293,7 @@ export function PresentationBubbleCard({
             ))}
           </div>
         ) : (
-          <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words text-gray-800 dark:text-gray-100">
+          <p data-testid="discussion-speech-caption" data-caption-role={bubble.role} className="text-[15px] leading-relaxed whitespace-pre-wrap break-words text-gray-800 dark:text-gray-100">
             {bubble.text}
             {bubble.isTopicPending && (
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 ml-1 align-middle" />

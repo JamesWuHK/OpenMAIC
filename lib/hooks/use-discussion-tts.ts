@@ -19,6 +19,7 @@ import { useI18n } from '@/lib/hooks/use-i18n';
 import { isQwenCloneVoice, resolveTTSModelForVoice } from '@/lib/audio/constants';
 import { toast } from 'sonner';
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
+import { createDiscussionCaptionController, type DiscussionCaption } from '@/lib/audio/discussion-caption';
 import { takeCompleteSpeechSegments } from '@/lib/audio/discussion-speech-segments';
 import { fetchLearnerDiscussionSpeech } from '@/lib/learner/fetch-discussion-speech';
 import {
@@ -70,6 +71,10 @@ export function useDiscussionTTS({
   const globalTtsVoice = useSettingsStore((s) => s.ttsVoice);
   const agentVoiceOverrides = useSettingsStore((s) => s.agentVoiceOverrides);
   const { profiles: voiceProfiles } = useAllVoiceProfiles();
+
+  const [caption, setCaption] = useState<DiscussionCaption | null>(null);
+  const captionController = useRef<ReturnType<typeof createDiscussionCaptionController> | null>(null);
+  if (!captionController.current) captionController.current = createDiscussionCaptionController(setCaption);
 
   const queueRef = useRef<QueueItem[]>([]);
   const isPlayingRef = useRef(false);
@@ -236,6 +241,7 @@ export function useDiscussionTTS({
 
     isPlayingRef.current = true;
     const item = queueRef.current.shift()!;
+    if (learner) captionController.current!.start(item);
 
     // Browser TTS
     if (item.providerId === 'browser-native-tts') {
@@ -322,6 +328,7 @@ export function useDiscussionTTS({
         finished = true;
         isPlayingRef.current = false;
         segmentDoneCounterRef.current++;
+        if (learner) captionController.current!.finish(item);
         onAudioStateChangeRef.current?.(item.agentId, 'idle');
         if (!pausedRef.current) {
           queueMicrotask(() => { if (isCurrent()) processQueueRef.current(); });
@@ -418,6 +425,7 @@ export function useDiscussionTTS({
       }
       isPlayingRef.current = false;
       segmentDoneCounterRef.current++;
+      if (learner) captionController.current!.finish(item);
       onAudioStateChangeRef.current?.(item.agentId, 'idle');
       if (!pausedRef.current) {
         queueMicrotask(() => { if (isCurrent()) processQueueRef.current(); });
@@ -534,6 +542,7 @@ export function useDiscussionTTS({
   );
 
   const cleanup = useCallback(() => {
+    captionController.current!.clear();
     if (blockedPlaybackToastRef.current !== null) {
       toast.dismiss(blockedPlaybackToastRef.current);
       blockedPlaybackToastRef.current = null;
@@ -611,6 +620,7 @@ export function useDiscussionTTS({
   }, []);
 
   return {
+    caption,
     handleSegmentSealed,
     handleStreamingTextDelta,
     cleanup,

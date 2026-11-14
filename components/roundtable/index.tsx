@@ -283,9 +283,11 @@ export function Roundtable({
     playbackView?.isInLiveFlow ??
     !!(speakingAgentId || thinkingState || isStreaming || sessionType);
 
+  const visibleUserMessage = playbackView?.audioCaptionActive ? null : userMessage;
+
   // Role-aware source text: userMessage overlay on top of playbackView
-  const sourceText = userMessage
-    ? userMessage
+  const sourceText = visibleUserMessage
+    ? visibleUserMessage
     : (playbackView?.sourceText ??
       (currentSpeech
         ? currentSpeech
@@ -331,6 +333,13 @@ export function Roundtable({
     if (scrollableHeight <= 0) return;
     el.scrollTo({ top: scrollableHeight, behavior: 'smooth' });
   }, [sourceText, isInLiveFlow]);
+
+  // Actual speech must not be hidden by the previous 3-second user-message overlay.
+  useEffect(() => {
+    if (!playbackView?.audioCaptionActive || !userMessage) return;
+    clearUserMessageClearTimer();
+    setUserMessage(null);
+  }, [playbackView?.audioCaptionActive, userMessage, clearUserMessageClearTimer]);
 
   // Clear user message early when agent starts responding
   useEffect(() => {
@@ -559,7 +568,7 @@ export function Roundtable({
   // Student agent specifically loading (for agent-style bubble)
   const isAgentLoading = !!(speakingStudent && !currentSpeech && !userMessage);
 
-  const activeRole: 'teacher' | 'user' | 'agent' | null = userMessage
+  const activeRole: 'teacher' | 'user' | 'agent' | null = visibleUserMessage
     ? 'user'
     : (playbackView?.activeRole ??
       (currentSpeech && speakingStudent
@@ -576,7 +585,7 @@ export function Roundtable({
                   ? 'teacher'
                   : null));
 
-  const bubbleRole: 'teacher' | 'user' | 'agent' | null = userMessage
+  const bubbleRole: 'teacher' | 'user' | 'agent' | null = visibleUserMessage
     ? 'user'
     : (playbackView?.bubbleRole ??
       (currentSpeech && speakingStudent
@@ -1794,7 +1803,7 @@ export function Roundtable({
                             />
                           </div>
                         ) : (
-                          <p className="whitespace-pre-wrap break-words" suppressHydrationWarning>
+                          <p data-testid="discussion-speech-caption" data-caption-role={bubbleRole} className="whitespace-pre-wrap break-words" suppressHydrationWarning>
                             {sourceText}
                             {isTopicPending && (
                               <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 ml-1 align-middle" />

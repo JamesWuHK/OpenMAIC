@@ -37,6 +37,7 @@ import {
 import { loadCursor, saveCursor, type PlaybackCursor } from '@/lib/playback/cursor';
 import { ActionEngine } from '@/lib/action/engine';
 import { createAudioPlayer } from '@/lib/utils/audio-player';
+import { withDiscussionCaption } from '@/lib/audio/discussion-caption';
 import { useDiscussionTTS } from '@/lib/hooks/use-discussion-tts';
 import { useWidgetIframeStore } from '@/lib/store/widget-iframe';
 import type { AudioIndicatorState } from '@/components/roundtable/audio-indicator';
@@ -255,6 +256,9 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
         setAudioIndicatorState(state);
       },
     });
+
+    const audioCaption = isLearnerDeployment() && !ttsMuted ? discussionTTS.caption : null;
+    const captionAgentId = audioCaption ? audioCaption.agentId : speakingAgentId;
 
     // Pick a student agent for discussion trigger (prioritize student > non-teacher > fallback)
     const pickStudentAgent = useCallback((): string => {
@@ -1048,15 +1052,15 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
     // Whether the speaking agent is a student (for bubble role derivation)
     const speakingStudentFlag = useMemo(() => {
-      if (!speakingAgentId) return false;
-      const agent = useAgentRegistry.getState().getAgent(speakingAgentId);
-      return agent?.role !== 'teacher';
-    }, [speakingAgentId]);
+      if (!captionAgentId) return false;
+      const agent = useAgentRegistry.getState().getAgent(captionAgentId);
+      return !!agent && agent.role !== 'teacher';
+    }, [captionAgentId]);
 
     // Centralised derived playback view
     const playbackView = useMemo(
       () =>
-        computePlaybackView({
+        withDiscussionCaption(computePlaybackView({
           engineMode,
           lectureSpeech,
           liveSpeech,
@@ -1070,7 +1074,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           idleText: firstSpeechText,
           speakingStudent: speakingStudentFlag,
           sessionType: chatSessionType,
-        }),
+        }), audioCaption, speakingStudentFlag),
       [
         engineMode,
         lectureSpeech,
@@ -1084,6 +1088,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
         playbackCompleted,
         firstSpeechText,
         speakingStudentFlag,
+        audioCaption,
         chatSessionType,
       ],
     );
@@ -1621,7 +1626,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                 startInputOpen={lectureLayout && classroomInteractionOpen}
                 initialParticipants={participants}
                 playbackView={playbackView}
-                currentSpeech={liveSpeech}
+                currentSpeech={audioCaption?.text ?? liveSpeech}
                 lectureSpeech={lectureSpeech}
                 idleText={firstSpeechText}
                 playbackCompleted={playbackCompleted}
@@ -1637,12 +1642,12 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
                       ? 'discussion'
                       : undefined
                 }
-                speakingAgentId={speakingAgentId}
+                speakingAgentId={captionAgentId}
                 speechProgress={speechProgress}
                 showEndFlash={showEndFlash}
                 endFlashSessionType={endFlashSessionType}
-                thinkingState={thinkingState}
-                isCueUser={isCueUser}
+                thinkingState={audioCaption ? null : thinkingState}
+                isCueUser={isCueUser && !audioCaption}
                 isSoftClosing={chatIsSoftClosing}
                 softCloseDeadline={softCloseDeadline}
                 isTopicPending={isTopicPending}

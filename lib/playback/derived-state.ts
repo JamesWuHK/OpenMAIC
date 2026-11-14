@@ -48,6 +48,8 @@ export type PlaybackPhase =
 export type BubbleButtonState = 'bars' | 'play' | 'restart' | 'none';
 
 export interface PlaybackView {
+  /** An active audio segment owns the displayed text and speaker. */
+  audioCaptionActive?: boolean;
   /** High-level phase — "what is happening right now?" */
   phase: PlaybackPhase;
 
