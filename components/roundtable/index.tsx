@@ -1645,11 +1645,11 @@ export function Roundtable({
             </AnimatePresence>
 
             {/* Chat bubble */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence key={playbackView?.audioCaptionActive ? 'audio-caption' : 'stream'} mode="wait" initial={playbackView?.audioCaptionActive ? false : undefined}>
               {bubbleRole && (
                 <motion.div
-                  key={bubbleKey}
-                  initial={{ opacity: 0, y: 8 }}
+                  key={playbackView?.audioCaptionActive ? 'audio-caption' : bubbleKey}
+                  initial={playbackView?.audioCaptionActive ? false : { opacity: 0, y: 8 }}
                   animate={{
                     opacity: isInputOpen || isVoiceOpen ? 0.4 : 1,
                     y: 0,

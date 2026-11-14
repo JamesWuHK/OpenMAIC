@@ -460,13 +460,13 @@ export function PresentationSpeechOverlay({
   if (side === 'left') {
     return (
       <div className="absolute inset-0 pointer-events-none">
-        <AnimatePresence mode="wait">
+        <AnimatePresence key={playbackView.audioCaptionActive ? 'audio-caption' : 'stream'} mode="wait" initial={playbackView.audioCaptionActive ? false : undefined}>
           {matchesSide && bubble && (
             <motion.div
-              key={bubble.key}
-              initial={{ opacity: 0, x: -20, y: 12 }}
+              key={playbackView.audioCaptionActive ? 'audio-caption' : bubble.key}
+              initial={playbackView.audioCaptionActive ? false : { opacity: 0, x: -20, y: 12 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
+              exit={playbackView.audioCaptionActive ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, y: 8 }}
               transition={{ duration: 0.22, ease: [0.21, 1, 0.36, 1] }}
               className="absolute bottom-6 left-6 z-30 pointer-events-auto"
             >
@@ -480,13 +480,13 @@ export function PresentationSpeechOverlay({
 
   /* ── Right-side: inline flow, rendered inside the dock's flex column ── */
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence key={playbackView.audioCaptionActive ? 'audio-caption' : 'stream'} mode="wait" initial={playbackView.audioCaptionActive ? false : undefined}>
       {matchesSide && bubble && (
         <motion.div
-          key={bubble.key}
-          initial={{ opacity: 0, x: 20, y: 12 }}
+          key={playbackView.audioCaptionActive ? 'audio-caption' : bubble.key}
+          initial={playbackView.audioCaptionActive ? false : { opacity: 0, x: 20, y: 12 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
-          exit={{ opacity: 0, y: 8 }}
+          exit={playbackView.audioCaptionActive ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, y: 8 }}
           transition={{ duration: 0.22, ease: [0.21, 1, 0.36, 1] }}
           className="pointer-events-auto"
         >
