@@ -40,7 +40,8 @@ const fs = require('fs'), path = require('path'), http = require('http'), assert
       await route.fulfill({ status: 200, contentType: 'text/event-stream', body: events.map(e => 'data: ' + JSON.stringify(e) + '\n\n').join('') });
     });
     await page.goto('http://127.0.0.1:' + proxy.address().port + '/classroom/' + id, { waitUntil: 'domcontentloaded' });
-    await page.getByRole('button', { name: '繁', exact: true }).first().waitFor();
+    await page.getByRole('button', { name: '语言与讲解', exact: true }).first().waitFor();
+    assert.equal(await page.evaluate(() => localStorage.getItem('locale')), 'zh-CN', 'Mandarin course UI did not align');
     const mute = page.getByRole('button', { name: 'Mute', exact: true }); if (await mute.count()) await mute.first().click();
     const join = page.getByRole('button', { name: /^(加入討論|加入讨论|Join discussion|Join Discussion)$/ });
     const startupDeadline = Date.now() + 30000;
@@ -50,7 +51,7 @@ const fs = require('fs'), path = require('path'), http = require('http'), assert
       await page.waitForTimeout(100);
     }
     await join.waitFor({ timeout: 30000 }); await join.click();
-    async function awaitCount(count) { const end = Date.now() + 20000; while (Date.now() < end) { if (r.requests.length >= count && (await page.locator('body').innerText()).includes('輪到你發言')) return; await page.waitForTimeout(100); } throw Error('mock discussion failed to cue'); }
+    async function awaitCount(count) { const end = Date.now() + 20000; while (Date.now() < end) { if (r.requests.length >= count && /(輪到你發言|轮到你发言)/.test(await page.locator('body').innerText())) return; await page.waitForTimeout(100); } throw Error('mock discussion failed to cue'); }
     await awaitCount(2);
     for (let n = 0; n < 2; n++) {
       const input = page.locator('textarea:visible').first(); if (!await input.count()) await page.locator('button:has(svg.lucide-message-square):visible').last().click();
