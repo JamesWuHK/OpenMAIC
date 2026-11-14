@@ -13,9 +13,9 @@ function course(id) {
     actions:[{id:id+'-speech-'+order,type:'speech',text:cn?'普通話測試。':'粵語測試。',audioId:'/api/classroom-media/'+id+'/voice.wav',audioUrl:'/api/classroom-media/'+id+'/voice.wav'}],
   }));
   if (serveLifecycle && id === bases[0]) {
-    const discussion = (seed.classroom || seed).scenes.flatMap(s=>s.actions).find(a=>a.type==='discussion');
-    assert.ok(discussion, 'seed discussion action required');
-    c.scenes[0].actions = [{...discussion, id:'language-lifecycle-discussion',topic:'Synthetic lifecycle',prompt:'Synthetic test only'}];
+    // This old ordinary-lecture seed intentionally has no discussion action.
+    // Define the native synthetic action explicitly, as in qa-discussion-context.
+    c.scenes[0].actions = [{id:'language-lifecycle-discussion',type:'discussion',agentId:'default-1',topic:'Synthetic lifecycle',prompt:'Synthetic test only'}];
   }
   c.outlines = c.scenes.map(s=>({id:s.outlineId,order:s.order,title:s.title,type:'interactive',description:'synthetic fixture'}));
   return c;
@@ -47,11 +47,12 @@ function wav() {
   await new Promise(resolve=>proxy.listen(0,'127.0.0.1',resolve));
   const base='http://127.0.0.1:'+proxy.address().port;
   const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+  let activePage;
   try {
     for(const phone of [false,true]) {
       const ctx=await browser.newContext({viewport:phone?{width:390,height:844}:{width:1280,height:800},isMobile:phone,hasTouch:phone});
       await ctx.addInitScript(()=>{if(window!==window.top)return;localStorage.setItem('locale',localStorage.getItem('locale')||'ja-JP');window.__languageMedia=[];const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(...args){window.__languageMedia.push({source:this.currentSrc||this.src,event:'play'});return play.apply(this,args)};});
-      const page=await ctx.newPage();page.on('pageerror',error=>report.errors.push(String(error)));
+      const page=await ctx.newPage();activePage=page;page.on('pageerror',error=>report.errors.push(String(error)));
       await ctx.route('**/api/classroom?id=*',async route=>{
         const id=new URL(route.request().url()).searchParams.get('id');
         if(bases.some(b=>id===b||id===b+'-mandarin')){report.requests.push({id});return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({success:true,classroom:course(id)})})}
@@ -121,5 +122,5 @@ function wav() {
       await ctx.close();
     }
     assert.equal(report.errors.length,0);assert.equal(report.modelCalls,0);assert.equal(report.runs.length,16);assert.equal(report.lifecycleRuns.length,2);report.pass=true;
-  }catch(error){report.failure=String(error);process.exitCode=1}finally{await browser.close();proxy.closeAllConnections();await new Promise(resolve=>proxy.close(resolve));http.globalAgent.destroy();https.globalAgent.destroy();fs.mkdirSync('artifacts/learner-image-qa',{recursive:true});fs.writeFileSync('artifacts/learner-image-qa/unified-language.json',JSON.stringify(report,null,2));console.log(JSON.stringify({pass:report.pass,failure:report.failure,runs:report.runs.length,modelCalls:report.modelCalls,errors:report.errors}));}
+  }catch(error){report.failure=String(error);process.exitCode=1;if(activePage&&!activePage.isClosed()){report.failureUI=await activePage.locator('body').innerText().catch(()=>null);fs.mkdirSync('artifacts/learner-image-qa',{recursive:true});await activePage.screenshot({path:'artifacts/learner-image-qa/unified-language-failure.png',fullPage:true}).catch(()=>{})}}finally{await browser.close();proxy.closeAllConnections();await new Promise(resolve=>proxy.close(resolve));http.globalAgent.destroy();https.globalAgent.destroy();fs.mkdirSync('artifacts/learner-image-qa',{recursive:true});fs.writeFileSync('artifacts/learner-image-qa/unified-language.json',JSON.stringify(report,null,2));console.log(JSON.stringify({pass:report.pass,failure:report.failure,runs:report.runs.length,modelCalls:report.modelCalls,errors:report.errors}));}
 })();
