@@ -10,10 +10,25 @@ export const nobelVoicePairIds = [
   'hk-nobel-08-hassabis-illustrated-v1',
 ] as const;
 
+// Private preview IDs are stable; the published-course manifest controls catalog visibility.
+const supplementalPreviewVoicePairIds = [
+  'hk-supplement-ai-baoyu-preview',
+  'hk-supplement-leaf-baoyu-preview',
+  'hk-supplement-chinese-baoyu-preview',
+  'hk-supplement-bus-baoyu-preview',
+  'hk-supplement-radar-baoyu-preview',
+  'hk-supplement-robot-baoyu-preview',
+] as const;
+
+const learnerVoicePairIds = new Set<string>([
+  ...nobelVoicePairIds,
+  ...supplementalPreviewVoicePairIds,
+]);
+
 export function getNobelVoicePair(classroomId: string | null | undefined) {
   if (!classroomId) return null;
   const base = classroomId.replace(/-mandarin$/, '');
-  if (!(nobelVoicePairIds as readonly string[]).includes(base)) return null;
+  if (!learnerVoicePairIds.has(base)) return null;
   return { base, mandarin: classroomId.endsWith('-mandarin') };
 }
 
@@ -51,7 +66,7 @@ export function getNobelVoiceDescription(classroomId: string, locale: string) {
   return undefined;
 }
 
-/** One catalog entry per reviewed lesson, with the Cantonese route as its entry point. */
+/** One catalog entry per bilingual lesson, with the Cantonese route as its entry point. */
 export function listNobelCatalogEntries<T extends { id: string }>(courses: readonly T[]): T[] {
   const availableIds = new Set(courses.map((course) => course.id));
   return courses.filter((course) => {

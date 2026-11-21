@@ -2,7 +2,7 @@ name: Learner cloud image candidate
 
 on:
   push:
-    branches: [codex/nobel-single-entry-20261121]
+    branches: [codex/six-bilingual-preview-20261121]
   workflow_dispatch:
 
 # Build/test only: no production credentials, package push, or deployment.
