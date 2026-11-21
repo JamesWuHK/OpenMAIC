@@ -1,5 +1,6 @@
 import { isLearnerDeployment } from '@/lib/config/deployment-mode';
 import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
+import { listNobelCatalogEntries } from '@/lib/learner/nobel-language-navigation';
 import { listPublishedCourses } from '@/lib/learner/public-courses';
 import { getServerPersistenceProvider } from '@/lib/persistence/server-provider';
 
@@ -18,7 +19,7 @@ export async function GET(): Promise<Response> {
       )
     : await listFilesystemPublishedCourses();
   return Response.json(
-    { courses },
+    { courses: listNobelCatalogEntries(courses) },
     {
       headers: {
         'Cache-Control': 'no-store, max-age=0',

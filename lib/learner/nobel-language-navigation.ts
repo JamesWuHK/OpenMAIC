@@ -50,3 +50,12 @@ export function getNobelVoiceDescription(classroomId: string, locale: string) {
   if (locale === 'en-US') return 'UI only · ' + (pair.mandarin ? 'Mandarin' : 'Cantonese') + ' narration';
   return undefined;
 }
+
+/** One catalog entry per reviewed lesson, with the Cantonese route as its entry point. */
+export function listNobelCatalogEntries<T extends { id: string }>(courses: readonly T[]): T[] {
+  const availableIds = new Set(courses.map((course) => course.id));
+  return courses.filter((course) => {
+    const pair = getNobelVoicePair(course.id);
+    return !pair?.mandarin || !availableIds.has(pair.base);
+  });
+}

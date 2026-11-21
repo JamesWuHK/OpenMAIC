@@ -21,6 +21,7 @@ import {
   isSeriesLessonOpen,
 } from '@/lib/learner/series-experience';
 import { readLearnerSiteContent } from '@/lib/learner/site-content.server';
+import { listNobelCatalogEntries } from '@/lib/learner/nobel-language-navigation';
 import { listFilesystemPublishedCourses } from '@/lib/learner/filesystem-public-courses';
 
 interface SeriesPageProps {
@@ -67,8 +68,11 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
   const experienceHref = getSeriesExperienceHref(series);
   const isNobelLecture = series.slug === 'nobel-curiosity-lab';
   const publishedLessons = isNobelLecture
-    ? (await listFilesystemPublishedCourses())
-        .filter((course) => series.liveCourseIds?.includes(course.id))
+    ? listNobelCatalogEntries(
+        (await listFilesystemPublishedCourses()).filter((course) =>
+          series.liveCourseIds?.includes(course.id),
+        ),
+      )
         .sort((a, b) => (a.lessonNumber ?? 0) - (b.lessonNumber ?? 0))
     : [];
 
